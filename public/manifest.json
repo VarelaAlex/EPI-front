@@ -1,9 +1,7 @@
 {
   "background_color": "#F4F4F4",
-  "categories": [
-    ""
-  ],
-  "description": "",
+  "categories": ["education", "kids"],
+  "description": "App description",
   "dir": "ltr",
   "display_override": [
     "standalone",
@@ -24,7 +22,7 @@
   ],
   "id": "/v1",
   "lang": "es-ES",
-  "name": "",
+  "name": "HYTEX",
   "orientation": "any",
   "prefer_related_application": false,
   "scope": "/",
@@ -35,10 +33,7 @@
       "sizes": "512x512"
     }
   ],
-  "short_name": "",
-  "shortcuts": [
-    {}
-  ],
+  "short_name": "HYTEX",
   "start_url": "/",
   "theme_color": "#000280"
 }
