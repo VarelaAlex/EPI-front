@@ -1,3 +1,39 @@
 {
-    "welcome-message": "Hello world!"
+    "language": {
+        "button": "Language",
+        "spanish": "Spanish🇪🇸",
+        "english": "English🇬🇧"
+    },
+    "downloadPWA": "Download",
+    "menu": {
+        "home": "Home",
+        "login": "Login",
+        "disconnect": "Disconnect"
+    },
+    "home": {
+        "welcome-message": "Hello world!"
+    },
+    "role": {
+        "title": "Who are you?",
+        "teacher": "Teacher",
+        "student": "Student"
+    },
+    "login": {
+        "title": "Login",
+        "button": "Log in",
+        "form": {
+            "email": "Your email",
+            "password": "Your password"
+        },
+        "error": {
+            "email": {
+                "empty": "Email cannot be empty",
+                "format": "Incorrect email format"
+            },
+            "password": {
+                "empty": "Password cannot be empty",
+                "format": "Incorrect password format"
+            }
+        }
+    }
 }

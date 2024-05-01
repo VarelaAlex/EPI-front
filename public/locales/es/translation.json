@@ -1,3 +1,39 @@
 {
-    "welcome-message": "Hola mundo!"
+    "language": {
+        "button": "Idioma",
+        "spanish": "Español🇪🇸",
+        "english": "Inglés🇬🇧"
+    },
+    "downloadPWA": "Descargar",
+    "menu": {
+        "home": "Inicio",
+        "login": "Iniciar sesión",
+        "disconnect": "Cerrar sesión"
+    },
+    "home": {
+        "welcome-message": "¡Hola mundo!"
+    },
+    "role": {
+        "title": "¿Quién eres?",
+        "teacher": "Profesor",
+        "student": "Estudiante"
+    },
+    "login": {
+        "title": "Inicio de sesión",
+        "button": "Iniciar sesión",
+        "form": {
+            "email": "Tu email",
+            "password": "Tu contraseña"
+        },
+        "error": {
+            "email": {
+                "empty": "El email no puede estar vacío",
+                "format": "El formato del email no es correcto"
+            },
+            "password": {
+                "empty": "La contraseña no puede estar vacía",
+                "format": "El formato de la contraseña no es correcto"
+            }
+        }
+    }
 }
