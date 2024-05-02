@@ -4,14 +4,13 @@
         "spanish": "Spanish🇪🇸",
         "english": "English🇬🇧"
     },
-    "downloadPWA": "Download",
+    "pwa": {
+        "notificationMessage": "Welcome to HYTEX!",
+        "notificationDescription": "You can download the app by clicking on the button on the right"
+    },
     "menu": {
-        "home": "Home",
         "login": "Login",
         "disconnect": "Disconnect"
-    },
-    "home": {
-        "welcome-message": "Hello world!"
     },
     "role": {
         "title": "Who are you?",

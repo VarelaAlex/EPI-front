@@ -1,20 +1,26 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Button, Card, Flex, Col, Row } from "antd";
+import { Button, Flex, Col, Row, Typography } from "antd";
 
 let SelectRoleComponent = () => {
 
     let { t } = useTranslation();
+    let { Title } = Typography;
+
     let navigate = useNavigate();
+
     return (
         <Row align="middle" justify="center" style={{ minHeight: "70vh" }}>
             <Col>
-                <Card align="center" title={t("role.title")} style={{ width: "500px" }}>
-                    <Flex justify="center" align="center" vertical>
-                        <Button type="primary" style={{ marginTop: "10px" }} onClick={navigate("/")}>{t("role.teacher")}</Button>
-                        <Button type="primary" style={{ marginTop: "10px" }} onClick={navigate("login")}>{t("role.student")}</Button>
-                    </Flex>
-                </Card>
+                <Title style={{ paddingBottom: "10vh" }}>{t("role.title")}</Title>
+                <Flex justify="center" align="center" vertical>
+                    <Button size='large' type="primary" block style={{ height: "9vh", marginTop: "10px" }} onClick={navigate("/login")}>
+                        {t("role.teacher")}
+                    </Button>
+                    <Button size='large' type="primary" block style={{ height: "9vh", marginTop: "10px" }} onClick={navigate("/login")}>
+                        {t("role.student")}
+                    </Button>
+                </Flex>
             </Col>
         </Row>
     );

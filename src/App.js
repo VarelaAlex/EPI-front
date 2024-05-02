@@ -1,40 +1,18 @@
-import logo from './logo.png';
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useTranslation } from 'react-i18next';
-import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import { Alert, Card, Row, Col, Button, FloatButton, Image, Layout, Menu, Typography, notification, Dropdown, Space, Drawer } from "antd";
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Layout, notification } from "antd";
 import LoginComponent from './components/LoginComponent';
-import { DownloadOutlined, DownOutlined, TranslationOutlined, MenuOutlined } from '@ant-design/icons';
 import SelectRoleComponent from './components/SelectRoleComponent';
+import HeaderComponent from './components/layout/HeaderComponent';
+import SiderComponent from "./components/layout/SiderComponent";
 
 let App = () => {
 
-  const [open, setOpen] = useState(false);
-
-  const showDrawer = () => {
-    setOpen(true);
-  };
-
-  const onClose = () => {
-    setOpen(false);
-  };
-
-  let { t, i18n } = useTranslation();
-
-  let [isReadyForInstall, setIsReadyForInstall] = useState(false);
-
-  async function downloadApp() {
-    let promptEvent = window.deferredPrompt;
-    if (promptEvent) {
-      promptEvent.prompt();
-      await promptEvent.userChoice;
-      window.deferredPrompt = null;
-      setIsReadyForInstall(false);
-    }
-  }
+  const [collapsed, setCollapsed] = useState(true);
+  let { t } = useTranslation();
 
   let [api, contextHolder] = notification.useNotification();
-  let [message,] = useState([]);
   let [login, setLogin] = useState(false);
   let notificationShown = useRef(false);
   let navigate = useNavigate();
@@ -49,11 +27,6 @@ let App = () => {
     });
   }, [api]);
 
-  let disconnect = async () => {
-    setLogin(false);
-    navigate("/login");
-  };
-
   useEffect(() => {
 
     let checkLogin = async () => {
@@ -61,8 +34,8 @@ let App = () => {
         navigate("/");
         return;
       } else {
-        if (!["/a"].includes(location.pathname)) {
-          navigate("/a");
+        if (!["/selectRole"].includes(location.pathname)) {
+          navigate("/selectRole");
         }
       }
     };
@@ -70,108 +43,39 @@ let App = () => {
     checkLogin();
   }, [login, navigate, location.pathname]);
 
-  useEffect(() => {
-
-    window.addEventListener("beforeinstallprompt", (event) => {
-      event.preventDefault();
-      window.deferredPrompt = event;
-      setIsReadyForInstall(true);
-    });
-  }, []);
 
   useEffect(() => {
 
     if (!notificationShown.current) {
       createNotification({
-        message: "Welcome to HYTEX",
-        description: "You can download the app by clicking on the button below",
-        duration: "5"
+        message: t("pwa.notificationMessage"),
+        description: t("pwa.notificationDescription"),
+        duration: "4"
       });
     }
     notificationShown.current = true;
-  }, [createNotification]);
+  }, [createNotification, t]);
 
-  let { Header, Content, Footer } = Layout;
-  let { Title } = Typography;
-
-  const handleMenuClick = (locale) => {
-    i18n.changeLanguage(locale.key);
-  };
-  const items = [
-    {
-      label: t("language.spanish"),
-      key: 'es'
-    },
-    {
-      label: t("language.english"),
-      key: 'en'
-    }];
-  const menuProps = {
-    items,
-    onClick: handleMenuClick,
-  };
+  let { Content, Footer } = Layout;
 
   return (
     <>
       {contextHolder}
-      <Layout>
-        <Header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Button ghost onClick={showDrawer} icon={<MenuOutlined />} />
-          <Drawer
-            title="Menu"
-            placement="left"
-            closable={true}
-            onClose={onClose}
-            open={open}
-          >
-            <Menu mode="vertical" disabledOverflow
-              items={!login ?
-                [
-                  { key: "menuHome", label: <Link to="/">{t("menu.home")}</Link> },
-                  { key: "menuLogin", label: <Link to="/login">{t("menu.login")}</Link> }
-                ] :
-                [
-                  { key: "menuDisconnect", label: <Link to="/disconnect" onClick={disconnect}>{t("menu.disconnect")}</Link> }
-                ]
+      <Layout style={{ minHeight: "90vh" }}>
+        <HeaderComponent login={login} collapsed={collapsed} setCollapsed={setCollapsed} />
+        <Layout hasSider>
+         {login && <SiderComponent login={login} setLogin={setLogin} collapsed={collapsed} />}
+          <Content>
+            <Routes>
+              <Route path="/login" element={
+                <LoginComponent setLogin={setLogin} />
               } />
-          </Drawer>
-          <Row>
-            <Col style={{ display: 'flex', alignItems: 'center' }}>
-              <Dropdown menu={menuProps}>
-                <Button shape='round' ghost>
-                  <Space>
-                    <TranslationOutlined />
-                    {t("language.button")}
-                    <DownOutlined />
-                  </Space>
-                </Button>
-              </Dropdown>
-            </Col>
-          </Row>
-        </Header>
-        <Content style={{ padding: "auto" }}>
-          <Routes>
-            <Route path="/" element={
-              <Row align="middle" justify="center" >
-                <Col>
-                  {message.length > 0 && message.map(e => { return <Alert type="error" message={e} showIcon />; })}
-                  <Card title="Create list" style={{ width: "500px" }}>
-                    <Title style={{ textAlign: "center", padding: "100px" }}>Welcome to Present4U!</Title>
-                    <Image src={logo} alt="logo" />
-                    <Title>{t('home.welcome-message')}</Title>
-                  </Card>
-                </Col>
-              </Row>
-            } />
-            <Route path="/login" element={
-              <LoginComponent setLogin={setLogin} />
-            } />
-            <Route path="/a" element={
-              <SelectRoleComponent />
-            } />
-          </Routes>
-        </Content>
-        {isReadyForInstall && <FloatButton onClick={downloadApp} icon={<DownloadOutlined />} type='primary'></FloatButton>}
+              <Route path="/selectRole" element={
+                <SelectRoleComponent />
+              } />
+            </Routes>
+          </Content>
+        </Layout>
         <Footer style={{ textAlign: "center" }}>Present4U @ 2024<br />Made with ❤️ by Álex Álvarez Varela</Footer>
       </Layout >
     </>
