@@ -1,40 +1,48 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Layout, notification } from "antd";
-import LoginComponent from './components/LoginComponent';
+import LoginTeacherComponent from './components/LoginTeacherComponent';
+import LoginStudentComponent from './components/LoginStudentComponent';
 import SelectRoleComponent from './components/SelectRoleComponent';
 import HeaderComponent from './components/layout/HeaderComponent';
 import SiderComponent from "./components/layout/SiderComponent";
 
 let App = () => {
 
-  const [collapsed, setCollapsed] = useState(true);
-  let { t } = useTranslation();
-
-  let [api, contextHolder] = notification.useNotification();
+  let [collapsed, setCollapsed] = useState(true);
   let [login, setLogin] = useState(false);
+  let [api, contextHolder] = notification.useNotification();
+
+  let { t } = useTranslation();
+  let { Content, Footer } = Layout;
+
   let notificationShown = useRef(false);
   let navigate = useNavigate();
   let location = useLocation();
 
-  let createNotification = useCallback(({ message, description = message, type = "info", placement = "top", duration = "3" }) => {
-    api[type]({
-      message,
-      description,
-      placement,
-      duration
-    });
-  }, [api]);
+  let createNotification = useCallback(
+    ({ message,
+      description = message,
+      type = "info",
+      placement = "top",
+      duration = "3"
+    }) => {
+      api[type]({
+        message,
+        description,
+        placement,
+        duration
+      });
+    }, [api]);
 
   useEffect(() => {
 
     let checkLogin = async () => {
       if (login) {
         navigate("/");
-        return;
       } else {
-        if (!["/selectRole"].includes(location.pathname)) {
+        if (!["/selectRole", "/loginTeacher", "/loginStudent"].includes(location.pathname)) {
           navigate("/selectRole");
         }
       }
@@ -46,6 +54,7 @@ let App = () => {
 
   useEffect(() => {
 
+    // TODO: Create notification when first session created
     if (!notificationShown.current) {
       createNotification({
         message: t("pwa.notificationMessage"),
@@ -56,19 +65,30 @@ let App = () => {
     notificationShown.current = true;
   }, [createNotification, t]);
 
-  let { Content, Footer } = Layout;
-
   return (
     <>
       {contextHolder}
       <Layout style={{ minHeight: "90vh" }}>
-        <HeaderComponent login={login} collapsed={collapsed} setCollapsed={setCollapsed} />
+        <HeaderComponent
+          login={login}
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+        />
         <Layout hasSider>
-         {login && <SiderComponent login={login} setLogin={setLogin} collapsed={collapsed} />}
+          {login &&
+            <SiderComponent
+              login={login}
+              setLogin={setLogin}
+              collapsed={collapsed}
+              setCollapsed={setCollapsed}
+            />}
           <Content>
             <Routes>
-              <Route path="/login" element={
-                <LoginComponent setLogin={setLogin} />
+              <Route path="/loginTeacher" element={
+                <LoginTeacherComponent setLogin={setLogin} />
+              } />
+              <Route path="/loginStudent" element={
+                <LoginStudentComponent setLogin={setLogin} />
               } />
               <Route path="/selectRole" element={
                 <SelectRoleComponent />

@@ -32,6 +32,15 @@ let HeaderComponent = (props) => {
         },
     };
 
+    let downloadApp = async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            await deferredPrompt.userChoice;
+            setDeferredPrompt(null);
+            setIsReadyForInstall(false);
+        }
+    };
+
     useEffect(() => {
 
         setTimeout(() => {
@@ -45,23 +54,18 @@ let HeaderComponent = (props) => {
         });
     }, []);
 
-    let downloadApp = async () => {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            await deferredPrompt.userChoice;
-            setDeferredPrompt(null);
-            setIsReadyForInstall(false);
-        }
-    };
-
     return (
         <Header style={{ padding: "0vh 3vh", display: 'flex', justifyContent: 'space-between' }}>
             {login ?
+            <Row>
+            <Col style={{ display: 'flex', alignItems: 'center' }}>
                 <Button
                     ghost
                     icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                     onClick={() => setCollapsed(!collapsed)}
-                /> :
+                /> 
+                </Col>
+                </Row>:
                 <div></div>
             }
             <Row>

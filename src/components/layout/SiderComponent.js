@@ -4,7 +4,7 @@ import { Layout, Menu, } from "antd";
 
 let SiderComponent = (props) => {
 
-    let { collapsed, login, setLogin } = props;
+    let { collapsed, setCollapsed, login, setLogin } = props;
 
     let { t } = useTranslation();
     let { Sider } = Layout;
@@ -13,7 +13,8 @@ let SiderComponent = (props) => {
 
     let disconnect = async () => {
         setLogin(false);
-        navigate("/login");
+        navigate("/selectRole");
+        setCollapsed(true);
     };
 
     return (

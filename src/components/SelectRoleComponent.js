@@ -14,10 +14,10 @@ let SelectRoleComponent = () => {
             <Col>
                 <Title style={{ paddingBottom: "10vh" }}>{t("role.title")}</Title>
                 <Flex justify="center" align="center" vertical>
-                    <Button size='large' type="primary" block style={{ height: "9vh", marginTop: "10px" }} onClick={navigate("/login")}>
+                    <Button size='large' type="primary" block style={{ height: "9vh", marginTop: "10px" }} onClick={()=>navigate("/loginTeacher")}>
                         {t("role.teacher")}
                     </Button>
-                    <Button size='large' type="primary" block style={{ height: "9vh", marginTop: "10px" }} onClick={navigate("/login")}>
+                    <Button size='large' type="primary" block style={{ height: "9vh", marginTop: "10px" }} onClick={()=>navigate("/loginStudent")}>
                         {t("role.student")}
                     </Button>
                 </Flex>
