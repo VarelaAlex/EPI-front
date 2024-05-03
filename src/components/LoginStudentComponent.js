@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Button, Card, Col, Input, Row, Typography } from "antd";
+import { Button, Card, Flex, Input, Typography } from "antd";
 
 let LoginStudentComponent = (props) => {
 
@@ -43,22 +43,20 @@ let LoginStudentComponent = (props) => {
     };
 
     return (
-        <Row align="middle" justify="center" style={{ minHeight: "70vh" }}>
-            <Col>
-                <Card title={t("login.title")} style={{ width: "500px" }}>
-                    <Input
-                        ref={email}
-                        size="large"
-                        type="text"
-                        placeholder={t("login.form.email")}
-                        onChange={() => checkEmailInputErrors()}
-                        onBlur={() => blurEmailInput([])}
-                    />
-                    {emailError && emailError.map(e => { return <Text type="danger">{e}<br /></Text>; })}
-                    <Button type="primary" style={{ marginTop: "10px" }} block onClick={clickLogin}>{t("login.button")}</Button>
-                </Card>
-            </Col>
-        </Row>
+        <Flex align="center" justify="top" style={{ height: "100%" }} vertical>
+            <Card title={t("login.title")} style={{ width: "70vmin" }}>
+                <Input
+                    ref={email}
+                    size="large"
+                    type="text"
+                    placeholder={t("login.form.username")}
+                    onChange={() => checkEmailInputErrors()}
+                    onBlur={() => blurEmailInput([])}
+                />
+                {emailError && emailError.map(e => { return <Text type="danger">{e}<br /></Text>; })}
+                <Button type="primary" style={{ marginTop: "10px" }} block onClick={clickLogin}>{t("login.button")}</Button>
+            </Card>
+        </Flex>
     );
 };
 

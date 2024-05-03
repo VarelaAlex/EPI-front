@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import { Layout, notification } from "antd";
+import { Layout, notification, Steps, Flex } from "antd";
 import LoginTeacherComponent from './components/LoginTeacherComponent';
 import LoginStudentComponent from './components/LoginStudentComponent';
 import SelectRoleComponent from './components/SelectRoleComponent';
@@ -12,6 +12,8 @@ let App = () => {
 
   let [collapsed, setCollapsed] = useState(true);
   let [login, setLogin] = useState(false);
+  let [role, setRole] = useState(null);
+  let [current, setCurrent] = useState(0);
   let [api, contextHolder] = notification.useNotification();
 
   let { t } = useTranslation();
@@ -20,6 +22,12 @@ let App = () => {
   let notificationShown = useRef(false);
   let navigate = useNavigate();
   let location = useLocation();
+
+  let onChange = (value) => {
+    setCurrent(value);
+    setRole(null);
+    value === 0 && navigate("/");
+  };
 
   let createNotification = useCallback(
     ({ message,
@@ -38,6 +46,19 @@ let App = () => {
 
   useEffect(() => {
 
+    let checkRole = async () => {
+      switch (role) {
+        case "T":
+          navigate("/loginTeacher");
+          break;
+        case "S":
+          navigate("/loginStudent");
+          break;
+        default:
+          navigate("/selectRole");
+      }
+    };
+
     let checkLogin = async () => {
       if (login) {
         navigate("/");
@@ -48,6 +69,7 @@ let App = () => {
       }
     };
 
+    checkRole();
     checkLogin();
   }, [login, navigate, location.pathname]);
 
@@ -68,7 +90,7 @@ let App = () => {
   return (
     <>
       {contextHolder}
-      <Layout style={{ minHeight: "90vh" }}>
+      <Layout style={{ minHeight: "98vh" }}>
         <HeaderComponent
           login={login}
           collapsed={collapsed}
@@ -83,6 +105,24 @@ let App = () => {
               setCollapsed={setCollapsed}
             />}
           <Content>
+            <Flex justify="center">
+              <Steps
+                style={{ padding: "3vh 0vh 7vh", width: "40vmax" }}
+                current={current}
+                onChange={onChange}
+                direction="horizontal"
+                responsive={false}
+                items={[
+                  {
+                    title: 'Select role',
+                  },
+                  {
+                    title: 'Log in',
+                    disabled: true
+                  }
+                ]}
+              />
+            </Flex>
             <Routes>
               <Route path="/loginTeacher" element={
                 <LoginTeacherComponent setLogin={setLogin} />
@@ -91,7 +131,7 @@ let App = () => {
                 <LoginStudentComponent setLogin={setLogin} />
               } />
               <Route path="/selectRole" element={
-                <SelectRoleComponent />
+                <SelectRoleComponent setCurrent={setCurrent} setRole={setRole} />
               } />
             </Routes>
           </Content>
