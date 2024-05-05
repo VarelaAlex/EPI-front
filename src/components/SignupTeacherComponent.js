@@ -11,7 +11,7 @@ const SignupTeacherComponent = (props) => {
     };
 
     return (
-        <Card title={t("signup.title")} style={{ width: "80vmin" }}>
+        <Card title={t("signup.title")} style={{ width: "80vw" }}>
             <Form
                 name="register"
                 labelCol={{ xs: { span: 24 }, sm: { span: 8 } }}

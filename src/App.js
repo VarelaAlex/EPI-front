@@ -98,7 +98,7 @@ let App = () => {
   return (
     <>
       {contextHolder}
-      <Layout>
+      <Layout style={{backgroundColor:"black"}}>
         <HeaderComponent
           login={login}
           collapsed={collapsed}
@@ -113,6 +113,7 @@ let App = () => {
               setLogin={setLogin}
               collapsed={collapsed}
               setCollapsed={setCollapsed}
+              setRole={setRole}
             />
           }
           <Content style={{ minHeight: "78vh", marginTop: "2vh" }} >
