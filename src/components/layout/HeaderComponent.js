@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from 'react-i18next';
-import { Row, Col, Button, Dropdown, Space, Layout } from "antd";
-import { DownloadOutlined, DownOutlined, TranslationOutlined, MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
+import { Row, Col, Button, Dropdown, Space, Layout, Tooltip, Image } from "antd";
+import { DownloadOutlined, DownOutlined, TranslationOutlined, MenuOutlined } from '@ant-design/icons';
+import { Link } from "react-router-dom";
 
 let HeaderComponent = (props) => {
 
-    let { login, collapsed, setCollapsed } = props;
+    let { login, collapsed, setCollapsed, setRole, isMobile } = props;
 
     let [highlighted, setHighlighted] = useState(true);
     let [isReadyForInstall, setIsReadyForInstall] = useState(false);
@@ -42,7 +43,6 @@ let HeaderComponent = (props) => {
     };
 
     useEffect(() => {
-
         setTimeout(() => {
             setHighlighted(false);
         }, 4000);
@@ -56,38 +56,57 @@ let HeaderComponent = (props) => {
 
     return (
         <Header style={{ padding: "0vh 3vh", display: 'flex', justifyContent: 'space-between' }}>
-            {login ?
-            <Row>
-            <Col style={{ display: 'flex', alignItems: 'center' }}>
-                <Button
-                    ghost
-                    icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                    onClick={() => setCollapsed(!collapsed)}
-                /> 
-                </Col>
-                </Row>:
-                <div></div>
-            }
+            <Row gutter="16">
+                {login &&
+                    <Col style={{ display: 'flex', alignItems: 'center' }}>
+                        <Button
+                            ghost
+                            icon={<MenuOutlined />}
+                            onClick={() => setCollapsed(!collapsed)}
+                        />
+                    </Col>
+                }
+                <Col style={{ display: 'flex', alignItems: 'center' }}>
+                <Link to="/selectRole" onClick={() => setRole(null)}>
+                    <Image src="/logo_text.png" width="8vmax" preview={false} style={{ borderRadius: '0.75vmax' }} />
+                </Link>
+            </Col>
+            </Row>
             <Row>
                 <Col style={{ display: 'flex', alignItems: 'center' }}>
-                    <Dropdown menu={menuProps}>
-                        <Button shape='round' ghost>
-                            <Space>
-                                <TranslationOutlined />
-                                {t("language.button")}
-                                <DownOutlined />
-                            </Space>
-                        </Button>
-                    </Dropdown>
+                    {!isMobile ?
+                        <Dropdown menu={menuProps}>
+                            <Button shape='round' ghost>
+                                <Space>
+                                    <TranslationOutlined />
+                                    {t("language.button")}
+                                    <DownOutlined />
+                                </Space>
+                            </Button>
+                        </Dropdown>
+                        :
+                        <Tooltip title={t("language.button")} mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
+                            <Dropdown menu={menuProps}>
+                                <Button shape='round' ghost>
+                                    <Space>
+                                        <TranslationOutlined />
+                                        <DownOutlined />
+                                    </Space>
+                                </Button>
+                            </Dropdown>
+                        </Tooltip>
+                    }
                 </Col>
-                <Col style={{ paddingLeft: "10px" }}>
+                <Col style={{ paddingLeft: "2vh" }}>
                     {isReadyForInstall &&
-                        <Button
-                            onClick={downloadApp}
-                            icon={<DownloadOutlined />}
-                            ghost
-                            style={highlighted ? { boxShadow: '0px 0px 20px 5px rgba(255, 221, 0, 1)' } : {}}
-                        />
+                        <Tooltip title={t("pwa.button")} mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
+                            <Button
+                                onClick={downloadApp}
+                                icon={<DownloadOutlined />}
+                                ghost
+                                style={highlighted ? { boxShadow: '0vh 0vh 4vh 1vh rgba(255, 221, 0, 1)' } : {}}
+                            />
+                        </Tooltip>
                     }
                 </Col>
             </Row>

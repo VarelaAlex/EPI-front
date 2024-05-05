@@ -1,20 +1,23 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import { Layout, notification, Steps, Flex } from "antd";
+import { Layout, notification, Flex } from "antd";
 import LoginTeacherComponent from './components/LoginTeacherComponent';
 import LoginStudentComponent from './components/LoginStudentComponent';
 import SelectRoleComponent from './components/SelectRoleComponent';
 import HeaderComponent from './components/layout/HeaderComponent';
 import SiderComponent from "./components/layout/SiderComponent";
+import SignupTeacherComponent from './components/SignupTeacherComponent';
 
 let App = () => {
+
+  const MOBILE_BREAKPOINT = 768;
 
   let [collapsed, setCollapsed] = useState(true);
   let [login, setLogin] = useState(false);
   let [role, setRole] = useState(null);
-  let [current, setCurrent] = useState(0);
   let [api, contextHolder] = notification.useNotification();
+  let [isMobile, setIsMobile] = useState(false);
 
   let { t } = useTranslation();
   let { Content, Footer } = Layout;
@@ -22,12 +25,6 @@ let App = () => {
   let notificationShown = useRef(false);
   let navigate = useNavigate();
   let location = useLocation();
-
-  let onChange = (value) => {
-    setCurrent(value);
-    setRole(null);
-    value === 0 && navigate("/");
-  };
 
   let createNotification = useCallback(
     ({ message,
@@ -45,11 +42,22 @@ let App = () => {
     }, [api]);
 
   useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
 
     let checkRole = async () => {
       switch (role) {
         case "T":
-          navigate("/loginTeacher");
+          if (!["/registerTeacher", "/loginTeacher"].includes(location.pathname)) {
+            navigate("/loginTeacher");
+          }
           break;
         case "S":
           navigate("/loginStudent");
@@ -63,7 +71,7 @@ let App = () => {
       if (login) {
         navigate("/");
       } else {
-        if (!["/selectRole", "/loginTeacher", "/loginStudent"].includes(location.pathname)) {
+        if (!["/selectRole", "/loginTeacher", "/loginStudent", "/registerTeacher"].includes(location.pathname)) {
           navigate("/selectRole");
         }
       }
@@ -71,7 +79,7 @@ let App = () => {
 
     checkRole();
     checkLogin();
-  }, [login, navigate, location.pathname]);
+  }, [role, login, navigate, location.pathname]);
 
 
   useEffect(() => {
@@ -90,11 +98,13 @@ let App = () => {
   return (
     <>
       {contextHolder}
-      <Layout style={{ minHeight: "98vh" }}>
+      <Layout>
         <HeaderComponent
           login={login}
           collapsed={collapsed}
           setCollapsed={setCollapsed}
+          setRole={setRole}
+          isMobile={isMobile}
         />
         <Layout hasSider>
           {login &&
@@ -103,37 +113,25 @@ let App = () => {
               setLogin={setLogin}
               collapsed={collapsed}
               setCollapsed={setCollapsed}
-            />}
-          <Content>
-            <Flex justify="center">
-              <Steps
-                style={{ padding: "3vh 0vh 7vh", width: "40vmax" }}
-                current={current}
-                onChange={onChange}
-                direction="horizontal"
-                responsive={false}
-                items={[
-                  {
-                    title: 'Select role',
-                  },
-                  {
-                    title: 'Log in',
-                    disabled: true
-                  }
-                ]}
-              />
+            />
+          }
+          <Content style={{ minHeight: "78vh", marginTop: "2vh" }} >
+            <Flex align="center" justify="center" style={{ height: "100%" }}>
+              <Routes>
+                <Route path="/loginTeacher" element={
+                  <LoginTeacherComponent setLogin={setLogin} />
+                } />
+                <Route path="/loginStudent" element={
+                  <LoginStudentComponent setLogin={setLogin} />
+                } />
+                <Route path="/selectRole" element={
+                  <SelectRoleComponent setRole={setRole} />
+                } />
+                <Route path="/registerTeacher" element={
+                  <SignupTeacherComponent setRole={setRole} />
+                } />
+              </Routes>
             </Flex>
-            <Routes>
-              <Route path="/loginTeacher" element={
-                <LoginTeacherComponent setLogin={setLogin} />
-              } />
-              <Route path="/loginStudent" element={
-                <LoginStudentComponent setLogin={setLogin} />
-              } />
-              <Route path="/selectRole" element={
-                <SelectRoleComponent setCurrent={setCurrent} setRole={setRole} />
-              } />
-            </Routes>
           </Content>
         </Layout>
         <Footer style={{ textAlign: "center" }}>Present4U @ 2024<br />Made with ❤️ by Álex Álvarez Varela</Footer>

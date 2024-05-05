@@ -5,6 +5,7 @@
         "english": "English🇬🇧"
     },
     "pwa": {
+        "button": "Download",
         "notificationMessage": "Welcome to HYTEX!",
         "notificationDescription": "You can download the app by clicking on the button on the right"
     },
@@ -17,13 +18,26 @@
         "teacher": "Teacher",
         "student": "Student"
     },
+    "steps": {
+        "role": "Select role",
+        "login": "Log in"
+    },
     "login": {
         "title": "Login",
         "button": "Log in",
+        "registerMessage": "Don't you have an account yet?",
+        "registerLink": "Sing up",
         "form": {
-            "email": "Your email",
-            "username": "Your username",
-            "password": "Your password"
+            "label": {
+                "email": "Email",
+                "username": "Username",
+                "password": "Password"
+            },
+            "placeholder": {
+                "email": "Your email",
+                "username": "Your username",
+                "password": "Your password"
+            }
         },
         "error": {
             "email": {
@@ -33,7 +47,34 @@
             "password": {
                 "empty": "Password cannot be empty",
                 "format": "Incorrect password format"
+            },
+            "username": "Username cannot be empty"
+        }
+    },
+    "signup": {
+        "title": "Sign up",
+        "button": "Sign up",
+        "form": {
+            "label": {
+                "name": "Name",
+                "lastName": "Last name",
+                "email": "Email",
+                "username": "Username",
+                "password": "Password",
+                "confirm": "Confirm your password"
+            },
+            "placeholder": {
+                "name": "Your name",
+                "lastName": "Your last name",
+                "email": "Your email",
+                "username": "Your username",
+                "password": "Your password",
+                "confirm": "Repeat your password"
             }
+        },
+        "error": {
+            "name": "Name cannot be empty",
+            "surname": "Surname cannot be empty"
         }
     }
 }

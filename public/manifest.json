@@ -1,13 +1,16 @@
 {
   "background_color": "#F4F4F4",
-  "categories": ["education", "kids"],
+  "categories": [
+    "education",
+    "kids"
+  ],
   "description": "App description",
   "dir": "ltr",
   "display_override": [
-    "standalone",
-    "fullscreen"
+    "fullscreen",
+    "standalone"
   ],
-  "display": "standalone",
+  "display": "fullscreen",
   "icons": [
     {
       "src": "logo192.png",
