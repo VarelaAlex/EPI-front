@@ -1,25 +1,32 @@
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
-import { Layout, Menu, } from "antd";
+import { Drawer, Menu, Typography, } from "antd";
+import { CloseOutlined } from '@ant-design/icons';
 
 let SiderComponent = (props) => {
 
-    let { collapsed, setCollapsed, login, setLogin, setRole } = props;
+    let { open, setOpen, login, setLogin } = props;
 
     let { t } = useTranslation();
-    let { Sider } = Layout;
 
     let navigate = useNavigate();
 
     let disconnect = async () => {
         setLogin(false);
         navigate("/selectRole");
-        setCollapsed(true);
-        setRole(null)
+        setOpen(true);
     };
 
+    let { Text } = Typography;
+
     return (
-        <Sider collapsible collapsedWidth={0} collapsed={collapsed} trigger={null}>
+        <Drawer
+            title={<Text style={{ color: "white", fontSize: "2vh" }}>Profile</Text>}
+            open={open}
+            onClose={() => setOpen(false)}
+            placement="left"
+            styles={{ header: { backgroundColor: "#001628" } }}
+            closeIcon={<CloseOutlined style={{color:"white"}}/>}>
             <Menu mode="vertical"
                 items={!login ?
                     [
@@ -29,7 +36,7 @@ let SiderComponent = (props) => {
                         { key: "menuDisconnect", label: <Link to="/disconnect" onClick={disconnect}>{t("menu.disconnect")}</Link> }
                     ]
                 } />
-        </Sider>
+        </Drawer>
     );
 };
 

@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Button, Card, Flex, Input, Typography, Form } from "antd";
+import { Button, Card, Input, Typography, Form } from "antd";
 
 let LoginTeacherComponent = (props) => {
 
@@ -9,8 +9,11 @@ let LoginTeacherComponent = (props) => {
     let { t } = useTranslation();
     let { Text } = Typography;
 
+    let navigate = useNavigate();
+
     let onFinish = async () => {
         setLogin(true);
+        navigate("/menuTeacher");
     };
 
     return (

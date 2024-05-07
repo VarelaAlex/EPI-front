@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 let LoginStepsComponent = (props) => {
 
-    let { current, setCurrent, setRole } = props;
+    let { current, setCurrent } = props;
 
     let { t } = useTranslation();
 
@@ -22,7 +22,6 @@ let LoginStepsComponent = (props) => {
 
     let onChange = (value) => {
         setCurrent(value);
-        setRole(null);
         value === 0 && navigate("/");
     };
 

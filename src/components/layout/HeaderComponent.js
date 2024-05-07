@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { Row, Col, Button, Dropdown, Space, Layout, Tooltip, Image } from "antd";
-import { DownloadOutlined, DownOutlined, TranslationOutlined, MenuOutlined } from '@ant-design/icons';
+import { DownloadOutlined, DownOutlined, TranslationOutlined, UserOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
 
 let HeaderComponent = (props) => {
 
-    let { login, collapsed, setCollapsed, setRole, isMobile } = props;
+    let { login, open, setOpen, isMobile } = props;
 
     let [highlighted, setHighlighted] = useState(true);
     let [isReadyForInstall, setIsReadyForInstall] = useState(false);
@@ -61,16 +61,18 @@ let HeaderComponent = (props) => {
                     <Col style={{ display: 'flex', alignItems: 'center' }}>
                         <Button
                             ghost
-                            icon={<MenuOutlined />}
-                            onClick={() => setCollapsed(!collapsed)}
+                            size="large"
+                            shape="circle"
+                            icon={<UserOutlined />}
+                            onClick={() => setOpen(!open)}
                         />
                     </Col>
                 }
                 <Col style={{ display: 'flex', alignItems: 'center' }}>
-                <Link to="/selectRole" onClick={() => setRole(null)}>
-                    <Image src="/logo_text.png" width="8vmax" preview={false} style={{ borderRadius: '0.75vmax' }} />
-                </Link>
-            </Col>
+                    <Link to="/selectRole" >
+                        <Image src="/logo_text.png" width="8vmax" preview={false} style={{ borderRadius: '0.75vmax' }} />
+                    </Link>
+                </Col>
             </Row>
             <Row>
                 <Col style={{ display: 'flex', alignItems: 'center' }}>
@@ -97,7 +99,7 @@ let HeaderComponent = (props) => {
                         </Tooltip>
                     }
                 </Col>
-                <Col style={{ paddingLeft: "2vh" }}>
+                <Col style={{ paddingLeft: "1vw" }}>
                     {isReadyForInstall &&
                         <Tooltip title={t("pwa.button")} mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
                             <Button

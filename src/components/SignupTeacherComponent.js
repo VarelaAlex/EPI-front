@@ -1,10 +1,12 @@
-import { Button, Form, Input, Card } from 'antd';
+import { Button, Form, Input, Card, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 const SignupTeacherComponent = (props) => {
 
     let { setLogin } = props;
 
     let { t } = useTranslation();
+    let { Text } = Typography;
 
     let onFinish = async () => {
         setLogin(true);
@@ -105,10 +107,13 @@ const SignupTeacherComponent = (props) => {
                 </Form.Item>
                 <Form.Item wrapperCol={{ xs: { span: 24, offset: 0 }, sm: { span: 16, offset: 8 } }}>
                     <Button type="primary" htmlType="submit">
-                        Register
+                        {t("signup.button")}
                     </Button>
                 </Form.Item>
             </Form>
+            <Text style={{ paddingTop: "2vh" }}>
+                {t("signup.loginMessage")} <Link to="/loginTeacher">{t("signup.loginLink")}</Link>
+            </Text>
         </Card>
     );
 };

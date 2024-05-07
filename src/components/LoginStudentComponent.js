@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Button, Card, Flex, Input, Form } from "antd";
+import { Button, Card, Input, Form } from "antd";
 
 let LoginStudentComponent = (props) => {
 

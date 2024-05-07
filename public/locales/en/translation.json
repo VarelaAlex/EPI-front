@@ -1,8 +1,8 @@
 {
     "language": {
         "button": "Language",
-        "spanish": "Spanish🇪🇸",
-        "english": "English🇬🇧"
+        "spanish": "Spanish",
+        "english": "English"
     },
     "pwa": {
         "button": "Download",
@@ -54,6 +54,8 @@
     "signup": {
         "title": "Sign up",
         "button": "Sign up",
+        "loginMessage": "Already have an account?",
+        "loginLink": "Log in",
         "form": {
             "label": {
                 "name": "Name",
@@ -76,5 +78,8 @@
             "name": "Name cannot be empty",
             "surname": "Surname cannot be empty"
         }
+    },
+    "menuTeacher":{
+        "classrooms":"My classrooms"
     }
 }

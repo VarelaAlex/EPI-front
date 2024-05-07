@@ -1,8 +1,8 @@
 {
     "language": {
         "button": "Idioma",
-        "spanish": "Español🇪🇸",
-        "english": "Inglés🇬🇧"
+        "spanish": "Español",
+        "english": "Inglés"
     },
     "pwa": {
         "button": "Descargar",
@@ -54,6 +54,8 @@
     "signup": {
         "title": "Registro",
         "button": "Regístrate",
+        "loginMessage": "¿Ya tienes una cuenta?",
+        "loginLink": "Inicia sesión",
         "form": {
             "label": {
                 "name": "Nombre",
@@ -76,5 +78,8 @@
             "name": "El nombre no puede estar vacío",
             "lastName": "Los apellidos no pueden estar vacíos"
         }
+    },
+    "menuTeacher":{
+        "classrooms":"Mis aulas"
     }
 }
