@@ -21,7 +21,7 @@ let SiderComponent = (props) => {
 
     return (
         <Drawer
-            title={<Text style={{ color: "white", fontSize: "2vh" }}>Profile</Text>}
+            title={<Text style={{ color: "white", fontSize: "2vh" }}>{t("sider.profile")}</Text>}
             open={open}
             onClose={() => setOpen(false)}
             placement="left"
@@ -30,10 +30,10 @@ let SiderComponent = (props) => {
             <Menu mode="vertical"
                 items={!login ?
                     [
-                        { key: "menuLogin", label: <Link to="/login">{t("menu.login")}</Link> }
+                        { key: "menuLogin", label: <Link to="/login">{t("sider.login")}</Link> }
                     ] :
                     [
-                        { key: "menuDisconnect", label: <Link to="/disconnect" onClick={disconnect}>{t("menu.disconnect")}</Link> }
+                        { key: "menuDisconnect", label: <Link to="/disconnect" onClick={disconnect}>{t("sider.disconnect")}</Link> }
                     ]
                 } />
         </Drawer>

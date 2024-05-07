@@ -9,7 +9,8 @@
         "notificationMessage": "¡Bienvenido/a a HYTEX!",
         "notificationDescription": "Puedes descargar la aplicación pulsando en el botón que aparece a la derecha"
     },
-    "menu": {
+    "sider": {
+        "profile":"Mi perfil",
         "login": "Iniciar sesión",
         "disconnect": "Cerrar sesión"
     },
