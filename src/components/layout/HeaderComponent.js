@@ -70,7 +70,7 @@ let HeaderComponent = (props) => {
                 }
                 <Col style={{ display: 'flex', alignItems: 'center' }}>
                     <Link to="/selectRole" >
-                        <Image src="/logo_text.png" width="8vmax" preview={false} style={{ borderRadius: '0.75vmax' }} />
+                        <Image src="/logo_text.png" width="12.5vh" preview={false} style={{ borderRadius: '0.75vmax' }} />
                     </Link>
                 </Col>
             </Row>

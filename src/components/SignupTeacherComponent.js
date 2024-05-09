@@ -27,7 +27,7 @@ const SignupTeacherComponent = (props) => {
                     rules={[
                         {
                             required: true,
-                            message: 'Please input your nickname!',
+                            message: t("signup.error.name"),
                             whitespace: true,
                         },
                     ]}
@@ -40,7 +40,7 @@ const SignupTeacherComponent = (props) => {
                     rules={[
                         {
                             required: true,
-                            message: 'Please input your nickname!',
+                            message: t("signup.error.lastName"),
                             whitespace: true,
                         },
                     ]}
@@ -53,11 +53,11 @@ const SignupTeacherComponent = (props) => {
                     rules={[
                         {
                             type: 'email',
-                            message: 'The input is not valid E-mail!',
+                            message: t("signup.error.email.format"),
                         },
                         {
                             required: true,
-                            message: 'Please input your E-mail!',
+                            message: t("signup.error.email.empty"),
                         },
                     ]}
                     hasFeedback
@@ -71,7 +71,7 @@ const SignupTeacherComponent = (props) => {
                     rules={[
                         {
                             required: true,
-                            message: 'Please input your password!',
+                            message: t("signup.error.password.empty"),
                         },
                     ]}
                     hasFeedback
@@ -89,14 +89,14 @@ const SignupTeacherComponent = (props) => {
                     rules={[
                         {
                             required: true,
-                            message: 'Please confirm your password!',
+                            message: t("signup.error.password.confirm"),
                         },
                         ({ getFieldValue }) => ({
                             validator(_, value) {
                                 if (!value || getFieldValue('password') === value) {
                                     return Promise.resolve();
                                 }
-                                return Promise.reject(new Error('The new password that you entered do not match!'));
+                                return Promise.reject(new Error(t("signup.error.password.unmatch")));
                             },
                         }),
                     ]}

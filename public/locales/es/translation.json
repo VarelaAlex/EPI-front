@@ -10,7 +10,13 @@
         "notificationDescription": "Puedes descargar la aplicación pulsando en el botón que aparece a la derecha"
     },
     "sider": {
-        "profile":"Mi perfil",
+        "teacher": {
+            "welcomeMessage": "Hola",
+            "classrooms": "Mis aulas",
+            "exercises": "Mis ejercicios",
+            "about": "Sobre la estrategia Hypertexto",
+            "profile": "Mi perfil"
+        },
         "login": "Iniciar sesión",
         "disconnect": "Cerrar sesión"
     },
@@ -49,7 +55,7 @@
                 "empty": "La contraseña no puede estar vacía",
                 "format": "El formato de la contraseña no es correcto"
             },
-            "username": "Username cannot be empty"
+            "username": "El nombre de ususario no puede estar vacío"
         }
     },
     "signup": {
@@ -76,11 +82,39 @@
             }
         },
         "error": {
+            "email": {
+                "empty": "El correo no puede estar vacío",
+                "format": "El formato del correo no es correcto"
+            },
             "name": "El nombre no puede estar vacío",
-            "lastName": "Los apellidos no pueden estar vacíos"
+            "lastName": "Los apellidos no pueden estar vacíos",
+            "password": {
+                "empty": "La contraseña no puede estar vacía",
+                "format": "El formato de la contraseña no es correcto",
+                "confirm": "Por favor, confirma tu contraseña",
+                "unmatch": "Las contraseñas que has introducido no son correctas"
+            }
         }
     },
-    "menuTeacher":{
-        "classrooms":"Mis aulas"
+    "classrooms": {
+        "table": {
+            "title": "Mis aulas",
+            "className": "Nombre del aula",
+            "numberStudents": "Número de estudiantes",
+            "empty": "No tienes aulas",
+            "tooltips": {
+                "seeStatistics": "Ver estadísticas",
+                "delete": "Eliminar"
+            },
+            "buttons": {
+                "seeStatistics": "Ver estadísticas",
+                "delete": "Eliminar"
+            }
+        },
+        "addClassroom": {
+            "divider": "Añadir un nuevo aula",
+            "placeholder": "Nombre del aula",
+            "button": "Añadir aula"
+        }
     }
 }

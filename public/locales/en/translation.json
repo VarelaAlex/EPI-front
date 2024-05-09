@@ -10,7 +10,13 @@
         "notificationDescription": "You can download the app by clicking on the button on the right"
     },
     "sider": {
-        "profile":"My profile",
+        "teacher": {
+            "welcomeMessage": "Hello",
+            "classrooms": "My classrooms",
+            "exercises": "My exercises",
+            "about": "About Hypertexto strategy",
+            "profile": "My profile"
+        },
         "login": "Login",
         "disconnect": "Disconnect"
     },
@@ -76,11 +82,39 @@
             }
         },
         "error": {
+            "email": {
+                "empty": "Email cannot be empty",
+                "format": "Incorrect email format"
+            },
             "name": "Name cannot be empty",
-            "surname": "Surname cannot be empty"
+            "lastName": "Last name cannot be empty",
+            "password": {
+                "empty": "Password cannot be empty",
+                "format": "Incorrect password format",
+                "confirm": "Please, confirm your password",
+                "unmatch": "The passwords you entered do not match"
+            }
         }
     },
-    "menuTeacher":{
-        "classrooms":"My classrooms"
+    "classrooms": {
+        "table": {
+            "title": "My classrooms",
+            "className": "Class name",
+            "numberStudents": "Number of students",
+            "empty": "You don't have classrooms",
+            "tooltips": {
+                "seeStatistics": "See statistics",
+                "delete": "Delete"
+            },
+            "buttons": {
+                "seeStatistics": "See statistics",
+                "delete": "Delete"
+            }
+        },
+        "addClassroom": {
+            "divider": "Add a new classroom",
+            "placeholder": "Classroom name",
+            "button": "Add classroom"
+        }
     }
 }

@@ -8,22 +8,24 @@ let ClassroomsListComponent = (props) => {
 
   let { isMobile } = props;
 
-  let { t } = useTranslation();
-
+  let [lastKey, setLasKey] = useState(0);
   let [classrooms, setClassrooms] = useState([]);
+  let [className, setClassName] = useState("");
+
+  let classNameInput = useRef("");
+
+  let { t } = useTranslation();
 
   let navigate = useNavigate();
 
-  let [lastKey, setLasKey] = useState(0);
-
   const columns = [
     {
-      title: 'Class name',
+      title: t("classrooms.table.className"),
       dataIndex: 'name',
       render: (text) => <Link to="/example">{text}</Link>
     },
     {
-      title: 'Number of students',
+      title: t("classrooms.table.numberStudents"),
       dataIndex: 'numberStudents',
       align: "center"
     },
@@ -33,10 +35,10 @@ let ClassroomsListComponent = (props) => {
         <Flex justify="end" align="center" gap="1vw">
           {isMobile ?
             <>
-              <Tooltip title="See statistics" mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
+              <Tooltip title={t("classrooms.table.tooltips.seeStatistics")} mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
                 <Button onClick={() => navigate("/example")} icon={<LineChartOutlined />} />
               </Tooltip>
-              <Tooltip title="Delete" mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
+              <Tooltip title={t("classrooms.table.tooltips.delete")} mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
                 <Button
                   danger
                   type="primary"
@@ -46,20 +48,13 @@ let ClassroomsListComponent = (props) => {
               </Tooltip>
             </>
             : <>
-              <Button onClick={() => navigate("/example")} > See statistics</Button >
-              <Button
-                danger
-                type="primary"
-                onClick={() => deleteClassroom(record)}
-              > Delete</Button >
+              <Button onClick={() => navigate("/example")} > {t("classrooms.table.buttons.seeStatistics")}</Button >
+              <Button danger type="primary" onClick={() => deleteClassroom(record)}> {t("classrooms.table.buttons.delete")}</Button >
             </>}
         </Flex>
       )
     }
   ];
-
-  let [className, setClassName] = useState("");
-  let classNameInput = useRef("");
 
   let addFriend = async () => {
     setClassrooms([...classrooms, {
@@ -78,21 +73,21 @@ let ClassroomsListComponent = (props) => {
   };
 
   return (
-    <Card title={t("menuTeacher.classrooms")} style={{ minWidth: "55vw" }}>
+    <Card title={t("classrooms.table.title")} style={{ minWidth: "55vw" }}>
       {classrooms.length <= 0 ?
-        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="You don't have classrooms" />
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("classrooms.table.empty")} />
         : <Table columns={columns} dataSource={classrooms} />
       }
-      <Divider orientation="left">Add a new classroom</Divider>
+      <Divider orientation="left">{t("classrooms.addClassroom.divider")}</Divider>
       <Flex gap="1vw" align="start" justify="center" vertical={isMobile}>
         <Input
           ref={classNameInput}
           type="text"
-          placeholder="Classroom name"
+          placeholder={t("classrooms.addClassroom.placeholder")}
           value={className}
           onChange={(e) => setClassName(e.target.value)}
         />
-        <Button type="primary" onClick={addFriend}>Add classroom</Button>
+        <Button type="primary" onClick={addFriend}>{t("classrooms.addClassroom.button")}</Button>
       </Flex>
     </Card>
   );

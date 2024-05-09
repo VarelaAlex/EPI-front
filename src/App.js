@@ -14,7 +14,6 @@ import ClassroomOutlined from './components/icons/ClassroomOutlined';
 
 let App = () => {
 
-
   const MOBILE_BREAKPOINT = 768;
 
   let [open, setOpen] = useState(false);
@@ -71,11 +70,36 @@ let App = () => {
         }
         setMenuItems(
           [
-            { key: "classrooms", label: <Link to="/menuTeacher" onClick={() => setOpen(false)}> {"My classrooms"}</Link>, danger: false, icon: <ClassroomOutlined /> },
-            { key: "exercises", label: <Link to="/manageExercises" onClick={() => setOpen(false)}> {"My exercises"}</Link>, danger: false, icon: <FormOutlined /> },
-            { key: "about", label: <Link to="/aboutHYTEX" onClick={() => setOpen(false)}> {"About Hypertexto strategy"}</Link>, danger: false, icon: <InfoCircleOutlined /> },
-            { key: "profile", label: <Link to="/profile" onClick={() => setOpen(false)}> {"My profile"}</Link>, danger: false, icon: <UserOutlined /> },
-            { key: "menuDisconnect", label: <Link to="/disconnect" onClick={disconnect}>{t("sider.disconnect")}</Link>, danger: true, icon: <LogoutOutlined /> }
+            {
+              key: "classrooms",
+              label: <Link to="/menuTeacher" onClick={() => setOpen(false)}>{t("sider.teacher.classrooms")}</Link>,
+              danger: false,
+              icon: <ClassroomOutlined />
+            },
+            {
+              key: "exercises",
+              label: <Link to="/manageExercises" onClick={() => setOpen(false)}>{t("sider.teacher.exercises")}</Link>,
+              danger: false,
+              icon: <FormOutlined />
+            },
+            {
+              key: "about",
+              label: <Link to="/aboutHYTEX" onClick={() => setOpen(false)}>{t("sider.teacher.about")}</Link>,
+              danger: false,
+              icon: <InfoCircleOutlined />
+            },
+            {
+              key: "profile",
+              label: <Link to="/profile" onClick={() => setOpen(false)}>{t("sider.teacher.profile")}</Link>,
+              danger: false,
+              icon: <UserOutlined />
+            },
+            {
+              key: "menuDisconnect",
+              label: <Link to="/disconnect" onClick={disconnect}>{t("sider.disconnect")}</Link>,
+              danger: true,
+              icon: <LogoutOutlined />
+            }
           ]);
       }
     };

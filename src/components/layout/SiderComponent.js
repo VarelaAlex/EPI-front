@@ -1,9 +1,13 @@
 import { Drawer, Menu, Typography, } from "antd";
 import { CloseOutlined } from '@ant-design/icons';
+import { useTranslation } from "react-i18next";
 
 let SiderComponent = (props) => {
 
     let { open, setOpen, menuItems } = props;
+
+    let { t } = useTranslation();
+    let { Text } = Typography;
 
     let [menu, footer] = menuItems.reduce(
         (acc, item) => {
@@ -13,11 +17,9 @@ let SiderComponent = (props) => {
         [[], []]
     );
 
-    let { Text } = Typography;
-
     return (
         <Drawer
-            title={<Text style={{ color: "white", fontSize: "2vh" }}>{"Hello, Álex!"}</Text>}
+            title={<Text style={{ color: "white", fontSize: "2vh" }}>{t("sider.teacher.welcomeMessage") + ", Álex"}</Text>}
             open={open}
             onClose={() => setOpen(false)}
             placement="left"
@@ -28,7 +30,7 @@ let SiderComponent = (props) => {
             closeIcon={<CloseOutlined style={{ color: "white" }} />}
             footer={<Menu mode="vertical" items={footer} />}
         >
-            <Menu mode="vertical" items={menu} defaultSelectedKeys="classrooms" />
+            <Menu mode="vertical" items={menu} defaultSelectedKeys={menu[0]?.key} />
         </Drawer>
     );
 };
