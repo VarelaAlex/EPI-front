@@ -8,7 +8,7 @@ let HeaderComponent = (props) => {
 
     let { login, open, setOpen, isMobile } = props;
 
-    let [highlighted, setHighlighted] = useState(true);
+    let [highlighted, setHighlighted] = useState(false);
     let [isReadyForInstall, setIsReadyForInstall] = useState(false);
     let [deferredPrompt, setDeferredPrompt] = useState(null);
 
@@ -43,9 +43,11 @@ let HeaderComponent = (props) => {
     };
 
     useEffect(() => {
-        setTimeout(() => {
-            setHighlighted(false);
-        }, 4000);
+        if (!localStorage.getItem("pwaNotificationShown")) {
+            setTimeout(() => {
+                setHighlighted(false);
+            }, 4000);
+        }
 
         window.addEventListener("beforeinstallprompt", (event) => {
             event.preventDefault();

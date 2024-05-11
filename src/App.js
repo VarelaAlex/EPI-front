@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Layout, notification, Flex } from "antd";
@@ -11,38 +11,82 @@ import SignupTeacherComponent from './components/SignupTeacherComponent';
 import ClassroomsListComponent from './components/ClassroomsListComponent';
 import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined } from "@ant-design/icons";
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
+import { backendURL } from './Globals';
 
 let App = () => {
 
-  const MOBILE_BREAKPOINT = 768;
+  const MOBILE_BREAKPOINT = 500;
 
   let [open, setOpen] = useState(false);
-  let [login, setLogin] = useState(true);
+  let [login, setLogin] = useState(false);
   let [api, contextHolder] = notification.useNotification();
   let [isMobile, setIsMobile] = useState(false);
-  let [menuItems, setMenuItems] = useState([]);
 
   let { t } = useTranslation();
   let { Content, Footer } = Layout;
 
-  let notificationShown = useRef(false);
   let navigate = useNavigate();
   let location = useLocation();
+  /*
+    let createNotification =
+      ({ message,
+        description = message,
+        type = "info",
+        placement = "top",
+        duration = "3"
+      }) => {
+        api[type]({
+          message,
+          description,
+          placement,
+          duration
+        });
+      };
+  */
 
-  let createNotification = useCallback(
-    ({ message,
-      description = message,
-      type = "info",
-      placement = "top",
-      duration = "3"
-    }) => {
-      api[type]({
-        message,
-        description,
-        placement,
-        duration
-      });
-    }, [api]);
+  let disconnect = async () => {
+    let response = await fetch(backendURL + "/teachers/disconnect?apiKey=" + localStorage.getItem("apiKey"));
+    if (response.ok) {
+      localStorage.removeItem("apiKey");
+      localStorage.removeItem("idUser");
+      localStorage.removeItem("email");
+      setLogin(false);
+      navigate("/selectRole");
+    }
+  };
+
+  let menuItems = [
+    {
+      key: "classrooms",
+      label: <Link to="/menuTeacher" onClick={() => setOpen(false)}>{t("sider.teacher.classrooms")}</Link>,
+      danger: false,
+      icon: <ClassroomOutlined />
+    },
+    {
+      key: "exercises",
+      label: <Link to="/manageExercises" onClick={() => setOpen(false)}>{t("sider.teacher.exercises")}</Link>,
+      danger: false,
+      icon: <FormOutlined />
+    },
+    {
+      key: "about",
+      label: <Link to="/aboutHYTEX" onClick={() => setOpen(false)}>{t("sider.teacher.about")}</Link>,
+      danger: false,
+      icon: <InfoCircleOutlined />
+    },
+    {
+      key: "profile",
+      label: <Link to="/profile" onClick={() => setOpen(false)}>{t("sider.teacher.profile")}</Link>,
+      danger: false,
+      icon: <UserOutlined />
+    },
+    {
+      key: "menuDisconnect",
+      label: <Link onClick={disconnect}>{t("sider.disconnect")}</Link>,
+      danger: true,
+      icon: <LogoutOutlined />
+    }
+  ];
 
   useEffect(() => {
     const handleResize = () => {
@@ -56,70 +100,36 @@ let App = () => {
 
   useEffect(() => {
 
-    let disconnect = async () => {
-      setLogin(false);
-      navigate("/selectRole");
-    };
-
     let checkLogin = async () => {
-      if (!login && !["/selectRole", "/loginTeacher", "/loginStudent", "/registerTeacher"].includes(location.pathname)) {
-        navigate("/selectRole");
-      } else {
-        if (login && ["/selectRole", "/loginTeacher", "/loginStudent", "/registerTeacher"].includes(location.pathname)) {
-          navigate("/menuTeacher");
+      if (localStorage.getItem("apiKey")) {
+        let response = await fetch(backendURL + "/teachers/checkLogin?apiKey=" + localStorage.getItem("apiKey"));
+        if (response.status === 200) {
+          setLogin(true);
+        } else {
+          setLogin(false);
+          navigate("/selectRole");
         }
-        setMenuItems(
-          [
-            {
-              key: "classrooms",
-              label: <Link to="/menuTeacher" onClick={() => setOpen(false)}>{t("sider.teacher.classrooms")}</Link>,
-              danger: false,
-              icon: <ClassroomOutlined />
-            },
-            {
-              key: "exercises",
-              label: <Link to="/manageExercises" onClick={() => setOpen(false)}>{t("sider.teacher.exercises")}</Link>,
-              danger: false,
-              icon: <FormOutlined />
-            },
-            {
-              key: "about",
-              label: <Link to="/aboutHYTEX" onClick={() => setOpen(false)}>{t("sider.teacher.about")}</Link>,
-              danger: false,
-              icon: <InfoCircleOutlined />
-            },
-            {
-              key: "profile",
-              label: <Link to="/profile" onClick={() => setOpen(false)}>{t("sider.teacher.profile")}</Link>,
-              danger: false,
-              icon: <UserOutlined />
-            },
-            {
-              key: "menuDisconnect",
-              label: <Link to="/disconnect" onClick={disconnect}>{t("sider.disconnect")}</Link>,
-              danger: true,
-              icon: <LogoutOutlined />
-            }
-          ]);
+      } else {
+        if (!["/loginTeacher", "/loginStudent", "/registerTeacher", "/selectRole"].includes(location.pathname)) {
+          navigate("/selectRole");
+        }
       }
     };
 
     checkLogin();
-  }, [login, navigate, location.pathname, t]);
-
+  }, [location.pathname, navigate]);
 
   useEffect(() => {
-
     // TODO: Create notification when first session created
-    if (!notificationShown.current) {
-      createNotification({
+    if (!localStorage.getItem("pwaNotificationShown")) {
+      api.info({
         message: t("pwa.notificationMessage"),
         description: t("pwa.notificationDescription"),
         duration: "4"
       });
+      localStorage.setItem("pwaNotificationShown", true);
     }
-    notificationShown.current = true;
-  }, [createNotification, t]);
+  }, [api, t]);
 
   return (
     <>

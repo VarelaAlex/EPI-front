@@ -47,6 +47,6 @@
     }
   ],
   "short_name": "HYTEX",
-  "start_url": "/",
+  "start_url": "/selectRole",
   "theme_color": "#000280"
 }
