@@ -1,19 +1,49 @@
-import { Button, Form, Input, Card, Typography } from 'antd';
+import { Button, Form, Input, Card, Typography, Alert } from 'antd';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
-const SignupTeacherComponent = (props) => {
+import { Link, useNavigate } from 'react-router-dom';
+import { backendURL } from '../Globals';
 
-    let { setLogin } = props;
+const SignupTeacherComponent = () => {
 
     let { t } = useTranslation();
     let { Text } = Typography;
 
-    let onFinish = async () => {
-        setLogin(true);
+    let [message, setMessage] = useState(null);
+
+    let navigate = useNavigate();
+
+    let onFinish = async (values) => {
+        let { name, lastName, email, password } = values;
+
+        let response = null;
+        try {
+            response = await fetch(backendURL + "/teachers", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name,
+                    lastName,
+                    email,
+                    password
+                })
+            });
+        } catch (e) {
+            setMessage({ error: { type: "internalServerError", message: e } });
+            return;
+        }
+
+        let jsonData = await response?.json();
+        if (response?.ok) {
+            navigate("/loginTeacher");
+        } else {
+            setMessage({ error: jsonData?.error });
+        }
     };
 
     return (
         <Card title={t("signup.title")} style={{ width: "80vw" }}>
+            {message?.error?.type && <Alert type="error" message={t(message?.error?.type)} showIcon style={{ marginBottom: "1vh" }} />}
             <Form
                 name="register"
                 labelCol={{ xs: { span: 24 }, sm: { span: 8 } }}
@@ -31,8 +61,11 @@ const SignupTeacherComponent = (props) => {
                             whitespace: true,
                         },
                     ]}
+                    validateStatus={message?.error?.name ? 'error' : undefined}
+                    help={message?.error?.name ? t(message?.error?.name) : undefined}
+                    hasFeedback
                 >
-                    <Input placeholder={t("signup.form.placeholder.name")} />
+                    <Input placeholder={t("signup.form.placeholder.name")} onInput={() => setMessage(null)} />
                 </Form.Item>
                 <Form.Item
                     name="lastName"
@@ -44,8 +77,11 @@ const SignupTeacherComponent = (props) => {
                             whitespace: true,
                         },
                     ]}
+                    validateStatus={message?.error?.lastName ? 'error' : undefined}
+                    help={message?.error?.lastName ? t(message?.error?.lastName) : undefined}
+                    hasFeedback
                 >
-                    <Input placeholder={t("signup.form.placeholder.lastName")} />
+                    <Input placeholder={t("signup.form.placeholder.lastName")} onInput={() => setMessage(null)} />
                 </Form.Item>
                 <Form.Item
                     name="email"
@@ -60,9 +96,11 @@ const SignupTeacherComponent = (props) => {
                             message: t("signup.error.email.empty"),
                         },
                     ]}
+                    validateStatus={message?.error?.email ? 'error' : undefined}
+                    help={message?.error?.email ? t(message?.error?.email) : undefined}
                     hasFeedback
                 >
-                    <Input placeholder={t("signup.form.placeholder.email")} />
+                    <Input placeholder={t("signup.form.placeholder.email")} onInput={() => setMessage(null)} />
                 </Form.Item>
 
                 <Form.Item
@@ -73,12 +111,23 @@ const SignupTeacherComponent = (props) => {
                             required: true,
                             message: t("signup.error.password.empty"),
                         },
+                        {
+                            pattern: /^(?=.*[\d])(?=.*[!@#$%&*])[\w!@#$%&*]{8,12}$/,
+                            message:
+                                <>
+                                    {t("signup.error.password.format.mustHave")} <br />
+                                    <span style={{ marginLeft: "2vmax" }} /> {t("signup.error.password.format.between")}  <br />
+                                    <span style={{ marginLeft: "2vmax" }} />{t("signup.error.password.format.digit")} <br />
+                                    <span style={{ marginLeft: "2vmax" }} />{t("signup.error.password.format.special")}
+                                </>
+                        }
                     ]}
+                    validateStatus={message?.error?.password ? 'error' : undefined}
+                    help={message?.error?.password ? t(message?.error?.password) : undefined}
                     hasFeedback
                 >
                     <Input.Password
-                        placeholder={t("signup.form.placeholder.password")}
-                    />
+                        placeholder={t("signup.form.placeholder.password")} onInput={() => setMessage(null)} />
                 </Form.Item>
 
                 <Form.Item

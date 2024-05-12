@@ -54,7 +54,6 @@
             },
             "password": {
                 "empty": "Password cannot be empty",
-                "format": "Incorrect password format",
                 "incorrect": "Incorrect password"
             },
             "username": "Username cannot be empty"
@@ -86,13 +85,19 @@
         "error": {
             "email": {
                 "empty": "Email cannot be empty",
-                "format": "Incorrect email format"
+                "format": "Incorrect email format",
+                "repeated": "There is already an account with this email"
             },
             "name": "Name cannot be empty",
             "lastName": "Last name cannot be empty",
             "password": {
                 "empty": "Password cannot be empty",
-                "format": "Incorrect password format",
+                "format": {
+                    "mustHave": "The password must have:",
+                    "between": "1. Between 8 and 12 characters",
+                    "digit": "2. At list one digit",
+                    "special": "3. At list one of the following characters: ! @ # $ % & *"
+                },
                 "confirm": "Please, confirm your password",
                 "unmatch": "The passwords you entered do not match"
             }

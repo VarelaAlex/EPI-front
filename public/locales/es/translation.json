@@ -54,7 +54,6 @@
             },
             "password": {
                 "empty": "La contraseña no puede estar vacía",
-                "format": "El formato de la contraseña no es correcto",
                 "incorrect": "Contraseña incorrecta"
             },
             "username": "El nombre de ususario no puede estar vacío"
@@ -86,15 +85,21 @@
         "error": {
             "email": {
                 "empty": "El correo no puede estar vacío",
-                "format": "El formato del correo no es correcto"
+                "format": "El formato del correo no es correcto",
+                "repeated": "Ya existe una cuenta con este correo"
             },
             "name": "El nombre no puede estar vacío",
             "lastName": "Los apellidos no pueden estar vacíos",
             "password": {
                 "empty": "La contraseña no puede estar vacía",
-                "format": "El formato de la contraseña no es correcto",
+                "format": {
+                    "mustHave": "La contraseña debe cumplir los siguientes requisitos:",
+                    "between": "1. Tener entre 8 y 12 caracteres",
+                    "digit": "2. Contener al menos un dígito",
+                    "special": "3. Contener al menos uno de los siguientes caracteres: ! @ # $ % & *"
+                },
                 "confirm": "Por favor, confirma tu contraseña",
-                "unmatch": "Las contraseñas que has introducido no son correctas"
+                "unmatch": "Las contraseñas que has introducido no son idénticas"
             }
         }
     },
