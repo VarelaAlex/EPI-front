@@ -17,7 +17,10 @@
             "about": "About Hypertexto strategy",
             "profile": "My profile"
         },
-        "login": "Login",
+        "student": {
+            "exercises": "Exercises",
+            "howto": "How to do a exercise"
+        },
         "disconnect": "Disconnect"
     },
     "role": {
@@ -56,7 +59,10 @@
                 "empty": "Password cannot be empty",
                 "incorrect": "Incorrect password"
             },
-            "username": "Username cannot be empty"
+            "username": {
+                "empty": "Username cannot be empty",
+                "notExist": "There is not a student with this username"
+            }
         }
     },
     "signup": {

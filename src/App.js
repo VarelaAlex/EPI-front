@@ -9,9 +9,9 @@ import HeaderComponent from './components/layout/HeaderComponent';
 import SiderComponent from "./components/layout/SiderComponent";
 import SignupTeacherComponent from './components/SignupTeacherComponent';
 import ClassroomsListComponent from './components/ClassroomsListComponent';
+import { backendURL } from './Globals';
 import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined } from "@ant-design/icons";
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
-import { backendURL } from './Globals';
 
 let App = () => {
 
@@ -50,35 +50,57 @@ let App = () => {
       localStorage.removeItem("apiKey");
       localStorage.removeItem("idUser");
       localStorage.removeItem("email");
+      localStorage.removeItem("role");
       setLogin(false);
       navigate("/selectRole");
     }
   };
 
-  let menuItems = [
+  let teacherMenuItems = [
     {
       key: "classrooms",
-      label: <Link to="/menuTeacher" onClick={() => setOpen(false)}>{t("sider.teacher.classrooms")}</Link>,
+      label: <Link to="/teachers/menuTeacher" onClick={() => setOpen(false)}>{t("sider.teacher.classrooms")}</Link>,
       danger: false,
       icon: <ClassroomOutlined />
     },
     {
       key: "exercises",
-      label: <Link to="/manageExercises" onClick={() => setOpen(false)}>{t("sider.teacher.exercises")}</Link>,
+      label: <Link to="/teachers/manageExercises" onClick={() => setOpen(false)}>{t("sider.teacher.exercises")}</Link>,
       danger: false,
       icon: <FormOutlined />
     },
     {
       key: "about",
-      label: <Link to="/aboutHYTEX" onClick={() => setOpen(false)}>{t("sider.teacher.about")}</Link>,
+      label: <Link to="/teachers/aboutHYTEX" onClick={() => setOpen(false)}>{t("sider.teacher.about")}</Link>,
       danger: false,
       icon: <InfoCircleOutlined />
     },
     {
       key: "profile",
-      label: <Link to="/profile" onClick={() => setOpen(false)}>{t("sider.teacher.profile")}</Link>,
+      label: <Link to="/teachers/profile" onClick={() => setOpen(false)}>{t("sider.teacher.profile")}</Link>,
       danger: false,
       icon: <UserOutlined />
+    },
+    {
+      key: "menuDisconnect",
+      label: <Link onClick={disconnect}>{t("sider.disconnect")}</Link>,
+      danger: true,
+      icon: <LogoutOutlined />
+    }
+  ];
+
+  let studentMenuItems = [
+    {
+      key: "exercises",
+      label: <Link to="/students/manageExercises" onClick={() => setOpen(false)}>{t("sider.student.exercises")}</Link>,
+      danger: false,
+      icon: <FormOutlined />
+    },
+    {
+      key: "howto",
+      label: <Link to="/students/howTo" onClick={() => setOpen(false)}>{t("sider.student.howto")}</Link>,
+      danger: false,
+      icon: <InfoCircleOutlined />
     },
     {
       key: "menuDisconnect",
@@ -102,15 +124,29 @@ let App = () => {
 
     let checkLogin = async () => {
       if (localStorage.getItem("apiKey")) {
-        let response = await fetch(backendURL + "/teachers/checkLogin?apiKey=" + localStorage.getItem("apiKey"));
-        if (response.status === 200) {
+        let response = null;
+        let role = localStorage.getItem("role");
+        if (role === "T") {
+          response = await fetch(backendURL + "/teachers/checkLogin?apiKey=" + localStorage.getItem("apiKey"));
+        }
+        if (role === "S") {
+          response = await fetch(backendURL + "/students/checkLogin?apiKey=" + localStorage.getItem("apiKey"));
+        }
+        if (response?.status === 200) {
           setLogin(true);
+          if (role === "T" && (["/loginTeacher", "/loginStudent", "/registerTeacher", "/selectRole"].includes(location.pathname) || location.pathname.startsWith("/students/"))) {
+            navigate("/teachers/menuTeacher");
+          }
+          if (role === "S" && (["/loginTeacher", "/loginStudent", "/registerTeacher", "/selectRole"].includes(location.pathname) || location.pathname.startsWith("/teachers/"))) {
+            navigate("/students/example"); //TODO: replace this
+          }
         } else {
           setLogin(false);
           navigate("/selectRole");
         }
       } else {
         if (!["/loginTeacher", "/loginStudent", "/registerTeacher", "/selectRole"].includes(location.pathname)) {
+          setLogin(false);
           navigate("/selectRole");
         }
       }
@@ -148,7 +184,7 @@ let App = () => {
               setLogin={setLogin}
               open={open}
               setOpen={setOpen}
-              menuItems={menuItems}
+              menuItems={localStorage.getItem("role") === "T" ? teacherMenuItems : studentMenuItems}
             />
           }
           <Content style={{ minHeight: "78vh", marginTop: "2vh" }} >
@@ -166,13 +202,13 @@ let App = () => {
                 <Route path="/registerTeacher" element={
                   <SignupTeacherComponent />
                 } />
-                <Route path="/menuTeacher" element={
+                <Route path="/teachers/menuTeacher" element={
                   <ClassroomsListComponent isMobile={isMobile} />
                 } />
-                <Route path="/example" element={
+                <Route path="/teachers/example" element={
                   <>a</>
                 } />
-                <Route path="/manageExercises" element={
+                <Route path="/teachers/manageExercises" element={
                   <>a</>
                 } />
               </Routes>

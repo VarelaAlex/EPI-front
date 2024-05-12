@@ -19,7 +19,7 @@ let SiderComponent = (props) => {
 
     return (
         <Drawer
-            title={<Text style={{ color: "white", fontSize: "2vh" }}>{t("sider.teacher.welcomeMessage") + ", Álex"}</Text>}
+            title={<Text style={{ color: "white", fontSize: "2vh" }}>{t("sider.teacher.welcomeMessage") + ", " + localStorage.getItem("name")}</Text>}
             open={open}
             onClose={() => setOpen(false)}
             placement="left"

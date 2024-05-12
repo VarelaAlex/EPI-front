@@ -22,7 +22,7 @@ let ClassroomsListComponent = (props) => {
     {
       title: t("classrooms.table.className"),
       dataIndex: 'name',
-      render: (text) => <Link to="/example">{text}</Link>
+      render: (text) => <Link to="/teachers/example">{text}</Link>
     },
     {
       title: t("classrooms.table.numberStudents"),
@@ -36,7 +36,7 @@ let ClassroomsListComponent = (props) => {
           {isMobile ?
             <>
               <Tooltip title={t("classrooms.table.tooltips.seeStatistics")} mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
-                <Button onClick={() => navigate("/example")} icon={<LineChartOutlined />} />
+                <Button onClick={() => navigate("/teachers/example")} icon={<LineChartOutlined />} />
               </Tooltip>
               <Tooltip title={t("classrooms.table.tooltips.delete")} mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
                 <Button
@@ -48,7 +48,7 @@ let ClassroomsListComponent = (props) => {
               </Tooltip>
             </>
             : <>
-              <Button onClick={() => navigate("/example")} > {t("classrooms.table.buttons.seeStatistics")}</Button >
+              <Button onClick={() => navigate("/teachers/example")} > {t("classrooms.table.buttons.seeStatistics")}</Button >
               <Button danger type="primary" onClick={() => deleteClassroom(record)}> {t("classrooms.table.buttons.delete")}</Button >
             </>}
         </Flex>

@@ -17,7 +17,10 @@
             "about": "Sobre la estrategia Hypertexto",
             "profile": "Mi perfil"
         },
-        "login": "Iniciar sesión",
+        "student": {
+            "exercises": "Exercises",
+            "howto": "How to do a exercise"
+        },
         "disconnect": "Cerrar sesión"
     },
     "role": {
@@ -56,7 +59,10 @@
                 "empty": "La contraseña no puede estar vacía",
                 "incorrect": "Contraseña incorrecta"
             },
-            "username": "El nombre de ususario no puede estar vacío"
+            "username": {
+                "empty": "El nombre de usuario no puede estar vacío",
+                "notExist": "No existe un alumno con este nombre de usuario"
+            }
         }
     },
     "signup": {
