@@ -49,11 +49,13 @@
         "error": {
             "email": {
                 "empty": "El correo no puede estar vacío",
-                "format": "El formato del correo no es correcto"
+                "format": "El formato del correo no es correcto",
+                "notExist": "No existe un profesor con este correo"
             },
             "password": {
                 "empty": "La contraseña no puede estar vacía",
-                "format": "El formato de la contraseña no es correcto"
+                "format": "El formato de la contraseña no es correcto",
+                "incorrect": "Contraseña incorrecta"
             },
             "username": "El nombre de ususario no puede estar vacío"
         }
@@ -116,5 +118,6 @@
             "placeholder": "Nombre del aula",
             "button": "Añadir aula"
         }
-    }
+    },
+    "internalServerError": "Algo ha ido mal, inténtalo más tarde"
 }

@@ -49,11 +49,13 @@
         "error": {
             "email": {
                 "empty": "Email cannot be empty",
-                "format": "Incorrect email format"
+                "format": "Incorrect email format",
+                "notExist": "There is not a teacher with this email"
             },
             "password": {
                 "empty": "Password cannot be empty",
-                "format": "Incorrect password format"
+                "format": "Incorrect password format",
+                "incorrect": "Incorrect password"
             },
             "username": "Username cannot be empty"
         }
@@ -116,5 +118,6 @@
             "placeholder": "Classroom name",
             "button": "Add classroom"
         }
-    }
+    },
+    "internalServerError": "Something went wrong, try again later"
 }

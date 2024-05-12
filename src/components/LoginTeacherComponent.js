@@ -1,7 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Button, Card, Input, Typography, Form } from "antd";
+import { Button, Card, Input, Typography, Form, Alert } from "antd";
 import { backendURL } from '../Globals';
+import { useState } from 'react';
 
 let LoginTeacherComponent = (props) => {
 
@@ -10,47 +11,46 @@ let LoginTeacherComponent = (props) => {
     let { t } = useTranslation();
     let { Text } = Typography;
 
-    const [form] = Form.useForm();
+    let [message, setMessage] = useState(null);
 
     let navigate = useNavigate();
 
     let onFinish = async (values) => {
-        let { email, password, name, lastName } = values;
-        let response = await fetch(backendURL + "/teachers/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                name,
-                lastName,
-                email,
-                password
-            })
-        });
+        let { email, password } = values;
 
-        let jsonData = await response.json();
-        if (response.ok) {
-            if (jsonData.apiKey != null) {
+        let response = null;
+        try {
+            response = await fetch(backendURL + "/teachers/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            });
+        } catch (e) {
+            setMessage({ error: { type: "internalServerError", message: e } });
+            return;
+        }
+
+        let jsonData = await response?.json();
+        if (response?.ok) {
+            if (jsonData?.apiKey != null) {
                 localStorage.setItem("apiKey", jsonData.apiKey);
                 localStorage.setItem("idUser", jsonData.id);
                 localStorage.setItem("email", jsonData.email);
                 setLogin(true);
                 navigate("/menuTeacher");
             }
-        } /*else {
-            if (Array.isArray(jsonData.error)) {
-                setMessage(jsonData.error);
-            } else {
-                let finalError = [];
-                finalError.push(jsonData.error);
-                setMessage(finalError);
-            }
-        }*/
+        } else {
+            setMessage({ error: jsonData?.error });
+        }
     };
 
     return (
         <Card title={t("login.title")} style={{ width: "80vw" }}>
+            {message?.error?.type && <Alert type="error" message={t(message?.error?.type)} showIcon style={{ marginBottom: "1vh" }} />}
             <Form
-                form={form}
                 name="login"
                 labelCol={{ xs: { span: 24 }, sm: { span: 8 } }}
                 wrapperCol={{ xs: { span: 24 }, sm: { span: 16 } }}
@@ -68,11 +68,13 @@ let LoginTeacherComponent = (props) => {
                         {
                             required: true,
                             message: t("login.error.email.empty"),
-                        },
+                        }
                     ]}
+                    validateStatus={message?.error?.email ? 'error' : undefined}
+                    help={message?.error?.email ? t(message?.error?.email) : undefined}
                     hasFeedback
                 >
-                    <Input placeholder={t("login.form.placeholder.email")} />
+                    <Input placeholder={t("login.form.placeholder.email")} onInput={() => setMessage(null)} />
                 </Form.Item>
                 <Form.Item
                     name="password"
@@ -81,13 +83,13 @@ let LoginTeacherComponent = (props) => {
                         {
                             required: true,
                             message: t("login.error.password.empty"),
-                        },
+                        }
                     ]}
+                    validateStatus={message?.error?.password ? 'error' : undefined}
+                    help={message?.error?.password ? t(message?.error?.password) : undefined}
                     hasFeedback
                 >
-                    <Input.Password
-                        placeholder={t("login.form.placeholder.password")}
-                    />
+                    <Input.Password placeholder={t("login.form.placeholder.password")} onInput={() => setMessage(null)} />
                 </Form.Item>
                 <Form.Item wrapperCol={{ xs: { span: 24, offset: 0 }, sm: { span: 16, offset: 8 } }}>
                     <Button type="primary" htmlType="submit">
