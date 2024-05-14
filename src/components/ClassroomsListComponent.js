@@ -16,24 +16,6 @@ let ClassroomsListComponent = (props) => {
   let navigate = useNavigate();
 
   useEffect(() => {
-    let getClassrooms = async () => {
-      let response = await fetch(backendURL + "/classrooms/list?apiKey=" + localStorage.getItem("apiKey"));
-
-      if (response.ok) {
-        let jsonData = await response.json();
-        setClassrooms(jsonData);
-      } else {
-        let jsonData = await response.json();
-        if (Array.isArray(jsonData.error)) {
-          setMessage(jsonData.error);
-        } else {
-          let finalError = [];
-          finalError.push(jsonData.error);
-          setMessage(finalError);
-        }
-      }
-    };
-
     getClassrooms();
   }, []);
 
@@ -76,17 +58,34 @@ let ClassroomsListComponent = (props) => {
     }
   ];
 
+  let getClassrooms = async () => {
+    let response = await fetch(backendURL + "/classrooms/list?apiKey=" + localStorage.getItem("apiKey"));
+
+    if (response.ok) {
+      let jsonData = await response.json();
+      setClassrooms(jsonData);
+    } else {
+      let jsonData = await response.json();
+      if (Array.isArray(jsonData.error)) {
+        setMessage(jsonData.error);
+      } else {
+        let finalError = [];
+        finalError.push(jsonData.error);
+        setMessage(finalError);
+      }
+    }
+  };
+
   let onFinish = async (values) => {
     let { name } = values;
 
     let response = null;
     try {
-      response = await fetch(backendURL + "/classroom/?apiKey=" + localStorage.getItem("apiKey"), {
+      response = await fetch(backendURL + "/classrooms/?apiKey=" + localStorage.getItem("apiKey"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name,
-          teacherId: localStorage.getItem("idUser")
+          name
         })
       });
     } catch (e) {
@@ -101,6 +100,7 @@ let ClassroomsListComponent = (props) => {
     } else {
       setMessage({ error: jsonData?.error });
     }
+    getClassrooms();
   };
 
   let deleteClassroom = async (id) => {
@@ -109,51 +109,42 @@ let ClassroomsListComponent = (props) => {
     });
     if (response.ok) {
     }
+    getClassrooms();
   };
 
   return (
     <Card title={t("classrooms.table.title")} style={{ minWidth: "55vw" }}>
       {classrooms.length <= 0 ?
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("classrooms.table.empty")} />
-        : <Table
-          onRow={(record, rowIndex) => ({
-            onMouseEnter: () => {
-              document.querySelector(`tbody > tr:nth-child(${rowIndex + 1})`).style.cursor = 'pointer';
-            },
-            onMouseLeave: () => {
-              document.querySelector(`tbody > tr:nth-child(${rowIndex + 1})`).style.cursor = 'default';
-            },
-            onClick: () => { navigate("/teachers/classroomDetail/" + record.id); }
-          })}
-          columns={columns} dataSource={classrooms} />
+        : <Table columns={columns} dataSource={classrooms} />
       }
       <Divider orientation="left">{t("classrooms.addClassroom.divider")}</Divider>
       {message?.error?.type && <Alert type="error" message={t(message?.error?.type)} showIcon style={{ marginBottom: "1vh" }} />}
       <Form
-        name="login"
+        name="addClassroom"
         labelCol={{ xs: { span: 24 }, sm: { span: 6 } }}
         wrapperCol={{ xs: { span: 24 }, sm: { span: 18 } }}
         onFinish={onFinish}
         scrollToFirstError
       >
         <Form.Item
-          name="username"
-          label={t("login.form.label.username")}
+          name="name"
+          label={t("classrooms.addClassroom.label")}
           rules={[
             {
               required: true,
-              message: t("login.error.username.empty")
+              message: t("classrooms.addClassroom.error")
             },
           ]}
-          validateStatus={message?.error?.username ? 'error' : undefined}
-          help={message?.error?.username ? t(message?.error?.username) : undefined}
+          validateStatus={message?.error?.name ? 'error' : undefined}
+          help={message?.error?.name ? t(message?.error?.name) : undefined}
           hasFeedback
         >
-          <Input placeholder={t("login.form.placeholder.username")} onInput={() => setMessage(null)} />
+          <Input placeholder={t("classrooms.addClassroom.placeholder")} onInput={() => setMessage(null)} />
         </Form.Item>
         <Form.Item wrapperCol={{ xs: { span: 24, offset: 0 }, sm: { span: 16, offset: 6 } }}>
           <Button type="primary" htmlType="submit">
-            {t("login.button")}
+            {t("classrooms.addClassroom.button")}
           </Button>
         </Form.Item>
       </Form>

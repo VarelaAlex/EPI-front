@@ -18,8 +18,8 @@
             "profile": "Mi perfil"
         },
         "student": {
-            "exercises": "Exercises",
-            "howto": "How to do a exercise"
+            "exercises": "Ejercicios",
+            "howto": "Cómo hacer un ejercicio"
         },
         "disconnect": "Cerrar sesión"
     },
@@ -27,10 +27,6 @@
         "title": "¿Quién eres?",
         "teacher": "Profesor",
         "student": "Estudiante"
-    },
-    "steps": {
-        "role": "Selecciona rol",
-        "login": "Inicia sesión"
     },
     "login": {
         "title": "Inicio de sesión",
@@ -51,16 +47,16 @@
         },
         "error": {
             "email": {
-                "empty": "El correo no puede estar vacío",
+                "empty": "El correo es obligatorio",
                 "format": "El formato del correo no es correcto",
                 "notExist": "No existe un profesor con este correo"
             },
             "password": {
-                "empty": "La contraseña no puede estar vacía",
+                "empty": "La contraseña es obligatoria",
                 "incorrect": "Contraseña incorrecta"
             },
             "username": {
-                "empty": "El nombre de usuario no puede estar vacío",
+                "empty": "El nombre de usuario es obligatorio",
                 "notExist": "No existe un alumno con este nombre de usuario"
             }
         }
@@ -90,19 +86,19 @@
         },
         "error": {
             "email": {
-                "empty": "El correo no puede estar vacío",
+                "empty": "El correo es obligatorio",
                 "format": "El formato del correo no es correcto",
                 "repeated": "Ya existe una cuenta con este correo"
             },
-            "name": "El nombre no puede estar vacío",
-            "lastName": "Los apellidos no pueden estar vacíos",
+            "name": "El nombre es obligatorio",
+            "lastName": "Los apellidos son obligatorios",
             "password": {
-                "empty": "La contraseña no puede estar vacía",
+                "empty": "La contraseña es obligatoria",
                 "format": {
-                    "mustHave": "La contraseña debe cumplir los siguientes requisitos:",
+                    "mustHave": "La contraseña debe cumplir los siguientes criterios:",
                     "between": "1. Tener entre 8 y 12 caracteres",
                     "digit": "2. Contener al menos un dígito",
-                    "special": "3. Contener al menos uno de los siguientes caracteres: ! @ # $ % & *"
+                    "special": "3. Contener al menos uno de los siguientes caracteres especiales: ! @ # $ % & *"
                 },
                 "confirm": "Por favor, confirma tu contraseña",
                 "unmatch": "Las contraseñas que has introducido no son idénticas"
@@ -114,7 +110,7 @@
             "title": "Mis aulas",
             "className": "Nombre del aula",
             "numberStudents": "Número de estudiantes",
-            "empty": "No tienes aulas",
+            "empty": "Aún no tienes aulas",
             "tooltips": {
                 "seeStatistics": "Ver estadísticas",
                 "delete": "Eliminar"
@@ -126,8 +122,29 @@
         },
         "addClassroom": {
             "divider": "Añadir un nuevo aula",
+            "label": "Nombre del aula",
             "placeholder": "Nombre del aula",
-            "button": "Añadir aula"
+            "button": "Añadir aula",
+            "error": "El nombre del aula es obligatorio"
+        },
+        "create": {
+            "error": {
+                "name": "El nombre es obligatorio",
+                "teacher": "El id del profesor es obligatorio",
+                "repeated": "Ya existe un aula con este nombre"
+            }
+        },
+        "list": {
+            "error": {
+                "teacher": "El id del profesor es obligatorio",
+                "notExist": "Aún no tienes aulas"
+            }
+        },
+        "delete": {
+            "error": {
+                "id": "El id del aula es obligatorio",
+                "notExist": "El aula no existe"
+            }
         }
     },
     "internalServerError": "Algo ha ido mal, inténtalo más tarde"

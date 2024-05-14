@@ -28,10 +28,6 @@
         "teacher": "Teacher",
         "student": "Student"
     },
-    "steps": {
-        "role": "Select role",
-        "login": "Log in"
-    },
     "login": {
         "title": "Login",
         "button": "Log in",
@@ -51,16 +47,16 @@
         },
         "error": {
             "email": {
-                "empty": "Email cannot be empty",
+                "empty": "Email is mandatory",
                 "format": "Incorrect email format",
                 "notExist": "There is not a teacher with this email"
             },
             "password": {
-                "empty": "Password cannot be empty",
+                "empty": "Password is mandatory",
                 "incorrect": "Incorrect password"
             },
             "username": {
-                "empty": "Username cannot be empty",
+                "empty": "Username is mandatory",
                 "notExist": "There is not a student with this username"
             }
         }
@@ -90,19 +86,19 @@
         },
         "error": {
             "email": {
-                "empty": "Email cannot be empty",
+                "empty": "Email is mandatory",
                 "format": "Incorrect email format",
                 "repeated": "There is already an account with this email"
             },
-            "name": "Name cannot be empty",
-            "lastName": "Last name cannot be empty",
+            "name": "Name is mandatory",
+            "lastName": "Last name is mandatory",
             "password": {
-                "empty": "Password cannot be empty",
+                "empty": "Password is mandatory",
                 "format": {
-                    "mustHave": "The password must have:",
+                    "mustHave": "Password must meet the following criteria:",
                     "between": "1. Between 8 and 12 characters",
                     "digit": "2. At list one digit",
-                    "special": "3. At list one of the following characters: ! @ # $ % & *"
+                    "special": "3. At list one of the following special characters: ! @ # $ % & *"
                 },
                 "confirm": "Please, confirm your password",
                 "unmatch": "The passwords you entered do not match"
@@ -114,7 +110,7 @@
             "title": "My classrooms",
             "className": "Class name",
             "numberStudents": "Number of students",
-            "empty": "You don't have classrooms",
+            "empty": "You don't have classrooms yet",
             "tooltips": {
                 "seeStatistics": "See statistics",
                 "delete": "Delete"
@@ -126,8 +122,29 @@
         },
         "addClassroom": {
             "divider": "Add a new classroom",
+            "label": "Classroom name",
             "placeholder": "Classroom name",
-            "button": "Add classroom"
+            "button": "Add classroom",
+            "error": "Classroom name is mandatory"
+        },
+        "create": {
+            "error": {
+                "name": "Name is mandatory",
+                "teacher": "Teacher's id is mandatory",
+                "repeated": "There is already a classroom with this name"
+            }
+        },
+        "list": {
+            "error": {
+                "teacher": "Teacher's id is mandatory",
+                "notExist": "You don't have classrooms yet"
+            }
+        },
+        "delete": {
+            "error": {
+                "id": "Classroom's id is mandatory",
+                "notExist": "The classroom doesn't exist"
+            }
         }
     },
     "internalServerError": "Something went wrong, try again later"
