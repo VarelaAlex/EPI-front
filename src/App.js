@@ -12,6 +12,7 @@ import ClassroomsListComponent from './components/ClassroomsListComponent';
 import { backendURL } from './Globals';
 import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined } from "@ant-design/icons";
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
+import ExampleDnD from './components/ExampleDnD';
 
 let App = () => {
 
@@ -205,8 +206,8 @@ let App = () => {
                 <Route path="/teachers/menuTeacher" element={
                   <ClassroomsListComponent isMobile={isMobile} />
                 } />
-                <Route path="/teachers/example" element={
-                  <>a</>
+                <Route path="/example" element={
+                  <ExampleDnD />
                 } />
                 <Route path="/teachers/manageExercises" element={
                   <>a</>
