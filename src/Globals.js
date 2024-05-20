@@ -1,1 +1,1 @@
-export let backendURL = "http://localhost:8081"
+export let backendURL = "http://192.168.54.46:8081"
