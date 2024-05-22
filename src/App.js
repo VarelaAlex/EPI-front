@@ -13,6 +13,7 @@ import { backendURL } from './Globals';
 import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined } from "@ant-design/icons";
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
 import ExampleDnD from './components/ExampleDnD';
+import ExampleDnD2 from './components/ExampleDnD2';
 
 let App = () => {
 
@@ -208,6 +209,9 @@ let App = () => {
                 } />
                 <Route path="/example" element={
                   <ExampleDnD />
+                } />
+                <Route path="/example2" element={
+                  <ExampleDnD2 />
                 } />
                 <Route path="/teachers/manageExercises" element={
                   <>a</>
