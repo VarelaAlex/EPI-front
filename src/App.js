@@ -14,6 +14,8 @@ import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined } from "
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
 import ExampleDnD from './components/ExampleDnD';
 import ExampleDnD2 from './components/ExampleDnD2';
+import ExampleDnD3 from './components/ExampleDnD3';
+import ExampleDnD4 from './components/ExampleDnD4';
 
 let App = () => {
 
@@ -212,6 +214,12 @@ let App = () => {
                 } />
                 <Route path="/example2" element={
                   <ExampleDnD2 />
+                } />
+                <Route path="/example3" element={
+                  <ExampleDnD3 />
+                } />
+                <Route path="/example4" element={
+                  <ExampleDnD4 />
                 } />
                 <Route path="/teachers/manageExercises" element={
                   <>a</>

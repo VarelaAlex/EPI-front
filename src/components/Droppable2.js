@@ -50,7 +50,6 @@ const Droppable2 = ({ id, type, ok, nexus, stop, bigStop, shape, src, text }) =>
                         />}
                     </g>
                 }
-                {console.log(ok)}
                 {shape === "ellipse" && <g>
                     <ellipse
                         cx="5vmax"
