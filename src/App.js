@@ -16,6 +16,7 @@ import ExampleDnD from './components/ExampleDnD';
 import ExampleDnD2 from './components/ExampleDnD2';
 import ExampleDnD3 from './components/ExampleDnD3';
 import ExampleDnD4 from './components/ExampleDnD4';
+import ExercisesCarousel from './components/ExercisesCarousel';
 
 let App = () => {
 
@@ -220,6 +221,9 @@ let App = () => {
                 } />
                 <Route path="/example4" element={
                   <ExampleDnD4 />
+                } />
+                <Route path="/exercises" element={
+                  <ExercisesCarousel />
                 } />
                 <Route path="/teachers/manageExercises" element={
                   <>a</>
