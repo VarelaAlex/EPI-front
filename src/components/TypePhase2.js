@@ -1,63 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
-
 import { Col, Flex, Input, Row } from 'antd';
+import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX } from './NetworkProps';
 
-let ExampleDnD4 = () => {
+let TypePhase2 = ({ networkType, nodes, nexusX }) => {
 
-    const X = 210;
-    const Y = 25;
-    const nexusX = [130, 260, 350];
-    const viewBoxWidth = [480, 730, 920];
-    const stopX = [90, 210, 310];
     let [showGif, setShowGif] = useState(false);
-
-    const pathTop = [
-        "L 350 85 L 350 105",
-        "L 480 85 L 480 105",
-        "L 570 85 L 570 105"
-    ];
-    const pathBottom = [
-        "L 350 150",
-        "L 350 150 L 480 150 L 480 150",
-        "L 350 150 L 570 150 L 570 145"
-    ];
-    const pathBottom2 = [
-        "M 480 145 L 480 150 L 610 150 L 610 165",
-        "M 570 145 L 570 165"
-    ];
-
-    let networkType = 2;
-
-    let nodes = [
-        { id: "1", type: "type1", posX: 0, posY: 0, src: "boca.png", text: "LA BOCA", shape: "rect", clicked: false },
-        { order: 2, id: "2", type: "type2", posX: -160, posY: 90, src: "es_parte_de.png", nexus: true, text: "es parte de", clicked: false },
-        { order: 3, id: "3", type: "type3", posX: -160, posY: 170, shape: "ellipse", src: "cara.png", text: "LA CARA", clicked: false },
-        { order: 6, id: "4", type: "type4", posX: nexusX[networkType], posY: 90, src: "tiene.png", nexus: true, text: "tiene", clicked: false },
-        { order: 7, id: "5", type: "type5", posX: 130, posY: 170, shape: "ellipse", src: "labios.png", text: "LABIOS", clicked: false },
-        { id: "6", type: "type6", posX: -70, posY: 190, clicked: false },
-
-        /*
-        { order: 8, id: "7", type: "type7", posX: 260, posY: 190, text: "y", src: "stop.png", stop: true },
-        { order: 9, id: "8", type: "type8", posX: 390, posY: 170, shape: "ellipse", src: "dientes.png", text: "DIENTES" },
-        */
-
-
-        { order: 8, id: "7", type: "type7", posX: 240, posY: 190, text: ",", src: "stop.png", stop: true },
-        { order: 9, id: "8", type: "type8", posX: 350, posY: 170, shape: "ellipse", src: "dientes.png", text: "DIENTES" },
-        { order: 10, id: "9", type: "type9", posX: 460, posY: 190, text: "y", src: "stop.png", stop: true },
-        { order: 11, id: "10", type: "type10", posX: 570, posY: 170, shape: "ellipse", src: "lengua.png", text: "LENGUA" },
-
-    ];
 
     let [extendedNodes, setExtendedNodes] = useState([
         { ...nodes[0], order: 0, id: "1-1" },
         { ...nodes[0], order: 1, id: "1-2" },
         ...nodes.slice(1, 3),
-        { ...nodes[5], order: 4, id: "6-2", type: "type6-2", text: ".", src: "stop.png", bigStop: true },
+        { ...nodes[5], order: 4, id: "6-2", type: "type6-2", src: "/stop.png", bigStop: true },
         { ...nodes[0], order: 5, id: "1-3" },
         ...nodes.slice(3, 5),
         ...nodes.slice(6),
-        { ...nodes[5], order: nodes.length + 2, id: "6-3", type: "type6-3", posX: nexusX[networkType] + stopX[networkType], text: ".", src: "stop.png", bigStop: true }
+        { ...nodes[5], order: nodes.length + 2, id: "6-3", type: "type6-3", posX: nexusX[networkType] + stopX[networkType], src: "/stop.png", bigStop: true }
     ]);
 
     let [id, setId] = useState();
@@ -75,6 +32,7 @@ let ExampleDnD4 = () => {
 
         extendedNodes.forEach((element) => {
             if (element.id === a.id && element.text.toLowerCase() === a.value.toLowerCase()) {
+                a.readOnly = true;
                 setCurrent(current + 1);
             }
             return element;
@@ -390,18 +348,19 @@ let ExampleDnD4 = () => {
                 </Row>
             </Flex>
             {showGif && <img
-                src="/pawpatrol.webp"
+                src="/bluey.gif"
                 className="moving-image"
                 alt="Moving"
                 style={{
                     position: "fixed",
                     right: "20vw",
                     bottom: "50vh",
-                    height: "20vmax"
+                    height: "20vmax",
+                    transform: "scaleX(-1)"
                 }} />
             }
         </Flex>
     );
 };
 
-export default ExampleDnD4;
+export default TypePhase2;

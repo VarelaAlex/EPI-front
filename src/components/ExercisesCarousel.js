@@ -1,12 +1,26 @@
-import { Image, Typography, Card, List, Checkbox, Divider, Collapse, Row, Col } from "antd";
+import { Image, Typography, Card, Checkbox, Divider, Collapse, Row, Col, Carousel } from "antd";
 import { useState } from "react";
 import { FilterFilled } from "@ant-design/icons";
 
-let ExercisesCarousel = () => {
+let ExercisesCarousel = ({ cardsPerRow = 4, rowsPerSlide = 2 }) => {
 
-    let styleCard = { width: "18vw", height: "12vmax", textAlign: "center" };
-    let styleTitle = { fontSize: "1.3vmax", textAlign: "center" };
-    let imageProps = { preview: false, width: "6vmax", src: "boca.png" };
+
+    const cardData = [
+        { title: 'LA BOCA' },
+        { title: 'Card 2' },
+        { title: 'Card 3' },
+        { title: 'Card 4' },
+        { title: 'Card 5' },
+        { title: 'Card 6' },
+        { title: 'Card 7' },
+        { title: 'Card 8' },
+        { title: 'Card 9' },
+        { title: 'Card 10' },
+        { title: 'Card 11' },
+        { title: 'Card 12' },
+    ];
+
+    const totalCardsPerSlide = cardsPerRow * rowsPerSlide;
 
     const CheckboxGroup = Checkbox.Group;
 
@@ -50,7 +64,7 @@ let ExercisesCarousel = () => {
                         <Row>
                             {plainOptionsCategory.map((element) => {
                                 return (
-                                    <Col span={7}>
+                                    <Col key={element} span={7}>
                                         <Checkbox value={element} style={{ fontSize: "1.1vmax" }}>{element}</Checkbox>
                                     </Col>
                                 );
@@ -67,7 +81,7 @@ let ExercisesCarousel = () => {
                         <Row>
                             {plainOptionsAge.map((element) => {
                                 return (
-                                    <Col span={7}>
+                                    <Col key={element} span={7}>
                                         <Checkbox value={element} style={{ fontSize: "1.1vmax" }}>{element}</Checkbox>
                                     </Col>
                                 );
@@ -79,64 +93,34 @@ let ExercisesCarousel = () => {
         }
     ];
 
+    const renderSlide = (startIndex) => (
+        <div key={startIndex}>
+            {Array.from({ length: rowsPerSlide }).map((_, rowIndex) => (
+                <Row gutter={16} key={rowIndex}>
+                    {cardData.slice(startIndex + rowIndex * cardsPerRow, startIndex + (rowIndex + 1) * cardsPerRow).map((card, cardIndex) => (
+                        <Col span={24 / cardsPerRow} key={cardIndex}>
+                            <Card hoverable size="small" style={{ width: "20vw", height: "12vmax", textAlign: "center", marginBottom: "1vmax" }} title={<Title style={{ fontSize: "1.3vmax", textAlign: "center" }}>{card.title}</Title>}>
+                                <Image preview={false} width="6vmax" src="/boca.png" />
+                            </Card>
+                        </Col>
+                    ))}
+                </Row>
+            ))}
+        </div>
+    );
+
     let { Title } = Typography;
 
     return (
-        <div style={{ width: "90vw", padding: "1vw" }}>
-            <Collapse ghost items={items} style={{ fontSize: "2.5vmin", fontWeight: "bold" }} />
-            <div
-                id="scrollableDiv"
-                style={{
-                    height: "65vh",
-                    width: "90vw",
-                    overflow: 'scroll',
-                    padding: "1vw",
-                    backgroundColor: "rgb(254,254,254)"
-                }}
-            >
-                <List
-                    grid={{
-                        xs: 4,
-                        sm: 4,
-                        md: 4,
-                        lg: 4,
-                        xl: 4,
-                        xxl: 4,
-                    }}
-                    dataSource={[
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                        { title: "LA BOCA" },
-                    ]}
-                    renderItem={(item) => (
-                        <List.Item key={item.email}>
-                            <Card size="small" style={{ ...styleCard }} title={<Title style={{ ...styleTitle }}>{item.title}</Title>}>
-                                <Image {...imageProps} />
-                            </Card>
-                        </List.Item>
-                    )}
-                />
+        <div style={{ width: "95vw", padding: "1vw" }}>
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: "1vmax" }}>
+                <Collapse items={items} style={{ fontSize: "2.5vmin", fontWeight: "bold", width: "90%" }} />
             </div>
+            <Carousel draggable style={{ padding: "3vmax", backgroundColor: "#00152f", borderRadius: "50px" }}>
+                {Array.from({ length: Math.ceil(cardData.length / totalCardsPerSlide) }).map((_, slideIndex) =>
+                    renderSlide(slideIndex * totalCardsPerSlide)
+                )}
+            </Carousel>
         </div>
     );
 };

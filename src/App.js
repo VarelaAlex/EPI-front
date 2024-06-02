@@ -12,11 +12,12 @@ import ClassroomsListComponent from './components/ClassroomsListComponent';
 import { backendURL } from './Globals';
 import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined } from "@ant-design/icons";
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
-import ExampleDnD from './components/ExampleDnD';
-import ExampleDnD2 from './components/ExampleDnD2';
-import ExampleDnD3 from './components/ExampleDnD3';
-import ExampleDnD4 from './components/ExampleDnD4';
+import DnDPhase1 from './components/DnDPhase1';
+import DnDPhase2 from './components/DnDPhase2';
+import TypePhase1 from './components/TypePhase1';
+import TypePhase2 from './components/TypePhase2';
 import ExercisesCarousel from './components/ExercisesCarousel';
+import { nexusX } from './components/NetworkProps';
 
 let App = () => {
 
@@ -97,7 +98,7 @@ let App = () => {
   let studentMenuItems = [
     {
       key: "exercises",
-      label: <Link to="/students/manageExercises" onClick={() => setOpen(false)}>{t("sider.student.exercises")}</Link>,
+      label: <Link to="/students/exercises" onClick={() => setOpen(false)}>{t("sider.student.exercises")}</Link>,
       danger: false,
       icon: <FormOutlined />
     },
@@ -143,7 +144,7 @@ let App = () => {
             navigate("/teachers/menuTeacher");
           }
           if (role === "S" && (["/loginTeacher", "/loginStudent", "/registerTeacher", "/selectRole"].includes(location.pathname) || location.pathname.startsWith("/teachers/"))) {
-            navigate("/students/example"); //TODO: replace this
+            navigate("/students/exercises");
           }
         } else {
           setLogin(false);
@@ -171,6 +172,29 @@ let App = () => {
       localStorage.setItem("pwaNotificationShown", true);
     }
   }, [api, t]);
+
+  let networkType = 0;
+
+  let nodes = [
+    { id: "1", type: "type1", posX: 0, posY: 0, src: "/boca.png", text: "LA BOCA", shape: "rect" },
+    { order: 2, id: "2", type: "type2", posX: -160, posY: 90, src: "/es_parte_de.png", nexus: true, text: "es parte de" },
+    { order: 3, id: "3", type: "type3", posX: -160, posY: 170, shape: "ellipse", src: "/cara.png", text: "LA CARA" },
+    { order: 6, id: "4", type: "type4", posX: nexusX[networkType], posY: 90, src: "/tiene.png", nexus: true, text: "tiene" },
+    { order: 7, id: "5", type: "type5", posX: 130, posY: 170, shape: "ellipse", src: "/labios.png", text: "LABIOS" },
+    { id: "6", type: "type6", posX: -70, posY: 190, text: "." },
+
+    /*
+    { order: 8, id: "7", type: "type7", posX: 260, posY: 190, text: "y", src: "/stop.png", stop: true },
+    { order: 9, id: "8", type: "type8", posX: 390, posY: 170, shape: "ellipse", src: "/dientes.png", text: "DIENTES" },
+    */
+
+    /*
+    { order: 8, id: "7", type: "type7", posX: 260, posY: 190, text: ",", src: "/stop.png", stop: true },
+    { order: 9, id: "8", type: "type8", posX: 350, posY: 170, shape: "ellipse", src: "/dientes.png", text: "DIENTES" },
+    { order: 10, id: "9", type: "type9", posX: 460, posY: 190, text: "y", src: "/stop.png", stop: true },
+    { order: 11, id: "10", type: "type10", posX: 570, posY: 170, shape: "ellipse", src: "/lengua.png", text: "LENGUA" },
+    */
+  ];
 
   return (
     <>
@@ -211,19 +235,19 @@ let App = () => {
                   <ClassroomsListComponent isMobile={isMobile} />
                 } />
                 <Route path="/example" element={
-                  <ExampleDnD />
+                  <DnDPhase1 networkType={networkType} nodes={nodes} nexusX={nexusX} />
                 } />
                 <Route path="/example2" element={
-                  <ExampleDnD2 />
+                  <DnDPhase2 networkType={networkType} nodes={nodes} nexusX={nexusX} />
                 } />
                 <Route path="/example3" element={
-                  <ExampleDnD3 />
+                  <TypePhase1 networkType={networkType} nodes={nodes} nexusX={nexusX} />
                 } />
                 <Route path="/example4" element={
-                  <ExampleDnD4 />
+                  <TypePhase2 networkType={networkType} nodes={nodes} nexusX={nexusX} />
                 } />
-                <Route path="/exercises" element={
-                  <ExercisesCarousel />
+                <Route path="/students/exercises" element={
+                  <ExercisesCarousel cardsPerRow={isMobile ? 3 : 4} />
                 } />
                 <Route path="/teachers/manageExercises" element={
                   <>a</>
