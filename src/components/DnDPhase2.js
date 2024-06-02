@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors, DragOverlay } from '@dnd-kit/core';
-import { Col, Flex, Row } from 'antd';
-import Droppable2 from './Droppable2';
-import Draggable2 from './Draggable2';
+import { Col, Divider, Flex, Row } from 'antd';
+import DroppablePhase2 from './DroppablePhase2';
+import DraggablePhase2 from './DraggablePhase2';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX } from './NetworkProps';
 
 let DnDPhase2 = ({ networkType, nodes, nexusX }) => {
@@ -127,7 +127,7 @@ let DnDPhase2 = ({ networkType, nodes, nexusX }) => {
     };
 
     return (
-        <Flex align="center" vertical style={{ height: "100%", width: "95%", backgroundColor: "grey" }}>
+        <Flex align="center" vertical style={{ height: "100%", width: "95%" }}>
             <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
                 <Flex align="center" justify="center" style={{ height: "90%", width: "90%" }} >
                     <svg height="18vmax" viewBox={`0 0 ${viewBoxWidth[networkType]} 250`}>
@@ -152,7 +152,7 @@ let DnDPhase2 = ({ networkType, nodes, nexusX }) => {
                         }
 
                         {extendedNodes.slice().sort((a, b) => b.order - a.order).map((element) =>
-                            <Draggable2
+                            <DraggablePhase2
                                 key={element.id}
                                 id={element.id}
                                 type={element.type}
@@ -176,10 +176,11 @@ let DnDPhase2 = ({ networkType, nodes, nexusX }) => {
                             : null}
                     </DragOverlay>
                 </Flex>
+                <Divider style={{ backgroundColor: "grey" }} />
                 <Flex align="start" vertical style={{ padding: "1vmax 0vmax 5vh" }}>
                     <Row>
                         <Col>
-                            <Droppable2
+                            <DroppablePhase2
                                 id={droppableNodes[0].id}
                                 type={droppableNodes[0].type}
                                 x={X + droppableNodes[0].posX}
@@ -194,7 +195,7 @@ let DnDPhase2 = ({ networkType, nodes, nexusX }) => {
                     <Row>
                         {droppableNodes.slice(1, 5).map((element) => (
                             <Col key={element.id} style={{ paddingRight: "0.5vmax" }}>
-                                <Droppable2
+                                <DroppablePhase2
                                     id={element.id}
                                     type={element.type}
                                     x={X + element.posX}
@@ -213,7 +214,7 @@ let DnDPhase2 = ({ networkType, nodes, nexusX }) => {
                     <Row>
                         {droppableNodes.slice(5).map((element) => (
                             <Col key={element.id} style={{ paddingRight: "0.5vmax" }}>
-                                <Droppable2
+                                <DroppablePhase2
                                     id={element.id}
                                     type={element.type}
                                     x={X + element.posX}

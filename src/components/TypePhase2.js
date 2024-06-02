@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Col, Flex, Input, Row } from 'antd';
+import { Col, Divider, Flex, Input, Row } from 'antd';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX } from './NetworkProps';
 
 let TypePhase2 = ({ networkType, nodes, nexusX }) => {
@@ -46,7 +46,9 @@ let TypePhase2 = ({ networkType, nodes, nexusX }) => {
     };
 
     return (
-        <Flex align="center" vertical style={{ height: "100%", width: "95%", backgroundColor: "grey" }}>
+        <Flex align="center" vertical style={{
+            height: "100%", width: "95%"
+        }}>
             <Flex align="center" justify="center" style={{ height: "90%", width: "90%" }} >
                 <svg height="18vmax" viewBox={`0 0 ${viewBoxWidth[networkType]} 250`}>
                     <path d={`M 220 70 L 220 85 ${pathTop[networkType]}`} fill="none" stroke="rgb(0, 0, 0)" />
@@ -137,7 +139,8 @@ let TypePhase2 = ({ networkType, nodes, nexusX }) => {
                     })}
                 </svg>
             </Flex>
-            <Flex align="start" vertical style={{ padding: "1vmax 0vmax 5vh" }}>
+            <Divider style={{ backgroundColor: "grey" }} />
+            <Flex align="start" vertical >
                 <Row>
                     <Col key={extendedNodes[0].id}>
                         <svg height="6.5vmax" width="9vmax">

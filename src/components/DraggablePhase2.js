@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
 
-const Draggable2 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text, x, y }) => {
+const DraggablePhase2 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text, x, y }) => {
 
     const getImageProps = () => {
         if (nexus) return { x: x - 2, y: y - 5, width: "25", height: "25" };
@@ -49,4 +49,4 @@ const Draggable2 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text, x, y
     );
 };
 
-export default Draggable2;
+export default DraggablePhase2;

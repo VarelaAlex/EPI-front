@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDroppable } from '@dnd-kit/core';
 
-const Droppable = ({ id, type, ok, nexus, stop, bigStop, x, y, src, text }) => {
+const DroppablePhase1 = ({ id, type, ok, nexus, stop, bigStop, x, y, src, text }) => {
 
     const { isOver, setNodeRef } = useDroppable({
         id,
@@ -51,4 +51,4 @@ const Droppable = ({ id, type, ok, nexus, stop, bigStop, x, y, src, text }) => {
     );
 };
 
-export default Droppable;
+export default DroppablePhase1;

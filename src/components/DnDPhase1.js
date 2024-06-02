@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
-import { Col, Flex, Row } from 'antd';
-import Droppable from './Droppable';
-import Draggable from './Draggable';
+import { Col, Divider, Flex, Row } from 'antd';
+import DroppablePhase1 from './DroppablePhase1';
+import DraggablePhase1 from './DraggablePhase1';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX } from './NetworkProps';
 
 let DnDPhase1 = ({ networkType, nodes, nexusX }) => {
@@ -61,12 +61,12 @@ let DnDPhase1 = ({ networkType, nodes, nexusX }) => {
     );
 
     return (
-        <Flex align="center" vertical style={{ height: "100%", width: "95%", backgroundColor: "grey" }}>
+        <Flex align="center" vertical style={{ height: "100%", width: "95%" }}>
             <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
-                <Flex align="start" vertical style={{ padding: "1vmax 0vmax 5vh" }}>
+                <Flex align="start" vertical >
                     <Row>
                         <Col>
-                            <Draggable
+                            <DraggablePhase1
                                 id={extendedNodes[0].id}
                                 type={extendedNodes[0].type}
                                 x={X + extendedNodes[0].posX}
@@ -81,7 +81,7 @@ let DnDPhase1 = ({ networkType, nodes, nexusX }) => {
                     <Row>
                         {extendedNodes.slice(1, 5).map((element) => (
                             <Col key={element.id} style={{ paddingRight: "0.5vmax" }}>
-                                <Draggable
+                                <DraggablePhase1
                                     id={element.id}
                                     type={element.type}
                                     x={X + element.posX}
@@ -100,7 +100,7 @@ let DnDPhase1 = ({ networkType, nodes, nexusX }) => {
                     <Row>
                         {extendedNodes.slice(5).map((element) => (
                             <Col key={element.id} style={{ paddingRight: "0.5vmax" }}>
-                                <Draggable
+                                <DraggablePhase1
                                     id={element.id}
                                     type={element.type}
                                     x={X + element.posX}
@@ -117,6 +117,7 @@ let DnDPhase1 = ({ networkType, nodes, nexusX }) => {
                         ))}
                     </Row>
                 </Flex>
+                <Divider style={{ backgroundColor: "grey" }} />
                 <Flex align="center" justify="center" style={{ height: "90%", width: "90%" }} >
                     <svg height="18vmax" viewBox={`0 0 ${viewBoxWidth[networkType]} 250`}>
                         <rect x="160" y="1" width="120" height="70" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" />
@@ -164,7 +165,7 @@ let DnDPhase1 = ({ networkType, nodes, nexusX }) => {
                             (value, index, self) => index === self.findIndex(
                                 (t) => (t.type === value.type)
                             )).map((element) =>
-                                <Droppable
+                                <DroppablePhase1
                                     key={element.id}
                                     id={element.id}
                                     type={element.type}
