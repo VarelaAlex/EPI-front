@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from "react-router-dom";
 import { LineChartOutlined, DeleteOutlined } from "@ant-design/icons";
-import { backendURL } from "../Globals";
+import { usersServiceURL } from "../Globals";
 
 let ClassroomsListComponent = (props) => {
 
@@ -59,7 +59,7 @@ let ClassroomsListComponent = (props) => {
   ];
 
   let getClassrooms = async () => {
-    let response = await fetch(backendURL + "/classrooms/list?apiKey=" + localStorage.getItem("apiKey"));
+    let response = await fetch(usersServiceURL + "/classrooms/list?apiKey=" + localStorage.getItem("apiKey"));
 
     if (response.ok) {
       let jsonData = await response.json();
@@ -81,7 +81,7 @@ let ClassroomsListComponent = (props) => {
 
     let response = null;
     try {
-      response = await fetch(backendURL + "/classrooms/?apiKey=" + localStorage.getItem("apiKey"), {
+      response = await fetch(usersServiceURL + "/classrooms/?apiKey=" + localStorage.getItem("apiKey"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -104,7 +104,7 @@ let ClassroomsListComponent = (props) => {
   };
 
   let deleteClassroom = async (id) => {
-    let response = await fetch(backendURL + "/classrooms/" + id + "?apiKey=" + localStorage.getItem("apiKey"), {
+    let response = await fetch(usersServiceURL + "/classrooms/" + id + "?apiKey=" + localStorage.getItem("apiKey"), {
       method: "DELETE"
     });
     if (response.ok) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
 
-const DraggablePhase1 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text }) => {
+const DraggablePhase1 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text, representation }) => {
 
     const { attributes, listeners, setNodeRef, transform } = useDraggable({
         id,

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Input, Form, Alert } from "antd";
-import { backendURL } from '../Globals';
+import { usersServiceURL } from '../Globals';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,7 +19,7 @@ let LoginStudentComponent = (props) => {
 
         let response = null;
         try {
-            response = await fetch(backendURL + "/students/login", {
+            response = await fetch(usersServiceURL + "/students/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

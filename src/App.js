@@ -9,7 +9,7 @@ import HeaderComponent from './components/layout/HeaderComponent';
 import SiderComponent from "./components/layout/SiderComponent";
 import SignupTeacherComponent from './components/SignupTeacherComponent';
 import ClassroomsListComponent from './components/ClassroomsListComponent';
-import { backendURL } from './Globals';
+import { usersServiceURL } from './Globals';
 import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined } from "@ant-design/icons";
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
 import DnDPhase1 from './components/DnDPhase1';
@@ -17,7 +17,6 @@ import DnDPhase2 from './components/DnDPhase2';
 import TypePhase1 from './components/TypePhase1';
 import TypePhase2 from './components/TypePhase2';
 import ExercisesCarousel from './components/ExercisesCarousel';
-import { nexusX } from './components/NetworkProps';
 
 let App = () => {
 
@@ -27,6 +26,7 @@ let App = () => {
   let [login, setLogin] = useState(false);
   let [api, contextHolder] = notification.useNotification();
   let [isMobile, setIsMobile] = useState(false);
+  let [exercise, setExercise] = useState({});
 
   let { t } = useTranslation();
   let { Content, Footer } = Layout;
@@ -51,7 +51,7 @@ let App = () => {
   */
 
   let disconnect = async () => {
-    let response = await fetch(backendURL + "/teachers/disconnect?apiKey=" + localStorage.getItem("apiKey"));
+    let response = await fetch(usersServiceURL + "/teachers/disconnect?apiKey=" + localStorage.getItem("apiKey"));
     if (response.ok) {
       localStorage.removeItem("apiKey");
       localStorage.removeItem("idUser");
@@ -133,10 +133,10 @@ let App = () => {
         let response = null;
         let role = localStorage.getItem("role");
         if (role === "T") {
-          response = await fetch(backendURL + "/teachers/checkLogin?apiKey=" + localStorage.getItem("apiKey"));
+          response = await fetch(usersServiceURL + "/teachers/checkLogin?apiKey=" + localStorage.getItem("apiKey"));
         }
         if (role === "S") {
-          response = await fetch(backendURL + "/students/checkLogin?apiKey=" + localStorage.getItem("apiKey"));
+          response = await fetch(usersServiceURL + "/students/checkLogin?apiKey=" + localStorage.getItem("apiKey"));
         }
         if (response?.status === 200) {
           setLogin(true);
@@ -172,29 +172,6 @@ let App = () => {
       localStorage.setItem("pwaNotificationShown", true);
     }
   }, [api, t]);
-
-  let networkType = 0;
-
-  let nodes = [
-    { id: "1", type: "type1", posX: 0, posY: 0, src: "/boca.png", text: "LA BOCA", shape: "rect" },
-    { order: 2, id: "2", type: "type2", posX: -160, posY: 90, src: "/es_parte_de.png", nexus: true, text: "es parte de" },
-    { order: 3, id: "3", type: "type3", posX: -160, posY: 170, shape: "ellipse", src: "/cara.png", text: "LA CARA" },
-    { order: 6, id: "4", type: "type4", posX: nexusX[networkType], posY: 90, src: "/tiene.png", nexus: true, text: "tiene" },
-    { order: 7, id: "5", type: "type5", posX: 130, posY: 170, shape: "ellipse", src: "/labios.png", text: "LABIOS" },
-    { id: "6", type: "type6", posX: -70, posY: 190, text: "." },
-
-    /*
-    { order: 8, id: "7", type: "type7", posX: 260, posY: 190, text: "y", src: "/stop.png", stop: true },
-    { order: 9, id: "8", type: "type8", posX: 390, posY: 170, shape: "ellipse", src: "/dientes.png", text: "DIENTES" },
-    */
-
-    /*
-    { order: 8, id: "7", type: "type7", posX: 260, posY: 190, text: ",", src: "/stop.png", stop: true },
-    { order: 9, id: "8", type: "type8", posX: 350, posY: 170, shape: "ellipse", src: "/dientes.png", text: "DIENTES" },
-    { order: 10, id: "9", type: "type9", posX: 460, posY: 190, text: "y", src: "/stop.png", stop: true },
-    { order: 11, id: "10", type: "type10", posX: 570, posY: 170, shape: "ellipse", src: "/lengua.png", text: "LENGUA" },
-    */
-  ];
 
   return (
     <>
@@ -234,20 +211,20 @@ let App = () => {
                 <Route path="/teachers/menuTeacher" element={
                   <ClassroomsListComponent isMobile={isMobile} />
                 } />
-                <Route path="/example" element={
-                  <DnDPhase1 networkType={networkType} nodes={nodes} nexusX={nexusX} />
+                <Route path="/exerciseDnD/phase1" element={
+                  <DnDPhase1 exercise={exercise} />
                 } />
-                <Route path="/example2" element={
-                  <DnDPhase2 networkType={networkType} nodes={nodes} nexusX={nexusX} />
+                <Route path="/exerciseDnD/phase2" element={
+                  <DnDPhase2 exercise={exercise} />
                 } />
-                <Route path="/example3" element={
-                  <TypePhase1 networkType={networkType} nodes={nodes} nexusX={nexusX} />
+                <Route path="/exerciseType/phase1" element={
+                  <TypePhase1 exercise={exercise} />
                 } />
-                <Route path="/example4" element={
-                  <TypePhase2 networkType={networkType} nodes={nodes} nexusX={nexusX} />
+                <Route path="/exerciseType/phase2" element={
+                  <TypePhase2 exercise={exercise} />
                 } />
                 <Route path="/students/exercises" element={
-                  <ExercisesCarousel cardsPerRow={isMobile ? 3 : 4} />
+                  <ExercisesCarousel cardsPerRow={isMobile ? 3 : 4} setExercise={setExercise} />
                 } />
                 <Route path="/teachers/manageExercises" element={
                   <>a</>

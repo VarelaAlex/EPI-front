@@ -3,22 +3,26 @@ import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors, DragOverla
 import { Col, Divider, Flex, Row } from 'antd';
 import DroppablePhase2 from './DroppablePhase2';
 import DraggablePhase2 from './DraggablePhase2';
-import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX } from './NetworkProps';
+import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX } from './NetworkProps';
+import { arasaacURL } from "../Globals";
+import { useNavigate } from 'react-router-dom';
 
-let DnDPhase2 = ({ networkType, nodes, nexusX }) => {
+let DnDPhase2 = ({ exercise }) => {
 
+    let navigate = useNavigate();
+    let exerciseNodes = nodes(exercise);
     let [showGif, setShowGif] = useState(false);
     let [element, setElement] = useState();
 
     let [extendedNodes, setExtendedNodes] = useState([
-        { ...nodes[0], order: 0, id: "1-1" },
-        { ...nodes[0], order: 1, id: "1-2" },
-        ...nodes.slice(1, 3),
-        { ...nodes[5], order: 4, id: "6-2", type: "type6-2", src: "/stop.png", bigStop: true },
-        { ...nodes[0], order: 5, id: "1-3" },
-        ...nodes.slice(3, 5),
-        ...nodes.slice(6),
-        { ...nodes[5], order: nodes.length + 2, id: "6-3", type: "type6-3", posX: nexusX[networkType] + stopX[networkType], src: "/stop.png", bigStop: true }
+        { ...exerciseNodes[0], order: 0, id: "1-1" },
+        { ...exerciseNodes[0], order: 1, id: "1-2" },
+        ...exerciseNodes.slice(1, 3),
+        { ...exerciseNodes[5], order: 4, id: "6-2", type: "type6-2", src: `${arasaacURL}/8289`, bigStop: true },
+        { ...exerciseNodes[0], order: 5, id: "1-3" },
+        ...exerciseNodes.slice(3, 5),
+        ...exerciseNodes.slice(6),
+        { ...exerciseNodes[5], order: exerciseNodes.length + 2, id: "6-3", type: "type6-3", posX: nexusX(exercise?.networkType) + stopX(exercise?.networkType), src: `${arasaacURL}/8289`, bigStop: true }
     ]);
 
     let [droppableNodes, setDroppableNodes] = useState(JSON.parse(JSON.stringify(extendedNodes)));
@@ -47,6 +51,7 @@ let DnDPhase2 = ({ networkType, nodes, nexusX }) => {
             setShowGif(true);
             setTimeout(() => {
                 setShowGif(false);
+                navigate("/students/exercises");
             }, 8000);
         }
         setElement(null);
@@ -130,20 +135,20 @@ let DnDPhase2 = ({ networkType, nodes, nexusX }) => {
         <Flex align="center" vertical style={{ height: "100%", width: "95%" }}>
             <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
                 <Flex align="center" justify="center" style={{ height: "90%", width: "90%" }} >
-                    <svg height="18vmax" viewBox={`0 0 ${viewBoxWidth[networkType]} 250`}>
-                        <path d={`M 220 70 L 220 85 ${pathTop[networkType]}`} fill="none" stroke="rgb(0, 0, 0)" />
+                    <svg height="18vmax" viewBox={`0 0 ${viewBoxWidth(exercise?.networkType)} 250`}>
+                        <path d={`M 220 70 L 220 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" />
                         <path d="M 220 70 L 220 85 L 60 85 L 60 105" fill="none" stroke="rgb(0, 0, 0)" />
                         <path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" />
-                        <path d={`M 350 165 ${pathBottom[networkType]}`} fill="none" stroke="rgb(0, 0, 0)" />
-                        {[1, 2].includes(networkType) &&
+                        <path d={`M 350 165 ${pathBottom(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" />
+                        {["I-II", "I-III"].includes(exercise?.networkType) &&
                             <path
-                                d={pathBottom2[networkType - 1]}
+                                d={pathBottom2(exercise?.networkType)}
                                 fill="none"
                                 stroke="rgb(0, 0, 0)"
                             />
                         }
 
-                        {networkType === 2 &&
+                        {exercise?.networkType === "I-III" &&
                             <path
                                 d="M 570 145 L 570 150 L 790 150 L 790 165"
                                 fill="none"
@@ -233,7 +238,7 @@ let DnDPhase2 = ({ networkType, nodes, nexusX }) => {
                 </Flex>
             </DndContext>
             {showGif && <img
-                src="/pawpatrol.webp"
+                src="/reinforcement/pawpatrol.webp"
                 className="moving-image"
                 alt="Moving"
                 style={{

@@ -2,7 +2,7 @@ import { Button, Form, Input, Card, Typography, Alert } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
-import { backendURL } from '../Globals';
+import { usersServiceURL } from '../Globals';
 
 const SignupTeacherComponent = () => {
 
@@ -18,7 +18,7 @@ const SignupTeacherComponent = () => {
 
         let response = null;
         try {
-            response = await fetch(backendURL + "/teachers", {
+            response = await fetch(usersServiceURL + "/teachers", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
