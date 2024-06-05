@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Col, Divider, Flex, Input, Row } from 'antd';
-import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX } from './NetworkProps';
+import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX } from '../NetworkProps';
 import { useNavigate } from 'react-router-dom';
 
 let TypePhase1 = ({ exercise }) => {

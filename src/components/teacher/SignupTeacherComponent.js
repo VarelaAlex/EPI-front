@@ -2,7 +2,7 @@ import { Button, Form, Input, Card, Typography, Alert } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
-import { usersServiceURL } from '../Globals';
+import { usersServiceURL } from '../../Globals';
 
 const SignupTeacherComponent = () => {
 

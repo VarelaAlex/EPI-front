@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Input, Typography, Form, Alert } from "antd";
-import { usersServiceURL } from '../Globals';
+import { usersServiceURL } from '../../Globals';
 import { useState } from 'react';
 
 let LoginTeacherComponent = (props) => {

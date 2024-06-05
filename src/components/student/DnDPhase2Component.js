@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors, DragOverlay } from '@dnd-kit/core';
 import { Col, Divider, Flex, Row } from 'antd';
-import DroppablePhase2 from './DroppablePhase2';
-import DraggablePhase2 from './DraggablePhase2';
-import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX } from './NetworkProps';
-import { arasaacURL } from "../Globals";
+import DroppablePhase2 from './DroppablePhase2Component';
+import DraggablePhase2 from './DraggablePhase2Component';
+import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX } from '../NetworkProps';
+import { arasaacURL } from "../../Globals";
 import { useNavigate } from 'react-router-dom';
 
 let DnDPhase2 = ({ exercise }) => {

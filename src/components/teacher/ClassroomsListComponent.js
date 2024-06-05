@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from "react-router-dom";
 import { LineChartOutlined, DeleteOutlined } from "@ant-design/icons";
-import { usersServiceURL } from "../Globals";
+import { usersServiceURL } from "../../Globals";
 
 let ClassroomsListComponent = (props) => {
 

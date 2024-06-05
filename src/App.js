@@ -2,21 +2,21 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Layout, notification, Flex } from "antd";
-import LoginTeacherComponent from './components/LoginTeacherComponent';
-import LoginStudentComponent from './components/LoginStudentComponent';
+import LoginTeacherComponent from './components/teacher/LoginTeacherComponent';
+import LoginStudentComponent from './components/student/LoginStudentComponent';
 import SelectRoleComponent from './components/SelectRoleComponent';
 import HeaderComponent from './components/layout/HeaderComponent';
 import SiderComponent from "./components/layout/SiderComponent";
-import SignupTeacherComponent from './components/SignupTeacherComponent';
-import ClassroomsListComponent from './components/ClassroomsListComponent';
+import SignupTeacherComponent from './components/teacher/SignupTeacherComponent';
+import ClassroomsListComponent from './components/teacher/ClassroomsListComponent';
 import { usersServiceURL } from './Globals';
 import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined } from "@ant-design/icons";
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
-import DnDPhase1 from './components/DnDPhase1';
-import DnDPhase2 from './components/DnDPhase2';
-import TypePhase1 from './components/TypePhase1';
-import TypePhase2 from './components/TypePhase2';
-import ExercisesCarousel from './components/ExercisesCarousel';
+import DnDPhase1 from './components/student/DnDPhase1Component';
+import DnDPhase2 from './components/student/DnDPhase2Component';
+import TypePhase1 from './components/student/TypePhase1Component';
+import TypePhase2 from './components/student/TypePhase2Component';
+import ExercisesCarousel from './components/student/ExercisesCarouselComponent';
 
 let App = () => {
 

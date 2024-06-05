@@ -1,10 +1,10 @@
 import { Image, Typography, Card, Checkbox, Divider, Collapse, Row, Col, Carousel, Alert, Empty, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { FilterFilled } from "@ant-design/icons";
-import { arasaacURL, exercisesServiceURL } from "../Globals";
+import { arasaacURL, exercisesServiceURL } from "../../Globals";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import i18n from "../i18n";
+import i18n from "../../i18n";
 
 let ExercisesCarousel = ({ cardsPerRow = 4, setExercise, rowsPerSlide = 2 }) => {
 

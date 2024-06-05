@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Input, Form, Alert } from "antd";
-import { usersServiceURL } from '../Globals';
+import { usersServiceURL } from '../../Globals';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -40,7 +40,7 @@ let LoginStudentComponent = (props) => {
                 localStorage.setItem("username", jsonData.username);
                 localStorage.setItem("role", "S");
                 setLogin(true);
-                navigate("/students/example");
+                navigate("/students/exercises");
             }
         } else {
             setMessage({ error: jsonData?.error });
