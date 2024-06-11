@@ -3,7 +3,7 @@ import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors } from '@dn
 import { Card, Col, Divider, Flex, Row } from 'antd';
 import DroppablePhase1 from './DroppablePhase1Component';
 import DraggablePhase1 from './DraggablePhase1Component';
-import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX, STOP } from '../NetworkProps';
+import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX, STOP } from './NetworkProps';
 import { arasaacURL } from "../../Globals";
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
