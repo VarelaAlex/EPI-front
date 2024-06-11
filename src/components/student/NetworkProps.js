@@ -1,4 +1,4 @@
-import { arasaacURL } from "../Globals";
+import { arasaacURL } from "../../Globals";
 
 export const X = 210;
 export const Y = 25;
