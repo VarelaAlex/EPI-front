@@ -4,7 +4,7 @@ import { usersServiceURL } from '../../Globals';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-let LoginStudentComponent = (props) => {
+let LoginStudent = (props) => {
 
     let { setLogin } = props;
 
@@ -82,4 +82,4 @@ let LoginStudentComponent = (props) => {
     );
 };
 
-export default LoginStudentComponent;
+export default LoginStudent;

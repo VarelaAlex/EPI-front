@@ -25,8 +25,7 @@ let ExercisesCarousel = ({ cardsPerRow = 4, setExercise, rowsPerSlide = 2 }) => 
         let getExercises = async () => {
             let response = null;
             try {
-                console.log(i18n.language);
-                response = await fetch(exercisesServiceURL + `/exercises/list/${lang}`, {
+                response = await fetch(exercisesServiceURL + `/exercises/list/${lang.split("-")[0]}`, {
                     method: "GET",
                     headers: { "Content-Type": "application/json" }
                 });
@@ -175,7 +174,7 @@ let ExercisesCarousel = ({ cardsPerRow = 4, setExercise, rowsPerSlide = 2 }) => 
                                     navigate("/exerciseType/phase1");
                                 }
                             }}>
-                                <Image preview={false} width="6vmax" src={`${arasaacURL}/${card.mainImage}`} />
+                                <Image preview={false} width="6vmax" src={`${arasaacURL}/pictograms/${card.mainImage}`} />
                             </Card>
                         </Col>
                     ))}

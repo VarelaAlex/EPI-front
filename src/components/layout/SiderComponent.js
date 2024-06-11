@@ -2,7 +2,7 @@ import { Drawer, Menu, Typography, } from "antd";
 import { CloseOutlined } from '@ant-design/icons';
 import { useTranslation } from "react-i18next";
 
-let SiderComponent = (props) => {
+let Sider = (props) => {
 
     let { open, setOpen, menuItems } = props;
 
@@ -35,4 +35,4 @@ let SiderComponent = (props) => {
     );
 };
 
-export default SiderComponent;
+export default Sider;

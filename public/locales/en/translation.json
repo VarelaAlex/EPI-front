@@ -147,5 +147,61 @@
             }
         }
     },
-    "internalServerError": "Something went wrong, try again later"
+    "internalServerError": "Something went wrong, try again later",
+    "exercise": {
+        "create": {
+            "title": "Create Exercise",
+            "label": {
+                "title": "Title",
+                "language": "Language",
+                "category": "Category",
+                "networkType": "Network Type",
+                "representation": "Representation",
+                "mainImage": "Main Image",
+                "definitionText": "Definition Text",
+                "definitionImage": "Definition Image",
+                "ampliationText": "Ampliation Text",
+                "ampliationImage": "Ampliation Image",
+                "definitionPictogram": "Definition Pictogram",
+                "ampliationPictogram": "Ampliation Pictogram"
+            },
+            "error": {
+                "title": "Please enter a title",
+                "language": "Please select a language",
+                "category": "Please select a category",
+                "networkType": "Please select a network type",
+                "representation": "Please select a representation",
+                "definitionText": "Please enter a definition text",
+                "ampliationText": "Please enter an ampliation text",
+                "definitionPictogram": "Please select a definition connector",
+                "ampliationPictogram": "Please select an ampliation connector"
+            },
+            "placeholder": {
+                "title": "Enter title",
+                "language": "Select language",
+                "category": "Select category",
+                "networkType": "Select network type",
+                "representation": "Select representation",
+                "definitionText": "Enter definition text",
+                "ampliationText": "Enter ampliation text",
+                "definitionPictogram": "Select definition connector",
+                "ampliationPictogram": "Select ampliation connector"
+            },
+            "button": "Create Exercise"
+        }
+    },
+    "pictograms": {
+        "is": "is",
+        "isFor": "is for",
+        "isPartOf": "is part of",
+        "are": "are",
+        "areFor": "are for",
+        "arePartOf": "are part of",
+        "has": "has",
+        "isUsedFor": "is used for",
+        "isIn": "is in",
+        "have": "have",
+        "areUsedFor": "are used for",
+        "areIn": "are in"
+    }
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors, DragOverlay } from '@dnd-kit/core';
-import { Col, Divider, Flex, Row } from 'antd';
+import { Card, Col, Divider, Flex, Row } from 'antd';
 import DroppablePhase2 from './DroppablePhase2Component';
 import DraggablePhase2 from './DraggablePhase2Component';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX } from '../NetworkProps';
@@ -18,11 +18,11 @@ let DnDPhase2 = ({ exercise }) => {
         { ...exerciseNodes[0], order: 0, id: "1-1" },
         { ...exerciseNodes[0], order: 1, id: "1-2" },
         ...exerciseNodes.slice(1, 3),
-        { ...exerciseNodes[5], order: 4, id: "6-2", type: "type6-2", src: `${arasaacURL}/8289`, bigStop: true },
+        { ...exerciseNodes[5], order: 4, id: "6-2", type: "type6-2", src: `${arasaacURL}/pictograms/8289`, bigStop: true },
         { ...exerciseNodes[0], order: 5, id: "1-3" },
         ...exerciseNodes.slice(3, 5),
         ...exerciseNodes.slice(6),
-        { ...exerciseNodes[5], order: exerciseNodes.length + 2, id: "6-3", type: "type6-3", posX: nexusX(exercise?.networkType) + stopX(exercise?.networkType), src: `${arasaacURL}/8289`, bigStop: true }
+        { ...exerciseNodes[5], order: exerciseNodes.length + 2, id: "6-3", type: "type6-3", posX: nexusX(exercise?.networkType) + stopX(exercise?.networkType), src: `${arasaacURL}/pictograms/8289`, bigStop: true }
     ]);
 
     let [droppableNodes, setDroppableNodes] = useState(JSON.parse(JSON.stringify(extendedNodes)));
@@ -132,75 +132,34 @@ let DnDPhase2 = ({ exercise }) => {
     };
 
     return (
-        <Flex align="center" vertical style={{ height: "100%", width: "95%" }}>
-            <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
-                <Flex align="center" justify="center" style={{ height: "90%", width: "90%" }} >
-                    <svg height="18vmax" viewBox={`0 0 ${viewBoxWidth(exercise?.networkType)} 250`}>
-                        <path d={`M 220 70 L 220 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" />
-                        <path d="M 220 70 L 220 85 L 60 85 L 60 105" fill="none" stroke="rgb(0, 0, 0)" />
-                        <path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" />
-                        <path d={`M 350 165 ${pathBottom(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" />
-                        {["I-II", "I-III"].includes(exercise?.networkType) &&
-                            <path
-                                d={pathBottom2(exercise?.networkType)}
-                                fill="none"
-                                stroke="rgb(0, 0, 0)"
-                            />
-                        }
+        <Card style={{ height: "100%", width: "95%" }} >
+            <Flex align="center" vertical >
+                <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
+                    <Flex align="center" justify="center" style={{ height: "90%", width: "90%" }} >
+                        <svg height="18vmax" viewBox={`0 0 ${viewBoxWidth(exercise?.networkType)} 250`}>
+                            <path d={`M 220 70 L 220 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" />
+                            <path d="M 220 70 L 220 85 L 60 85 L 60 105" fill="none" stroke="rgb(0, 0, 0)" />
+                            <path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" />
+                            <path d={`M 350 165 ${pathBottom(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" />
+                            {["I-II", "I-III"].includes(exercise?.networkType) &&
+                                <path
+                                    d={pathBottom2(exercise?.networkType)}
+                                    fill="none"
+                                    stroke="rgb(0, 0, 0)"
+                                />
+                            }
 
-                        {exercise?.networkType === "I-III" &&
-                            <path
-                                d="M 570 145 L 570 150 L 790 150 L 790 165"
-                                fill="none"
-                                stroke="rgb(0, 0, 0)"
-                            />
-                        }
+                            {exercise?.networkType === "I-III" &&
+                                <path
+                                    d="M 570 145 L 570 150 L 790 150 L 790 165"
+                                    fill="none"
+                                    stroke="rgb(0, 0, 0)"
+                                />
+                            }
 
-                        {extendedNodes.slice().sort((a, b) => b.order - a.order).map((element) =>
-                            <DraggablePhase2
-                                key={element.id}
-                                id={element.id}
-                                type={element.type}
-                                x={X + element.posX}
-                                y={Y + element.posY}
-                                ok={element.ok}
-                                src={element.src}
-                                text={element.text}
-                                stop={element.stop}
-                                bigStop={element.bigStop}
-                                nexus={element.nexus}
-                                shape={element.shape}
-                            />
-                        )}
-                    </svg>
-                    <DragOverlay>
-                        {element?.id ?
-                            <svg>
-                                {getDragElement()}
-                            </svg>
-                            : null}
-                    </DragOverlay>
-                </Flex>
-                <Divider style={{ backgroundColor: "grey" }} />
-                <Flex align="start" vertical style={{ padding: "1vmax 0vmax 5vh" }}>
-                    <Row>
-                        <Col>
-                            <DroppablePhase2
-                                id={droppableNodes[0].id}
-                                type={droppableNodes[0].type}
-                                x={X + droppableNodes[0].posX}
-                                y={Y + droppableNodes[0].posY}
-                                ok={droppableNodes[0].ok}
-                                src={droppableNodes[0].src}
-                                text={droppableNodes[0].text}
-                                shape={droppableNodes[0].shape}
-                            />
-                        </Col>
-                    </Row>
-                    <Row>
-                        {droppableNodes.slice(1, 5).map((element) => (
-                            <Col key={element.id} style={{ paddingRight: "0.5vmax" }}>
-                                <DroppablePhase2
+                            {extendedNodes.slice().sort((a, b) => b.order - a.order).map((element) =>
+                                <DraggablePhase2
+                                    key={element.id}
                                     id={element.id}
                                     type={element.type}
                                     x={X + element.posX}
@@ -208,48 +167,91 @@ let DnDPhase2 = ({ exercise }) => {
                                     ok={element.ok}
                                     src={element.src}
                                     text={element.text}
-                                    shape={element.shape}
                                     stop={element.stop}
                                     bigStop={element.bigStop}
                                     nexus={element.nexus}
+                                    shape={element.shape}
                                 />
-                            </Col>
-                        ))}
-                    </Row>
-                    <Row>
-                        {droppableNodes.slice(5).map((element) => (
-                            <Col key={element.id} style={{ paddingRight: "0.5vmax" }}>
+                            )}
+                        </svg>
+                        <DragOverlay>
+                            {element?.id ?
+                                <svg>
+                                    {getDragElement()}
+                                </svg>
+                                : null}
+                        </DragOverlay>
+                    </Flex>
+                    <Divider style={{ backgroundColor: "grey" }} />
+                    <Flex align="start" vertical style={{ padding: "1vmax 0vmax 5vh" }}>
+                        <Row>
+                            <Col>
                                 <DroppablePhase2
-                                    id={element.id}
-                                    type={element.type}
-                                    x={X + element.posX}
-                                    y={Y + element.posY}
-                                    ok={element.ok}
-                                    src={element.src}
-                                    text={element.text}
-                                    shape={element.shape}
-                                    stop={element.stop}
-                                    bigStop={element.bigStop}
-                                    nexus={element.nexus}
+                                    id={droppableNodes[0].id}
+                                    type={droppableNodes[0].type}
+                                    x={X + droppableNodes[0].posX}
+                                    y={Y + droppableNodes[0].posY}
+                                    ok={droppableNodes[0].ok}
+                                    src={droppableNodes[0].src}
+                                    text={droppableNodes[0].text}
+                                    shape={droppableNodes[0].shape}
                                 />
                             </Col>
-                        ))}
-                    </Row>
-                </Flex>
-            </DndContext>
-            {showGif && <img
-                src="/reinforcement/pawpatrol.webp"
-                className="moving-image"
-                alt="Moving"
-                style={{
-                    position: "fixed",
-                    right: "20vw",
-                    bottom: "50vh",
-                    height: "20vmax",
-                    transform: "scaleX(-1)"
-                }} />
-            }
-        </Flex>
+                        </Row>
+                        <Row>
+                            {droppableNodes.slice(1, 5).map((element) => (
+                                <Col key={element.id} style={{ paddingRight: "0.5vmax" }}>
+                                    <DroppablePhase2
+                                        id={element.id}
+                                        type={element.type}
+                                        x={X + element.posX}
+                                        y={Y + element.posY}
+                                        ok={element.ok}
+                                        src={element.src}
+                                        text={element.text}
+                                        shape={element.shape}
+                                        stop={element.stop}
+                                        bigStop={element.bigStop}
+                                        nexus={element.nexus}
+                                    />
+                                </Col>
+                            ))}
+                        </Row>
+                        <Row>
+                            {droppableNodes.slice(5).map((element) => (
+                                <Col key={element.id} style={{ paddingRight: "0.5vmax" }}>
+                                    <DroppablePhase2
+                                        id={element.id}
+                                        type={element.type}
+                                        x={X + element.posX}
+                                        y={Y + element.posY}
+                                        ok={element.ok}
+                                        src={element.src}
+                                        text={element.text}
+                                        shape={element.shape}
+                                        stop={element.stop}
+                                        bigStop={element.bigStop}
+                                        nexus={element.nexus}
+                                    />
+                                </Col>
+                            ))}
+                        </Row>
+                    </Flex>
+                </DndContext>
+                {showGif && <img
+                    src="/reinforcement/pawpatrol.webp"
+                    className="moving-image"
+                    alt="Moving"
+                    style={{
+                        position: "fixed",
+                        right: "20vw",
+                        bottom: "50vh",
+                        height: "20vmax",
+                        transform: "scaleX(-1)"
+                    }} />
+                }
+            </Flex>
+        </Card>
     );
 };
 

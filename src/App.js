@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Layout, notification, Flex } from "antd";
-import LoginTeacherComponent from './components/teacher/LoginTeacherComponent';
-import LoginStudentComponent from './components/student/LoginStudentComponent';
-import SelectRoleComponent from './components/SelectRoleComponent';
-import HeaderComponent from './components/layout/HeaderComponent';
-import SiderComponent from "./components/layout/SiderComponent";
-import SignupTeacherComponent from './components/teacher/SignupTeacherComponent';
-import ClassroomsListComponent from './components/teacher/ClassroomsListComponent';
+import LoginTeacher from './components/teacher/LoginTeacherComponent';
+import LoginStudent from './components/student/LoginStudentComponent';
+import SelectRole from './components/SelectRoleComponent';
+import Header from './components/layout/HeaderComponent';
+import Sider from "./components/layout/SiderComponent";
+import SignupTeacher from './components/teacher/SignupTeacherComponent';
+import ClassroomsList from './components/teacher/ClassroomsListComponent';
 import { usersServiceURL } from './Globals';
 import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined } from "@ant-design/icons";
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
@@ -17,10 +17,12 @@ import DnDPhase2 from './components/student/DnDPhase2Component';
 import TypePhase1 from './components/student/TypePhase1Component';
 import TypePhase2 from './components/student/TypePhase2Component';
 import ExercisesCarousel from './components/student/ExercisesCarouselComponent';
+import ExercisesList from './components/teacher/ExercisesListComponent';
+import CreateExercise from './components/teacher/CreateExerciseComponent';
 
 let App = () => {
 
-  const MOBILE_BREAKPOINT = 500;
+  const MOBILE_BREAKPOINT = 430;
 
   let [open, setOpen] = useState(false);
   let [login, setLogin] = useState(false);
@@ -177,7 +179,7 @@ let App = () => {
     <>
       {contextHolder}
       <Layout>
-        <HeaderComponent
+        <Header
           login={login}
           open={open}
           setOpen={setOpen}
@@ -185,7 +187,7 @@ let App = () => {
         />
         <Layout hasSider>
           {login &&
-            <SiderComponent
+            <Sider
               login={login}
               setLogin={setLogin}
               open={open}
@@ -193,23 +195,23 @@ let App = () => {
               menuItems={localStorage.getItem("role") === "T" ? teacherMenuItems : studentMenuItems}
             />
           }
-          <Content style={{ minHeight: "78vh", marginTop: "2vh" }} >
-            <Flex align="center" justify="center" style={{ height: "100%" }}>
+          <Content style={{ minHeight: "100vh", background: "url(/bg.svg) no-repeat", backgroundSize: "cover" }} >
+            <Flex align="center" justify="center" style={{ minHeight: "100%" }}>
               <Routes>
                 <Route path="/loginTeacher" element={
-                  <LoginTeacherComponent setLogin={setLogin} />
+                  <LoginTeacher setLogin={setLogin} />
                 } />
                 <Route path="/loginStudent" element={
-                  <LoginStudentComponent setLogin={setLogin} />
+                  <LoginStudent setLogin={setLogin} />
                 } />
                 <Route path="/selectRole" element={
-                  <SelectRoleComponent />
+                  <SelectRole />
                 } />
                 <Route path="/registerTeacher" element={
-                  <SignupTeacherComponent />
+                  <SignupTeacher />
                 } />
                 <Route path="/teachers/menuTeacher" element={
-                  <ClassroomsListComponent isMobile={isMobile} />
+                  <ClassroomsList isMobile={isMobile} />
                 } />
                 <Route path="/exerciseDnD/phase1" element={
                   <DnDPhase1 exercise={exercise} />
@@ -227,13 +229,16 @@ let App = () => {
                   <ExercisesCarousel cardsPerRow={isMobile ? 3 : 4} setExercise={setExercise} />
                 } />
                 <Route path="/teachers/manageExercises" element={
-                  <>a</>
+                  <ExercisesList isMobile={isMobile} />
+                } />
+                <Route path="/teachers/create" element={
+                  <CreateExercise isMobile={isMobile} />
                 } />
               </Routes>
             </Flex>
           </Content>
         </Layout>
-        <Footer style={{ textAlign: "center" }}>HYTEX @ 2024<br />Made with ❤️ by Álex Álvarez Varela</Footer>
+        <Footer style={{ textAlign: "center", backgroundColor: "#001628", color: "white" }}>HYTEX @ 2024<br />Made with ❤️ by Álex Álvarez Varela</Footer>
       </Layout >
     </>
   );

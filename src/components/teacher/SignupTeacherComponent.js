@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { usersServiceURL } from '../../Globals';
 
-const SignupTeacherComponent = () => {
+const SignupTeacher = () => {
 
     let { t } = useTranslation();
     let { Text } = Typography;
@@ -166,4 +166,4 @@ const SignupTeacherComponent = () => {
         </Card>
     );
 };
-export default SignupTeacherComponent;
+export default SignupTeacher;

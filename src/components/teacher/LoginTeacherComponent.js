@@ -4,7 +4,7 @@ import { Button, Card, Input, Typography, Form, Alert } from "antd";
 import { usersServiceURL } from '../../Globals';
 import { useState } from 'react';
 
-let LoginTeacherComponent = (props) => {
+let LoginTeacher = (props) => {
 
     let { setLogin } = props;
 
@@ -106,4 +106,4 @@ let LoginTeacherComponent = (props) => {
     );
 };
 
-export default LoginTeacherComponent;
+export default LoginTeacher;

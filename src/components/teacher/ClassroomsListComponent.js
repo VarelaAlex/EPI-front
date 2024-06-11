@@ -1,11 +1,11 @@
-import { Empty, Button, Card, Table, Flex, Divider, Input, Tooltip, Form, Alert } from "antd";
+import { Empty, Button, Card, Table, Divider, Input, Tooltip, Form, Alert } from "antd";
 import { useEffect, useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from "react-router-dom";
 import { LineChartOutlined, DeleteOutlined } from "@ant-design/icons";
 import { usersServiceURL } from "../../Globals";
 
-let ClassroomsListComponent = (props) => {
+let ClassroomsList = (props) => {
 
   let { isMobile } = props;
 
@@ -31,29 +31,28 @@ let ClassroomsListComponent = (props) => {
       align: "center"
     },
     {
-      title: "",
+      title: "Actions",
       dataIndex: "id",
+      align: "right",
       render: (id) => (
-        <Flex justify="end" align="center" gap="1vw">
-          {isMobile ?
-            <>
-              <Tooltip title={t("classrooms.table.tooltips.seeStatistics")} mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
-                <Button onClick={() => navigate("/teachers/classroomStatistics/" + id)} icon={<LineChartOutlined />} />
-              </Tooltip>
-              <Tooltip title={t("classrooms.table.tooltips.delete")} mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
-                <Button
-                  danger
-                  type="primary"
-                  onClick={() => deleteClassroom(id)}
-                  icon={<DeleteOutlined />}
-                />
-              </Tooltip>
-            </>
-            : <>
-              <Button onClick={() => navigate("/teachers/classroomStatistics/" + id)} > {t("classrooms.table.buttons.seeStatistics")}</Button >
-              <Button danger type="primary" onClick={() => deleteClassroom(id)}> {t("classrooms.table.buttons.delete")}</Button >
-            </>}
-        </Flex>
+        isMobile ?
+          <div style={{ float: "right" }}>
+            <Tooltip title={t("classrooms.table.tooltips.seeStatistics")} mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
+              <Button onClick={() => navigate("/teachers/classroomStatistics/" + id)} icon={<LineChartOutlined />} style={{ marginRight: "1vmax" }} />
+            </Tooltip>
+            <Tooltip title={t("classrooms.table.tooltips.delete")} mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
+              <Button
+                danger
+                type="primary"
+                onClick={() => deleteClassroom(id)}
+                icon={<DeleteOutlined />}
+              />
+            </Tooltip>
+          </div>
+          : <div style={{ float: "right" }}>
+            <Button onClick={() => navigate("/teachers/classroomStatistics/" + id)} style={{ marginRight: "1vmax" }}> {t("classrooms.table.buttons.seeStatistics")}</Button >
+            <Button danger type="primary" onClick={() => deleteClassroom(id)}> {t("classrooms.table.buttons.delete")}</Button >
+          </div>
       )
     }
   ];
@@ -113,10 +112,10 @@ let ClassroomsListComponent = (props) => {
   };
 
   return (
-    <Card title={t("classrooms.table.title")} style={{ minWidth: "55vw" }}>
+    <Card title={t("classrooms.table.title")} style={{ width: "90%" }}>
       {classrooms.length <= 0 ?
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("classrooms.table.empty")} />
-        : <Table columns={columns} dataSource={classrooms} />
+        : <Table bordered columns={columns} dataSource={classrooms} />
       }
       <Divider orientation="left">{t("classrooms.addClassroom.divider")}</Divider>
       {message?.error?.type && <Alert type="error" message={t(message?.error?.type)} showIcon style={{ marginBottom: "1vh" }} />}
@@ -152,4 +151,4 @@ let ClassroomsListComponent = (props) => {
   );
 };
 
-export default ClassroomsListComponent;
+export default ClassroomsList;

@@ -147,5 +147,61 @@
             }
         }
     },
-    "internalServerError": "Algo ha ido mal, inténtalo más tarde"
+    "internalServerError": "Algo ha ido mal, inténtalo más tarde",
+    "exercise": {
+        "create": {
+            "title": "Crear Ejercicio",
+            "label": {
+                "title": "Título",
+                "language": "Idioma",
+                "category": "Categoría",
+                "networkType": "Tipo de Red",
+                "representation": "Representación",
+                "mainImage": "Imagen Principal",
+                "definitionText": "Texto de Definición",
+                "definitionImage": "Imagen de Definición",
+                "ampliationText": "Texto de Ampliación",
+                "ampliationImage": "Imagen de Ampliación",
+                "definitionPictogram": "Pictograma de Definición",
+                "ampliationPictogram": "Pictograma de Ampliación"
+            },
+            "error": {
+                "title": "Por favor, ingrese un título",
+                "language": "Por favor, seleccione un idioma",
+                "category": "Por favor, seleccione una categoría",
+                "networkType": "Por favor, seleccione un tipo de red",
+                "representation": "Por favor, seleccione una representación",
+                "definitionText": "Por favor, ingrese un texto de definición",
+                "ampliationText": "Por favor, ingrese un texto de ampliación",
+                "definitionPictogram": "Por favor, seleccione un conector de definición",
+                "ampliationPictogram": "Por favor, seleccione un conector de ampliación"
+            },
+            "placeholder": {
+                "title": "Ingrese título",
+                "language": "Seleccione idioma",
+                "category": "Seleccione categoría",
+                "networkType": "Seleccione tipo de red",
+                "representation": "Seleccione representación",
+                "definitionText": "Ingrese texto de definición",
+                "ampliationText": "Ingrese texto de ampliación",
+                "definitionPictogram": "Seleccione conector de definición",
+                "ampliationPictogram": "Seleccione conector de ampliación"
+            },
+            "button": "Crear Ejercicio"
+        }
+    },
+    "pictograms": {
+        "is": "es",
+        "isFor": "es para",
+        "isPartOf": "es parte de",
+        "are": "son",
+        "areFor": "son para",
+        "arePartOf": "son parte de",
+        "has": "tiene",
+        "isUsedFor": "sirve para",
+        "isIn": "está en",
+        "have": "tienen",
+        "areUsedFor": "sirven para",
+        "areIn": "están en"
+    }
 }
