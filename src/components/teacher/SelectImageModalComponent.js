@@ -56,8 +56,8 @@ let SelectImageModal = ({ setMessage, setOpen, open, selectedImages, setSelected
             onCancel={handleCancel}
             width="70vw"
             footer={[
-                <Button key="back" onClick={handleCancel}>
-                    Cancel
+                <Button type="primary" key="ok" onClick={handleCancel} disabled={selectedImages.length !== selectionLimit}>
+                    Accept
                 </Button>
             ]}
         >

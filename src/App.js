@@ -5,7 +5,7 @@ import { Layout, notification, Flex } from "antd";
 import LoginTeacher from './components/teacher/LoginTeacherComponent';
 import LoginStudent from './components/student/LoginStudentComponent';
 import SelectRole from './components/SelectRoleComponent';
-import Header from './components/layout/HeaderComponent';
+import HeaderComponent from './components/layout/HeaderComponent';
 import Sider from "./components/layout/SiderComponent";
 import SignupTeacher from './components/teacher/SignupTeacherComponent';
 import ClassroomsList from './components/teacher/ClassroomsListComponent';
@@ -179,7 +179,7 @@ let App = () => {
     <>
       {contextHolder}
       <Layout>
-        <Header
+        <HeaderComponent
           login={login}
           open={open}
           setOpen={setOpen}
@@ -238,7 +238,7 @@ let App = () => {
             </Flex>
           </Content>
         </Layout>
-        <Footer style={{ textAlign: "center", backgroundColor: "#001628", color: "white" }}>HYTEX @ 2024<br />Made with ❤️ by Álex Álvarez Varela</Footer>
+        <Footer style={{ textAlign: "center", backgroundColor: "#001628", color: "white" }}>HYTEX @ 2024<br />Made with ❤️ by Álex Álvarez Varela & UniOvi</Footer>
       </Layout >
     </>
   );

@@ -203,5 +203,21 @@
         "have": "have",
         "areUsedFor": "are used for",
         "areIn": "are in"
+    },
+    "representation": {
+        "iconic": "ICONIC",
+        "mixed": "MIXED",
+        "symbolic": "SYMBOLIC"
+    },
+    "categories": {
+        "family": "Family",
+        "animals": "Animals",
+        "food": "Food",
+        "body": "Body",
+        "objects": "Objects",
+        "meansOfTransport": "Means of transport",
+        "city": "City",
+        "clothes": "Clothes",
+        "nature": "Nature"
     }
 }

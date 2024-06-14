@@ -4,7 +4,7 @@ import { Row, Col, Button, Dropdown, Space, Layout, Tooltip, Image } from "antd"
 import { DownloadOutlined, DownOutlined, TranslationOutlined, UserOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
 
-let Header = (props) => {
+let HeaderComponent = (props) => {
 
     let { login, open, setOpen, isMobile } = props;
 
@@ -118,4 +118,4 @@ let Header = (props) => {
     );
 };
 
-export default Header;
+export default HeaderComponent;

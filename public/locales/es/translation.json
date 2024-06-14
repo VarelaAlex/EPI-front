@@ -187,7 +187,30 @@
                 "definitionPictogram": "Seleccione conector de definición",
                 "ampliationPictogram": "Seleccione conector de ampliación"
             },
-            "button": "Crear Ejercicio"
+            "addExercise": {
+                "divider": "Añadir un nuevo ejercicio",
+                "button": "Crear Ejercicio"
+            }
+        },
+        "carousel": {
+            "empty": "No existen ejercicios"
+        },
+        "table": {
+            "title": "Mis ejercicios",
+            "name": "Ejercicio",
+            "category": "Categoría",
+            "networkType": "Tipo de red",
+            "representation": "Representación",
+            "language": "Idioma",
+            "empty": "Aún no tienes ejercicios",
+            "tooltips": {
+                "edit": "Editar",
+                "delete": "Eliminar"
+            },
+            "buttons": {
+                "edit": "Editar",
+                "delete": "Eliminar"
+            }
         }
     },
     "pictograms": {
@@ -203,5 +226,21 @@
         "have": "tienen",
         "areUsedFor": "sirven para",
         "areIn": "están en"
+    },
+    "representation": {
+        "iconic": "ICÓNICA",
+        "mixed": "COMBINADA",
+        "symbolic": "SIMBÓLICA"
+    },
+    "categories": {
+        "family": "Familia",
+        "animals": "Animales",
+        "food": "Comida",
+        "body": "Cuerpo",
+        "objects": "Objetos",
+        "meansOfTransport": "Medios de transporte",
+        "city": "Ciudad",
+        "clothes": "Ropa",
+        "nature": "Naturaleza"
     }
 }

@@ -11,24 +11,20 @@ let ExercisesCarousel = ({ cardsPerRow = 4, setExercise, rowsPerSlide = 2 }) => 
     const TOTAL_CARDS_PER_SLIDE = cardsPerRow * rowsPerSlide;
 
     let [exercises, setExercises] = useState([]);
-    let [filteredExercises, setFilteredExercises] = useState([]);
     let [message, setMessage] = useState(null);
     let [loading, setLoading] = useState(true);
+    let [categories, setCategories] = useState([]);
+
     let navigate = useNavigate();
     let { t } = useTranslation();
     let lang = i18n.language;
 
     useEffect(() => {
-        setTimeout(() => {
-            setLoading(false);
-        }, 2000);
         let getExercises = async () => {
+            setLoading(true);
             let response = null;
             try {
-                response = await fetch(exercisesServiceURL + `/exercises/list/${lang.split("-")[0]}`, {
-                    method: "GET",
-                    headers: { "Content-Type": "application/json" }
-                });
+                response = await fetch(exercisesServiceURL + `/exercises/list/${lang.split("-")[0]}`);
             } catch (e) {
                 return;
             }
@@ -36,27 +32,29 @@ let ExercisesCarousel = ({ cardsPerRow = 4, setExercise, rowsPerSlide = 2 }) => 
             let jsonData = await response?.json();
             if (response?.ok) {
                 setExercises(jsonData);
-                setFilteredExercises(jsonData);
             } else {
                 setMessage({ error: jsonData?.error });
             }
+            setLoading(false);
         };
 
         getExercises();
     }, [navigate, lang]);
 
     const [checkedListCategory, setCheckedListCategory] = useState([]);
-    let plainOptionsCategory = [
-        { category: "Family", title: "FAMILIA" },
-        { category: "Animals", title: "ANIMALES" },
-        { category: "Food", title: "COMIDA" },
-        { category: "Body", title: "CUERPO HUMANO" },
-        { category: "Objects", title: "OBJETOS" },
-        { category: "MeanOfTransportation", title: "MEDIOS DE TRANSPORTE" },
-        { category: "City", title: "CIUDAD" },
-        { category: "Clothes", title: "ROPA" },
-        { category: "Nature", title: "NATURALEZA" }
-    ];
+    let plainOptionsCategory = categories?.map(category => {
+        return {
+            category: category?.toUpperCase(),
+            title: t(
+                `categories.${category
+                    .replace(
+                        /(?:^\w)/g,
+                        (match, index) =>
+                            index === 0 ? match.toLowerCase() : match.toUpperCase()
+                    )}`)
+        };
+    });
+
     const indeterminateCategory = checkedListCategory.length > 0 && checkedListCategory.length < plainOptionsCategory.length;
     const checkAllCategory = plainOptionsCategory.length === checkedListCategory.length;
 
@@ -89,30 +87,58 @@ let ExercisesCarousel = ({ cardsPerRow = 4, setExercise, rowsPerSlide = 2 }) => 
     const CheckboxGroup = Checkbox.Group;
 
     useEffect(() => {
-        let filteredByCategory = checkedListCategory.length === 0 ? exercises : exercises.filter(exercise =>
-            checkedListCategory.some(category =>
-                category.toLowerCase() === exercise.category.toLowerCase()
-            )
-        );
 
-        let filteredByAge = checkedListAge.length === 0 ? filteredByCategory : filteredByCategory.filter(exercise =>
-            checkedListAge.some(age => {
-                if (["3", "4"].includes(age)) {
-                    return "ICONIC" === exercise.representation.toUpperCase();
-                }
-                if (["5", "6"].includes(age)) {
-                    return "MIXED" === exercise.representation.toUpperCase();
-                }
-                if (["7", "8"].includes(age)) {
-                    return "SYMBOLIC" === exercise.representation.toUpperCase();
-                }
-                return false;
+        let getFilteredExercises = async (checkedListCategory, checkedListAge) => {
+            setLoading(true);
+            let response = null;
+            try {
+                response = await fetch(exercisesServiceURL + `/exercises/list/${lang.split("-")[0]}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        categories: checkedListCategory,
+                        ages: checkedListAge
+                    })
+                });
+            } catch (e) {
+                return;
             }
-            )
-        );
 
-        setFilteredExercises(filteredByAge);
-    }, [checkedListCategory, checkedListAge, exercises]);
+            let jsonData = await response?.json();
+            if (response?.ok) {
+                setExercises(jsonData);
+            } else {
+                setMessage({ error: jsonData?.error });
+            }
+            setLoading(false);
+        };
+
+        getFilteredExercises(checkedListCategory, checkedListAge);
+
+    }, [checkedListCategory, checkedListAge, lang]);
+
+    useEffect(() => {
+        let getCategories = async () => {
+            setLoading(true);
+            let response = null;
+            try {
+                response = await fetch(`${exercisesServiceURL}/categories`);
+            } catch (e) {
+                setMessage({ error: { type: "internalServerError", message: e } });
+                return;
+            }
+
+            let jsonData = await response?.json();
+            if (response?.ok) {
+                setCategories(jsonData.map(category => category.name));
+            } else {
+                setMessage({ error: jsonData?.error });
+            }
+            setLoading(false);
+        };
+
+        getCategories();
+    }, []);
 
     let items = [
         {
@@ -148,7 +174,7 @@ let ExercisesCarousel = ({ cardsPerRow = 4, setExercise, rowsPerSlide = 2 }) => 
                             {plainOptionsAge.map((element) => {
                                 return (
                                     <Col key={element.age} span={7}>
-                                        <Checkbox value={element.age} style={{ fontSize: "1.1vmax" }}>{element.title}</Checkbox>
+                                        <Checkbox value={element.age} style={{ fontSize: "1.1vmax" }}>{element.title.toUpperCase()}</Checkbox>
                                     </Col>
                                 );
                             })}
@@ -163,8 +189,9 @@ let ExercisesCarousel = ({ cardsPerRow = 4, setExercise, rowsPerSlide = 2 }) => 
         <div key={startIndex}>
             {Array.from({ length: rowsPerSlide }).map((_, rowIndex) => (
                 <Row gutter={16} key={rowIndex}>
-                    {filteredExercises.slice(startIndex + rowIndex * cardsPerRow, startIndex + (rowIndex + 1) * cardsPerRow).map((card, cardIndex) => (
+                    {exercises.slice(startIndex + rowIndex * cardsPerRow, startIndex + (rowIndex + 1) * cardsPerRow).map((card, cardIndex) => (
                         <Col span={24 / cardsPerRow} key={cardIndex}>
+
                             <Card hoverable size="small" style={{ userSelect: "none", width: "20vw", height: "12vmax", textAlign: "center", marginBottom: "1vmax" }} title={<Title style={{ fontSize: "1.3vmax", textAlign: "center" }}>{card.title}</Title>} onClick={() => {
                                 setExercise(card);
                                 if (["ICONIC", "MIXED"].includes(card.representation)) {
@@ -173,7 +200,7 @@ let ExercisesCarousel = ({ cardsPerRow = 4, setExercise, rowsPerSlide = 2 }) => 
                                 else {
                                     navigate("/exerciseType/phase1");
                                 }
-                            }}>
+                            }} description={card.representation}>
                                 <Image preview={false} width="6vmax" src={`${arasaacURL}/pictograms/${card.mainImage}`} />
                             </Card>
                         </Col>
@@ -189,20 +216,18 @@ let ExercisesCarousel = ({ cardsPerRow = 4, setExercise, rowsPerSlide = 2 }) => 
         <Spin spinning={loading} tip="Loading" size="large">
 
             <div style={{ width: "95vw", padding: "1vw" }}>
+                {message?.error?.type && <Alert type="error" message={t(message?.error?.type)} showIcon style={{ marginBottom: "1vh" }} />}
                 <div style={{ display: "flex", justifyContent: "center", marginBottom: "1vmax" }}>
                     <Collapse items={items} style={{ fontSize: "2.5vmin", fontWeight: "bold", width: "90%" }} />
                 </div>
-                {filteredExercises.length <= 0 ?
-                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("exercises.empty")} />
+                {exercises.length <= 0 ?
+                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("exercise.carousel.empty")} />
                     :
-                    <div>
-                        {message?.error?.type && <Alert type="error" message={t(message?.error?.type)} showIcon style={{ marginBottom: "1vh" }} />}
-                        <Carousel draggable style={{ padding: "3vmax", backgroundColor: "#00152f", borderRadius: "50px" }}>
-                            {Array.from({ length: Math.ceil(filteredExercises.length / TOTAL_CARDS_PER_SLIDE) }).map((_, slideIndex) =>
-                                renderSlide(slideIndex * TOTAL_CARDS_PER_SLIDE)
-                            )}
-                        </Carousel>
-                    </div>
+                    <Carousel draggable style={{ padding: "3vmax", backgroundColor: "#00152f", borderRadius: "50px" }}>
+                        {Array.from({ length: Math.ceil(exercises.length / TOTAL_CARDS_PER_SLIDE) }).map((_, slideIndex) =>
+                            renderSlide(slideIndex * TOTAL_CARDS_PER_SLIDE)
+                        )}
+                    </Carousel>
                 }
             </div>
         </Spin>

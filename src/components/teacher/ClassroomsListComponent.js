@@ -1,4 +1,4 @@
-import { Empty, Button, Card, Table, Divider, Input, Tooltip, Form, Alert } from "antd";
+import { Empty, Button, Card, Table, Divider, Input, Tooltip, Form, Alert, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from "react-router-dom";
@@ -9,6 +9,7 @@ let ClassroomsList = (props) => {
 
   let { isMobile } = props;
 
+  let [loading, setLoading] = useState(true);
   let [classrooms, setClassrooms] = useState([]);
   let [message, setMessage] = useState(null);
 
@@ -58,6 +59,7 @@ let ClassroomsList = (props) => {
   ];
 
   let getClassrooms = async () => {
+    setLoading(true);
     let response = await fetch(usersServiceURL + "/classrooms/list?apiKey=" + localStorage.getItem("apiKey"));
 
     if (response.ok) {
@@ -73,6 +75,7 @@ let ClassroomsList = (props) => {
         setMessage(finalError);
       }
     }
+    setLoading(false);
   };
 
   let onFinish = async (values) => {
@@ -112,42 +115,44 @@ let ClassroomsList = (props) => {
   };
 
   return (
-    <Card title={t("classrooms.table.title")} style={{ width: "90%" }}>
-      {classrooms.length <= 0 ?
-        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("classrooms.table.empty")} />
-        : <Table bordered columns={columns} dataSource={classrooms} />
-      }
-      <Divider orientation="left">{t("classrooms.addClassroom.divider")}</Divider>
-      {message?.error?.type && <Alert type="error" message={t(message?.error?.type)} showIcon style={{ marginBottom: "1vh" }} />}
-      <Form
-        name="addClassroom"
-        labelCol={{ xs: { span: 24 }, sm: { span: 6 } }}
-        wrapperCol={{ xs: { span: 24 }, sm: { span: 18 } }}
-        onFinish={onFinish}
-        scrollToFirstError
-      >
-        <Form.Item
-          name="name"
-          label={t("classrooms.addClassroom.label")}
-          rules={[
-            {
-              required: true,
-              message: t("classrooms.addClassroom.error")
-            },
-          ]}
-          validateStatus={message?.error?.name ? 'error' : undefined}
-          help={message?.error?.name ? t(message?.error?.name) : undefined}
-          hasFeedback
+    <Spin spinning={loading} tip="Loading" size="large">
+      <Card title={t("classrooms.table.title")} style={{ width: "90vw" }}>
+        {classrooms.length <= 0 ?
+          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("classrooms.table.empty")} />
+          : <Table bordered columns={columns} dataSource={classrooms} />
+        }
+        <Divider orientation="left">{t("classrooms.addClassroom.divider")}</Divider>
+        {message?.error?.type && <Alert type="error" message={t(message?.error?.type)} showIcon style={{ marginBottom: "1vh" }} />}
+        <Form
+          name="addClassroom"
+          labelCol={{ xs: { span: 24 }, sm: { span: 6 } }}
+          wrapperCol={{ xs: { span: 24 }, sm: { span: 18 } }}
+          onFinish={onFinish}
+          scrollToFirstError
         >
-          <Input placeholder={t("classrooms.addClassroom.placeholder")} onInput={() => setMessage(null)} />
-        </Form.Item>
-        <Form.Item wrapperCol={{ xs: { span: 24, offset: 0 }, sm: { span: 16, offset: 6 } }}>
-          <Button type="primary" htmlType="submit">
-            {t("classrooms.addClassroom.button")}
-          </Button>
-        </Form.Item>
-      </Form>
-    </Card>
+          <Form.Item
+            name="name"
+            label={t("classrooms.addClassroom.label")}
+            rules={[
+              {
+                required: true,
+                message: t("classrooms.addClassroom.error")
+              },
+            ]}
+            validateStatus={message?.error?.name ? 'error' : undefined}
+            help={message?.error?.name ? t(message?.error?.name) : undefined}
+            hasFeedback
+          >
+            <Input placeholder={t("classrooms.addClassroom.placeholder")} onInput={() => setMessage(null)} />
+          </Form.Item>
+          <Form.Item wrapperCol={{ xs: { span: 24, offset: 0 }, sm: { span: 16, offset: 6 } }}>
+            <Button type="primary" htmlType="submit">
+              {t("classrooms.addClassroom.button")}
+            </Button>
+          </Form.Item>
+        </Form>
+      </Card>
+    </Spin>
   );
 };
 
