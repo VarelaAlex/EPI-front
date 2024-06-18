@@ -235,12 +235,8 @@
     "categories": {
         "family": "Familia",
         "animals": "Animales",
-        "food": "Comida",
-        "body": "Cuerpo",
-        "objects": "Objetos",
-        "meansOfTransport": "Medios de transporte",
-        "city": "Ciudad",
-        "clothes": "Ropa",
-        "nature": "Naturaleza"
+        "body&food": "Cuerpo y alimentos",
+        "transports": "Transportes",
+        "seasons": "Estaciones"
     }
 }

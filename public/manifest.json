@@ -1,5 +1,5 @@
 {
-  "background_color": "#F4F4F4",
+  "background_color": "#F5F5F5",
   "categories": [
     "education",
     "kids"
@@ -11,6 +11,7 @@
     "standalone"
   ],
   "display": "fullscreen",
+  "orientation":"landscape",
   "icons": [
     {
       "src": "logo192.png",

@@ -1,0 +1,1 @@
+export const CATEGORIES = ["BODY&FOOD", "FAMILY", "TRANSPORTS", "ANIMALS", "SEASONS"];

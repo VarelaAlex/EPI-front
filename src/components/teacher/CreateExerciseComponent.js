@@ -1,18 +1,17 @@
-import { Button, Form, Input, Card, Alert, Cascader, Image, Spin } from 'antd';
-import { useEffect, useState } from 'react';
+import { Button, Form, Input, Card, Alert, Cascader, Image } from 'antd';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { arasaacURL, exercisesServiceURL } from '../../Globals';
 import SelectImageModal from './SelectImageModalComponent';
 import i18n from "../../i18n";
+import { CATEGORIES } from '../../Categories';
 
 let CreateExercise = ({ isMobile }) => {
 
     let { t } = useTranslation();
     let lng = i18n.language;
     let navigate = useNavigate();
-
-    let [loading, setLoading] = useState(true);
     let [message, setMessage] = useState(null);
     let [openMain, setOpenMain] = useState(false);
     let [openDefinition, setOpenDefinition] = useState(false);
@@ -22,7 +21,6 @@ let CreateExercise = ({ isMobile }) => {
     let [selectedAmpliationImages, setSelectedAmpliationImages] = useState([]);
     let [networkType, setNetworkType] = useState(null);
     let [representation, setRepresentation] = useState(null);
-    let [categories, setCategories] = useState(null);
     let [selectedLanguage, setSelectedLanguage] = useState(lng.split("-")[0]);
     let [fields, setFields] = useState([]);
 
@@ -38,7 +36,7 @@ let CreateExercise = ({ isMobile }) => {
         { key: 'Symbolic', value: 'SYMBOLIC', label: t("representation.symbolic", { lng: selectedLanguage }) },
     ];
 
-    const categoryOptions = categories?.map(category => ({
+    const categoryOptions = CATEGORIES?.map(category => ({
         key: category,
         value: category?.toUpperCase(),
         label: t(`categories.${category.replace(/(?:^\w)/g, (match, index) => (index === 0 ? match.toLowerCase() : match.toUpperCase()))}`, { lng: selectedLanguage })
@@ -124,248 +122,224 @@ let CreateExercise = ({ isMobile }) => {
         }
     };
 
-    useEffect(() => {
-        const getCategories = async () => {
-            setLoading(true);
-            let response = null;
-            try {
-                response = await fetch(`${exercisesServiceURL}/categories`);
-            } catch (e) {
-                setMessage({ error: { type: "internalServerError", message: e } });
-                return;
-            }
-
-            const jsonData = await response?.json();
-            if (response?.ok) {
-                setCategories(jsonData.map(category => category.name));
-            } else {
-                setMessage({ error: jsonData?.error });
-            }
-            setLoading(false);
-        };
-
-        getCategories();
-    }, []);
-
     return (
-        <Spin spinning={loading} tip="Loading" size="large">
-            <Card title={t("exercise.create.title")} style={{ width: isMobile ? "90vw" : "65vw", marginTop: "2vh" }}>
-                {message?.error?.type && <Alert type="error" message={t(message?.error?.type)} showIcon style={{ marginBottom: "1vh" }} />}
-                <Form
-                    name="register"
-                    labelCol={{
-                        xs: { span: 24 },
-                        sm: { span: 10 },
-                    }}
-                    wrapperCol={{
-                        xs: { span: 24 },
-                        sm: { span: 16 },
-                    }}
-                    onFinish={onFinish}
-                    scrollToFirstError
+
+        <Card title={t("exercise.create.title")} style={{ width: isMobile ? "90vw" : "65vw", marginTop: "2vh" }}>
+            {message?.error?.type && <Alert type="error" message={t(message?.error?.type)} showIcon style={{ marginBottom: "1vh" }} />}
+            <Form
+                name="register"
+                labelCol={{
+                    xs: { span: 24 },
+                    sm: { span: 10 },
+                }}
+                wrapperCol={{
+                    xs: { span: 24 },
+                    sm: { span: 16 },
+                }}
+                onFinish={onFinish}
+                scrollToFirstError
+            >
+                <Form.Item
+                    name="language"
+                    label={t("exercise.create.label.language")}
+                    rules={[
+                        { required: true, message: t("exercise.create.error.language") }
+                    ]}
+                    validateStatus={message?.error?.lastName ? 'error' : undefined}
+                    help={message?.error?.lastName ? t(message?.error?.lastName) : undefined}
+                    hasFeedback
+                    wrapperCol={{ xs: { span: 14 }, sm: { span: 10 }, md: { span: 9 }, lg: { span: 7 }, xl: { span: 5 } }}
                 >
+                    <Cascader options={languageOptions} placeholder={t("exercise.create.placeholder.language")} onChange={(value) => setSelectedLanguage(value ? value[0] : i18n.language.split("-")[0])} />
+                </Form.Item>
+                <Form.Item
+                    name="category"
+                    label={t("exercise.create.label.category")}
+                    rules={[
+                        { required: true, message: t("exercise.create.error.category") }
+                    ]}
+                    validateStatus={message?.error?.name ? 'error' : undefined}
+                    help={message?.error?.name ? t(message?.error?.name) : undefined}
+                    hasFeedback
+                    wrapperCol={{ xs: { span: 16 }, sm: { span: 12 }, md: { span: 9 }, lg: { span: 8 }, xl: { span: 5 } }}
+                >
+                    <Cascader options={categoryOptions} placeholder={t("exercise.create.placeholder.category")} />
+                </Form.Item>
+                <Form.Item
+                    name="networkType"
+                    label={t("exercise.create.label.networkType")}
+                    rules={[
+                        { required: true, message: t("exercise.create.error.networkType") }
+                    ]}
+                    validateStatus={message?.error?.lastName ? 'error' : undefined}
+                    help={message?.error?.lastName ? t(message?.error?.lastName) : undefined}
+                    hasFeedback
+                    wrapperCol={{ xs: { span: 17 }, sm: { span: 12 }, md: { span: 10 }, lg: { span: 8 }, xl: { span: 6 } }}
+                >
+                    <Cascader
+                        options={networkTypeOptions}
+                        placeholder={t("exercise.create.placeholder.networkType")}
+                        onChange={(value) => {
+                            value && setNetworkType(value[0]);
+                            updateFields(networkTypeOptions.find(e => e.key === value[0]));
+                        }}
+                    />
+                </Form.Item>
+                <Form.Item
+                    name="representation"
+                    label={t("exercise.create.label.representation")}
+                    rules={[
+                        { required: true, message: t("exercise.create.error.representation") }
+                    ]}
+                    validateStatus={message?.error?.lastName ? 'error' : undefined}
+                    help={message?.error?.lastName ? t(message?.error?.lastName) : undefined}
+                    hasFeedback
+                    wrapperCol={{ xs: { span: 21 }, sm: { span: 16 }, md: { span: 12 }, lg: { span: 10 }, xl: { span: 7 } }}
+                >
+                    <Cascader options={representationOptions} placeholder={t("exercise.create.placeholder.representation")} onChange={(value) => value && setRepresentation(value[0])} />
+                </Form.Item>
+                <Form.Item
+                    name="title"
+                    label={t("exercise.create.label.title")}
+                    rules={[
+                        { required: true, message: t("exercise.create.error.title"), whitespace: true }
+                    ]}
+                    validateStatus={message?.error?.name ? 'error' : undefined}
+                    help={message?.error?.name ? t(message?.error?.name) : undefined}
+                    hasFeedback
+                    wrapperCol={{ xs: { span: 18 }, sm: { span: 10 }, md: { span: 12 }, lg: { span: 9 }, xl: { span: 7 } }}
+                >
+                    <Input placeholder={t("exercise.create.placeholder.title")} onInput={() => setMessage(null)} />
+                </Form.Item>
+                <Form.Item
+                    name="mainImage"
+                    label={t("exercise.create.label.mainImage")}
+                    required
+                    validateStatus={selectedMainImages.length === 0 && message?.error?.mainImage ? 'error' : ''}
+                    help={selectedMainImages.length === 0 && message?.error?.mainImage ? t(message?.error?.mainImage) : undefined}
+                >
+                    <div>
+                        {selectedMainImages && selectedMainImages.map(image =>
+                            <Image key={image} preview={false} width="4vmax" src={`${arasaacURL}/pictograms/${image}`} />
+                        )}
+                        <Button ghost type="primary" onClick={() => setOpenMain(true)}>
+                            Select mainImage
+                        </Button>
+                    </div>
+                </Form.Item>
+                <Form.Item
+                    name="definitionPictogram"
+                    label={t("exercise.create.label.definitionPictogram")}
+                    rules={[
+                        { required: true, message: t("exercise.create.error.definitionPictogram") }
+                    ]}
+                    validateStatus={message?.error?.lastName ? 'error' : undefined}
+                    help={message?.error?.lastName ? t(message?.error?.lastName) : undefined}
+                    hasFeedback
+                    wrapperCol={{ xs: { span: 24 }, sm: { span: 18 }, md: { span: 14 }, lg: { span: 11 }, xl: { span: 8 } }}
+                >
+                    <Cascader options={definitionPictogramOptions} placeholder={t("exercise.create.placeholder.definitionPictogram")} />
+                </Form.Item>
+                {["MIXED", "SYMBOLIC"].includes(representation) &&
                     <Form.Item
-                        name="language"
-                        label={t("exercise.create.label.language")}
+                        name="definitionText"
+                        label={t("exercise.create.label.definitionText")}
                         rules={[
-                            { required: true, message: t("exercise.create.error.language") }
-                        ]}
-                        validateStatus={message?.error?.lastName ? 'error' : undefined}
-                        help={message?.error?.lastName ? t(message?.error?.lastName) : undefined}
-                        hasFeedback
-                        wrapperCol={{ xs: { span: 14 }, sm: { span: 10 }, md: { span: 9 }, lg: { span: 7 }, xl: { span: 5 } }}
-                    >
-                        <Cascader options={languageOptions} placeholder={t("exercise.create.placeholder.language")} onChange={(value) => setSelectedLanguage(value ? value[0] : i18n.language.split("-")[0])} />
-                    </Form.Item>
-                    <Form.Item
-                        name="category"
-                        label={t("exercise.create.label.category")}
-                        rules={[
-                            { required: true, message: t("exercise.create.error.category") }
+                            { required: true, message: t("exercise.create.error.definitionText"), whitespace: true }
                         ]}
                         validateStatus={message?.error?.name ? 'error' : undefined}
                         help={message?.error?.name ? t(message?.error?.name) : undefined}
                         hasFeedback
-                        wrapperCol={{ xs: { span: 16 }, sm: { span: 12 }, md: { span: 9 }, lg: { span: 8 }, xl: { span: 5 } }}
+                        wrapperCol={{ xs: { span: 18 }, sm: { span: 12 }, md: { span: 11 }, lg: { span: 9 }, xl: { span: 6 } }}
                     >
-                        <Cascader options={categoryOptions} placeholder={t("exercise.create.placeholder.category")} />
+                        <Input placeholder={t("exercise.create.placeholder.definitionText")} onInput={() => setMessage(null)} />
                     </Form.Item>
+                }
+                {["ICONIC", "MIXED"].includes(representation) &&
                     <Form.Item
-                        name="networkType"
-                        label={t("exercise.create.label.networkType")}
-                        rules={[
-                            { required: true, message: t("exercise.create.error.networkType") }
-                        ]}
-                        validateStatus={message?.error?.lastName ? 'error' : undefined}
-                        help={message?.error?.lastName ? t(message?.error?.lastName) : undefined}
-                        hasFeedback
-                        wrapperCol={{ xs: { span: 17 }, sm: { span: 12 }, md: { span: 10 }, lg: { span: 8 }, xl: { span: 6 } }}
-                    >
-                        <Cascader
-                            options={networkTypeOptions}
-                            placeholder={t("exercise.create.placeholder.networkType")}
-                            onChange={(value) => {
-                                value && setNetworkType(value[0]);
-                                updateFields(networkTypeOptions.find(e => e.key === value[0]));
-                            }}
-                        />
-                    </Form.Item>
-                    <Form.Item
-                        name="representation"
-                        label={t("exercise.create.label.representation")}
-                        rules={[
-                            { required: true, message: t("exercise.create.error.representation") }
-                        ]}
-                        validateStatus={message?.error?.lastName ? 'error' : undefined}
-                        help={message?.error?.lastName ? t(message?.error?.lastName) : undefined}
-                        hasFeedback
-                        wrapperCol={{ xs: { span: 21 }, sm: { span: 16 }, md: { span: 12 }, lg: { span: 10 }, xl: { span: 7 } }}
-                    >
-                        <Cascader options={representationOptions} placeholder={t("exercise.create.placeholder.representation")} onChange={(value) => value && setRepresentation(value[0])} />
-                    </Form.Item>
-                    <Form.Item
-                        name="title"
-                        label={t("exercise.create.label.title")}
-                        rules={[
-                            { required: true, message: t("exercise.create.error.title"), whitespace: true }
-                        ]}
-                        validateStatus={message?.error?.name ? 'error' : undefined}
-                        help={message?.error?.name ? t(message?.error?.name) : undefined}
-                        hasFeedback
-                        wrapperCol={{ xs: { span: 18 }, sm: { span: 10 }, md: { span: 12 }, lg: { span: 9 }, xl: { span: 7 } }}
-                    >
-                        <Input placeholder={t("exercise.create.placeholder.title")} onInput={() => setMessage(null)} />
-                    </Form.Item>
-                    <Form.Item
-                        name="mainImage"
-                        label={t("exercise.create.label.mainImage")}
+                        name="definitionImage"
                         required
-                        validateStatus={selectedMainImages.length === 0 && message?.error?.mainImage ? 'error' : ''}
-                        help={selectedMainImages.length === 0 && message?.error?.mainImage ? t(message?.error?.mainImage) : undefined}
+                        label={t("exercise.create.label.definitionImage")}
+                        validateStatus={selectedDefinitionImages.length === 0 && message?.error?.definitionImage ? 'error' : ''}
+                        help={selectedDefinitionImages.length === 0 && message?.error?.definitionImage ? t(message?.error?.definitionImage) : undefined}
                     >
                         <div>
-                            {selectedMainImages && selectedMainImages.map(image =>
+                            {selectedDefinitionImages && selectedDefinitionImages.map(image =>
                                 <Image key={image} preview={false} width="4vmax" src={`${arasaacURL}/pictograms/${image}`} />
                             )}
-                            <Button ghost type="primary" onClick={() => setOpenMain(true)}>
-                                Select mainImage
+                            <Button ghost type="primary" onClick={() => setOpenDefinition(true)}>
+                                Select definitionImage
                             </Button>
                         </div>
                     </Form.Item>
+                }
+                <Form.Item
+                    name="ampliationPictogram"
+                    label={t("exercise.create.label.ampliationPictogram")}
+                    rules={[
+                        { required: true, message: t("exercise.create.error.ampliationPictogram") }
+                    ]}
+                    validateStatus={message?.error?.lastName ? 'error' : undefined}
+                    help={message?.error?.lastName ? t(message?.error?.lastName) : undefined}
+                    hasFeedback
+                    wrapperCol={{ xs: { span: 24 }, sm: { span: 18 }, md: { span: 14 }, lg: { span: 11 }, xl: { span: 8 } }}
+                >
+                    <Cascader options={ampliationPictogramOptions} placeholder={t("exercise.create.placeholder.ampliationPictogram")} />
+                </Form.Item>
+                {["MIXED", "SYMBOLIC"].includes(representation) &&
                     <Form.Item
-                        name="definitionPictogram"
-                        label={t("exercise.create.label.definitionPictogram")}
-                        rules={[
-                            { required: true, message: t("exercise.create.error.definitionPictogram") }
-                        ]}
-                        validateStatus={message?.error?.lastName ? 'error' : undefined}
-                        help={message?.error?.lastName ? t(message?.error?.lastName) : undefined}
-                        hasFeedback
-                        wrapperCol={{ xs: { span: 24 }, sm: { span: 18 }, md: { span: 14 }, lg: { span: 11 }, xl: { span: 8 } }}
+                        name="ampliationText"
+                        label={t("exercise.create.label.ampliationText")}
+                        wrapperCol={{ xs: { span: 18 }, sm: { span: 12 }, md: { span: 11 }, lg: { span: 9 }, xl: { span: 6 } }}
                     >
-                        <Cascader options={definitionPictogramOptions} placeholder={t("exercise.create.placeholder.definitionPictogram")} />
+                        <Form.List name="ampliationText">
+                            {() => (
+                                <div>
+                                    {fields.map((field) => (
+                                        <Form.Item
+                                            key={field.key}
+                                            name={[field.key, "ampliationText"]}
+                                            rules={[{ required: true, message: t("exercise.create.error.ampliationText"), whitespace: true }]}
+                                            validateStatus={message?.error?.name ? 'error' : undefined}
+                                            help={message?.error?.name ? t(message?.error?.name) : undefined}
+                                            hasFeedback
+                                        >
+                                            <Input placeholder={t("exercise.create.placeholder.ampliationText")} onInput={() => setMessage(null)} />
+                                        </Form.Item>
+                                    ))}
+                                </div>
+                            )}
+                        </Form.List>
                     </Form.Item>
-                    {["MIXED", "SYMBOLIC"].includes(representation) &&
-                        <Form.Item
-                            name="definitionText"
-                            label={t("exercise.create.label.definitionText")}
-                            rules={[
-                                { required: true, message: t("exercise.create.error.definitionText"), whitespace: true }
-                            ]}
-                            validateStatus={message?.error?.name ? 'error' : undefined}
-                            help={message?.error?.name ? t(message?.error?.name) : undefined}
-                            hasFeedback
-                            wrapperCol={{ xs: { span: 18 }, sm: { span: 12 }, md: { span: 11 }, lg: { span: 9 }, xl: { span: 6 } }}
-                        >
-                            <Input placeholder={t("exercise.create.placeholder.definitionText")} onInput={() => setMessage(null)} />
-                        </Form.Item>
-                    }
-                    {["ICONIC", "MIXED"].includes(representation) &&
-                        <Form.Item
-                            name="definitionImage"
-                            required
-                            label={t("exercise.create.label.definitionImage")}
-                            validateStatus={selectedDefinitionImages.length === 0 && message?.error?.definitionImage ? 'error' : ''}
-                            help={selectedDefinitionImages.length === 0 && message?.error?.definitionImage ? t(message?.error?.definitionImage) : undefined}
-                        >
-                            <div>
-                                {selectedDefinitionImages && selectedDefinitionImages.map(image =>
-                                    <Image key={image} preview={false} width="4vmax" src={`${arasaacURL}/pictograms/${image}`} />
-                                )}
-                                <Button ghost type="primary" onClick={() => setOpenDefinition(true)}>
-                                    Select definitionImage
-                                </Button>
-                            </div>
-                        </Form.Item>
-                    }
+                }
+                {["ICONIC", "MIXED"].includes(representation) &&
                     <Form.Item
-                        name="ampliationPictogram"
-                        label={t("exercise.create.label.ampliationPictogram")}
-                        rules={[
-                            { required: true, message: t("exercise.create.error.ampliationPictogram") }
-                        ]}
-                        validateStatus={message?.error?.lastName ? 'error' : undefined}
-                        help={message?.error?.lastName ? t(message?.error?.lastName) : undefined}
-                        hasFeedback
-                        wrapperCol={{ xs: { span: 24 }, sm: { span: 18 }, md: { span: 14 }, lg: { span: 11 }, xl: { span: 8 } }}
+                        name="ampliationImages"
+                        required
+                        label={t("exercise.create.label.ampliationImage")}
+                        validateStatus={selectedAmpliationImages.length === 0 && message?.error?.ampliationImages ? 'error' : ''}
+                        help={selectedAmpliationImages.length === 0 && message?.error?.ampliationImages ? t(message?.error?.ampliationImages) : undefined}
                     >
-                        <Cascader options={ampliationPictogramOptions} placeholder={t("exercise.create.placeholder.ampliationPictogram")} />
+                        <div>
+                            {selectedAmpliationImages && selectedAmpliationImages.map(image =>
+                                <Image key={image} preview={false} width="4vmax" src={`${arasaacURL}/pictograms/${image}`} />
+                            )}
+                            <Button ghost type="primary" onClick={() => setOpenAmpliation(true)}>
+                                Select ampliationImage
+                            </Button>
+                        </div>
                     </Form.Item>
-                    {["MIXED", "SYMBOLIC"].includes(representation) &&
-                        <Form.Item
-                            name="ampliationText"
-                            label={t("exercise.create.label.ampliationText")}
-                            wrapperCol={{ xs: { span: 18 }, sm: { span: 12 }, md: { span: 11 }, lg: { span: 9 }, xl: { span: 6 } }}
-                        >
-                            <Form.List name="ampliationText">
-                                {() => (
-                                    <div>
-                                        {fields.map((field) => (
-                                            <Form.Item
-                                                key={field.key}
-                                                name={[field.key, "ampliationText"]}
-                                                rules={[{ required: true, message: t("exercise.create.error.ampliationText"), whitespace: true }]}
-                                                validateStatus={message?.error?.name ? 'error' : undefined}
-                                                help={message?.error?.name ? t(message?.error?.name) : undefined}
-                                                hasFeedback
-                                            >
-                                                <Input placeholder={t("exercise.create.placeholder.ampliationText")} onInput={() => setMessage(null)} />
-                                            </Form.Item>
-                                        ))}
-                                    </div>
-                                )}
-                            </Form.List>
-                        </Form.Item>
-                    }
-                    {["ICONIC", "MIXED"].includes(representation) &&
-                        <Form.Item
-                            name="ampliationImages"
-                            required
-                            label={t("exercise.create.label.ampliationImage")}
-                            validateStatus={selectedAmpliationImages.length === 0 && message?.error?.ampliationImages ? 'error' : ''}
-                            help={selectedAmpliationImages.length === 0 && message?.error?.ampliationImages ? t(message?.error?.ampliationImages) : undefined}
-                        >
-                            <div>
-                                {selectedAmpliationImages && selectedAmpliationImages.map(image =>
-                                    <Image key={image} preview={false} width="4vmax" src={`${arasaacURL}/pictograms/${image}`} />
-                                )}
-                                <Button ghost type="primary" onClick={() => setOpenAmpliation(true)}>
-                                    Select ampliationImage
-                                </Button>
-                            </div>
-                        </Form.Item>
-                    }
-                    <Form.Item style={{ float: "right" }}>
-                        <Button type="primary" htmlType="submit">
-                            {t("exercise.create.addExercise.button")}
-                        </Button>
-                    </Form.Item>
-                </Form>
-                <SelectImageModal setMessage={setMessage} setOpen={setOpenMain} open={openMain} selectedImages={selectedMainImages} setSelectedImages={setSelectedMainImages} selectionLimit={1} />
-                <SelectImageModal setMessage={setMessage} setOpen={setOpenDefinition} open={openDefinition} selectedImages={selectedDefinitionImages} setSelectedImages={setSelectedDefinitionImages} selectionLimit={1} />
-                <SelectImageModal setMessage={setMessage} setOpen={setOpenAmpliation} open={openAmpliation} selectedImages={selectedAmpliationImages} setSelectedImages={setSelectedAmpliationImages} selectionLimit={getSelectionLimit(networkType)} />
-            </Card>
-        </Spin>
+                }
+                <Form.Item style={{ float: "right" }}>
+                    <Button type="primary" htmlType="submit">
+                        {t("exercise.create.addExercise.button")}
+                    </Button>
+                </Form.Item>
+            </Form>
+            <SelectImageModal setMessage={setMessage} setOpen={setOpenMain} open={openMain} selectedImages={selectedMainImages} setSelectedImages={setSelectedMainImages} selectionLimit={1} />
+            <SelectImageModal setMessage={setMessage} setOpen={setOpenDefinition} open={openDefinition} selectedImages={selectedDefinitionImages} setSelectedImages={setSelectedDefinitionImages} selectionLimit={1} />
+            <SelectImageModal setMessage={setMessage} setOpen={setOpenAmpliation} open={openAmpliation} selectedImages={selectedAmpliationImages} setSelectedImages={setSelectedAmpliationImages} selectionLimit={getSelectionLimit(networkType)} />
+        </Card>
     );
 };
 

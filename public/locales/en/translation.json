@@ -212,12 +212,8 @@
     "categories": {
         "family": "Family",
         "animals": "Animals",
-        "food": "Food",
-        "body": "Body",
-        "objects": "Objects",
-        "meansOfTransport": "Means of transport",
-        "city": "City",
-        "clothes": "Clothes",
-        "nature": "Nature"
+        "body&food": "Body and food",
+        "transports": "Transports",
+        "seasons": "Seasons"
     }
 }

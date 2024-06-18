@@ -2,23 +2,14 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Layout, notification, Flex } from "antd";
-import LoginTeacher from './components/teacher/LoginTeacherComponent';
-import LoginStudent from './components/student/LoginStudentComponent';
 import SelectRole from './components/SelectRoleComponent';
 import HeaderComponent from './components/layout/HeaderComponent';
 import Sider from "./components/layout/SiderComponent";
-import SignupTeacher from './components/teacher/SignupTeacherComponent';
-import ClassroomsList from './components/teacher/ClassroomsListComponent';
 import { usersServiceURL } from './Globals';
 import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined } from "@ant-design/icons";
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
-import DnDPhase1 from './components/student/DnDPhase1Component';
-import DnDPhase2 from './components/student/DnDPhase2Component';
-import TypePhase1 from './components/student/TypePhase1Component';
-import TypePhase2 from './components/student/TypePhase2Component';
-import ExercisesCarousel from './components/student/ExercisesCarouselComponent';
-import ExercisesList from './components/teacher/ExercisesListComponent';
-import CreateExercise from './components/teacher/CreateExerciseComponent';
+import StudentRoutes from './components/routes/StudentRoutesComponent';
+import TeacherRoutes from './components/routes/TeacherRoutesComponent';
 
 let App = () => {
 
@@ -198,43 +189,12 @@ let App = () => {
           <Content style={{ minHeight: "100vh", background: "url(/bg.svg) no-repeat", backgroundSize: "cover" }} >
             <Flex align="center" justify="center" style={{ minHeight: "100%" }}>
               <Routes>
-                <Route path="/loginTeacher" element={
-                  <LoginTeacher setLogin={setLogin} />
-                } />
-                <Route path="/loginStudent" element={
-                  <LoginStudent setLogin={setLogin} />
-                } />
                 <Route path="/selectRole" element={
                   <SelectRole />
                 } />
-                <Route path="/registerTeacher" element={
-                  <SignupTeacher />
-                } />
-                <Route path="/teachers/menuTeacher" element={
-                  <ClassroomsList isMobile={isMobile} />
-                } />
-                <Route path="/exerciseDnD/phase1" element={
-                  <DnDPhase1 exercise={exercise} />
-                } />
-                <Route path="/exerciseDnD/phase2" element={
-                  <DnDPhase2 exercise={exercise} />
-                } />
-                <Route path="/exerciseType/phase1" element={
-                  <TypePhase1 exercise={exercise} />
-                } />
-                <Route path="/exerciseType/phase2" element={
-                  <TypePhase2 exercise={exercise} />
-                } />
-                <Route path="/students/exercises" element={
-                  <ExercisesCarousel cardsPerRow={isMobile ? 3 : 4} setExercise={setExercise} />
-                } />
-                <Route path="/teachers/manageExercises" element={
-                  <ExercisesList isMobile={isMobile} />
-                } />
-                <Route path="/teachers/create" element={
-                  <CreateExercise isMobile={isMobile} />
-                } />
               </Routes>
+              <TeacherRoutes setLogin={setLogin} isMobile={isMobile} />
+              <StudentRoutes setLogin={setLogin} exercise={exercise} setExercise={setExercise} />
             </Flex>
           </Content>
         </Layout>
