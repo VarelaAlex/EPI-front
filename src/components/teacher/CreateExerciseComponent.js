@@ -2,10 +2,9 @@ import { Button, Form, Input, Card, Alert, Cascader, Image } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { arasaacURL, exercisesServiceURL } from '../../Globals';
+import { arasaacURL, exercisesServiceURL, CATEGORIES } from '../../Globals';
 import SelectImageModal from './SelectImageModalComponent';
 import i18n from "../../i18n";
-import { CATEGORIES } from '../../Categories';
 
 let CreateExercise = ({ isMobile }) => {
 
@@ -31,15 +30,15 @@ let CreateExercise = ({ isMobile }) => {
     ];
 
     const representationOptions = [
-        { key: 'Iconic', value: 'ICONIC', label: t("representation.iconic", { lng: selectedLanguage }) },
-        { key: 'Mixed', value: 'MIXED', label: t("representation.mixed", { lng: selectedLanguage }) },
-        { key: 'Symbolic', value: 'SYMBOLIC', label: t("representation.symbolic", { lng: selectedLanguage }) },
+        { key: 'Iconic', value: 'ICONIC', label: t("representation.iconic", { lng: selectedLanguage }).toUpperCase()},
+        { key: 'Mixed', value: 'MIXED', label: t("representation.mixed", { lng: selectedLanguage }).toUpperCase() },
+        { key: 'Symbolic', value: 'SYMBOLIC', label: t("representation.symbolic", { lng: selectedLanguage }).toUpperCase() },
     ];
 
-    const categoryOptions = CATEGORIES?.map(category => ({
+    const categoryOptions = Object.values(CATEGORIES).map(category => ({
         key: category,
         value: category?.toUpperCase(),
-        label: t(`categories.${category.replace(/(?:^\w)/g, (match, index) => (index === 0 ? match.toLowerCase() : match.toUpperCase()))}`, { lng: selectedLanguage })
+        label: t(`categories.${category.toLowerCase()}`, { lng: selectedLanguage })
     }));
 
     const languageOptions = [
@@ -103,7 +102,7 @@ let CreateExercise = ({ isMobile }) => {
                     mainImage: selectedMainImages?.length > 0 ? selectedMainImages[0] : undefined,
                     definitionText: definitionText ? definitionText.toUpperCase() : undefined,
                     definitionImage: selectedDefinitionImages?.length > 0 ? selectedDefinitionImages[0] : undefined,
-                    ampliationText: Object.keys(ampliationText).length > 0 ? Object.keys(ampliationText).map((key, _index) => ampliationText[key].ampliationText.toUpperCase()) : undefined,
+                    ampliationText: ampliationText && Object.keys(ampliationText).length > 0 ? Object.keys(ampliationText).map((key, _index) => ampliationText[key].ampliationText.toUpperCase()) : undefined,
                     ampliationImages: selectedAmpliationImages?.length > 0 ? selectedAmpliationImages : undefined,
                     definitionPictogram: definitionPictogram[0],
                     ampliationPictogram: ampliationPictogram[0]

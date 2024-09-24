@@ -1,8 +1,7 @@
 import { Image, Typography, Card, Row, Col, Alert, Empty, Spin, Flex } from "antd";
 import { useEffect, useState, useRef, useCallback } from "react";
 import "./Example.css";
-import { arasaacURL, exercisesServiceURL } from "../../Globals";
-import { CATEGORIES } from "../../Categories";
+import { arasaacURL, exercisesServiceURL, CATEGORIES, REPRESENTATION } from "../../Globals";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import i18n from "../../i18n";
@@ -13,6 +12,9 @@ let ExercisesCarousel = ({ setExercise }) => {
     let [message, setMessage] = useState(null);
     let [loading, setLoading] = useState(true);
     let [selectedImage, setSelectedImage] = useState(0);
+    let [selectedRepresentation, setSelectedRepresentation] = useState(0);
+    let [category, setCategory] = useState(CATEGORIES.BODY_AND_FOOD);
+    let [representation, setRepresentation] = useState(REPRESENTATION.ICONIC);
 
     let navigate = useNavigate();
     let { t } = useTranslation();
@@ -27,14 +29,14 @@ let ExercisesCarousel = ({ setExercise }) => {
     const lastTime = useRef(0);
     const requestId = useRef(null);
 
-    const getExercises = useCallback(async (category) => {
+    const getExercises = useCallback(async () => {
         setLoading(true);
         let response = null;
         try {
             response = await fetch(exercisesServiceURL + `/exercises/list/${lang.split("-")[0]}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ category })
+                body: JSON.stringify({ category, representation })
             });
         } catch (error) {
             console.error("Error fetching exercises:", error);
@@ -47,15 +49,22 @@ let ExercisesCarousel = ({ setExercise }) => {
             setMessage({ error: jsonData?.error });
         }
         setLoading(false);
-    }, [lang]);
+    }, [lang, category, representation]);
 
     useEffect(() => {
-        getExercises(CATEGORIES[0]);
-    }, [getExercises]);
+        getExercises();
+    }, [getExercises, category, representation]);
 
     let handleImageClick = (category, index) => {
         setSelectedImage(index);
-        getExercises(category);
+        setCategory(category);
+        //getExercises();
+    };
+
+    let handleRepresentationClick = (representation, index) => {
+        setSelectedRepresentation(index);
+        setRepresentation(representation);
+        //getExercises();
     };
 
     const startDrag = (e) => {
@@ -110,7 +119,29 @@ let ExercisesCarousel = ({ setExercise }) => {
             <div style={{ width: "100vw", padding: "1vw", overflow: "hidden" }}>
                 {message?.error?.type && <Alert type="error" message={t(message?.error?.type)} showIcon style={{ marginBottom: "1vh" }} />}
                 <Row justify="center" gutter={15} style={{ marginBottom: "1vmax" }}>
-                    {CATEGORIES.map((category, index) => (
+                    {Object.values(REPRESENTATION).map((representation, index) => (
+                        <Col key={index}>
+                            <div
+                                style={
+                                    selectedRepresentation === index ? { border: "2px solid #ebdc00", borderRadius: "50%", padding: "20px", cursor: "pointer" } : { cursor: "pointer" }
+                                }
+                            >
+                                <Flex vertical align="center">
+                                    <Image
+                                        draggable={false}
+                                        preview={false}
+                                        src={`/representations/${representation.toLocaleLowerCase()}${selectedRepresentation === index ? "Color" : "BW"}.png`}
+                                        width="64px"
+                                        onClick={() => handleRepresentationClick(representation, index)}
+                                    />
+                                    {t(`representation.${representation.toLocaleLowerCase()}`)}
+                                </Flex>
+                            </div>
+                        </Col>
+                    ))}
+                </Row>
+                <Row justify="center" gutter={15} style={{ marginBottom: "1vmax" }}>
+                    {Object.values(CATEGORIES).map((category, index) => (
                         <Col key={index}>
                             <div
                                 style={
@@ -151,25 +182,38 @@ let ExercisesCarousel = ({ setExercise }) => {
                             }}
                         >
                             {exercises.map((card, index) => (
-                                <Card
-                                    key={index}
-                                    hoverable
-                                    size="small"
-                                    style={{ userSelect: "none", minWidth: "20vw", maxWidth: "25vw", height: "auto", textAlign: "center", marginBottom: "1vmax" }}
-                                    title={<Typography.Title level={4} style={{ fontSize: "1.3vmax", textAlign: "center" }}>{card.title}</Typography.Title>}
-                                    onClick={() => {
-                                        if (velocity.current === 0) {
-                                            setExercise(card);
-                                            if (["ICONIC", "MIXED"].includes(card.representation)) {
+                                ["ICONIC", "MIXED"].includes(card.representation) ?
+                                    <Card
+                                        key={index}
+                                        hoverable
+                                        size="small"
+                                        style={{ userSelect: "none", width: "30vmax", height: "25vmax", textAlign: "center", marginBottom: "1vmax" }}
+                                        title={<Typography.Title level={4} style={{ fontSize: "1.3vmax", textAlign: "center" }}>{card.title}</Typography.Title>}
+                                        onClick={() => {
+                                            if (velocity.current === 0) {
+                                                setExercise(card);
                                                 navigate("/exerciseDnD/phase1");
-                                            } else {
+                                            }
+                                        }}
+                                    >
+                                        <Image draggable={false} preview={false} width="100%" src={`${arasaacURL}/pictograms/${card.mainImage}`} style={{ marginRight: "3vmax" }} />
+                                    </Card>
+                                    :
+                                    <Card
+                                        key={index}
+                                        hoverable
+                                        size="small"
+                                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', userSelect: "none", minWidth: "20vw", maxWidth: "25vw", height: "45vh", marginBottom: "1vmax" }}
+                                        title={null}
+                                        onClick={() => {
+                                            if (velocity.current === 0) {
+                                                setExercise(card);
                                                 navigate("/exerciseType/phase1");
                                             }
-                                        }
-                                    }}
-                                >
-                                    <Image draggable={false} preview={false} width="100%" src={`${arasaacURL}/pictograms/${card.mainImage}`} style={{ marginRight: "3vmax" }} />
-                                </Card>
+                                        }}
+                                    >
+                                        <Typography.Title style={{ fontSize: "3vmax", textAlign: "center" }}>{card.title}</Typography.Title>
+                                    </Card>
                             ))}
                         </div>
                     ) : (

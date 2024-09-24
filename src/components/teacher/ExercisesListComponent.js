@@ -108,7 +108,7 @@ let ExercisesList = (props) => {
             <Card title={t("exercise.table.title")} style={{ width: "90vw" }}>
                 {exercises.length <= 0 ?
                     <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("exercise.table.empty")} />
-                    : <Table size="small" bordered columns={columns} dataSource={exercises} scroll={{ x: 900, y: 300, }} />
+                    : <Table size="small" bordered columns={columns} dataSource={exercises} scroll={{ x: 900, y: 300, }} pagination={{ pageSize: 5 }} />
                 }
                 <Divider orientation="left">{t("exercise.create.addExercise.divider")}</Divider>
                 {message?.error?.type && <Alert type="error" message={t(message?.error?.type)} showIcon style={{ marginBottom: "1vh" }} />}

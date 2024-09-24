@@ -228,9 +228,9 @@
         "areIn": "están en"
     },
     "representation": {
-        "iconic": "ICÓNICA",
-        "mixed": "COMBINADA",
-        "symbolic": "SIMBÓLICA"
+        "iconic": "Icónica",
+        "mixed": "Combinada",
+        "symbolic": "Simbólica"
     },
     "categories": {
         "family": "Familia",

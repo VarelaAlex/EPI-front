@@ -205,9 +205,9 @@
         "areIn": "are in"
     },
     "representation": {
-        "iconic": "ICONIC",
-        "mixed": "MIXED",
-        "symbolic": "SYMBOLIC"
+        "iconic": "Iconic",
+        "mixed": "Mixed",
+        "symbolic": "Symbolic"
     },
     "categories": {
         "family": "Family",
