@@ -1,12 +1,11 @@
 import { Image, Typography, Card, Row, Col, Alert, Empty, Spin, Flex } from "antd";
 import { useEffect, useState, useRef, useCallback } from "react";
-import "./Example.css";
 import { arasaacURL, exercisesServiceURL, CATEGORIES, REPRESENTATION } from "../../Globals";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import i18n from "../../i18n";
 
-let ExercisesCarousel = ({ setExercise }) => {
+let ExercisesCarousel = ({ setExercise, setFeedback }) => {
 
     let [exercises, setExercises] = useState([]);
     let [message, setMessage] = useState(null);
@@ -39,7 +38,6 @@ let ExercisesCarousel = ({ setExercise }) => {
                 body: JSON.stringify({ category, representation })
             });
         } catch (error) {
-            console.error("Error fetching exercises:", error);
         }
 
         let jsonData = await response?.json();
@@ -192,6 +190,7 @@ let ExercisesCarousel = ({ setExercise }) => {
                                         onClick={() => {
                                             if (velocity.current === 0) {
                                                 setExercise(card);
+                                                setFeedback({})
                                                 navigate("/exerciseDnD/phase1");
                                             }
                                         }}
@@ -208,6 +207,7 @@ let ExercisesCarousel = ({ setExercise }) => {
                                         onClick={() => {
                                             if (velocity.current === 0) {
                                                 setExercise(card);
+                                                setFeedback({})
                                                 navigate("/exerciseType/phase1");
                                             }
                                         }}

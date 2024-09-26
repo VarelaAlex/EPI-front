@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors, DragOverlay } from '@dnd-kit/core';
 import { Card, Col, Divider, Flex, Row } from 'antd';
 import DroppablePhase2 from './DroppablePhase2Component';
 import DraggablePhase2 from './DraggablePhase2Component';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX } from './NetworkProps';
-import { arasaacURL } from "../../Globals";
+import { arasaacURL, exercisesServiceURL } from "../../Globals";
 import { useNavigate } from 'react-router-dom';
 
-let DnDPhase2 = ({ exercise }) => {
+let DnDPhase2 = ({ exercise, feedback, setFeedback }) => {
+
+    useEffect(() => {
+        if (feedback?.phase2?.elapsedTime) {
+            saveFeedback(feedback);
+        }
+    }, [feedback]);
+
+    let startTime = useRef(Date.now());
 
     let navigate = useNavigate();
     let exerciseNodes = nodes(exercise);
@@ -28,31 +36,91 @@ let DnDPhase2 = ({ exercise }) => {
     let [droppableNodes, setDroppableNodes] = useState(JSON.parse(JSON.stringify(extendedNodes)));
     let [current, setCurrent] = useState(0);
 
+    let saveFeedback = async (feedback) => {
+        try {
+            await fetch(`${exercisesServiceURL}/statistics?apiKey=${localStorage.getItem("apiKey")}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ feedback })
+            });
+        } catch (e) {
+            return;
+        }
+    };
+
     let handleDragStart = (event) => {
         setElement(event.active);
     };
+
     let handleDragEnd = (event) => {
         let { active, over } = event;
         let node = null;
-        if (over && over.data.current.accepts.includes(active.data.current.type)) {
-            let updated = extendedNodes.map((element) => {
-                if (element.id === active.id && element.order === current) {
-                    element.ok = true;
-                    node = element;
-                    setCurrent(current + 1);
+        let correct = false;
+        let isStop = element.data.current.stop || element.data.current.bigStop;
+        if (over) {
+            if (over.data.current.accepts.includes(active.data.current.type)) {
+                let updated = extendedNodes.map((element) => {
+                    if (element.id === active.id) {
+                        if (element.order === current) {
+                            element.ok = true;
+                            node = element;
+                            setCurrent(current + 1);
+                            correct = true;
+                        } else {
+                            setFeedback({
+                                phase1: { ...feedback.phase1 },
+                                phase2: isStop ? {
+                                    ...feedback.phase2,
+                                    incorrectOrderStop: feedback?.phase2?.incorrectOrderStop == null ? 1 : feedback?.phase2?.incorrectOrderStop + 1
+                                } : {
+                                    ...feedback.phase2,
+                                    incorrectOrder: feedback?.phase2?.incorrectOrder == null ? 1 : feedback?.phase2?.incorrectOrder + 1
+                                }
+                            });
+                        }
+                    }
+                    return element;
+                });
+                setExtendedNodes(updated);
+                correct && setDroppableNodes(updated);
+            } else {
+                setFeedback({
+                    phase1: { ...feedback.phase1 },
+                    phase2: isStop ? {
+                        ...feedback.phase2,
+                        incorrectPosStop: feedback?.phase2?.incorrectPosStop == null ? 1 : feedback?.phase2?.incorrectPosStop + 1
+                    } : {
+                        ...feedback.phase2,
+                        incorrectPos: feedback?.phase2?.incorrectPos == null ? 1 : feedback?.phase2?.incorrectPos + 1
+                    }
+                });
+            }
+        } else {
+            setFeedback({
+                phase1: { ...feedback.phase1 },
+                phase2: {
+                    ...feedback.phase2,
+                    elementOutOfBounds: feedback?.phase2?.elementOutOfBounds == null ? 1 : feedback?.phase2?.elementOutOfBounds + 1
                 }
-                return element;
             });
-            setExtendedNodes(updated);
-            setDroppableNodes(updated);
         }
 
         if (node?.id === "6-3") {
+            let endTime = Date.now();
+            setFeedback({
+                phase1: { ...feedback.phase1 },
+                phase2: {
+                    ...feedback.phase2,
+                    elapsedTime: (endTime - startTime.current) / 1000
+                },
+                title: exercise.title,
+                level: exercise.representation,
+            });
             setShowGif(true);
             setTimeout(() => {
                 setShowGif(false);
                 navigate("/students/exercises");
-            }, 8000);
+            }, 6000);
         }
         setElement(null);
     };

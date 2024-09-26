@@ -238,5 +238,10 @@
         "body&food": "Cuerpo y alimentos",
         "transports": "Transportes",
         "seasons": "Estaciones"
+    },
+    "student": {
+        "error": {
+            "notExist": "No existe este estudiante"
+        }
     }
 }

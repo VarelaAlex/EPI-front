@@ -49,7 +49,7 @@
             "email": {
                 "empty": "Email is mandatory",
                 "format": "Incorrect email format",
-                "notExist": "There is not a teacher with this email"
+                "notExist": "There is no teacher with this email"
             },
             "password": {
                 "empty": "Password is mandatory",
@@ -57,7 +57,7 @@
             },
             "username": {
                 "empty": "Username is mandatory",
-                "notExist": "There is not a student with this username"
+                "notExist": "There is no student with this username"
             }
         }
     },
@@ -215,5 +215,10 @@
         "body&food": "Body and food",
         "transports": "Transports",
         "seasons": "Seasons"
+    },
+    "student": {
+        "error": {
+            "notExist": "The student doesn't exist"
+        }
     }
 }

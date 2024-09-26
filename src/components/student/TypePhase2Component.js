@@ -3,7 +3,28 @@ import { Card, Col, Divider, Flex, Input, Row } from 'antd';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX } from './NetworkProps';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-let TypePhase2 = ({ exercise }) => {
+import { exercisesServiceURL } from '../../Globals';
+let TypePhase2 = ({ exercise, feedback, setFeedback }) => {
+
+    let startTime = useRef(Date.now());
+
+    useEffect(() => {
+        if (feedback?.phase2?.elapsedTime) {
+            saveFeedback(feedback);
+        }
+    }, [feedback]);
+
+    let saveFeedback = async (feedback) => {
+        try {
+            await fetch(`${exercisesServiceURL}/statistics?apiKey=${localStorage.getItem("apiKey")}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ feedback })
+            });
+        } catch (e) {
+            return;
+        }
+    };
 
     let { t } = useTranslation();
     let navigate = useNavigate();
@@ -21,33 +42,57 @@ let TypePhase2 = ({ exercise }) => {
         { ...exerciseNodes[5], order: exerciseNodes.length + 2, id: "6-3", type: "type6-3", posX: nexusX(exercise?.networkType) + stopX(exercise?.networkType), bigStop: true }
     ]);
 
-    let [id, setId] = useState();
+    let [id, setId] = useState("1-1");
     let [current, setCurrent] = useState(0);
 
-    useEffect(() => {
-        document.getElementById(id)?.focus();
-    }, [id]);
-
-    let input1 = useRef("");
+    let checkSpell = (word) => {
+        return word.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    };
 
     let check = () => {
 
-        let a = input1.current.input;
+        let i = document.getElementById(id);
 
         extendedNodes.forEach((element) => {
-            if (element.id === a.id && t(element.text.toLowerCase()) === a.value.toLowerCase()) {
-                a.readOnly = true;
-                setCurrent(current + 1);
+            if (element?.id === i?.id) {
+                let text = t(element.text);
+                if (text.length === i.value.length) {
+                    if (text.toLowerCase() === checkSpell(i.value.toLowerCase())) {
+                        i.readOnly = true;
+                        element.ok = true;
+                        setCurrent(current + 1);
+
+                        if (i.id === "6-3") {
+                            let endTime = Date.now();
+                            setFeedback({
+                                phase1: { ...feedback.phase1 },
+                                phase2: {
+                                    ...feedback.phase2,
+                                    elapsedTime: (endTime - startTime.current) / 1000
+                                },
+                                title: exercise.title,
+                                level: exercise.representation,
+
+                            });
+                            setShowGif(true);
+                            setTimeout(() => {
+                                setShowGif(false);
+                                navigate("/students/exercises");
+                            }, 6000);
+                        }
+                    }
+                    else {
+                        setFeedback({
+                            phase1: { ...feedback.phase1 },
+                            phase2: {
+                                ...feedback.phase2,
+                                spellingError: feedback?.phase2?.spellingError == null ? 1 : feedback?.phase2?.spellingError + 1
+                            }
+                        });
+                    }
+                }
             }
-            return element;
         });
-        if (a.id === "6-3") {
-            setShowGif(true);
-            setTimeout(() => {
-                setShowGif(false);
-                navigate("/students/exercises");
-            }, 8000);
-        }
     };
 
     return (
@@ -164,10 +209,12 @@ let TypePhase2 = ({ exercise }) => {
                                                 height="4vh"
                                             >
                                                 <Input
-                                                    ref={input1}
+                                                    autoFocus={true}
+                                                    autoComplete='off'
                                                     id={extendedNodes[0].id}
                                                     style={{ textTransform: "uppercase" }}
                                                     onChange={() => check()}
+                                                    value={extendedNodes[0].ok ? extendedNodes[0].text : undefined}
                                                 />
                                             </foreignObject>
                                         ) : (<rect
@@ -234,11 +281,13 @@ let TypePhase2 = ({ exercise }) => {
                                                     height="40px"
                                                 >
                                                     <Input
-                                                        ref={input1}
+                                                        autoFocus={true}
+                                                        autoComplete='off'
                                                         id={element.id}
                                                         style={{ textTransform: element.shape ? "uppercase" : "lowercase" }}
                                                         height={"40px"}
                                                         onChange={() => check()}
+                                                        value={element.ok ? (element.shape ? element.text : t(element.text)) : undefined}
                                                     />
                                                 </foreignObject>
                                             ) : (<rect
@@ -313,11 +362,13 @@ let TypePhase2 = ({ exercise }) => {
                                                     height="40px"
                                                 >
                                                     <Input
-                                                        ref={input1}
+                                                        autoFocus={true}
+                                                        autoComplete='off'
                                                         id={element.id}
                                                         style={{ textTransform: element.shape ? "uppercase" : "lowercase" }}
                                                         height={"40px"}
                                                         onChange={() => check()}
+                                                        value={element.ok ? (element.shape ? element.text : t(element.text)) : undefined}
                                                     />
                                                 </foreignObject>
                                             ) : (<rect

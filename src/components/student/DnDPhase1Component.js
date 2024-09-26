@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { Card, Col, Divider, Flex, Row } from 'antd';
 import DroppablePhase1 from './DroppablePhase1Component';
@@ -8,12 +8,15 @@ import { arasaacURL } from "../../Globals";
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-let DnDPhase1 = ({ exercise }) => {
+let DnDPhase1 = ({ exercise, feedback, setFeedback }) => {
+
+    let startTime = useRef(Date.now());
 
     let navigate = useNavigate();
     let { t } = useTranslation();
     let exerciseNodes = nodes(exercise);
     let [showGif, setShowGif] = useState(false);
+    let [element, setElement] = useState();
 
     let [extendedNodes, setExtendedNodes] = useState([
         { ...exerciseNodes[0], order: 0, id: "1-1" },
@@ -29,23 +32,61 @@ let DnDPhase1 = ({ exercise }) => {
     let [droppableNodes, setDroppableNodes] = useState(JSON.parse(JSON.stringify(extendedNodes)));
     let [current, setCurrent] = useState(0);
 
+    let handleDragStart = (event) => {
+        setElement(event.active);
+    };
+
     let handleDragEnd = (event) => {
         let { active, over } = event;
         let node = null;
-        if (over && over.data.current.accepts.includes(active.data.current.type)) {
-            let updated = extendedNodes.map((element) => {
-                if (element.id === active.id && element.order === current) {
-                    element.ok = true;
-                    node = element;
-                    setCurrent(current + 1);
+        let correct = false;
+        let isStop = element.data.current.stop || element.data.current.bigStop;
+        if (over) {
+            if (over.data.current.accepts.includes(active.data.current.type)) {
+                let updated = extendedNodes.map((element) => {
+                    if (element.id === active.id) {
+                        if (element.order === current) {
+                            element.ok = true;
+                            node = element;
+                            setCurrent(current + 1);
+                            correct = true;
+                        } else {
+                            setFeedback({
+                                phase1: isStop ? {
+                                    ...feedback.phase1,
+                                    incorrectOrderStop: feedback?.phase1?.incorrectOrderStop == null ? 1 : feedback?.phase1?.incorrectOrderStop + 1
+                                } : {
+                                    ...feedback.phase1,
+                                    incorrectOrder: feedback?.phase1?.incorrectOrder == null ? 1 : feedback?.phase1?.incorrectOrder + 1
+                                }
+                            });
+                        }
+                    }
+                    return element;
+                });
+                setExtendedNodes(updated);
+                correct && setDroppableNodes(updated);
+            } else {
+                setFeedback({
+                    phase1: isStop ? {
+                        ...feedback.phase1,
+                        incorrectPosStop: feedback?.phase1?.incorrectPosStop == null ? 1 : feedback?.phase1?.incorrectPosStop + 1
+                    } : {
+                        ...feedback.phase1,
+                        incorrectPos: feedback?.phase1?.incorrectPos == null ? 1 : feedback?.phase1?.incorrectPos + 1
+                    }
+                });
+            }
+        } else {
+            setFeedback({
+                phase1: {
+                    ...feedback.phase1,
+                    elementOutOfBounds: feedback?.phase1?.elementOutOfBounds == null ? 1 : feedback?.phase1?.elementOutOfBounds + 1
                 }
-                return element;
             });
-            setExtendedNodes(updated);
-            setDroppableNodes(updated);
         }
 
-        if (["1-1", "6-2"].includes(node?.id)) {
+        if (["1-1", "6-2"].includes(node?.id) && node?.order === current) {
             setTimeout(() => {
                 setDroppableNodes(droppableNodes.map(node =>
                     node.type === "type1" ? { ...node, ok: false } : node
@@ -53,12 +94,19 @@ let DnDPhase1 = ({ exercise }) => {
             }, 1000);
         }
 
-        if (node?.id === "6-3") {
+        if (node?.id === "6-3" && node?.order === current) {
+            let endTime = Date.now();
+            setFeedback({
+                phase1: {
+                    ...feedback.phase1,
+                    elapsedTime: (endTime - startTime.current) / 1000
+                }
+            });
             setShowGif(true);
             setTimeout(() => {
                 setShowGif(false);
                 navigate("/exerciseDnD/phase2");
-            }, 8000);
+            }, 6000);
         }
     };
 
@@ -70,7 +118,7 @@ let DnDPhase1 = ({ exercise }) => {
     return (
         <Card style={{ height: "100%", width: "95%" }} >
             <Flex align="center" vertical>
-                <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
+                <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors} >
                     <Flex align="start" vertical >
                         <Row>
                             <Col>

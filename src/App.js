@@ -20,6 +20,7 @@ let App = () => {
   let [api, contextHolder] = notification.useNotification();
   let [isMobile, setIsMobile] = useState(false);
   let [exercise, setExercise] = useState({});
+  let [feedback, setFeedback] = useState({});
 
   let { t } = useTranslation();
   let { Content, Footer } = Layout;
@@ -52,6 +53,8 @@ let App = () => {
       localStorage.removeItem("role");
       setLogin(false);
       navigate("/selectRole");
+      setFeedback({})
+      setExercise({})
     }
   };
 
@@ -194,7 +197,7 @@ let App = () => {
                 } />
               </Routes>
               <TeacherRoutes setLogin={setLogin} isMobile={isMobile} />
-              <StudentRoutes setLogin={setLogin} exercise={exercise} setExercise={setExercise} />
+              <StudentRoutes setLogin={setLogin} exercise={exercise} setExercise={setExercise} feedback={feedback} setFeedback={setFeedback} />
             </Flex>
           </Content>
         </Layout>
