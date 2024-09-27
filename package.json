@@ -27,7 +27,7 @@
     "workbox-strategies": "^7.0.0"
   },
   "scripts": {
-    "start": "serve -s -n -p $PORT",
+    "start": "serve -s build -n -p $PORT",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
