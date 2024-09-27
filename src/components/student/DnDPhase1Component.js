@@ -4,7 +4,6 @@ import { Card, Col, Divider, Flex, Row } from 'antd';
 import DroppablePhase1 from './DroppablePhase1Component';
 import DraggablePhase1 from './DraggablePhase1Component';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX, STOP } from './NetworkProps';
-import { arasaacURL } from "../../Globals";
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -22,11 +21,11 @@ let DnDPhase1 = ({ exercise, feedback, setFeedback }) => {
         { ...exerciseNodes[0], order: 0, id: "1-1" },
         { ...exerciseNodes[0], order: 1, id: "1-2" },
         ...exerciseNodes.slice(1, 3),
-        { ...exerciseNodes[5], order: 4, id: "6-2", type: "type6-2", src: `${arasaacURL}/pictograms/${STOP}`, bigStop: true },
+        { ...exerciseNodes[5], order: 4, id: "6-2", type: "type6-2", src: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, bigStop: true },
         { ...exerciseNodes[0], order: 5, id: "1-3" },
         ...exerciseNodes.slice(3, 5),
         ...exerciseNodes.slice(6),
-        { ...exerciseNodes[5], order: exerciseNodes.length + 2, id: "6-3", type: "type6-3", posX: nexusX(exercise?.networkType) + stopX(exercise?.networkType), src: `${arasaacURL}/pictograms/${STOP}`, bigStop: true }
+        { ...exerciseNodes[5], order: exerciseNodes.length + 2, id: "6-3", type: "type6-3", posX: nexusX(exercise?.networkType) + stopX(exercise?.networkType), src: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, bigStop: true }
     ]);
 
     let [droppableNodes, setDroppableNodes] = useState(JSON.parse(JSON.stringify(extendedNodes)));

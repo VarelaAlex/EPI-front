@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { exercisesServiceURL } from "../../Globals";
 
 let ExercisesList = (props) => {
 
@@ -74,7 +73,7 @@ let ExercisesList = (props) => {
     ];
 
     let deleteExercise = async (id) => {
-        let response = await fetch(exercisesServiceURL + "/exercises/" + id + "?apiKey=" + localStorage.getItem("apiKey"), {
+        let response = await fetch(process.env.REACT_APP_EXERCISES_SERVICE_URL + "/exercises/" + id + "?apiKey=" + localStorage.getItem("apiKey"), {
             method: "DELETE"
         });
         if (response.ok) {
@@ -84,7 +83,7 @@ let ExercisesList = (props) => {
 
     let getExercises = async () => {
         setLoading(true);
-        let response = await fetch(exercisesServiceURL + "/exercises/teacher?apiKey=" + localStorage.getItem("apiKey"));
+        let response = await fetch(process.env.REACT_APP_EXERCISES_SERVICE_URL + "/exercises/teacher?apiKey=" + localStorage.getItem("apiKey"));
 
         if (response.ok) {
             let jsonData = await response.json();

@@ -3,7 +3,6 @@ import { Card, Col, Divider, Flex, Input, Row } from 'antd';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX } from './NetworkProps';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { exercisesServiceURL } from '../../Globals';
 let TypePhase2 = ({ exercise, feedback, setFeedback }) => {
 
     let startTime = useRef(Date.now());
@@ -16,7 +15,7 @@ let TypePhase2 = ({ exercise, feedback, setFeedback }) => {
 
     let saveFeedback = async (feedback) => {
         try {
-            await fetch(`${exercisesServiceURL}/statistics?apiKey=${localStorage.getItem("apiKey")}`, {
+            await fetch(`${process.env.REACT_APP_EXERCISES_SERVICE_URL}/statistics?apiKey=${localStorage.getItem("apiKey")}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ feedback })

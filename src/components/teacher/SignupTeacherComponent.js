@@ -2,7 +2,6 @@ import { Button, Form, Input, Card, Typography, Alert } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
-import { usersServiceURL } from '../../Globals';
 
 const SignupTeacher = () => {
 
@@ -18,7 +17,7 @@ const SignupTeacher = () => {
 
         let response = null;
         try {
-            response = await fetch(usersServiceURL + "/teachers", {
+            response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/teachers", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

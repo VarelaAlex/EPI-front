@@ -1,6 +1,6 @@
 import { Image, Typography, Card, Row, Col, Alert, Empty, Spin, Flex, Divider } from "antd";
 import { useEffect, useState, useRef, useCallback } from "react";
-import { arasaacURL, exercisesServiceURL, CATEGORIES, REPRESENTATION } from "../../Globals";
+import { CATEGORIES, REPRESENTATION } from "../../Globals";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import i18n from "../../i18n";
@@ -32,7 +32,7 @@ let ExercisesCarousel = ({ setExercise, setFeedback }) => {
         setLoading(true);
         let response = null;
         try {
-            response = await fetch(exercisesServiceURL + `/exercises/list/${lang.split("-")[0]}`, {
+            response = await fetch(process.env.REACT_APP_EXERCISES_SERVICE_URL + `/exercises/list/${lang.split("-")[0]}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ category, representation })
@@ -204,7 +204,7 @@ let ExercisesCarousel = ({ setExercise, setFeedback }) => {
                                         }}
                                     >
 
-                                        <Image draggable={false} preview={false} width="15vmax" src={`${arasaacURL}/pictograms/${card.mainImage}`}  />
+                                        <Image draggable={false} preview={false} width="15vmax" src={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${card.mainImage}`}  />
                                         <Divider style={{ marginTop: "1vmax", marginBottom: "1vmax" }} />
                                         <Meta style={{ backgroundColor: a[card.networkType], borderRadius: "12px" }} title={<Text style={{ fontSize: "1.5vmax", textAlign: "center", color: "black" }}>{card.networkType}</Text>} />
                                     </Card>

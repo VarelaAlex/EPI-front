@@ -4,7 +4,6 @@ import { Card, Col, Divider, Flex, Row } from 'antd';
 import DroppablePhase2 from './DroppablePhase2Component';
 import DraggablePhase2 from './DraggablePhase2Component';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX } from './NetworkProps';
-import { arasaacURL, exercisesServiceURL } from "../../Globals";
 import { useNavigate } from 'react-router-dom';
 
 let DnDPhase2 = ({ exercise, feedback, setFeedback }) => {
@@ -26,11 +25,11 @@ let DnDPhase2 = ({ exercise, feedback, setFeedback }) => {
         { ...exerciseNodes[0], order: 0, id: "1-1" },
         { ...exerciseNodes[0], order: 1, id: "1-2" },
         ...exerciseNodes.slice(1, 3),
-        { ...exerciseNodes[5], order: 4, id: "6-2", type: "type6-2", src: `${arasaacURL}/pictograms/8289`, bigStop: true },
+        { ...exerciseNodes[5], order: 4, id: "6-2", type: "type6-2", src: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/8289`, bigStop: true },
         { ...exerciseNodes[0], order: 5, id: "1-3" },
         ...exerciseNodes.slice(3, 5),
         ...exerciseNodes.slice(6),
-        { ...exerciseNodes[5], order: exerciseNodes.length + 2, id: "6-3", type: "type6-3", posX: nexusX(exercise?.networkType) + stopX(exercise?.networkType), src: `${arasaacURL}/pictograms/8289`, bigStop: true }
+        { ...exerciseNodes[5], order: exerciseNodes.length + 2, id: "6-3", type: "type6-3", posX: nexusX(exercise?.networkType) + stopX(exercise?.networkType), src: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/8289`, bigStop: true }
     ]);
 
     let [droppableNodes, setDroppableNodes] = useState(JSON.parse(JSON.stringify(extendedNodes)));
@@ -38,7 +37,7 @@ let DnDPhase2 = ({ exercise, feedback, setFeedback }) => {
 
     let saveFeedback = async (feedback) => {
         try {
-            await fetch(`${exercisesServiceURL}/statistics?apiKey=${localStorage.getItem("apiKey")}`, {
+            await fetch(`${process.env.REACT_APP_EXERCISES_SERVICE_URL}/statistics?apiKey=${localStorage.getItem("apiKey")}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ feedback })

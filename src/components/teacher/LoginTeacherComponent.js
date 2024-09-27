@@ -1,7 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Input, Typography, Form, Alert } from "antd";
-import { usersServiceURL } from '../../Globals';
 import { useState } from 'react';
 
 let LoginTeacher = (props) => {
@@ -20,7 +19,7 @@ let LoginTeacher = (props) => {
 
         let response = null;
         try {
-            response = await fetch(usersServiceURL + "/teachers/login", {
+            response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/teachers/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

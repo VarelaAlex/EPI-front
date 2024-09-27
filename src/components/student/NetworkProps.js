@@ -1,4 +1,3 @@
-import { arasaacURL } from "../../Globals";
 
 export const X = 210;
 export const Y = 25;
@@ -50,7 +49,7 @@ export let nodes = (exercise) => {
             posX: 0,
             posY: 0,
             src: ["ICONIC", "MIXED"].includes(representation)
-                ? `${arasaacURL}/pictograms/${mainImage}`
+                ? `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${mainImage}`
                 : null,
             text: ["MIXED", "SYMBOLIC"].includes(representation)
                 ? title
@@ -79,7 +78,7 @@ export let nodes = (exercise) => {
             posY: 170,
             shape: "ellipse",
             src: ["ICONIC", "MIXED"].includes(representation)
-                ? `${arasaacURL}/pictograms/${definitionImage}`
+                ? `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${definitionImage}`
                 : null,
             text: ["MIXED", "SYMBOLIC"].includes(representation)
                 ? definitionText
@@ -107,7 +106,7 @@ export let nodes = (exercise) => {
             posY: 170,
             shape: "ellipse",
             src: ["ICONIC", "MIXED"].includes(representation)
-                ? `${arasaacURL}/pictograms/${ampliationImages[0]}`
+                ? `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${ampliationImages[0]}`
                 : null,
             text: ["MIXED", "SYMBOLIC"].includes(representation)
                 ? ampliationText[0]
@@ -138,7 +137,7 @@ export let nodes = (exercise) => {
                         : ",")
                     : null,
                 src: ["ICONIC", "MIXED"].includes(representation)
-                    ? `${arasaacURL}/pictograms/${STOP}`
+                    ? `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`
                     : null,
                 stop: true
             },
@@ -150,7 +149,7 @@ export let nodes = (exercise) => {
                 posY: 170,
                 shape: "ellipse",
                 src: ["ICONIC", "MIXED"].includes(representation)
-                    ? `${arasaacURL}/pictograms/${ampliationImages[1]}`
+                    ? `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${ampliationImages[1]}`
                     : null,
                 text: ["MIXED", "SYMBOLIC"].includes(representation)
                     ? ampliationText[1]
@@ -171,7 +170,7 @@ export let nodes = (exercise) => {
                     ? "y"
                     : null,
                 src: ["ICONIC", "MIXED"].includes(representation)
-                    ? `${arasaacURL}/pictograms/${STOP}`
+                    ? `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`
                     : null,
                 stop: true
             },
@@ -183,7 +182,7 @@ export let nodes = (exercise) => {
                 posY: 170,
                 shape: "ellipse",
                 src: ["ICONIC", "MIXED"].includes(representation)
-                    ? `${arasaacURL}/pictograms/${ampliationImages[2]}`
+                    ? `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${ampliationImages[2]}`
                     : null,
                 text: ["MIXED", "SYMBOLIC"].includes(representation)
                     ? ampliationText[2]

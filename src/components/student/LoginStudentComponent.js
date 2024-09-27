@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Input, Form, Alert } from "antd";
-import { usersServiceURL } from '../../Globals';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,7 +18,7 @@ let LoginStudent = (props) => {
 
         let response = null;
         try {
-            response = await fetch(usersServiceURL + "/students/login", {
+            response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/students/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

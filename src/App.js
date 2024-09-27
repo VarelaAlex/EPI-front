@@ -5,7 +5,6 @@ import { Layout, notification, Flex } from "antd";
 import SelectRole from './components/SelectRoleComponent';
 import HeaderComponent from './components/layout/HeaderComponent';
 import Sider from "./components/layout/SiderComponent";
-import { usersServiceURL } from './Globals';
 import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined } from "@ant-design/icons";
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
 import StudentRoutes from './components/routes/StudentRoutesComponent';
@@ -125,10 +124,10 @@ let App = () => {
         let response = null;
         let role = localStorage.getItem("role");
         if (role === "T") {
-          response = await fetch(usersServiceURL + "/teachers/checkLogin?apiKey=" + localStorage.getItem("apiKey"));
+          response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/teachers/checkLogin?apiKey=" + localStorage.getItem("apiKey"));
         }
         if (role === "S") {
-          response = await fetch(usersServiceURL + "/students/checkLogin?apiKey=" + localStorage.getItem("apiKey"));
+          response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/students/checkLogin?apiKey=" + localStorage.getItem("apiKey"));
         }
         if (response?.status === 200) {
           setLogin(true);

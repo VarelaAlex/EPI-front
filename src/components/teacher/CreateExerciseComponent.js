@@ -2,7 +2,7 @@ import { Button, Form, Input, Card, Alert, Cascader, Image } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { arasaacURL, exercisesServiceURL, CATEGORIES } from '../../Globals';
+import { CATEGORIES } from '../../Globals';
 import SelectImageModal from './SelectImageModalComponent';
 import i18n from "../../i18n";
 
@@ -90,7 +90,7 @@ let CreateExercise = ({ isMobile }) => {
 
         let response = null;
         try {
-            response = await fetch(`${exercisesServiceURL}/exercises?apiKey=${localStorage.getItem("apiKey")}`, {
+            response = await fetch(`${process.env.REACT_APP_EXERCISES_SERVICE_URL}/exercises?apiKey=${localStorage.getItem("apiKey")}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -219,7 +219,7 @@ let CreateExercise = ({ isMobile }) => {
                 >
                     <div>
                         {selectedMainImages && selectedMainImages.map(image =>
-                            <Image key={image} preview={false} width="4vmax" src={`${arasaacURL}/pictograms/${image}`} />
+                            <Image key={image} preview={false} width="4vmax" src={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${image}`} />
                         )}
                         <Button ghost type="primary" onClick={() => setOpenMain(true)}>
                             Select mainImage
@@ -264,7 +264,7 @@ let CreateExercise = ({ isMobile }) => {
                     >
                         <div>
                             {selectedDefinitionImages && selectedDefinitionImages.map(image =>
-                                <Image key={image} preview={false} width="4vmax" src={`${arasaacURL}/pictograms/${image}`} />
+                                <Image key={image} preview={false} width="4vmax" src={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${image}`} />
                             )}
                             <Button ghost type="primary" onClick={() => setOpenDefinition(true)}>
                                 Select definitionImage
@@ -321,7 +321,7 @@ let CreateExercise = ({ isMobile }) => {
                     >
                         <div>
                             {selectedAmpliationImages && selectedAmpliationImages.map(image =>
-                                <Image key={image} preview={false} width="4vmax" src={`${arasaacURL}/pictograms/${image}`} />
+                                <Image key={image} preview={false} width="4vmax" src={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${image}`} />
                             )}
                             <Button ghost type="primary" onClick={() => setOpenAmpliation(true)}>
                                 Select ampliationImage

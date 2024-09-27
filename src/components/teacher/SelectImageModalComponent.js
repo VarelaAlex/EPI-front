@@ -1,5 +1,4 @@
 import { Button, Modal, Input, Card, Pagination, Flex, Image } from "antd";
-import { arasaacURL } from '../../Globals';
 import { useState } from "react";
 
 let SelectImageModal = ({ setMessage, setOpen, open, selectedImages, setSelectedImages, selectionLimit }) => {
@@ -25,7 +24,7 @@ let SelectImageModal = ({ setMessage, setOpen, open, selectedImages, setSelected
     let searchImages = async (text) => {
         let response = null;
         try {
-            response = await fetch(arasaacURL + `/pictograms/es/search/${text}`);
+            response = await fetch(process.env.REACT_APP_ARASAAC_URL + `/pictograms/es/search/${text}`);
         } catch (e) {
             setMessage({ error: { type: "internalServerError", message: e } });
             return;
@@ -80,7 +79,7 @@ let SelectImageModal = ({ setMessage, setOpen, open, selectedImages, setSelected
                         key={image}
                         style={selectedImages.includes(image) ? { border: '2px solid #1890ff' } : {}}
                     >
-                        <Image preview={false} width="6vmax" src={`${arasaacURL}/pictograms/${image}`} />
+                        <Image preview={false} width="6vmax" src={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${image}`} />
                     </Card>
                 )}
             </Flex>
