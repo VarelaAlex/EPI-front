@@ -44,18 +44,14 @@ let App = () => {
       };
   */
 
-  let disconnect = async () => {
-    let response = await fetch(usersServiceURL + "/teachers/disconnect?apiKey=" + localStorage.getItem("apiKey"));
-    if (response.ok) {
+  let disconnect = () => {
       localStorage.removeItem("apiKey");
-      localStorage.removeItem("idUser");
-      localStorage.removeItem("email");
+      localStorage.removeItem("name");
       localStorage.removeItem("role");
       setLogin(false);
       navigate("/selectRole");
       setFeedback({})
       setExercise({})
-    }
   };
 
   let teacherMenuItems = [

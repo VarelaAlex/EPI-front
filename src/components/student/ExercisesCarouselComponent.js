@@ -1,4 +1,4 @@
-import { Image, Typography, Card, Row, Col, Alert, Empty, Spin, Flex } from "antd";
+import { Image, Typography, Card, Row, Col, Alert, Empty, Spin, Flex, Divider } from "antd";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { arasaacURL, exercisesServiceURL, CATEGORIES, REPRESENTATION } from "../../Globals";
 import { useNavigate } from "react-router-dom";
@@ -42,6 +42,12 @@ let ExercisesCarousel = ({ setExercise, setFeedback }) => {
 
         let jsonData = await response?.json();
         if (response?.ok) {
+            const sortOrder = {
+                "I-I": 0,
+                "I-II": 1,
+                "I-III": 2
+            };
+            jsonData.sort((a, b) => sortOrder[a.networkType] - sortOrder[b.networkType]);
             setExercises(jsonData);
         } else {
             setMessage({ error: jsonData?.error });
@@ -56,13 +62,11 @@ let ExercisesCarousel = ({ setExercise, setFeedback }) => {
     let handleImageClick = (category, index) => {
         setSelectedImage(index);
         setCategory(category);
-        //getExercises();
     };
 
     let handleRepresentationClick = (representation, index) => {
         setSelectedRepresentation(index);
         setRepresentation(representation);
-        //getExercises();
     };
 
     const startDrag = (e) => {
@@ -112,6 +116,14 @@ let ExercisesCarousel = ({ setExercise, setFeedback }) => {
         requestId.current = requestAnimationFrame(() => drag(e));
     };
 
+    let { Meta } = Card;
+
+    let { Text, Title } = Typography;
+    let a = {
+        "I-I": "#ffc464",
+        "I-II": "#16e8df",
+        "I-III": "#cf8ffc"
+    };
     return (
         <Spin spinning={loading} tip="Loading" size="large">
             <div style={{ width: "100vw", padding: "1vw", overflow: "hidden" }}>
@@ -120,16 +132,14 @@ let ExercisesCarousel = ({ setExercise, setFeedback }) => {
                     {Object.values(REPRESENTATION).map((representation, index) => (
                         <Col key={index}>
                             <div
-                                style={
-                                    selectedRepresentation === index ? { border: "2px solid #ebdc00", borderRadius: "50%", padding: "20px", cursor: "pointer" } : { cursor: "pointer" }
-                                }
+                                style={{ cursor: "pointer" }}
                             >
                                 <Flex vertical align="center">
                                     <Image
                                         draggable={false}
                                         preview={false}
                                         src={`/representations/${representation.toLocaleLowerCase()}${selectedRepresentation === index ? "Color" : "BW"}.png`}
-                                        width="64px"
+                                        width="6vmax"
                                         onClick={() => handleRepresentationClick(representation, index)}
                                     />
                                     {t(`representation.${representation.toLocaleLowerCase()}`)}
@@ -138,20 +148,18 @@ let ExercisesCarousel = ({ setExercise, setFeedback }) => {
                         </Col>
                     ))}
                 </Row>
-                <Row justify="center" gutter={15} style={{ marginBottom: "1vmax" }}>
+                <Row justify="center" gutter={15} style={{ marginBottom: "1vmax", marginTop: "5vmax" }}>
                     {Object.values(CATEGORIES).map((category, index) => (
                         <Col key={index}>
                             <div
-                                style={
-                                    selectedImage === index ? { border: "2px solid #ebdc00", borderRadius: "50%", padding: "20px", cursor: "pointer" } : { cursor: "pointer" }
-                                }
+                                style={{ cursor: "pointer" }}
                             >
                                 <Flex vertical align="center">
                                     <Image
                                         draggable={false}
                                         preview={false}
                                         src={`/categories/${category.toLocaleLowerCase()}${selectedImage === index ? "Color" : "BW"}.png`}
-                                        width="64px"
+                                        width="6vmax"
                                         onClick={() => handleImageClick(category, index)}
                                     />
                                     {t(`categories.${category.toLocaleLowerCase()}`)}
@@ -185,34 +193,39 @@ let ExercisesCarousel = ({ setExercise, setFeedback }) => {
                                         key={index}
                                         hoverable
                                         size="small"
-                                        style={{ userSelect: "none", width: "30vmax", height: "25vmax", textAlign: "center", marginBottom: "1vmax" }}
-                                        title={<Typography.Title level={4} style={{ fontSize: "1.3vmax", textAlign: "center" }}>{card.title}</Typography.Title>}
+                                        style={{textAlign: "center", userSelect: "none", minWidth: "20vmax", height: "25vmax",  alignItems:"center" }}
+                                        title={<Title level={4} style={{ fontSize: "1.3vmax", textAlign: "center" }}>{card.title}</Title>}
                                         onClick={() => {
                                             if (velocity.current === 0) {
                                                 setExercise(card);
-                                                setFeedback({})
+                                                setFeedback({});
                                                 navigate("/exerciseDnD/phase1");
                                             }
                                         }}
                                     >
-                                        <Image draggable={false} preview={false} width="100%" src={`${arasaacURL}/pictograms/${card.mainImage}`} style={{ marginRight: "3vmax" }} />
+
+                                        <Image draggable={false} preview={false} width="15vmax" src={`${arasaacURL}/pictograms/${card.mainImage}`}  />
+                                        <Divider style={{ marginTop: "1vmax", marginBottom: "1vmax" }} />
+                                        <Meta style={{ backgroundColor: a[card.networkType], borderRadius: "12px" }} title={<Text style={{ fontSize: "1.5vmax", textAlign: "center", color: "black" }}>{card.networkType}</Text>} />
                                     </Card>
                                     :
                                     <Card
                                         key={index}
                                         hoverable
                                         size="small"
-                                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', userSelect: "none", minWidth: "20vw", maxWidth: "25vw", height: "45vh", marginBottom: "1vmax" }}
+                                        style={{ textAlign: 'center', userSelect: "none", minWidth: "20vmax", height: "25vmax", alignItems:"center" }}
                                         title={null}
                                         onClick={() => {
                                             if (velocity.current === 0) {
                                                 setExercise(card);
-                                                setFeedback({})
+                                                setFeedback({});
                                                 navigate("/exerciseType/phase1");
                                             }
                                         }}
                                     >
-                                        <Typography.Title style={{ fontSize: "3vmax", textAlign: "center" }}>{card.title}</Typography.Title>
+                                        <Title style={{ fontSize: "2.3vmax", textAlign: "center", marginTop: "8vmax" }}>{card.title}</Title>
+                                        <Divider style={{ marginTop: "9.45vmax", marginBottom: "1vmax" }} />
+                                        <Meta style={{ backgroundColor: a[card.networkType], borderRadius: "12px" }} title={<Text style={{ fontSize: "1.5vmax", textAlign: "center", color: "black" }}>{card.networkType}</Text>} />
                                     </Card>
                             ))}
                         </div>

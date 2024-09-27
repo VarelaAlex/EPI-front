@@ -11,6 +11,6 @@ export const REPRESENTATION = {
     SYMBOLIC: "SYMBOLIC"
 };
 
-export let usersServiceURL = "http://localhost:8081";
-export let exercisesServiceURL = "http://localhost:8082";
-export let arasaacURL = "https://api.arasaac.org/v1";
+export let usersServiceURL = process.env.REACT_APP_USERS_SERVICE_URL;
+export let exercisesServiceURL = process.env.REACT_APP_EXERCISES_SERVICE_URL;
+export let arasaacURL = process.env.REACT_APP_ARASAAC_URL;

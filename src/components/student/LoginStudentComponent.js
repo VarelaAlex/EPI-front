@@ -36,8 +36,6 @@ let LoginStudent = (props) => {
             if (jsonData?.apiKey != null) {
                 localStorage.setItem("apiKey", jsonData.apiKey);
                 localStorage.setItem("name", jsonData.name);
-                localStorage.setItem("idUser", jsonData.id);
-                localStorage.setItem("username", jsonData.username);
                 localStorage.setItem("role", "S");
                 setLogin(true);
                 navigate("/students/exercises");
