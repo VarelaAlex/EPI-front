@@ -9,6 +9,8 @@ import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined } from "
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
 import StudentRoutes from './components/routes/StudentRoutesComponent';
 import TeacherRoutes from './components/routes/TeacherRoutesComponent';
+import { jwtDecode } from 'jwt-decode';
+
 
 let App = () => {
 
@@ -44,13 +46,12 @@ let App = () => {
   */
 
   let disconnect = () => {
-      localStorage.removeItem("apiKey");
-      localStorage.removeItem("name");
-      localStorage.removeItem("role");
-      setLogin(false);
-      navigate("/selectRole");
-      setFeedback({})
-      setExercise({})
+    localStorage.removeItem("apiKey");
+    localStorage.removeItem("name");
+    localStorage.removeItem("role");
+    setLogin(false);
+    setFeedback({});
+    setExercise({});
   };
 
   let teacherMenuItems = [
@@ -80,7 +81,7 @@ let App = () => {
     },
     {
       key: "menuDisconnect",
-      label: <Link onClick={disconnect}>{t("sider.disconnect")}</Link>,
+      label: <Link to="/selectRole" onClick={disconnect}>{t("sider.disconnect")}</Link>,
       danger: true,
       icon: <LogoutOutlined />
     }
@@ -101,7 +102,7 @@ let App = () => {
     },
     {
       key: "menuDisconnect",
-      label: <Link onClick={disconnect}>{t("sider.disconnect")}</Link>,
+      label: <Link to="/selectRole" onClick={disconnect}>{t("sider.disconnect")}</Link>,
       danger: true,
       icon: <LogoutOutlined />
     }
@@ -119,15 +120,35 @@ let App = () => {
 
   useEffect(() => {
 
+    let isTokenExpired = (token) => {
+      if (!token) return true;
+      try {
+        const decodedToken = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
+        return decodedToken.exp < currentTime;
+      } catch (error) {
+        console.error('Error decoding token:', error);
+        return true;
+      }
+    };
+
     let checkLogin = async () => {
-      if (localStorage.getItem("apiKey")) {
+      let apiKey = localStorage.getItem("apiKey");
+      if (apiKey) {
+        if (isTokenExpired(apiKey)) {
+          localStorage.removeItem("apiKey");
+          localStorage.removeItem("name");
+          localStorage.removeItem("role");
+
+          navigate('/selectRole');
+        }
         let response = null;
         let role = localStorage.getItem("role");
         if (role === "T") {
-          response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/teachers/checkLogin?apiKey=" + localStorage.getItem("apiKey"));
+          response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/teachers/checkLogin?apiKey=" + apiKey);
         }
         if (role === "S") {
-          response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/students/checkLogin?apiKey=" + localStorage.getItem("apiKey"));
+          response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/students/checkLogin?apiKey=" + apiKey);
         }
         if (response?.status === 200) {
           setLogin(true);
@@ -138,11 +159,17 @@ let App = () => {
             navigate("/students/exercises");
           }
         } else {
+          localStorage.removeItem("apiKey");
+          localStorage.removeItem("name");
+          localStorage.removeItem("role");
           setLogin(false);
           navigate("/selectRole");
         }
       } else {
         if (!["/loginTeacher", "/loginStudent", "/registerTeacher", "/selectRole"].includes(location.pathname)) {
+          localStorage.removeItem("apiKey");
+          localStorage.removeItem("name");
+          localStorage.removeItem("role");
           setLogin(false);
           navigate("/selectRole");
         }
