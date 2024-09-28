@@ -18,7 +18,7 @@ let LoginStudent = (props) => {
 
         let response = null;
         try {
-            response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/students/login", {
+            response = await fetch(`${process.env.REACT_APP_USERS_SERVICE_URL}/students/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
