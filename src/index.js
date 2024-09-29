@@ -4,6 +4,7 @@ import App from './App';
 import * as swr from './serviceWorkerRegistration';
 import './i18n';
 import { BrowserRouter } from 'react-router-dom';
+import { SessionProvider } from './SessionComponent';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -18,7 +19,9 @@ swr.register({
 });
 
 root.render(
-    <BrowserRouter>
+  <BrowserRouter>
+    <SessionProvider>
       <App />
-    </BrowserRouter>
+    </SessionProvider>
+  </BrowserRouter>
 );

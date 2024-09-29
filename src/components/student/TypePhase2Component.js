@@ -3,8 +3,10 @@ import { Card, Col, Divider, Flex, Input, Row } from 'antd';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX } from './NetworkProps';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-let TypePhase2 = ({ exercise, feedback, setFeedback }) => {
+import { useSession } from '../../SessionComponent';
+let TypePhase2 = () => {
 
+    let { exercise, feedback, setFeedback } = useSession();
     let startTime = useRef(Date.now());
 
     useEffect(() => {
@@ -15,9 +17,12 @@ let TypePhase2 = ({ exercise, feedback, setFeedback }) => {
 
     let saveFeedback = async (feedback) => {
         try {
-            await fetch(`${process.env.REACT_APP_EXERCISES_SERVICE_URL}/statistics?apiKey=${localStorage.getItem("apiKey")}`, {
+            await fetch(`${process.env.REACT_APP_EXERCISES_SERVICE_URL}/statistics`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+                },
                 body: JSON.stringify({ feedback })
             });
         } catch (e) {
@@ -44,7 +49,7 @@ let TypePhase2 = ({ exercise, feedback, setFeedback }) => {
     let [id, setId] = useState("1-1");
     let [current, setCurrent] = useState(0);
 
-    let checkSpell = (word) => {
+    let normalize = (word) => {
         return word.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     };
 
@@ -56,7 +61,7 @@ let TypePhase2 = ({ exercise, feedback, setFeedback }) => {
             if (element?.id === i?.id) {
                 let text = t(element.text);
                 if (text.length === i.value.length) {
-                    if (text.toLowerCase() === checkSpell(i.value.toLowerCase())) {
+                    if (normalize(text.toLowerCase()) === normalize(i.value.toLowerCase())) {
                         i.readOnly = true;
                         element.ok = true;
                         setCurrent(current + 1);
@@ -71,7 +76,7 @@ let TypePhase2 = ({ exercise, feedback, setFeedback }) => {
                                 },
                                 title: exercise.title,
                                 level: exercise.representation,
-
+                                date: Date.now()
                             });
                             setShowGif(true);
                             setTimeout(() => {

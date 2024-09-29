@@ -24,7 +24,12 @@ let SelectImageModal = ({ setMessage, setOpen, open, selectedImages, setSelected
     let searchImages = async (text) => {
         let response = null;
         try {
-            response = await fetch(process.env.REACT_APP_ARASAAC_URL + `/pictograms/es/search/${text}`);
+            response = await fetch(process.env.REACT_APP_ARASAAC_URL + `/pictograms/es/search/${text}`,
+                {
+                    method: "GET",
+                    headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` }
+                }
+            );
         } catch (e) {
             setMessage({ error: { type: "internalServerError", message: e } });
             return;

@@ -3,9 +3,11 @@ import { Card, Col, Divider, Flex, Input, Row } from 'antd';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX } from './NetworkProps';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useSession } from '../../SessionComponent';
 
-let TypePhase1 = ({ exercise, feedback, setFeedback }) => {
+let TypePhase1 = () => {
 
+    let { exercise, feedback, setFeedback } = useSession();
     let startTime = useRef(Date.now());
 
     let { t } = useTranslation();
@@ -32,7 +34,7 @@ let TypePhase1 = ({ exercise, feedback, setFeedback }) => {
         return { x: "5vmax", y: "2.5vmax", fontSize: "1vmax" };
     };
 
-    let checkSpell = (word) => {
+    let normalize = (word) => {
         return word.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     };
 
@@ -47,7 +49,7 @@ let TypePhase1 = ({ exercise, feedback, setFeedback }) => {
             if (element?.id === i?.id) {
                 let text = t(element.text);
                 if (text.length === i.value.length) {
-                    if (text.toLowerCase() === checkSpell(i.value.toLowerCase())) {
+                    if (normalize(text.toLowerCase()) === normalize(i.value.toLowerCase())) {
                         if (current === 0 || current === 4) {
                             setTimeout(() => {
                                 setExtendedNodes(extendedNodes.map(node =>

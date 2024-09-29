@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Layout, notification, Flex } from "antd";
@@ -9,49 +9,44 @@ import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined } from "
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
 import StudentRoutes from './components/routes/StudentRoutesComponent';
 import TeacherRoutes from './components/routes/TeacherRoutesComponent';
+import { useSession } from './SessionComponent';
 import { jwtDecode } from 'jwt-decode';
 
-
 let App = () => {
+
+  let { login, setLogin, setFeedback, setExercise } = useSession();
 
   const MOBILE_BREAKPOINT = 430;
 
   let [open, setOpen] = useState(false);
-  let [login, setLogin] = useState(false);
   let [api, contextHolder] = notification.useNotification();
   let [isMobile, setIsMobile] = useState(false);
-  let [exercise, setExercise] = useState({});
-  let [feedback, setFeedback] = useState({});
 
   let { t } = useTranslation();
-  let { Content, Footer } = Layout;
-
   let navigate = useNavigate();
   let location = useLocation();
-  /*
-    let createNotification =
-      ({ message,
-        description = message,
-        type = "info",
-        placement = "top",
-        duration = "3"
-      }) => {
-        api[type]({
-          message,
-          description,
-          placement,
-          duration
-        });
-      };
-  */
+  let { Content, Footer } = Layout;
 
-  let disconnect = () => {
-    localStorage.removeItem("apiKey");
+  let disconnect = useCallback(() => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     localStorage.removeItem("name");
     localStorage.removeItem("role");
     setLogin(false);
     setFeedback({});
     setExercise({});
+  }, [setExercise, setFeedback, setLogin]);
+
+  let isTokenExpired = (token) => {
+    if (!token) return true;
+    try {
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+      return decodedToken.exp < currentTime;
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return true;
+    }
   };
 
   let teacherMenuItems = [
@@ -120,36 +115,86 @@ let App = () => {
 
   useEffect(() => {
 
-    let isTokenExpired = (token) => {
-      if (!token) return true;
-      try {
-        const decodedToken = jwtDecode(token);
-        const currentTime = Date.now() / 1000;
-        return decodedToken.exp < currentTime;
-      } catch (error) {
-        console.error('Error decoding token:', error);
-        return true;
+    let refresh = async () => {
+
+      let refreshToken = localStorage.getItem("refreshToken");
+
+      if (refreshToken) {
+        if (isTokenExpired(refreshToken)) {
+          try {
+            await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/logout",
+              {
+                method: "POST",
+                body: JSON.stringify({ token: refreshToken }),
+                headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` }
+              }
+            );
+          } catch (e) {
+          }
+          disconnect();
+          navigate('/selectRole');
+        }
+
+        let response;
+        try {
+          response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/token",
+            {
+              method: "POST",
+              body: JSON.stringify({ token: refreshToken }),
+              headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` }
+            }
+          );
+          return await response.json();
+        } catch (e) {
+          disconnect();
+          navigate("/selectRole");
+        }
       }
     };
 
-    let checkLogin = async () => {
-      let apiKey = localStorage.getItem("apiKey");
-      if (apiKey) {
-        if (isTokenExpired(apiKey)) {
-          localStorage.removeItem("apiKey");
-          localStorage.removeItem("name");
-          localStorage.removeItem("role");
+    const interval = setInterval(async () => {
+      if (localStorage.getItem("refreshToken")) {
+        localStorage.setItem("accessToken", await refresh());
+      }
+    }, 10 * 60 * 1000);
 
+    return () => clearInterval(interval);
+  }, [disconnect, navigate]);
+
+  useEffect(() => {
+
+    let checkLogin = async () => {
+
+      let accessToken = localStorage.getItem("accessToken");
+
+      if (accessToken) {
+        if (isTokenExpired(accessToken)) {
+          disconnect();
           navigate('/selectRole');
         }
+
         let response = null;
         let role = localStorage.getItem("role");
         if (role === "T") {
-          response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/teachers/checkLogin?apiKey=" + apiKey);
+          response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/teachers/checkLogin",
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${accessToken}`
+              }
+            }
+          );
         }
+
         if (role === "S") {
-          response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/students/checkLogin?apiKey=" + apiKey);
+          response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/students/checkLogin", {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            }
+          });
         }
+
         if (response?.status === 200) {
           setLogin(true);
           if (role === "T" && (["/loginTeacher", "/loginStudent", "/registerTeacher", "/selectRole"].includes(location.pathname) || location.pathname.startsWith("/students/"))) {
@@ -159,28 +204,21 @@ let App = () => {
             navigate("/students/exercises");
           }
         } else {
-          localStorage.removeItem("apiKey");
-          localStorage.removeItem("name");
-          localStorage.removeItem("role");
-          setLogin(false);
+          disconnect();
           navigate("/selectRole");
         }
       } else {
         if (!["/loginTeacher", "/loginStudent", "/registerTeacher", "/selectRole"].includes(location.pathname)) {
-          localStorage.removeItem("apiKey");
-          localStorage.removeItem("name");
-          localStorage.removeItem("role");
-          setLogin(false);
+          disconnect();
           navigate("/selectRole");
         }
       }
     };
 
     checkLogin();
-  }, [location.pathname, navigate]);
+  }, [location.pathname, navigate, setLogin, disconnect]);
 
   useEffect(() => {
-    // TODO: Create notification when first session created
     if (!localStorage.getItem("pwaNotificationShown")) {
       api.info({
         message: t("pwa.notificationMessage"),
@@ -214,12 +252,10 @@ let App = () => {
           <Content style={{ minHeight: "100vh", background: "url(/bg.svg) no-repeat", backgroundSize: "cover" }} >
             <Flex align="center" justify="center" style={{ minHeight: "100%" }}>
               <Routes>
-                <Route path="/selectRole" element={
-                  <SelectRole />
-                } />
+                <Route path="/selectRole" element={<SelectRole />} />
               </Routes>
-              <TeacherRoutes setLogin={setLogin} isMobile={isMobile} />
-              <StudentRoutes setLogin={setLogin} exercise={exercise} setExercise={setExercise} feedback={feedback} setFeedback={setFeedback} />
+              <TeacherRoutes isMobile={isMobile} />
+              <StudentRoutes />
             </Flex>
           </Content>
         </Layout>

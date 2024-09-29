@@ -6,9 +6,11 @@ import DraggablePhase1 from './DraggablePhase1Component';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX, STOP } from './NetworkProps';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useSession } from '../../SessionComponent';
 
-let DnDPhase1 = ({ exercise, feedback, setFeedback }) => {
-
+let DnDPhase1 = () => {
+    
+    let { exercise, feedback, setFeedback } = useSession();
     let startTime = useRef(Date.now());
 
     let navigate = useNavigate();

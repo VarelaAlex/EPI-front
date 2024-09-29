@@ -30,7 +30,7 @@ let CreateExercise = ({ isMobile }) => {
     ];
 
     const representationOptions = [
-        { key: 'Iconic', value: 'ICONIC', label: t("representation.iconic", { lng: selectedLanguage }).toUpperCase()},
+        { key: 'Iconic', value: 'ICONIC', label: t("representation.iconic", { lng: selectedLanguage }).toUpperCase() },
         { key: 'Mixed', value: 'MIXED', label: t("representation.mixed", { lng: selectedLanguage }).toUpperCase() },
         { key: 'Symbolic', value: 'SYMBOLIC', label: t("representation.symbolic", { lng: selectedLanguage }).toUpperCase() },
     ];
@@ -90,9 +90,12 @@ let CreateExercise = ({ isMobile }) => {
 
         let response = null;
         try {
-            response = await fetch(`${process.env.REACT_APP_EXERCISES_SERVICE_URL}/exercises?apiKey=${localStorage.getItem("apiKey")}`, {
+            response = await fetch(`${process.env.REACT_APP_EXERCISES_SERVICE_URL}/exercises}`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+                },
                 body: JSON.stringify({
                     title: title.toUpperCase(),
                     language: language[0],

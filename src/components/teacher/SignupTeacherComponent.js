@@ -19,7 +19,10 @@ const SignupTeacher = () => {
         try {
             response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/teachers", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+                },
                 body: JSON.stringify({
                     name,
                     lastName,

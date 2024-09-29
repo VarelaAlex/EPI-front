@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { Row, Col, Button, Dropdown, Space, Layout, Tooltip, Image } from "antd";
 import { DownloadOutlined, DownOutlined, TranslationOutlined, UserOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
+import { useSession } from "../../SessionComponent";
 
 let HeaderComponent = (props) => {
 
-    let { login, open, setOpen, isMobile } = props;
+    let { open, setOpen, isMobile } = props;
+    let { login } = useSession();
 
     let [highlighted, setHighlighted] = useState(false);
     let [isReadyForInstall, setIsReadyForInstall] = useState(false);

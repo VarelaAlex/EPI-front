@@ -5,8 +5,12 @@ import DroppablePhase2 from './DroppablePhase2Component';
 import DraggablePhase2 from './DraggablePhase2Component';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX } from './NetworkProps';
 import { useNavigate } from 'react-router-dom';
+import { useSession } from '../../SessionComponent';
 
-let DnDPhase2 = ({ exercise, feedback, setFeedback }) => {
+
+let DnDPhase2 = () => {
+
+    let { feedback, setFeedback, exercise } = useSession();
 
     useEffect(() => {
         if (feedback?.phase2?.elapsedTime) {
@@ -36,10 +40,14 @@ let DnDPhase2 = ({ exercise, feedback, setFeedback }) => {
     let [current, setCurrent] = useState(0);
 
     let saveFeedback = async (feedback) => {
+
         try {
-            await fetch(`${process.env.REACT_APP_EXERCISES_SERVICE_URL}/statistics?apiKey=${localStorage.getItem("apiKey")}`, {
+            await fetch(`${process.env.REACT_APP_EXERCISES_SERVICE_URL}/statistics`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+                },
                 body: JSON.stringify({ feedback })
             });
         } catch (e) {
@@ -114,6 +122,7 @@ let DnDPhase2 = ({ exercise, feedback, setFeedback }) => {
                 },
                 title: exercise.title,
                 level: exercise.representation,
+                date: Date.now()
             });
             setShowGif(true);
             setTimeout(() => {

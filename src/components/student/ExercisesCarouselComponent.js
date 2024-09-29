@@ -4,8 +4,11 @@ import { CATEGORIES, REPRESENTATION } from "../../Globals";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import i18n from "../../i18n";
+import { useSession } from "../../SessionComponent";
 
-let ExercisesCarousel = ({ setExercise, setFeedback }) => {
+let ExercisesCarousel = () => {
+
+    let { setExercise, setFeedback } = useSession();
 
     let [exercises, setExercises] = useState([]);
     let [message, setMessage] = useState(null);
@@ -34,7 +37,10 @@ let ExercisesCarousel = ({ setExercise, setFeedback }) => {
         try {
             response = await fetch(process.env.REACT_APP_EXERCISES_SERVICE_URL + `/exercises/list/${lang.split("-")[0]}`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+                },
                 body: JSON.stringify({ category, representation })
             });
         } catch (error) {
@@ -193,7 +199,7 @@ let ExercisesCarousel = ({ setExercise, setFeedback }) => {
                                         key={index}
                                         hoverable
                                         size="small"
-                                        style={{textAlign: "center", userSelect: "none", minWidth: "20vmax", height: "25vmax",  alignItems:"center" }}
+                                        style={{ textAlign: "center", userSelect: "none", minWidth: "20vmax", height: "25vmax", alignItems: "center" }}
                                         title={<Title level={4} style={{ fontSize: "1.3vmax", textAlign: "center" }}>{card.title}</Title>}
                                         onClick={() => {
                                             if (velocity.current === 0) {
@@ -204,7 +210,7 @@ let ExercisesCarousel = ({ setExercise, setFeedback }) => {
                                         }}
                                     >
 
-                                        <Image draggable={false} preview={false} width="15vmax" src={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${card.mainImage}`}  />
+                                        <Image draggable={false} preview={false} width="15vmax" src={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${card.mainImage}`} />
                                         <Divider style={{ marginTop: "1vmax", marginBottom: "1vmax" }} />
                                         <Meta style={{ backgroundColor: a[card.networkType], borderRadius: "12px" }} title={<Text style={{ fontSize: "1.5vmax", textAlign: "center", color: "black" }}>{card.networkType}</Text>} />
                                     </Card>
@@ -213,7 +219,7 @@ let ExercisesCarousel = ({ setExercise, setFeedback }) => {
                                         key={index}
                                         hoverable
                                         size="small"
-                                        style={{ textAlign: 'center', userSelect: "none", minWidth: "20vmax", height: "25vmax", alignItems:"center" }}
+                                        style={{ textAlign: 'center', userSelect: "none", minWidth: "20vmax", height: "25vmax", alignItems: "center" }}
                                         title={null}
                                         onClick={() => {
                                             if (velocity.current === 0) {

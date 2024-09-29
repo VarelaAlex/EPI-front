@@ -73,17 +73,21 @@ let ExercisesList = (props) => {
     ];
 
     let deleteExercise = async (id) => {
-        let response = await fetch(process.env.REACT_APP_EXERCISES_SERVICE_URL + "/exercises/" + id + "?apiKey=" + localStorage.getItem("apiKey"), {
-            method: "DELETE"
+        await fetch(process.env.REACT_APP_EXERCISES_SERVICE_URL + "/exercises/" + id, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` }
         });
-        if (response.ok) {
-        }
         getExercises();
     };
 
     let getExercises = async () => {
         setLoading(true);
-        let response = await fetch(process.env.REACT_APP_EXERCISES_SERVICE_URL + "/exercises/teacher?apiKey=" + localStorage.getItem("apiKey"));
+        let response = await fetch(process.env.REACT_APP_EXERCISES_SERVICE_URL + "/exercises/teacher?apiKe",
+            {
+                method: "GET",
+                headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` }
+            }
+        );
 
         if (response.ok) {
             let jsonData = await response.json();

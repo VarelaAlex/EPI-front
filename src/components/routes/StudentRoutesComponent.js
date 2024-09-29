@@ -6,28 +6,16 @@ import TypePhase2 from '../student/TypePhase2Component';
 import ExercisesCarousel from '../student/ExercisesCarouselComponent';
 import { Route, Routes } from 'react-router-dom';
 
-let StudentRoutes = ({ setLogin, exercise, setExercise, feedback, setFeedback }) => {
+let StudentRoutes = () => {
 
     return (
         <Routes>
-            <Route path="/loginStudent" element={
-                <LoginStudent setLogin={setLogin} />
-            } />
-            <Route path="/exerciseDnD/phase1" element={
-                <DnDPhase1 exercise={exercise} feedback={feedback} setFeedback={setFeedback} />
-            } />
-            <Route path="/exerciseDnD/phase2" element={
-                <DnDPhase2 exercise={exercise} feedback={feedback} setFeedback={setFeedback} />
-            } />
-            <Route path="/exerciseType/phase1" element={
-                <TypePhase1 exercise={exercise} feedback={feedback} setFeedback={setFeedback} />
-            } />
-            <Route path="/exerciseType/phase2" element={
-                <TypePhase2 exercise={exercise} feedback={feedback} setFeedback={setFeedback} />
-            } />
-            <Route path="/students/exercises" element={
-                <ExercisesCarousel setExercise={setExercise} setFeedback={setFeedback} />
-            } />
+            <Route path="/loginStudent" element={<LoginStudent />} />
+            <Route path="/exerciseDnD/phase1" element={<DnDPhase1 />} />
+            <Route path="/exerciseDnD/phase2" element={<DnDPhase2 />} />
+            <Route path="/exerciseType/phase1" element={<TypePhase1 />} />
+            <Route path="/exerciseType/phase2" element={<TypePhase2 />} />
+            <Route path="/students/exercises" element={<ExercisesCarousel />} />
         </Routes>
     );
 };

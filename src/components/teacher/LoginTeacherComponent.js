@@ -2,10 +2,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Input, Typography, Form, Alert } from "antd";
 import { useState } from 'react';
+import { useSession } from '../../SessionComponent';
 
-let LoginTeacher = (props) => {
+let LoginTeacher = () => {
 
-    let { setLogin } = props;
+    let { setLogin } = useSession();
 
     let { t } = useTranslation();
     let { Text } = Typography;
@@ -21,7 +22,10 @@ let LoginTeacher = (props) => {
         try {
             response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/teachers/login", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+                },
                 body: JSON.stringify({
                     email,
                     password
@@ -34,13 +38,12 @@ let LoginTeacher = (props) => {
 
         let jsonData = await response?.json();
         if (response?.ok) {
-            if (jsonData?.apiKey != null) {
-                localStorage.setItem("apiKey", jsonData.apiKey);
-                localStorage.setItem("name", jsonData.name);
-                localStorage.setItem("role", "T");
-                setLogin(true);
-                navigate("/teachers/menuTeacher");
-            }
+            localStorage.setItem("accessToken", jsonData.accessToken);
+            localStorage.setItem("refreshToken", jsonData.refreshToken);
+            localStorage.setItem("name", jsonData.name);
+            localStorage.setItem("role", "S");
+            setLogin(true);
+            navigate("/teachers/menuTeacher");
         } else {
             setMessage({ error: jsonData?.error });
         }
