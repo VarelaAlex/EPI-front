@@ -23,8 +23,7 @@ let LoginTeacher = () => {
             response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/teachers/login", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
                     email,
@@ -41,7 +40,7 @@ let LoginTeacher = () => {
             localStorage.setItem("accessToken", jsonData.accessToken);
             localStorage.setItem("refreshToken", jsonData.refreshToken);
             localStorage.setItem("name", jsonData.name);
-            localStorage.setItem("role", "S");
+            localStorage.setItem("role", "T");
             setLogin(true);
             navigate("/teachers/menuTeacher");
         } else {

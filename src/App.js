@@ -1,16 +1,26 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Link, matchPath, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Layout, notification, Flex } from "antd";
 import SelectRole from './components/SelectRoleComponent';
 import HeaderComponent from './components/layout/HeaderComponent';
 import Sider from "./components/layout/SiderComponent";
 import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined } from "@ant-design/icons";
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
-import StudentRoutes from './components/routes/StudentRoutesComponent';
-import TeacherRoutes from './components/routes/TeacherRoutesComponent';
+import LoginTeacher from './components/teacher/LoginTeacherComponent';
+import SignupTeacher from './components/teacher/SignupTeacherComponent';
+import ClassroomsList from './components/teacher/ClassroomsListComponent';
+import ExercisesList from './components/teacher/ExercisesListComponent';
+import CreateExercise from './components/teacher/CreateExerciseComponent';
+import LoginStudent from './components/student/LoginStudentComponent';
+import DnDPhase1 from './components/student/DnDPhase1Component';
+import DnDPhase2 from './components/student/DnDPhase2Component';
+import TypePhase1 from './components/student/TypePhase1Component';
+import TypePhase2 from './components/student/TypePhase2Component';
+import ExercisesCarousel from './components/student/ExercisesCarouselComponent';
 import { useSession } from './SessionComponent';
 import { jwtDecode } from 'jwt-decode';
+import NotFound from './components/NotFoundComponent';
 
 let App = () => {
 
@@ -140,8 +150,11 @@ let App = () => {
           response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/token",
             {
               method: "POST",
-              body: JSON.stringify({ token: refreshToken }),
-              headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` }
+              body: JSON.stringify({ refreshToken }),
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+              }
             }
           );
           return await response.json();
@@ -156,7 +169,7 @@ let App = () => {
       if (localStorage.getItem("refreshToken")) {
         localStorage.setItem("accessToken", await refresh());
       }
-    }, 10 * 60 * 1000);
+    }, 13 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, [disconnect, navigate]);
@@ -197,11 +210,23 @@ let App = () => {
 
         if (response?.status === 200) {
           setLogin(true);
-          if (role === "T" && (["/loginTeacher", "/loginStudent", "/registerTeacher", "/selectRole"].includes(location.pathname) || location.pathname.startsWith("/students/"))) {
-            navigate("/teachers/menuTeacher");
+
+          if (role === "T") {
+
+            const isAllowedPath = matchPath("/teachers/:path/*", location.pathname);
+
+            if (!isAllowedPath) {
+              navigate("/teachers/menuTeacher");
+            }
           }
-          if (role === "S" && (["/loginTeacher", "/loginStudent", "/registerTeacher", "/selectRole"].includes(location.pathname) || location.pathname.startsWith("/teachers/"))) {
-            navigate("/students/exercises");
+
+          if (role === "S") {
+
+            const isAllowedPath = matchPath("/students/:path/*", location.pathname) || location.pathname.startsWith("/exercise");
+
+            if (!isAllowedPath) {
+              navigate("/students/exercises");
+            }
           }
         } else {
           disconnect();
@@ -252,10 +277,20 @@ let App = () => {
           <Content style={{ minHeight: "100vh", background: "url(/bg.svg) no-repeat", backgroundSize: "cover" }} >
             <Flex align="center" justify="center" style={{ minHeight: "100%" }}>
               <Routes>
+                <Route path="/loginStudent" element={<LoginStudent />} />
+                <Route path="/exerciseDnD/phase1" element={<DnDPhase1 />} />
+                <Route path="/exerciseDnD/phase2" element={<DnDPhase2 />} />
+                <Route path="/exerciseType/phase1" element={<TypePhase1 />} />
+                <Route path="/exerciseType/phase2" element={<TypePhase2 />} />
+                <Route path="/students/exercises" element={<ExercisesCarousel />} />
+                <Route path="/loginTeacher" element={<LoginTeacher />} />
+                <Route path="/registerTeacher" element={<SignupTeacher />} />
+                <Route path="/teachers/menuTeacher" element={<ClassroomsList isMobile={isMobile} />} />
+                <Route path="/teachers/manageExercises" element={<ExercisesList isMobile={isMobile} />} />
+                <Route path="/teachers/create" element={<CreateExercise isMobile={isMobile} />} />
                 <Route path="/selectRole" element={<SelectRole />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
-              <TeacherRoutes isMobile={isMobile} />
-              <StudentRoutes />
             </Flex>
           </Content>
         </Layout>

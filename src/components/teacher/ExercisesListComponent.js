@@ -82,7 +82,7 @@ let ExercisesList = (props) => {
 
     let getExercises = async () => {
         setLoading(true);
-        let response = await fetch(process.env.REACT_APP_EXERCISES_SERVICE_URL + "/exercises/teacher?apiKe",
+        let response = await fetch(process.env.REACT_APP_EXERCISES_SERVICE_URL + "/exercises/teacher",
             {
                 method: "GET",
                 headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` }
