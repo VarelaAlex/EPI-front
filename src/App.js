@@ -74,7 +74,7 @@ let App = () => {
     },
     {
       key: "about",
-      label: <Link to="/teachers/aboutHYTEX" onClick={() => setOpen(false)}>{t("sider.teacher.about")}</Link>,
+      label: <Link to="/teachers/aboutEPI" onClick={() => setOpen(false)}>{t("sider.teacher.about")}</Link>,
       danger: false,
       icon: <InfoCircleOutlined />
     },
@@ -294,7 +294,7 @@ let App = () => {
             </Flex>
           </Content>
         </Layout>
-        <Footer style={{ textAlign: "center", backgroundColor: "#001628", color: "white" }}>HYTEX @ 2024<br />Made with ❤️ by Álex & UniOvi</Footer>
+        <Footer style={{ textAlign: "center", backgroundColor: "#001628", color: "white" }}>EPI @ 2024<br />Made with ❤️ by Álex & UniOvi</Footer>
       </Layout >
     </>
   );

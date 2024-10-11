@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
+import { useTranslation } from 'react-i18next';
 
 const DraggablePhase1 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text }) => {
 
@@ -8,6 +9,7 @@ const DraggablePhase1 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text 
         data: { type, stop, bigStop },
         disabled: ok
     });
+    let { t } = useTranslation();
 
     const style = transform ? {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`
@@ -67,7 +69,7 @@ const DraggablePhase1 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text 
                     fontSize={textPosition.fontSize}
                     textAnchor="middle"
                 >
-                    {text}
+                    {t(text)}
                 </text>
             </svg>
         </div>

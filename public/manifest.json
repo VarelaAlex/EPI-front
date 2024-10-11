@@ -28,7 +28,7 @@
   ],
   "id": "/v1",
   "lang": "es-ES",
-  "name": "HYTEX",
+  "name": "EPI",
   "prefer_related_application": false,
   "scope": "/",
   "screenshots": [
@@ -47,7 +47,7 @@
       "label": "Application"
     }
   ],
-  "short_name": "HYTEX",
+  "short_name": "EPI",
   "start_url": "/selectRole",
   "theme_color": "#000280"
 }

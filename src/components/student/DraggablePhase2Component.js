@@ -1,7 +1,10 @@
 import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
+import { useTranslation } from 'react-i18next';
 
 const DraggablePhase2 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text, x, y }) => {
+
+    let { t } = useTranslation();
 
     const getImageProps = () => {
         if (nexus) return { x: x - 2, y: y - 5, width: "25", height: "25" };
@@ -22,7 +25,7 @@ const DraggablePhase2 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text,
 
     const { attributes, listeners, setNodeRef, transform } = useDraggable({
         id,
-        data: { type, src, imageProps, text, textProps, stop, bigStop, nexus, ok, shape },
+        data: { type, src, imageProps, text: t(text), textProps, stop, bigStop, nexus, ok, shape },
         disabled: ok
     });
 
@@ -43,7 +46,7 @@ const DraggablePhase2 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text,
             }
             <image href={src} {...imageProps} />
             <text {...textProps} fill="black" textAnchor="middle">
-                {text}
+                {t(text)}
             </text>
         </g>
     );

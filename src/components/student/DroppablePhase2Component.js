@@ -1,8 +1,10 @@
 import React from 'react';
 import { useDroppable } from '@dnd-kit/core';
+import { useTranslation } from 'react-i18next';
 
 const DroppablePhase2 = ({ id, type, ok, nexus, stop, bigStop, shape, src, text }) => {
 
+    let { t } = useTranslation();
     const { isOver, setNodeRef } = useDroppable({
         id,
         data: { accepts: type }
@@ -82,7 +84,7 @@ const DroppablePhase2 = ({ id, type, ok, nexus, stop, bigStop, shape, src, text 
                 }
                 {ok &&
                     <text {...textPosition} fill="black" textAnchor="middle">
-                        {text}
+                        {t(text)}
                     </text>
                 }
             </svg>

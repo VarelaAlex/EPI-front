@@ -5,7 +5,6 @@ import DroppablePhase1 from './DroppablePhase1Component';
 import DraggablePhase1 from './DraggablePhase1Component';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX, STOP } from './NetworkProps';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { useSession } from '../../SessionComponent';
 
 let DnDPhase1 = () => {
@@ -14,7 +13,6 @@ let DnDPhase1 = () => {
     let startTime = useRef(Date.now());
 
     let navigate = useNavigate();
-    let { t } = useTranslation();
     let exerciseNodes = nodes(exercise);
     let [showGif, setShowGif] = useState(false);
     let [element, setElement] = useState();
@@ -145,7 +143,7 @@ let DnDPhase1 = () => {
                                         y={Y + element.posY}
                                         ok={element.ok}
                                         src={element.src}
-                                        text={t(element.text)}
+                                        text={element.text}
                                         shape={element.shape}
                                         stop={element.stop}
                                         bigStop={element.bigStop}
@@ -164,7 +162,7 @@ let DnDPhase1 = () => {
                                         y={Y + element.posY}
                                         ok={element.ok}
                                         src={element.src}
-                                        text={t(element.text)}
+                                        text={element.text}
                                         shape={element.shape}
                                         stop={element.stop}
                                         bigStop={element.bigStop}
