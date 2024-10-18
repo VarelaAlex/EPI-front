@@ -4,18 +4,21 @@ import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nex
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSession } from '../../SessionComponent';
+import { HomeOutlined, ReloadOutlined } from '@ant-design/icons';
 
 let TypePhase1 = () => {
 
-    let { exercise, feedback, setFeedback } = useSession();
+    const INITIAL_ELEMENT = 0;
+    const INITIAL_ID = "1-1";
+
+    let { setExercise, exercise, feedback, setFeedback } = useSession();
     let startTime = useRef(Date.now());
 
     let { t } = useTranslation();
     let navigate = useNavigate();
     let exerciseNodes = nodes(exercise);
-    let [showGif, setShowGif] = useState(false);
 
-    let [extendedNodes, setExtendedNodes] = useState([
+    const INITIAL_EXTENDED_NODES = [
         { ...exerciseNodes[0], order: 0, id: "1-1" },
         { ...exerciseNodes[0], order: 1, id: "1-2" },
         ...exerciseNodes.slice(1, 3),
@@ -24,7 +27,11 @@ let TypePhase1 = () => {
         ...exerciseNodes.slice(3, 5),
         ...exerciseNodes.slice(6),
         { ...exerciseNodes[5], order: exerciseNodes.length + 2, id: "6-3", type: "type6-3", posX: nexusX(exercise?.networkType) + stopX(exercise?.networkType), bigStop: true }
-    ]);
+    ];
+
+    let [showGif, setShowGif] = useState(false);
+
+    let [extendedNodes, setExtendedNodes] = useState(INITIAL_EXTENDED_NODES);
 
     const getTextPosition = (bigStop, stop, shape) => {
         if (bigStop) return { x: "1vmax", y: "4vmax", fontSize: "2.3vmax" };
@@ -38,8 +45,8 @@ let TypePhase1 = () => {
         return word.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     };
 
-    let [id, setId] = useState("1-1");
-    let [current, setCurrent] = useState(0);
+    let [id, setId] = useState(INITIAL_ID);
+    let [current, setCurrent] = useState(INITIAL_ELEMENT);
 
     let check = () => {
 
@@ -77,12 +84,29 @@ let TypePhase1 = () => {
                         }
                     }
                     else {
-                        setFeedback({
-                            phase1: {
-                                ...feedback.phase1,
-                                spellingError: feedback?.phase1?.spellingError == null ? 1 : feedback?.phase1?.spellingError + 1
-                            }
-                        });
+                        if (element.shape) {
+                            setFeedback({
+                                phase1: {
+                                    ...feedback.phase1,
+                                    lexicalError: feedback?.phase1?.lexicalError == null ? 1 : feedback?.phase1?.lexicalError + 1
+                                }
+                            });
+                        }
+                        else if (element.stop || element.bigStop) {
+                            setFeedback({
+                                phase1: {
+                                    ...feedback.phase1,
+                                    syntacticError: feedback?.phase1?.syntacticError == null ? 1 : feedback?.phase1?.syntacticError + 1
+                                }
+                            });
+                        } else {
+                            setFeedback({
+                                phase1: {
+                                    ...feedback.phase1,
+                                    semanticError: feedback?.phase1?.semanticError == null ? 1 : feedback?.phase1?.semanticError + 1
+                                }
+                            });
+                        }
                     }
                 }
             }
@@ -91,9 +115,22 @@ let TypePhase1 = () => {
     };
 
     return (
-        <Card style={{ height: "100%", width: "95%" }} >
+        <Card style={{ height: "55vmax", width: "95%" }} >
+            <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
+                <ReloadOutlined style={{ fontSize: '45px', cursor: 'pointer' }} onClick={() => {
+                    setExercise(exercise);
+                    setExtendedNodes(INITIAL_EXTENDED_NODES);
+                    setId(INITIAL_ID);
+                    startTime.current = Date.now();
+                    setCurrent(INITIAL_ELEMENT);
+                    setFeedback({});
+                }} />
+                <HomeOutlined style={{ fontSize: '45px', cursor: 'pointer', paddingLeft: "20px" }} onClick={() => {
+                    navigate("/students/exercises");
+                }} />
+            </div>
             <Flex align="center" vertical >
-                <Flex align="start" vertical>
+                <Flex align="start" vertical style={{ paddingTop: "40px" }}>
                     <Row>
                         <Col key={extendedNodes[0].id}>
                             <svg height="6.5vmax" width="9vmax">
@@ -102,6 +139,7 @@ let TypePhase1 = () => {
                                     height="4.7vmax"
                                     fill="white"
                                     stroke="black"
+                                    stroke-width="3"
                                 />
                                 <text
                                     {...getTextPosition(extendedNodes[0].bigStop, extendedNodes[0].stop, extendedNodes[0].shape)}
@@ -123,6 +161,7 @@ let TypePhase1 = () => {
                                             height="4.7vmax"
                                             fill="white"
                                             stroke="black"
+                                            stroke-width="3"
                                         />
                                     }
                                     {element.shape === "ellipse" &&
@@ -133,6 +172,7 @@ let TypePhase1 = () => {
                                             ry="2.6vmax"
                                             fill="white"
                                             stroke="black"
+                                            stroke-width="3"
                                         />
                                     }
                                     <text
@@ -156,6 +196,7 @@ let TypePhase1 = () => {
                                             height="4.7vmax"
                                             fill="white"
                                             stroke="black"
+                                            stroke-width="3"
                                         />
                                     }
                                     {element.shape === "ellipse" &&
@@ -166,6 +207,7 @@ let TypePhase1 = () => {
                                             ry="2.6vmax"
                                             fill="white"
                                             stroke="black"
+                                            stroke-width="3"
                                         />
                                     }
                                     <text
@@ -182,16 +224,17 @@ let TypePhase1 = () => {
                 </Flex>
                 <Divider style={{ backgroundColor: "grey" }} />
                 <Flex align="center" justify="center" style={{ height: "90%", width: "90%" }} >
-                    <svg height="18vmax" viewBox={`0 0 ${viewBoxWidth(exercise?.networkType)} 250`}>
-                        <path d={`M 220 70 L 220 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" />
-                        <path d="M 220 70 L 220 85 L 60 85 L 60 105" fill="none" stroke="rgb(0, 0, 0)" />
-                        <path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" />
-                        <path d={`M 350 165 ${pathBottom(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" />
+                    <svg height="18vmax" viewBox={`-2 -2 ${viewBoxWidth(exercise?.networkType)} 250`}>
+                        <path d={`M 220 70 L 220 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                        <path d="M 220 70 L 220 85 L 60 85 L 60 105" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                        <path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                        <path d={`M 350 165 ${pathBottom(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
                         {["I-II", "I-III"].includes(exercise?.networkType) &&
                             <path
                                 d={pathBottom2(exercise?.networkType)}
                                 fill="none"
                                 stroke="rgb(0, 0, 0)"
+                                stroke-width="3"
                             />
                         }
 
@@ -200,6 +243,7 @@ let TypePhase1 = () => {
                                 d="M 570 145 L 570 150 L 790 150 L 790 165"
                                 fill="none"
                                 stroke="rgb(0, 0, 0)"
+                                stroke-width="3"
                             />
                         }
 
@@ -214,6 +258,7 @@ let TypePhase1 = () => {
                                             height="70"
                                             fill="rgb(255, 255, 255)"
                                             stroke="rgb(0, 0, 0)"
+                                            stroke-width="3"
                                         />
                                         {element.clicked ?
                                             (
@@ -225,7 +270,7 @@ let TypePhase1 = () => {
                                                 >
                                                     <Input
                                                         id={element.id}
-                                                        style={{ textTransform: "uppercase" }}
+                                                        style={{ textTransform: "uppercase", textAlign: 'center' }}
                                                         onChange={() => check()}
                                                         autoFocus={true}
                                                         autoComplete='off'
@@ -267,6 +312,7 @@ let TypePhase1 = () => {
                                             ry="40"
                                             fill="white"
                                             stroke="black"
+                                            stroke-width="3"
                                         />
                                         {element.clicked ?
                                             (
@@ -278,7 +324,7 @@ let TypePhase1 = () => {
                                                 >
                                                     <Input
                                                         id={element.id}
-                                                        style={{ textTransform: "uppercase" }}
+                                                        style={{ textTransform: "uppercase", textAlign: 'center' }}
                                                         onChange={() => check()}
                                                         autoFocus={true}
                                                         autoComplete='off'
@@ -323,7 +369,7 @@ let TypePhase1 = () => {
                                             >
                                                 <Input
                                                     id={element.id}
-                                                    style={{ textTransform: "lowercase" }}
+                                                    style={{ textTransform: "lowercase", textAlign: 'center' }}
                                                     onChange={() => check()}
                                                     autoFocus={true}
                                                     autoComplete='off'
@@ -367,7 +413,7 @@ let TypePhase1 = () => {
                                             >
                                                 <Input
                                                     id={element.id}
-                                                    style={{ textTransform: "lowercase" }}
+                                                    style={{ textTransform: "lowercase", textAlign: 'center' }}
                                                     onChange={() => check()}
                                                     autoFocus={true}
                                                     autoComplete='off'
@@ -411,7 +457,7 @@ let TypePhase1 = () => {
                                             >
                                                 <Input
                                                     id={element.id}
-                                                    style={{ textTransform: "lowercase" }}
+                                                    style={{ textTransform: "lowercase", textAlign: 'center' }}
                                                     onChange={() => check()}
                                                     autoFocus={true}
                                                     autoComplete='off'

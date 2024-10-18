@@ -1,247 +1,335 @@
 {
-    "language": {
-        "button": "Idioma",
-        "spanish": "Español",
-        "english": "Inglés"
-    },
-    "pwa": {
-        "button": "Descargar",
-        "notificationMessage": "¡Bienvenido/a a EPI!",
-        "notificationDescription": "Puedes descargar la aplicación pulsando en el botón que aparece a la derecha"
-    },
-    "sider": {
-        "teacher": {
-            "welcomeMessage": "Hola",
-            "classrooms": "Mis aulas",
-            "exercises": "Mis ejercicios",
-            "about": "Sobre la estrategia Hypertexto",
-            "profile": "Mi perfil"
-        },
-        "student": {
-            "exercises": "Ejercicios",
-            "howto": "Cómo hacer un ejercicio"
-        },
-        "disconnect": "Cerrar sesión"
-    },
-    "role": {
-        "title": "¿Quién eres?",
-        "teacher": "Profesor",
-        "student": "Estudiante"
-    },
-    "login": {
-        "title": "Inicio de sesión",
-        "button": "Iniciar sesión",
-        "registerMessage": "¿Aún no tienes una cuenta?",
-        "registerLink": "Regístrate",
-        "form": {
-            "label": {
-                "email": "Correo electrónico",
-                "username": "Usuario",
-                "password": "Contraseña"
-            },
-            "placeholder": {
-                "email": "Tu correo",
-                "username": "Tu nombre de usuario",
-                "password": "Tu contraseña"
-            }
-        },
-        "error": {
-            "email": {
-                "empty": "El correo es obligatorio",
-                "format": "El formato del correo no es correcto",
-                "notExist": "No existe un profesor con este correo"
-            },
-            "password": {
-                "empty": "La contraseña es obligatoria",
-                "incorrect": "Contraseña incorrecta"
-            },
-            "username": {
-                "empty": "El nombre de usuario es obligatorio",
-                "notExist": "No existe un alumno con este nombre de usuario"
-            }
-        }
-    },
-    "signup": {
-        "title": "Registro",
-        "button": "Regístrate",
-        "loginMessage": "¿Ya tienes una cuenta?",
-        "loginLink": "Inicia sesión",
-        "form": {
-            "label": {
-                "name": "Nombre",
-                "lastName": "Apellidos",
-                "email": "Correo electrónico",
-                "username": "Nombre de usuario",
-                "password": "Contraseña",
-                "confirm": "Confirma tu contraseña"
-            },
-            "placeholder": {
-                "name": "Tu nombre",
-                "lastName": "Tus apellidos",
-                "email": "Tu correo",
-                "username": "Tu nombre de usuario",
-                "password": "Tu contraseña",
-                "confirm": "Repite tu contraseña"
-            }
-        },
-        "error": {
-            "email": {
-                "empty": "El correo es obligatorio",
-                "format": "El formato del correo no es correcto",
-                "repeated": "Ya existe una cuenta con este correo"
-            },
-            "name": "El nombre es obligatorio",
-            "lastName": "Los apellidos son obligatorios",
-            "password": {
-                "empty": "La contraseña es obligatoria",
-                "format": {
-                    "mustHave": "La contraseña debe cumplir los siguientes criterios:",
-                    "between": "1. Tener entre 8 y 12 caracteres",
-                    "digit": "2. Contener al menos un dígito",
-                    "special": "3. Contener al menos uno de los siguientes caracteres especiales: ! @ # $ % & *"
-                },
-                "confirm": "Por favor, confirma tu contraseña",
-                "unmatch": "Las contraseñas que has introducido no son idénticas"
-            }
-        }
-    },
-    "classrooms": {
-        "table": {
-            "title": "Mis aulas",
-            "className": "Nombre del aula",
-            "numberStudents": "Número de estudiantes",
-            "empty": "Aún no tienes aulas",
-            "tooltips": {
-                "seeStatistics": "Ver estadísticas",
-                "delete": "Eliminar"
-            },
-            "buttons": {
-                "seeStatistics": "Ver estadísticas",
-                "delete": "Eliminar"
-            }
-        },
-        "addClassroom": {
-            "divider": "Añadir un nuevo aula",
-            "label": "Nombre del aula",
-            "placeholder": "Nombre del aula",
-            "button": "Añadir aula",
-            "error": "El nombre del aula es obligatorio"
-        },
-        "create": {
-            "error": {
-                "name": "El nombre es obligatorio",
-                "teacher": "El id del profesor es obligatorio",
-                "repeated": "Ya existe un aula con este nombre"
-            }
-        },
-        "list": {
-            "error": {
-                "teacher": "El id del profesor es obligatorio",
-                "notExist": "Aún no tienes aulas"
-            }
-        },
-        "delete": {
-            "error": {
-                "id": "El id del aula es obligatorio",
-                "notExist": "El aula no existe"
-            }
-        }
-    },
-    "internalServerError": "Algo ha ido mal, inténtalo más tarde",
-    "exercise": {
-        "create": {
-            "title": "Crear Ejercicio",
-            "label": {
-                "title": "Título",
-                "language": "Idioma",
-                "category": "Categoría",
-                "networkType": "Tipo de Red",
-                "representation": "Representación",
-                "mainImage": "Imagen Principal",
-                "definitionText": "Texto de Definición",
-                "definitionImage": "Imagen de Definición",
-                "ampliationText": "Texto de Ampliación",
-                "ampliationImage": "Imagen de Ampliación",
-                "definitionPictogram": "Pictograma de Definición",
-                "ampliationPictogram": "Pictograma de Ampliación"
-            },
-            "error": {
-                "title": "Por favor, ingrese un título",
-                "language": "Por favor, seleccione un idioma",
-                "category": "Por favor, seleccione una categoría",
-                "networkType": "Por favor, seleccione un tipo de red",
-                "representation": "Por favor, seleccione una representación",
-                "definitionText": "Por favor, ingrese un texto de definición",
-                "ampliationText": "Por favor, ingrese un texto de ampliación",
-                "definitionPictogram": "Por favor, seleccione un conector de definición",
-                "ampliationPictogram": "Por favor, seleccione un conector de ampliación"
-            },
-            "placeholder": {
-                "title": "Ingrese título",
-                "language": "Seleccione idioma",
-                "category": "Seleccione categoría",
-                "networkType": "Seleccione tipo de red",
-                "representation": "Seleccione representación",
-                "definitionText": "Ingrese texto de definición",
-                "ampliationText": "Ingrese texto de ampliación",
-                "definitionPictogram": "Seleccione conector de definición",
-                "ampliationPictogram": "Seleccione conector de ampliación"
-            },
-            "addExercise": {
-                "divider": "Añadir un nuevo ejercicio",
-                "button": "Crear Ejercicio"
-            }
-        },
-        "carousel": {
-            "empty": "No existen ejercicios"
-        },
-        "table": {
-            "title": "Mis ejercicios",
-            "name": "Ejercicio",
-            "category": "Categoría",
-            "networkType": "Tipo de red",
-            "representation": "Representación",
-            "language": "Idioma",
-            "empty": "Aún no tienes ejercicios",
-            "tooltips": {
-                "edit": "Editar",
-                "delete": "Eliminar"
-            },
-            "buttons": {
-                "edit": "Editar",
-                "delete": "Eliminar"
-            }
-        }
-    },
-    "pictograms": {
-        "is": "es",
-        "isFor": "es para",
-        "isPartOf": "es parte de",
-        "are": "son",
-        "areFor": "son para",
-        "arePartOf": "son parte de",
-        "has": "tiene",
-        "isUsedFor": "sirve para",
-        "isIn": "está en",
-        "have": "tienen",
-        "areUsedFor": "sirven para",
-        "areIn": "están en"
-    },
-    "representation": {
-        "iconic": "Icónica",
-        "mixed": "Combinada",
-        "symbolic": "Simbólica"
-    },
-    "categories": {
-        "family": "Familia",
-        "animals": "Animales",
-        "body&food": "Cuerpo y alimentos",
-        "transports": "Transportes",
-        "seasons": "Estaciones"
-    },
-    "student": {
-        "error": {
-            "notExist": "No existe este estudiante"
-        }
-    }
+	"language": {
+		"button": "Idioma",
+		"spanish": "Español",
+		"english": "Inglés"
+	},
+	"pwa": {
+		"button": "Descargar",
+		"notificationMessage": "¡Bienvenido/a a EPI!",
+		"notificationDescription": "Puedes descargar la aplicación pulsando en el botón que aparece a la derecha"
+	},
+	"sider": {
+		"teacher": {
+			"welcomeMessage": "Hola",
+			"classrooms": "Mis aulas",
+			"exercises": "Mis ejercicios",
+			"about": "Sobre la estrategia Hypertexto",
+			"profile": "Mi perfil"
+		},
+		"student": {
+			"exercises": "Ejercicios",
+			"howto": "Cómo hacer un ejercicio"
+		},
+		"disconnect": "Cerrar sesión"
+	},
+	"role": {
+		"title": "¿Quién eres?",
+		"teacher": "Profesor",
+		"student": "Estudiante"
+	},
+	"login": {
+		"title": "Inicio de sesión",
+		"button": "Iniciar sesión",
+		"registerMessage": "¿Aún no tienes una cuenta?",
+		"registerLink": "Regístrate",
+		"form": {
+			"label": {
+				"email": "Correo electrónico",
+				"username": "Usuario",
+				"password": "Contraseña"
+			},
+			"placeholder": {
+				"email": "angelicaR@email.com",
+				"username": "ross80"
+			}
+		},
+		"error": {
+			"email": {
+				"empty": "El correo es obligatorio",
+				"format": "El formato del correo no es correcto",
+				"notExist": "No existe un profesor con este correo"
+			},
+			"password": {
+				"empty": "La contraseña es obligatoria",
+				"incorrect": "Contraseña incorrecta"
+			},
+			"username": {
+				"empty": "El nombre de usuario es obligatorio",
+				"notExist": "No existe un alumno con este nombre de usuario"
+			}
+		}
+	},
+	"signup": {
+		"title": "Registro",
+		"button": "Regístrate",
+		"loginMessage": "¿Ya tienes una cuenta?",
+		"loginLink": "Inicia sesión",
+		"form": {
+			"label": {
+				"name": "Nombre",
+				"lastName": "Apellidos",
+				"email": "Correo electrónico",
+				"username": "Nombre de usuario",
+				"password": "Contraseña",
+				"confirm": "Confirma tu contraseña"
+			},
+			"placeholder": {
+				"name": "Angelica",
+				"lastName": "Ross",
+				"email": "angelicaR@email.com",
+				"confirm": "Repite tu contraseña"
+			}
+		},
+		"error": {
+			"email": {
+				"empty": "El correo es obligatorio",
+				"format": "El formato del correo no es correcto",
+				"repeated": "Ya existe una cuenta con este correo"
+			},
+			"name": "El nombre es obligatorio",
+			"lastName": "Los apellidos son obligatorios",
+			"password": {
+				"empty": "La contraseña es obligatoria",
+				"format": {
+					"mustHave": "La contraseña debe cumplir los siguientes criterios:",
+					"between": "1. Tener entre 8 y 12 caracteres",
+					"digit": "2. Contener al menos un dígito",
+					"special": "3. Contener al menos uno de los siguientes caracteres especiales: ! @ # $ % & *"
+				},
+				"confirm": "Por favor, confirma tu contraseña",
+				"unmatch": "Las contraseñas que has introducido no son idénticas"
+			}
+		}
+	},
+	"classrooms": {
+		"table": {
+			"title": "Mis aulas",
+			"className": "Nombre del aula",
+			"numberStudents": "Número de estudiantes",
+			"empty": "Aún no tienes aulas",
+			"tooltips": {
+				"seeStatistics": "Ver estadísticas",
+				"delete": "Eliminar"
+			},
+			"buttons": {
+				"seeStatistics": "Ver estadísticas",
+				"delete": "Eliminar"
+			}
+		},
+		"addClassroom": {
+			"divider": "Añadir un nuevo aula",
+			"label": "Nombre del aula",
+			"placeholder": "Infantil 3º A",
+			"button": "Añadir aula",
+			"error": "El nombre del aula es obligatorio"
+		},
+		"create": {
+			"error": {
+				"name": "El nombre es obligatorio",
+				"teacher": "El id del profesor es obligatorio",
+				"repeated": "Ya existe un aula con este nombre"
+			}
+		},
+		"list": {
+			"error": {
+				"teacher": "El id del profesor es obligatorio",
+				"notExist": "Aún no tienes aulas"
+			}
+		},
+		"delete": {
+			"error": {
+				"id": "El id del aula es obligatorio",
+				"notExist": "El aula no existe"
+			}
+		},
+		"detail": {
+			"table": {
+				"title": "Mis alumnos",
+				"studentUsername": "Nombre de usuario",
+				"studentName": "Nombre",
+				"studentLastName": "Apellidos",
+				"studentAge": "Edad",
+				"empty": "Aún no tienes alumnos",
+				"tooltips": {
+					"seeStatistics": "Ver estadísticas",
+					"delete": "Eliminar"
+				},
+				"buttons": {
+					"seeStatistics": "Ver estadísticas",
+					"delete": "Eliminar"
+				}
+			},
+			"addStudent": {
+				"divider": "Añadir un nuevo alumno",
+				"label": {
+					"name": "Nombre del alumno",
+					"lastName": "Apellidos del alumno",
+					"age": "Edad del alumno"
+				},
+				"error": {
+					"name": "El nombre es obligatorio",
+					"lastName": "Los apellidos son obligatorios",
+					"age": "La edad es obligatoria"
+				},
+				"placeholder": {
+					"name": "Angelica",
+					"lastName": "Ross",
+					"age": "5"
+				},
+				"button": "Añadir alumno"
+			},
+			"error": {
+				"id": "El id del aula es obligatorio",
+				"teacher": "El id del profesor es obligatorio",
+				"notExist": "El alumno no existe"
+			}
+		}
+	},
+	"internalServerError": "Algo ha ido mal, inténtalo más tarde",
+	"exercise": {
+		"create": {
+			"title": "Crear Ejercicio",
+			"label": {
+				"title": "Título",
+				"language": "Idioma",
+				"category": "Categoría",
+				"networkType": "Tipo de Red",
+				"representation": "Representación",
+				"mainImage": "Imagen Principal",
+				"definitionText": "Texto de Definición",
+				"definitionImage": "Imagen de Definición",
+				"ampliationText": "Texto de Ampliación",
+				"ampliationImage": "Imagen de Ampliación",
+				"definitionPictogram": "Pictograma de Definición",
+				"ampliationPictogram": "Pictograma de Ampliación"
+			},
+			"error": {
+				"title": "Por favor, ingrese un título",
+				"language": "Por favor, seleccione un idioma",
+				"category": "Por favor, seleccione una categoría",
+				"networkType": "Por favor, seleccione un tipo de red",
+				"representation": "Por favor, seleccione una representación",
+				"definitionText": "Por favor, ingrese un texto de definición",
+				"ampliationText": "Por favor, ingrese un texto de ampliación",
+				"definitionPictogram": "Por favor, seleccione un conector de definición",
+				"ampliationPictogram": "Por favor, seleccione un conector de ampliación"
+			},
+			"placeholder": {
+				"title": "La mano",
+				"language": "Español",
+				"category": "Cuerpo y alimentos",
+				"networkType": "I-I",
+				"representation": "Icónica",
+				"definitionText": "El brazo",
+				"ampliationText": "Dedos",
+				"definitionPictogram": "es parte de",
+				"ampliationPictogram": "tiene"
+			},
+			"addExercise": {
+				"divider": "Añadir un nuevo ejercicio",
+				"button": "Crear Ejercicio"
+			}
+		},
+		"carousel": {
+			"empty": "No existen ejercicios"
+		},
+		"table": {
+			"title": "Mis ejercicios",
+			"name": "Ejercicio",
+			"category": "Categoría",
+			"networkType": "Tipo de red",
+			"representation": "Representación",
+			"language": "Idioma",
+			"empty": "Aún no tienes ejercicios",
+			"tooltips": {
+				"edit": "Editar",
+				"delete": "Eliminar"
+			},
+			"buttons": {
+				"edit": "Editar",
+				"delete": "Eliminar"
+			}
+		}
+	},
+	"pictograms": {
+		"is": "es",
+		"isFor": "es para",
+		"isPartOf": "es parte de",
+		"are": "son",
+		"areFor": "son para",
+		"arePartOf": "son parte de",
+		"has": "tiene",
+		"isUsedFor": "sirve para",
+		"isIn": "está en",
+		"have": "tienen",
+		"areUsedFor": "sirven para",
+		"areIn": "están en"
+	},
+	"representation": {
+		"iconic": "Icónica",
+		"mixed": "Combinada",
+		"symbolic": "Simbólica"
+	},
+	"categories": {
+		"family": "Familia",
+		"animals": "Animales",
+		"body&food": "Cuerpo y alimentos",
+		"transports": "Transportes",
+		"seasons": "Estaciones"
+	},
+	"student": {
+		"error": {
+			"notExist": "No existe este estudiante"
+		}
+	},
+	"students": {
+		"detail": {
+			"title": "Modificar alumno",
+			"update": {
+				"label": {
+					"name": "Nombre del alumno",
+					"lastName": "Apellidos del alumno",
+					"age": "Edad del alumno",
+					"classroom": "Aula del alumno"
+				},
+				"error": {
+					"name": "El nombre es obligatorio",
+					"lastName": "Los apellidos son obligatorios",
+					"age": "La edad es obligatoria",
+					"classroom": "El aula es obligatoria"
+				},
+				"placeholder": {
+					"name": "Angelica",
+					"lastName": "Ross",
+					"age": "5",
+					"classroom": "Infantil 3ºC"
+				},
+				"button": "Aceptar"
+			}
+		}
+	},
+	"profile": {
+		"title": "Mi perfil",
+		"label": {
+			"name": "Nombre",
+			"lastName": "Apellidos",
+			"email": "Email"
+		},
+		"error": {
+			"name": "El nombre es obligatorio",
+			"lastName": "Los apellidos son obligatorios",
+			"email": {
+				"empty": "El email es obligatorio",
+				"format": "El formato del correo no es correcto",
+				"repeated": "Ya existe una cuenta con este correo"
+			}
+		},
+		"placeholder": {
+			"name": "Angelica",
+			"lastName": "Ross",
+			"email": "angelicaR@email.com"
+		},
+		"button": "Aceptar"
+	}
 }

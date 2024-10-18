@@ -224,9 +224,10 @@ let CreateExercise = ({ isMobile }) => {
                         {selectedMainImages && selectedMainImages.map(image =>
                             <Image key={image} preview={false} width="4vmax" src={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${image}`} />
                         )}
-                        <Button ghost type="primary" onClick={() => setOpenMain(true)}>
-                            Select mainImage
-                        </Button>
+                        {selectedMainImages.length > 0
+                            ? <Button type="primary" danger onClick={() => setSelectedMainImages([])}>Clear</Button>
+                            : <Button ghost type="primary" onClick={() => setOpenMain(true)}>Select mainImage</Button>
+                        }
                     </div>
                 </Form.Item>
                 <Form.Item
@@ -269,9 +270,10 @@ let CreateExercise = ({ isMobile }) => {
                             {selectedDefinitionImages && selectedDefinitionImages.map(image =>
                                 <Image key={image} preview={false} width="4vmax" src={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${image}`} />
                             )}
-                            <Button ghost type="primary" onClick={() => setOpenDefinition(true)}>
-                                Select definitionImage
-                            </Button>
+                            {selectedDefinitionImages.length > 0
+                                ? <Button type="primary" danger onClick={() => setSelectedDefinitionImages([])}>Clear</Button>
+                                : <Button ghost type="primary" onClick={() => setOpenDefinition(true)}>Select definitionImage</Button>
+                            }
                         </div>
                     </Form.Item>
                 }
@@ -326,9 +328,10 @@ let CreateExercise = ({ isMobile }) => {
                             {selectedAmpliationImages && selectedAmpliationImages.map(image =>
                                 <Image key={image} preview={false} width="4vmax" src={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${image}`} />
                             )}
-                            <Button ghost type="primary" onClick={() => setOpenAmpliation(true)}>
-                                Select ampliationImage
-                            </Button>
+                            {selectedAmpliationImages.length > 0
+                                ? <Button type="primary" danger onClick={() => setSelectedAmpliationImages([])}>Clear</Button>
+                                : <Button ghost type="primary" onClick={() => setOpenAmpliation(true)}>Select ampliationImage</Button>
+                            }
                         </div>
                     </Form.Item>
                 }

@@ -53,7 +53,15 @@ let ExercisesCarousel = () => {
                 "I-II": 1,
                 "I-III": 2
             };
-            jsonData.sort((a, b) => sortOrder[a.networkType] - sortOrder[b.networkType]);
+            jsonData.sort((a, b) => {
+                const networkTypeComparison = sortOrder[a.networkType] - sortOrder[b.networkType];
+
+                if (networkTypeComparison === 0) {
+                    return a.title.localeCompare(b.title);
+                }
+
+                return networkTypeComparison;
+            });
             setExercises(jsonData);
         } else {
             setMessage({ error: jsonData?.error });

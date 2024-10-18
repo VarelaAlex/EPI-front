@@ -21,283 +21,300 @@ import ExercisesCarousel from './components/student/ExercisesCarouselComponent';
 import { useSession } from './SessionComponent';
 import { jwtDecode } from 'jwt-decode';
 import NotFound from './components/NotFoundComponent';
+import ClassroomDetail from './components/teacher/ClassroomDetailComponent';
+import StudentDetail from './components/teacher/StudentDetailComponent';
+import BlankPage from './components/BlankPageComponent';
+import Profile from './components/teacher/ProfileComponent';
 
 let App = () => {
 
-  let { login, setLogin, setFeedback, setExercise } = useSession();
+	let { login, setLogin, setFeedback, setExercise } = useSession();
 
-  const MOBILE_BREAKPOINT = 430;
+	const MOBILE_BREAKPOINT = 430;
 
-  let [open, setOpen] = useState(false);
-  let [api, contextHolder] = notification.useNotification();
-  let [isMobile, setIsMobile] = useState(false);
+	let [open, setOpen] = useState(false);
+	let [api, contextHolder] = notification.useNotification();
+	let [isMobile, setIsMobile] = useState(false);
 
-  let { t } = useTranslation();
-  let navigate = useNavigate();
-  let location = useLocation();
-  let { Content, Footer } = Layout;
+	let { t } = useTranslation();
+	let navigate = useNavigate();
+	let location = useLocation();
+	let { Content, Footer } = Layout;
 
-  let disconnect = useCallback(() => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("name");
-    localStorage.removeItem("role");
-    setLogin(false);
-    setFeedback({});
-    setExercise({});
-  }, [setExercise, setFeedback, setLogin]);
+	let disconnect = useCallback(() => {
+		logout();
+		localStorage.removeItem("accessToken");
+		localStorage.removeItem("refreshToken");
+		localStorage.removeItem("name");
+		localStorage.removeItem("role");
+		setLogin(false);
+		setFeedback({});
+		setExercise({});
+	}, [setExercise, setFeedback, setLogin]);
 
-  let isTokenExpired = (token) => {
-    if (!token) return true;
-    try {
-      const decodedToken = jwtDecode(token);
-      const currentTime = Date.now() / 1000;
-      return decodedToken.exp < currentTime;
-    } catch (error) {
-      console.error('Error decoding token:', error);
-      return true;
-    }
-  };
+	let logout = async () => {
+		let refreshToken = localStorage.getItem("refreshToken");
 
-  let teacherMenuItems = [
-    {
-      key: "classrooms",
-      label: <Link to="/teachers/menuTeacher" onClick={() => setOpen(false)}>{t("sider.teacher.classrooms")}</Link>,
-      danger: false,
-      icon: <ClassroomOutlined />
-    },
-    {
-      key: "exercises",
-      label: <Link to="/teachers/manageExercises" onClick={() => setOpen(false)}>{t("sider.teacher.exercises")}</Link>,
-      danger: false,
-      icon: <FormOutlined />
-    },
-    {
-      key: "about",
-      label: <Link to="/teachers/aboutEPI" onClick={() => setOpen(false)}>{t("sider.teacher.about")}</Link>,
-      danger: false,
-      icon: <InfoCircleOutlined />
-    },
-    {
-      key: "profile",
-      label: <Link to="/teachers/profile" onClick={() => setOpen(false)}>{t("sider.teacher.profile")}</Link>,
-      danger: false,
-      icon: <UserOutlined />
-    },
-    {
-      key: "menuDisconnect",
-      label: <Link to="/selectRole" onClick={disconnect}>{t("sider.disconnect")}</Link>,
-      danger: true,
-      icon: <LogoutOutlined />
-    }
-  ];
+		try {
+			await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/logout",
+				{
+					method: "POST",
+					body: JSON.stringify({ token: refreshToken }),
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+					}
+				}
+			);
+		} catch (e) {
+		}
+	};
 
-  let studentMenuItems = [
-    {
-      key: "exercises",
-      label: <Link to="/students/exercises" onClick={() => setOpen(false)}>{t("sider.student.exercises")}</Link>,
-      danger: false,
-      icon: <FormOutlined />
-    },
-    {
-      key: "howto",
-      label: <Link to="/students/howTo" onClick={() => setOpen(false)}>{t("sider.student.howto")}</Link>,
-      danger: false,
-      icon: <InfoCircleOutlined />
-    },
-    {
-      key: "menuDisconnect",
-      label: <Link to="/selectRole" onClick={disconnect}>{t("sider.disconnect")}</Link>,
-      danger: true,
-      icon: <LogoutOutlined />
-    }
-  ];
+	let isTokenExpired = (token) => {
+		if (!token) return true;
+		try {
+			const decodedToken = jwtDecode(token);
+			const currentTime = Date.now() / 1000;
+			return decodedToken.exp < currentTime;
+		} catch (error) {
+			console.error('Error decoding token:', error);
+			return true;
+		}
+	};
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
-    };
+	let teacherMenuItems = [
+		{
+			key: "classrooms",
+			label: <Link to="/teachers/menuTeacher" onClick={() => setOpen(false)}>{t("sider.teacher.classrooms")}</Link>,
+			danger: false,
+			icon: <ClassroomOutlined />
+		},
+		{
+			key: "exercises",
+			label: <Link to="/teachers/manageExercises" onClick={() => setOpen(false)}>{t("sider.teacher.exercises")}</Link>,
+			danger: false,
+			icon: <FormOutlined />
+		},
+		{
+			key: "about",
+			label: <Link to="/teachers/aboutEPI" onClick={() => setOpen(false)}>{t("sider.teacher.about")}</Link>,
+			danger: false,
+			icon: <InfoCircleOutlined />
+		},
+		{
+			key: "profile",
+			label: <Link to="/teachers/profile" onClick={() => setOpen(false)}>{t("sider.teacher.profile")}</Link>,
+			danger: false,
+			icon: <UserOutlined />
+		},
+		{
+			key: "menuDisconnect",
+			label: <Link to="/selectRole" onClick={disconnect}>{t("sider.disconnect")}</Link>,
+			danger: true,
+			icon: <LogoutOutlined />
+		}
+	];
 
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+	let studentMenuItems = [
+		{
+			key: "exercises",
+			label: <Link to="/students/exercises" onClick={() => setOpen(false)}>{t("sider.student.exercises")}</Link>,
+			danger: false,
+			icon: <FormOutlined />
+		},
+		{
+			key: "howto",
+			label: <Link to="/students/howTo" onClick={() => setOpen(false)}>{t("sider.student.howto")}</Link>,
+			danger: false,
+			icon: <InfoCircleOutlined />
+		},
+		{
+			key: "menuDisconnect",
+			label: <Link to="/selectRole" onClick={disconnect}>{t("sider.disconnect")}</Link>,
+			danger: true,
+			icon: <LogoutOutlined />
+		}
+	];
 
-  useEffect(() => {
+	useEffect(() => {
+		const handleResize = () => {
+			setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
+		};
 
-    let refresh = async () => {
+		handleResize();
+		window.addEventListener('resize', handleResize);
+		return () => window.removeEventListener('resize', handleResize);
+	}, []);
 
-      let refreshToken = localStorage.getItem("refreshToken");
+	useEffect(() => {
 
-      if (refreshToken) {
-        if (isTokenExpired(refreshToken)) {
-          try {
-            await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/logout",
-              {
-                method: "POST",
-                body: JSON.stringify({ token: refreshToken }),
-                headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` }
-              }
-            );
-          } catch (e) {
-          }
-          disconnect();
-          navigate('/selectRole');
-        }
+		let refresh = async () => {
 
-        let response;
-        try {
-          response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/token",
-            {
-              method: "POST",
-              body: JSON.stringify({ refreshToken }),
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("accessToken")}`
-              }
-            }
-          );
-          return await response.json();
-        } catch (e) {
-          disconnect();
-          navigate("/selectRole");
-        }
-      }
-    };
+			let refreshToken = localStorage.getItem("refreshToken");
 
-    const interval = setInterval(async () => {
-      if (localStorage.getItem("refreshToken")) {
-        localStorage.setItem("accessToken", await refresh());
-      }
-    }, 13 * 60 * 1000);
+			if (refreshToken) {
+				if (isTokenExpired(refreshToken)) {
+					disconnect();
+					navigate('/selectRole');
+				}
 
-    return () => clearInterval(interval);
-  }, [disconnect, navigate]);
+				let response;
+				try {
+					response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/token",
+						{
+							method: "POST",
+							body: JSON.stringify({ refreshToken }),
+							headers: {
+								"Content-Type": "application/json",
+								Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+							}
+						}
+					);
+					return await response.json();
+				} catch (e) {
+					disconnect();
+					navigate("/selectRole");
+				}
+			}
+		};
 
-  useEffect(() => {
+		const interval = setInterval(async () => {
+			if (localStorage.getItem("refreshToken")) {
+				localStorage.setItem("accessToken", await refresh());
+			}
+		}, 0.5 * 60 * 1000);
 
-    let checkLogin = async () => {
+		return () => clearInterval(interval);
+	}, [disconnect, navigate]);
 
-      let accessToken = localStorage.getItem("accessToken");
+	useEffect(() => {
 
-      if (accessToken) {
-        if (isTokenExpired(accessToken)) {
-          disconnect();
-          navigate('/selectRole');
-        }
+		let checkLogin = async () => {
 
-        let response = null;
-        let role = localStorage.getItem("role");
-        if (role === "T") {
-          response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/teachers/checkLogin",
-            {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${accessToken}`
-              }
-            }
-          );
-        }
+			let accessToken = localStorage.getItem("accessToken");
 
-        if (role === "S") {
-          response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/students/checkLogin", {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${accessToken}`
-            }
-          });
-        }
+			if (accessToken) {
+				if (isTokenExpired(accessToken)) {
+					disconnect();
+					navigate('/selectRole');
+				}
 
-        if (response?.status === 200) {
-          setLogin(true);
+				let response = null;
+				let role = localStorage.getItem("role");
+				if (role === "T") {
+					response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/teachers/checkLogin",
+						{
+							method: "GET",
+							headers: {
+								Authorization: `Bearer ${accessToken}`
+							}
+						}
+					);
+				}
 
-          if (role === "T") {
+				if (role === "S") {
+					response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/students/checkLogin", {
+						method: "GET",
+						headers: {
+							Authorization: `Bearer ${accessToken}`
+						}
+					});
+				}
 
-            const isAllowedPath = matchPath("/teachers/:path/*", location.pathname);
+				if (response?.status === 200) {
+					setLogin(true);
 
-            if (!isAllowedPath) {
-              navigate("/teachers/menuTeacher");
-            }
-          }
+					if (role === "T") {
 
-          if (role === "S") {
+						const isAllowedPath = matchPath("/teachers/:path/*", location.pathname);
 
-            const isAllowedPath = matchPath("/students/:path/*", location.pathname) || location.pathname.startsWith("/exercise");
+						if (!isAllowedPath) {
+							navigate("/teachers/menuTeacher");
+						}
+					}
 
-            if (!isAllowedPath) {
-              navigate("/students/exercises");
-            }
-          }
-        } else {
-          disconnect();
-          navigate("/selectRole");
-        }
-      } else {
-        if (!["/loginTeacher", "/loginStudent", "/registerTeacher", "/selectRole"].includes(location.pathname)) {
-          disconnect();
-          navigate("/selectRole");
-        }
-      }
-    };
+					if (role === "S") {
 
-    checkLogin();
-  }, [location.pathname, navigate, setLogin, disconnect]);
+						const isAllowedPath = matchPath("/students/:path/*", location.pathname) || location.pathname.startsWith("/exercise");
 
-  useEffect(() => {
-    if (!localStorage.getItem("pwaNotificationShown")) {
-      api.info({
-        message: t("pwa.notificationMessage"),
-        description: t("pwa.notificationDescription"),
-        duration: "4"
-      });
-      localStorage.setItem("pwaNotificationShown", true);
-    }
-  }, [api, t]);
+						if (!isAllowedPath) {
+							navigate("/students/exercises");
+						}
+					}
+				} else {
+					disconnect();
+					navigate("/selectRole");
+				}
+			} else {
+				if (!["/loginTeacher", "/loginStudent", "/registerTeacher", "/selectRole"].includes(location.pathname)) {
+					disconnect();
+					navigate("/selectRole");
+				}
+			}
+		};
 
-  return (
-    <>
-      {contextHolder}
-      <Layout>
-        <HeaderComponent
-          login={login}
-          open={open}
-          setOpen={setOpen}
-          isMobile={isMobile}
-        />
-        <Layout hasSider>
-          {login &&
-            <Sider
-              login={login}
-              setLogin={setLogin}
-              open={open}
-              setOpen={setOpen}
-              menuItems={localStorage.getItem("role") === "T" ? teacherMenuItems : studentMenuItems}
-            />
-          }
-          <Content style={{ minHeight: "100vh", background: "url(/bg.svg) no-repeat", backgroundSize: "cover" }} >
-            <Flex align="center" justify="center" style={{ minHeight: "100%" }}>
-              <Routes>
-                <Route path="/loginStudent" element={<LoginStudent />} />
-                <Route path="/exerciseDnD/phase1" element={<DnDPhase1 />} />
-                <Route path="/exerciseDnD/phase2" element={<DnDPhase2 />} />
-                <Route path="/exerciseType/phase1" element={<TypePhase1 />} />
-                <Route path="/exerciseType/phase2" element={<TypePhase2 />} />
-                <Route path="/students/exercises" element={<ExercisesCarousel />} />
-                <Route path="/loginTeacher" element={<LoginTeacher />} />
-                <Route path="/registerTeacher" element={<SignupTeacher />} />
-                <Route path="/teachers/menuTeacher" element={<ClassroomsList isMobile={isMobile} />} />
-                <Route path="/teachers/manageExercises" element={<ExercisesList isMobile={isMobile} />} />
-                <Route path="/teachers/create" element={<CreateExercise isMobile={isMobile} />} />
-                <Route path="/selectRole" element={<SelectRole />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Flex>
-          </Content>
-        </Layout>
-        <Footer style={{ textAlign: "center", backgroundColor: "#001628", color: "white" }}>EPI @ 2024<br />Made with ❤️ by Álex & UniOvi</Footer>
-      </Layout >
-    </>
-  );
+		checkLogin();
+	}, [location.pathname, navigate, setLogin, disconnect]);
+
+	useEffect(() => {
+		if (!localStorage.getItem("pwaNotificationShown")) {
+			api.info({
+				message: t("pwa.notificationMessage"),
+				description: t("pwa.notificationDescription"),
+				duration: "4"
+			});
+			localStorage.setItem("pwaNotificationShown", true);
+		}
+	}, [api, t]);
+
+	return (
+		<>
+			{contextHolder}
+			<Layout>
+				<HeaderComponent
+					login={login}
+					open={open}
+					setOpen={setOpen}
+					isMobile={isMobile}
+				/>
+				<Layout hasSider>
+					{login &&
+						<Sider
+							login={login}
+							setLogin={setLogin}
+							open={open}
+							setOpen={setOpen}
+							menuItems={localStorage.getItem("role") === "T" ? teacherMenuItems : studentMenuItems}
+						/>
+					}
+					<Content style={{ minHeight: "100vh", background: "url(/bg.svg) no-repeat", backgroundSize: "cover" }} >
+						<Flex align="center" justify="center" style={{ minHeight: "100%" }}>
+							<Routes>
+								<Route path="/selectRole" element={<SelectRole />} />
+								<Route path="/loginStudent" element={<LoginStudent />} />
+								<Route path="/exerciseDnD/phase1" element={<DnDPhase1 />} />
+								<Route path="/exerciseDnD/phase2" element={<DnDPhase2 />} />
+								<Route path="/exerciseType/phase1" element={<TypePhase1 />} />
+								<Route path="/exerciseType/phase2" element={<TypePhase2 />} />
+								<Route path="/students/exercises" element={<ExercisesCarousel />} />
+								<Route path="/loginTeacher" element={<LoginTeacher />} />
+								<Route path="/registerTeacher" element={<SignupTeacher />} />
+								<Route path="/teachers/menuTeacher" element={<ClassroomsList isMobile={isMobile} />} />
+								<Route path="/teachers/classroomDetail/:classroomName" element={<ClassroomDetail isMobile={isMobile} />} />
+								<Route path="/teachers/studentDetail/:studentId" element={<StudentDetail isMobile={isMobile} />} />
+								<Route path="/teachers/manageExercises" element={<ExercisesList isMobile={isMobile} />} />
+								<Route path="/teachers/create" element={<CreateExercise isMobile={isMobile} />} />
+								<Route path='/teachers/profile' element={<Profile />} />
+								<Route path='/' element={<BlankPage />} />
+								<Route path="*" element={<NotFound />} />
+							</Routes>
+						</Flex>
+					</Content>
+				</Layout>
+				<Footer style={{ textAlign: "center", backgroundColor: "#001628", color: "white" }}>EPI @ 2024<br />Made with ❤️ by Álex & UniOvi</Footer>
+			</Layout >
+		</>
+	);
 };
 
 export default App;

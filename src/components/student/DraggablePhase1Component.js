@@ -16,43 +16,68 @@ const DraggablePhase1 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text 
     } : undefined;
 
     const getImagePosition = () => {
-        if (nexus) return { x: "3vmax", y: "1.5vmax", width: "2vmax", height: "2vmax" };
-        if (stop) return { x: "4vmax", y: "2.5vmax", width: "2vmax", height: "2vmax" };
+        if (nexus) return { x: "0vmax", y: "1.5vmax", width: "6vmax", height: "2.5vmax" };
+        if (stop) return { x: "0.5vmax", y: "2.5vmax", width: "2vmax", height: "2vmax" };
         if (bigStop) return { x: "0vmax", y: " 2.5vmax", width: "3vmax", height: "3vmax" };
-        if (shape === "rect") return { x: "2.5vmax", y: "0.3vmax", width: "3.25vmax", height: "3.25vmax" };
-        if (shape === "ellipse") return { x: "3.4vmax", y: "0.3vmax", width: "3.25vmax", height: "3.25vmax" };
+        if (shape === "rect") return { x: "2.7vmax", y: "0.6vmax", width: "4.5vmax", height: "4.5vmax" };
+        if (shape === "ellipse") return { x: "3.4vmax", y: "0.4vmax", width: "4.7vmax", height: "4.7vmax" };
         return {};
     };
 
     const getTextPosition = () => {
         if (bigStop) return { x: "3.4vmax", y: "5.9vmax", fontSize: "2.3vmax" };
-        if (stop) return { x: "6.2vmax", y: "5vmax", fontSize: "1.8vmax" };
-        if (shape === "ellipse") return { x: "5.1vmax", y: "4.5vmax", fontSize: "1.1vmax" };
-        return { x: "4vmax", y: "4.5vmax", fontSize: "1.1vmax" };
+        if (stop) return { x: "3vmax", y: "5vmax", fontSize: "1.8vmax" };
+        if (shape === "ellipse") return { x: "5.7vmax", y: "6.2vmax", fontSize: "1.1vmax" };
+        if (shape === "rect") return { x: "5vmax", y: "6vmax", fontSize: "1.1vmax" };
+        return { x: "3.2vmax", y: "5.3vmax", fontSize: "1.1vmax" };
     };
 
     const imagePosition = getImagePosition();
     const textPosition = getTextPosition();
 
+    let strokeColor = () => {
+        switch (id) {
+            case "5":
+                return "rgb(255, 196, 101)";
+            case "8":
+                return "rgb(21, 232, 223)";
+            case "10":
+                return "rgb(207, 143, 251)";
+            default:
+                return "black";
+        }
+    };
+
+    let svgWidth = () => {
+        if (stop) return "4vmax";
+        if (nexus) return "7vmax";
+        if (shape==="ellipse") return "12vmax";
+        else return "12vmax";
+    };
+
     return (
         <div ref={setNodeRef} style={ok ? { visibility: "hidden" } : style} {...listeners} {...attributes}>
-            <svg height="6.5vmax" width="9vmax">
+            <svg height="7.5vmax" width={svgWidth()}>
                 {shape === "rect" &&
                     <rect
-                        width="7.8vmax"
-                        height="4.7vmax"
+                        x="0.1vmax"
+                        y="0.5vmax"
+                        width="10vmax"
+                        height="6vmax"
                         fill="white"
                         stroke="black"
+                        stroke-width="3"
                     />
                 }
                 {shape === "ellipse" &&
                     <ellipse
-                        cx="5vmax"
-                        cy="2.7vmax"
-                        rx="3.9vmax"
-                        ry="2.6vmax"
+                        cx="5.7vmax"
+                        cy="3.7vmax"
+                        rx="5.5vmax"
+                        ry="3.5vmax"
                         fill="white"
-                        stroke="black"
+                        stroke={strokeColor()}
+                        stroke-width="3"
                     />
                 }
                 <image

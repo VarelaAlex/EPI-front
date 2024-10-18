@@ -128,8 +128,8 @@ const SignupTeacher = () => {
                     help={message?.error?.password ? t(message?.error?.password) : undefined}
                     hasFeedback
                 >
-                    <Input.Password
-                        placeholder={t("signup.form.placeholder.password")} onInput={() => setMessage(null)} />
+                    <Input.Password placeholder='******'
+                        onInput={() => setMessage(null)} />
                 </Form.Item>
 
                 <Form.Item
@@ -152,9 +152,7 @@ const SignupTeacher = () => {
                         }),
                     ]}
                 >
-                    <Input.Password
-                        placeholder={t("login.form.placeholder.password")}
-                    />
+                    <Input.Password placeholder='******' />
                 </Form.Item>
                 <Form.Item wrapperCol={{ xs: { span: 24, offset: 0 }, sm: { span: 16, offset: 8 } }}>
                     <Button type="primary" htmlType="submit">

@@ -6,18 +6,19 @@ import DraggablePhase1 from './DraggablePhase1Component';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX, STOP } from './NetworkProps';
 import { useNavigate } from 'react-router-dom';
 import { useSession } from '../../SessionComponent';
+import { HomeOutlined, ReloadOutlined } from '@ant-design/icons';
 
 let DnDPhase1 = () => {
-    
-    let { exercise, feedback, setFeedback } = useSession();
+
+    const INITIAL_ELEMENT = 0;
+
+    let { setExercise, exercise, feedback, setFeedback } = useSession();
     let startTime = useRef(Date.now());
 
     let navigate = useNavigate();
     let exerciseNodes = nodes(exercise);
-    let [showGif, setShowGif] = useState(false);
-    let [element, setElement] = useState();
 
-    let [extendedNodes, setExtendedNodes] = useState([
+    const INITIAL_EXTENDED_NODES = [
         { ...exerciseNodes[0], order: 0, id: "1-1" },
         { ...exerciseNodes[0], order: 1, id: "1-2" },
         ...exerciseNodes.slice(1, 3),
@@ -26,10 +27,14 @@ let DnDPhase1 = () => {
         ...exerciseNodes.slice(3, 5),
         ...exerciseNodes.slice(6),
         { ...exerciseNodes[5], order: exerciseNodes.length + 2, id: "6-3", type: "type6-3", posX: nexusX(exercise?.networkType) + stopX(exercise?.networkType), src: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, bigStop: true }
-    ]);
+    ];
 
-    let [droppableNodes, setDroppableNodes] = useState(JSON.parse(JSON.stringify(extendedNodes)));
-    let [current, setCurrent] = useState(0);
+    let [showGif, setShowGif] = useState(false);
+    let [element, setElement] = useState();
+    let [extendedNodes, setExtendedNodes] = useState(INITIAL_EXTENDED_NODES);
+
+    let [droppableNodes, setDroppableNodes] = useState(JSON.parse(JSON.stringify(INITIAL_EXTENDED_NODES)));
+    let [current, setCurrent] = useState(INITIAL_ELEMENT);
 
     let handleDragStart = (event) => {
         setElement(event.active);
@@ -115,10 +120,23 @@ let DnDPhase1 = () => {
     );
 
     return (
-        <Card style={{ height: "100%", width: "95%" }} >
+        <Card style={{ height: "53vmax", width: "95%" }} >
+            <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
+                <ReloadOutlined style={{ fontSize: '45px', cursor: 'pointer' }} onClick={() => {
+                    setExercise(exercise);
+                    setExtendedNodes(INITIAL_EXTENDED_NODES);
+                    setDroppableNodes(INITIAL_EXTENDED_NODES);
+                    startTime.current = Date.now();
+                    setCurrent(INITIAL_ELEMENT);
+                    setFeedback({});
+                }} />
+                <HomeOutlined style={{ fontSize: '45px', cursor: 'pointer', paddingLeft: "20px" }} onClick={() => {
+                    navigate("/students/exercises");
+                }} />
+            </div>
             <Flex align="center" vertical>
                 <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors} >
-                    <Flex align="start" vertical >
+                    <Flex align="start" vertical style={{ paddingTop: "10px" }}>
                         <Row>
                             <Col>
                                 <DraggablePhase1
@@ -174,19 +192,20 @@ let DnDPhase1 = () => {
                     </Flex>
                     <Divider style={{ backgroundColor: "grey" }} />
                     <Flex align="center" justify="center" style={{ height: "90%", width: "90%" }} >
-                        <svg height="18vmax" viewBox={`0 0 ${viewBoxWidth(exercise?.networkType)} 250`}>
-                            <rect x="160" y="1" width="120" height="70" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" />
-                            <ellipse cx="60" cy="205" rx="60" ry="40" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" />
-                            <ellipse cx="350" cy="205" rx="60" ry="40" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" />
-                            <path d={`M 220 70 L 220 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" />
-                            <path d="M 220 70 L 220 85 L 60 85 L 60 105" fill="none" stroke="rgb(0, 0, 0)" />
-                            <path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" />
-                            <path d={`M 350 165 ${pathBottom(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" />
+                        <svg height="21vmax" viewBox={`-2 0 ${viewBoxWidth(exercise?.networkType)} 250`}>
+                            <rect x="160" y="1" width="120" height="70" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                            <ellipse cx="60" cy="205" rx="60" ry="40" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                            <ellipse cx="350" cy="205" rx="60" ry="40" fill="rgb(255, 255, 255)" stroke="rgb(255, 196, 101)" stroke-width="3" />
+                            <path d={`M 220 70 L 220 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(255, 196, 101)" stroke-width="3" />
+                            <path d="M 220 70 L 220 85 L 60 85 L 60 105" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                            <path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                            <path d={`M 350 165 ${pathBottom(exercise?.networkType)}`} fill="none" stroke="rgb(255, 196, 101)" stroke-width="3" />
                             {["I-II", "I-III"].includes(exercise?.networkType) &&
                                 <path
                                     d={pathBottom2(exercise?.networkType)}
                                     fill="none"
-                                    stroke="rgb(0, 0, 0)"
+                                    stroke="rgb(21, 232, 223)"
+                                    stroke-width="3"
                                 />
                             }
                             {["I-II", "I-III"].includes(exercise?.networkType) &&
@@ -196,14 +215,16 @@ let DnDPhase1 = () => {
                                     rx="60"
                                     ry="40"
                                     fill="rgb(255, 255, 255)"
-                                    stroke="rgb(0, 0, 0)"
+                                    stroke="rgb(21, 232, 223)"
+                                    stroke-width="3"
                                 />
                             }
                             {exercise?.networkType === "I-III" &&
                                 <path
                                     d="M 570 145 L 570 150 L 790 150 L 790 165"
                                     fill="none"
-                                    stroke="rgb(0, 0, 0)"
+                                    stroke="rgb(207, 143, 251)"
+                                    stroke-width="3"
                                 />
                             }
                             {exercise?.networkType === "I-III" &&
@@ -213,7 +234,8 @@ let DnDPhase1 = () => {
                                     rx="60"
                                     ry="40"
                                     fill="rgb(255, 255, 255)"
-                                    stroke="rgb(0, 0, 0)"
+                                    stroke="rgb(207, 143, 251)"
+                                    stroke-width="3"
                                 />
                             }
                             {droppableNodes.filter(

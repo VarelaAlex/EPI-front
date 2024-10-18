@@ -6,11 +6,13 @@ import DraggablePhase2 from './DraggablePhase2Component';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX } from './NetworkProps';
 import { useNavigate } from 'react-router-dom';
 import { useSession } from '../../SessionComponent';
-
+import { HomeOutlined, ReloadOutlined } from '@ant-design/icons';
 
 let DnDPhase2 = () => {
 
-    let { feedback, setFeedback, exercise } = useSession();
+    const INITIAL_ELEMENT = 0;
+
+    let { setExercise, feedback, setFeedback, exercise } = useSession();
 
     useEffect(() => {
         if (feedback?.phase2?.elapsedTime) {
@@ -25,7 +27,7 @@ let DnDPhase2 = () => {
     let [showGif, setShowGif] = useState(false);
     let [element, setElement] = useState();
 
-    let [extendedNodes, setExtendedNodes] = useState([
+    const INITIAL_EXTENDED_NODES = [
         { ...exerciseNodes[0], order: 0, id: "1-1" },
         { ...exerciseNodes[0], order: 1, id: "1-2" },
         ...exerciseNodes.slice(1, 3),
@@ -34,10 +36,12 @@ let DnDPhase2 = () => {
         ...exerciseNodes.slice(3, 5),
         ...exerciseNodes.slice(6),
         { ...exerciseNodes[5], order: exerciseNodes.length + 2, id: "6-3", type: "type6-3", posX: nexusX(exercise?.networkType) + stopX(exercise?.networkType), src: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/8289`, bigStop: true }
-    ]);
+    ];
 
-    let [droppableNodes, setDroppableNodes] = useState(JSON.parse(JSON.stringify(extendedNodes)));
-    let [current, setCurrent] = useState(0);
+    let [extendedNodes, setExtendedNodes] = useState(INITIAL_EXTENDED_NODES);
+
+    let [droppableNodes, setDroppableNodes] = useState(JSON.parse(JSON.stringify(INITIAL_EXTENDED_NODES)));
+    let [current, setCurrent] = useState(INITIAL_ELEMENT);
 
     let saveFeedback = async (feedback) => {
 
@@ -139,7 +143,7 @@ let DnDPhase2 = () => {
     );
 
     const getImagePosition = (nexus, stop, bigStop, shape) => {
-        if (nexus) return { x: "1.75vmax", width: "1.75vmax", height: "1.75vmax" };
+        if (nexus) return { x: "1.75vmax", width: "3.5vmax", height: "3vmax" };
         if (stop) return { width: "2vmax", height: "2vmax" };
         if (bigStop) return { width: "3vmax", height: "3vmax" };
         if (shape === "rect") return { x: "2.5vmax", y: "0.3vmax", width: "3.25vmax", height: "3.25vmax" };
@@ -152,9 +156,21 @@ let DnDPhase2 = () => {
         if (stop) return { x: "2.5vmax", y: "2vmax", fontSize: "1.8vmax" };
         if (shape === "rect") return { x: "4.25vmax", y: "4.75vmax", fontSize: "1vmax" };
         if (shape === "ellipse") return { x: "4.25vmax", y: "5vmax", fontSize: "1vmax" };
-        return { x: "2.75vmax", y: "2.5vmax", fontSize: "1vmax" };
+        return { x: "3.5vmax", y: "3.2vmax", fontSize: "1vmax" };
     };
 
+    let strokeColor = () => {
+        switch (element.data.current.type) {
+            case "type5":
+                return "rgb(255, 196, 101)";
+            case "type8":
+                return "rgb(21, 232, 223)";
+            case "type10":
+                return "rgb(207, 143, 251)";
+            default:
+                return "black";
+        }
+    };
 
     let getDragElement = () => {
         if (element.data.current.nexus) {
@@ -166,7 +182,7 @@ let DnDPhase2 = () => {
             </g>);
         }
         if (element.data.current.shape === "rect") {
-            return (<g><rect width="8.5vmax" height="5vmax" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" />
+            return (<g><rect width="8.5vmax" height="5vmax" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-width="3" />
                 <image href={element.data.current.src} {...getImagePosition(element.data.current.nexus, element.data.current.stop, element.data.current.bigStop, element.data.current.shape)} />
                 <text {...getTextPosition(element.data.current.bigStop, element.data.current.stop, element.data.current.shape)} fill="black" textAnchor="middle">
                     {element.data.current.text}
@@ -181,7 +197,8 @@ let DnDPhase2 = () => {
                     rx="4.2vmax"
                     ry="2.9vmax"
                     fill="white"
-                    stroke="black"
+                    stroke={strokeColor()}
+                    stroke-width="3"
                 />
                 <image href={element.data.current.src} {...getImagePosition(element.data.current.nexus, element.data.current.stop, element.data.current.bigStop, element.data.current.shape)} />
                 <text {...getTextPosition(element.data.current.bigStop, element.data.current.stop, element.data.current.shape)} fill="black" textAnchor="middle">
@@ -208,20 +225,34 @@ let DnDPhase2 = () => {
     };
 
     return (
-        <Card style={{ height: "100%", width: "95%" }} >
+        <Card style={{ height: "53vmax", width: "95%" }} >
+            <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
+                <ReloadOutlined style={{ fontSize: '45px', cursor: 'pointer' }} onClick={() => {
+                    setExercise(exercise);
+                    setExtendedNodes(INITIAL_EXTENDED_NODES);
+                    setDroppableNodes(INITIAL_EXTENDED_NODES);
+                    startTime.current = Date.now();
+                    setCurrent(INITIAL_ELEMENT);
+                    setFeedback({ phase1: { ...feedback.phase1 } });
+                }} />
+                <HomeOutlined style={{ fontSize: '45px', cursor: 'pointer', paddingLeft: "20px" }} onClick={() => {
+                    navigate("/students/exercises");
+                }} />
+            </div>
             <Flex align="center" vertical >
                 <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
-                    <Flex align="center" justify="center" style={{ height: "90%", width: "90%" }} >
-                        <svg height="18vmax" viewBox={`0 0 ${viewBoxWidth(exercise?.networkType)} 250`}>
-                            <path d={`M 220 70 L 220 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" />
-                            <path d="M 220 70 L 220 85 L 60 85 L 60 105" fill="none" stroke="rgb(0, 0, 0)" />
-                            <path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" />
-                            <path d={`M 350 165 ${pathBottom(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" />
+                    <Flex align="center" justify="center" >
+                        <svg height="21vmax" viewBox={`-2 -2 ${viewBoxWidth(exercise?.networkType)} 250`}>
+                            <path d={`M 220 70 L 220 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(255, 196, 101)" stroke-width="3" />
+                            <path d="M 220 70 L 220 85 L 60 85 L 60 105" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                            <path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                            <path d={`M 350 165 ${pathBottom(exercise?.networkType)}`} fill="none" stroke="rgb(255, 196, 101)" stroke-width="3" />
                             {["I-II", "I-III"].includes(exercise?.networkType) &&
                                 <path
                                     d={pathBottom2(exercise?.networkType)}
                                     fill="none"
-                                    stroke="rgb(0, 0, 0)"
+                                    stroke="rgb(21, 232, 223)"
+                                    stroke-width="3"
                                 />
                             }
 
@@ -229,7 +260,8 @@ let DnDPhase2 = () => {
                                 <path
                                     d="M 570 145 L 570 150 L 790 150 L 790 165"
                                     fill="none"
-                                    stroke="rgb(0, 0, 0)"
+                                    stroke="rgb(207, 143, 251)"
+                                    stroke-width="3"
                                 />
                             }
 
@@ -252,7 +284,7 @@ let DnDPhase2 = () => {
                         </svg>
                         <DragOverlay>
                             {element?.id ?
-                                <svg>
+                                <svg viewBox={element?.data.current.shape ? `-2 -2 125 125` : null}>
                                     {getDragElement()}
                                 </svg>
                                 : null}

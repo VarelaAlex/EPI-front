@@ -23,7 +23,7 @@ let ClassroomsList = (props) => {
     {
       title: t("classrooms.table.className"),
       dataIndex: 'name',
-      render: (name, classroom) => { return <Link to={"/teachers/classroomDetail/" + classroom.id}>{name}</Link>; }
+      render: (name) => { return <Link to={"/teachers/classroomDetail/" + name}>{name}</Link>; }
     },
     {
       title: t("classrooms.table.numberStudents"),

@@ -4,9 +4,14 @@ import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nex
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSession } from '../../SessionComponent';
+import { HomeOutlined, ReloadOutlined } from '@ant-design/icons';
+
 let TypePhase2 = () => {
 
-    let { exercise, feedback, setFeedback } = useSession();
+    const INITIAL_ELEMENT = 0;
+    const INITIAL_ID = "1-1";
+
+    let { setExercise, exercise, feedback, setFeedback } = useSession();
     let startTime = useRef(Date.now());
 
     useEffect(() => {
@@ -33,9 +38,8 @@ let TypePhase2 = () => {
     let { t } = useTranslation();
     let navigate = useNavigate();
     let exerciseNodes = nodes(exercise);
-    let [showGif, setShowGif] = useState(false);
 
-    let [extendedNodes, setExtendedNodes] = useState([
+    const INITIAL_EXTENDED_NODES = [
         { ...exerciseNodes[0], order: 0, id: "1-1" },
         { ...exerciseNodes[0], order: 1, id: "1-2" },
         ...exerciseNodes.slice(1, 3),
@@ -44,10 +48,14 @@ let TypePhase2 = () => {
         ...exerciseNodes.slice(3, 5),
         ...exerciseNodes.slice(6),
         { ...exerciseNodes[5], order: exerciseNodes.length + 2, id: "6-3", type: "type6-3", posX: nexusX(exercise?.networkType) + stopX(exercise?.networkType), bigStop: true }
-    ]);
+    ];
 
-    let [id, setId] = useState("1-1");
-    let [current, setCurrent] = useState(0);
+    let [showGif, setShowGif] = useState(false);
+
+    let [extendedNodes, setExtendedNodes] = useState(INITIAL_EXTENDED_NODES);
+
+    let [id, setId] = useState(INITIAL_ID);
+    let [current, setCurrent] = useState(INITIAL_ELEMENT);
 
     let normalize = (word) => {
         return word.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -86,13 +94,32 @@ let TypePhase2 = () => {
                         }
                     }
                     else {
-                        setFeedback({
-                            phase1: { ...feedback.phase1 },
-                            phase2: {
-                                ...feedback.phase2,
-                                spellingError: feedback?.phase2?.spellingError == null ? 1 : feedback?.phase2?.spellingError + 1
-                            }
-                        });
+                        if (element.shape) {
+                            setFeedback({
+                                phase1: { ...feedback.phase1 },
+                                phase2: {
+                                    ...feedback.phase2,
+                                    lexicalError: feedback?.phase2?.lexicalError == null ? 1 : feedback?.phase2?.lexicalError + 1
+                                }
+                            });
+                        }
+                        else if (element.stop || element.bigStop) {
+                            setFeedback({
+                                phase1: { ...feedback.phase1 },
+                                phase2: {
+                                    ...feedback.phase2,
+                                    syntacticError: feedback?.phase2?.syntacticError == null ? 1 : feedback?.phase2?.syntacticError + 1
+                                }
+                            });
+                        } else {
+                            setFeedback({
+                                phase1: { ...feedback.phase1 },
+                                phase2: {
+                                    ...feedback.phase2,
+                                    semanticError: feedback?.phase2?.semanticError == null ? 1 : feedback?.phase2?.semanticError + 1
+                                }
+                            });
+                        }
                     }
                 }
             }
@@ -101,18 +128,32 @@ let TypePhase2 = () => {
 
     return (
         <Card style={{ height: "100%", width: "95%" }} >
+            <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
+                <ReloadOutlined style={{ fontSize: '45px', cursor: 'pointer' }} onClick={() => {
+                    setExercise(exercise);
+                    setExtendedNodes(INITIAL_EXTENDED_NODES);
+                    setId(INITIAL_ID);
+                    startTime.current = Date.now();
+                    setCurrent(INITIAL_ELEMENT);
+                    setFeedback({ phase1: { ...feedback.phase1 } });
+                }} />
+                <HomeOutlined style={{ fontSize: '45px', cursor: 'pointer', paddingLeft: "20px" }} onClick={() => {
+                    navigate("/students/exercises");
+                }} />
+            </div>
             <Flex align="center" vertical >
-                <Flex align="center" justify="center" style={{ height: "90%", width: "90%" }} >
-                    <svg height="18vmax" viewBox={`0 0 ${viewBoxWidth(exercise?.networkType)} 250`}>
-                        <path d={`M 220 70 L 220 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" />
-                        <path d="M 220 70 L 220 85 L 60 85 L 60 105" fill="none" stroke="rgb(0, 0, 0)" />
-                        <path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" />
-                        <path d={`M 350 165 ${pathBottom(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" />
+                <Flex align="center" justify="center" style={{ paddingTop: "40px" }} >
+                    <svg height="18vmax" viewBox={`-2 -2 ${viewBoxWidth(exercise?.networkType)} 250`}>
+                        <path d={`M 220 70 L 220 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                        <path d="M 220 70 L 220 85 L 60 85 L 60 105" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                        <path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                        <path d={`M 350 165 ${pathBottom(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
                         {["I-II", "I-III"].includes(exercise?.networkType) &&
                             <path
                                 d={pathBottom2(exercise?.networkType)}
                                 fill="none"
                                 stroke="rgb(0, 0, 0)"
+                                stroke-width="3"
                             />
                         }
 
@@ -121,6 +162,7 @@ let TypePhase2 = () => {
                                 d="M 570 145 L 570 150 L 790 150 L 790 165"
                                 fill="none"
                                 stroke="rgb(0, 0, 0)"
+                                stroke-width="3"
                             />
                         }
 
@@ -135,6 +177,7 @@ let TypePhase2 = () => {
                                             height="70"
                                             fill="rgb(255, 255, 255)"
                                             stroke="rgb(0, 0, 0)"
+                                            stroke-width="3"
                                         />
                                         <text
                                             x={element.posX + 220}
@@ -159,6 +202,7 @@ let TypePhase2 = () => {
                                             ry="40"
                                             fill="white"
                                             stroke="black"
+                                            stroke-width="3"
                                         />
                                         <text
                                             x={element.posX + 220}
@@ -203,6 +247,7 @@ let TypePhase2 = () => {
                                         height="4.7vmax"
                                         fill="white"
                                         stroke="black"
+                                        stroke-width="3"
                                     />
                                     {extendedNodes[0].clicked ?
                                         (
@@ -216,7 +261,7 @@ let TypePhase2 = () => {
                                                     autoFocus={true}
                                                     autoComplete='off'
                                                     id={extendedNodes[0].id}
-                                                    style={{ textTransform: "uppercase" }}
+                                                    style={{ textTransform: "uppercase", textAlign: 'center' }}
                                                     onChange={() => check()}
                                                     value={extendedNodes[0].ok ? extendedNodes[0].text : undefined}
                                                 />
@@ -258,6 +303,7 @@ let TypePhase2 = () => {
                                                 height="4.7vmax"
                                                 fill="white"
                                                 stroke="black"
+                                                stroke-width="3"
                                             />
                                         }
                                         {element.shape === "ellipse" &&
@@ -268,6 +314,7 @@ let TypePhase2 = () => {
                                                 ry="2.6vmax"
                                                 fill="white"
                                                 stroke="black"
+                                                stroke-width="3"
                                             />
                                         }
                                         {element.clicked ?
@@ -288,7 +335,7 @@ let TypePhase2 = () => {
                                                         autoFocus={true}
                                                         autoComplete='off'
                                                         id={element.id}
-                                                        style={{ textTransform: element.shape ? "uppercase" : "lowercase" }}
+                                                        style={{ textTransform: element.shape === "rect" ? "uppercase" : "lowercase", textAlign: 'center' }}
                                                         height={"40px"}
                                                         onChange={() => check()}
                                                         value={element.ok ? (element.shape ? element.text : t(element.text)) : undefined}
@@ -338,6 +385,7 @@ let TypePhase2 = () => {
                                                 height="4.7vmax"
                                                 fill="white"
                                                 stroke="black"
+                                                stroke-width="3"
                                             />
                                         }
                                         {element.shape === "ellipse" &&
@@ -348,6 +396,7 @@ let TypePhase2 = () => {
                                                 ry="2.6vmax"
                                                 fill="white"
                                                 stroke="black"
+                                                stroke-width="3"
                                             />
                                         }
                                         {element.clicked ?
@@ -369,7 +418,7 @@ let TypePhase2 = () => {
                                                         autoFocus={true}
                                                         autoComplete='off'
                                                         id={element.id}
-                                                        style={{ textTransform: element.shape ? "uppercase" : "lowercase" }}
+                                                        style={{ textTransform: element.shape === "rect" ? "uppercase" : "lowercase", textAlign: 'center' }}
                                                         height={"40px"}
                                                         onChange={() => check()}
                                                         value={element.ok ? (element.shape ? element.text : t(element.text)) : undefined}
