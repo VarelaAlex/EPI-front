@@ -1,10 +1,12 @@
 import React from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { useTranslation } from 'react-i18next';
-import './font.css'
+import './font.css';
+import { useSession } from '../../SessionComponent';
 
-const DroppablePhase1 = ({ id, type, ok, nexus, stop, bigStop, x, y, src, text }) => {
+const DroppablePhase1 = ({ id, type, ok, nexus, stop, bigStop, x, y, src, text, shape }) => {
 
+    let { exercise } = useSession();
     let { t } = useTranslation();
     const { isOver, setNodeRef } = useDroppable({
         id,
@@ -14,17 +16,19 @@ const DroppablePhase1 = ({ id, type, ok, nexus, stop, bigStop, x, y, src, text }
     const style = isOver ? "#ea9999" : "#f8cecc";
 
     const getImageProps = () => {
-        if (nexus) return { x: x - 15, y: y - 25, width: "3.5vmax", height: "3.5vmax" };
-        if (stop) return { x: x - 15, y: y, width: "2vmax", height: "2vmax" };
-        if (bigStop) return { x: x - 5, y: y - 20, width: "3vmax", height: "3vmax" };
+        if (nexus) return { x: x - 20, y: y - (exercise.representation === "ICONIC" ? 10 : 20), width: 60, height: 30 };
+        if (stop) return { x: x - 15, y: y, width: "25", height: "25" };
+        if (bigStop) return { x: x - 5, y: y - 20, width: "40", height: "40" };
+        if (shape === "ellipse") return { x: x - 15, y: y - 28, width: "50", height: "50" };
         return { x: x - 15, y: y - 22, width: "50", height: "50" };
     };
 
     const getTextProps = () => {
-        if (nexus) return { x: x + 10, y: y + 25, fontSize: "1vmax" };
-        if (stop) return { x: x + 20, y: y + 30, fontSize: "1.7vmax" };
-        if (bigStop) return { x: x + 40, y: y + 30, fontSize: "2.1vmax" };
-        return { x: x + 10, y: y + 38, fontSize: "1vmax" };
+        if (nexus) return { x: x + 10, y: y + 25, fontSize: "15" };
+        if (stop) return { x: x + 22, y: y + 22, fontSize: "25" };
+        if (bigStop) return { x: x + 38, y: y + 20, fontSize: "40" };
+        if (shape === "ellipse") return { x: x + 11, y: y + 34, fontSize: "12" };
+        return { x: x + 10, y: y + 38, fontSize: "13" };
     };
 
     const imageProps = getImageProps();
@@ -47,7 +51,7 @@ const DroppablePhase1 = ({ id, type, ok, nexus, stop, bigStop, x, y, src, text }
                 <image {...imageProps} href={src} />
             }
             {ok &&
-                <text {...textProps} fill="black" textAnchor="middle" style={{ fontFamily: 'Massallera' }}>
+                <text {...textProps} fill="black" textAnchor="middle" fontFamily="Massallera">
                     {t(text)}
                 </text>
             }

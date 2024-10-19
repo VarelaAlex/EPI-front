@@ -1,9 +1,12 @@
 import React from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { useTranslation } from 'react-i18next';
+import '../../fonts/massallera.TTF'
+import { useSession } from '../../SessionComponent';
 
 const DroppablePhase2 = ({ id, type, ok, nexus, stop, bigStop, shape, src, text }) => {
 
+    let {exercise} = useSession()
     let { t } = useTranslation();
     const { isOver, setNodeRef } = useDroppable({
         id,
@@ -13,20 +16,20 @@ const DroppablePhase2 = ({ id, type, ok, nexus, stop, bigStop, shape, src, text 
     const style = isOver ? "#ea9999" : "#f8cecc";
 
     const getImagePosition = () => {
-        if (nexus) return { x: "1vmax", y: "2vmax", width: "4.5vmax", height: "2.3vmax" };
+        if (nexus) return { x: "2vmax", y: exercise.representation === "ICONIC" ? "2vmax" : "1vmax", width: 60, height:40 };
         if (stop) return { x: "0.5vmax", y: "2.5vmax", width: "2vmax", height: "2vmax" };
         if (bigStop) return { x: "0vmax", y: " 2.5vmax", width: "3vmax", height: "3vmax" };
         if (shape === "rect") return { x: "2.7vmax", y: "0.6vmax", width: "4.5vmax", height: "4.5vmax" };
-        if (shape === "ellipse") return { x: "3.4vmax", y: "0.4vmax", width: "4.7vmax", height: "4.7vmax" };
+        if (shape === "ellipse") return { x: "3.4vmax", y: "0.3vmax", width: "4.7vmax", height: "4.7vmax" };
         return {};
     };
 
     const getTextPosition = () => {
-        if (bigStop) return { x: "3.4vmax", y: "5.9vmax", fontSize: "2.3vmax" };
-        if (stop) return { x: "3vmax", y: "5vmax", fontSize: "1.8vmax" };
-        if (shape === "ellipse") return { x: "5.7vmax", y: "6.2vmax", fontSize: "1.1vmax" };
-        if (shape === "rect") return { x: "5vmax", y: "6vmax", fontSize: "1.1vmax" };
-        return { x: "3.2vmax", y: "5.3vmax", fontSize: "1.1vmax" };
+        if (bigStop) return { x: "3.3vmax", y: "5.3vmax", fontSize: "3vmax" };
+        if (stop) return { x: "3.2vmax", y: "4.7vmax", fontSize: "1.8vmax" };
+        if (shape === "ellipse") return {x: "5.7vmax", y: "6.1vmax", fontSize: "1vmax" };
+        if (shape === "rect") return { x: "5.2vmax", y: "6vmax", fontSize: "1.1vmax" };
+        return { x: "3.9vmax", y: "5.3vmax", fontSize: "1.1vmax" };
     };
 
     const imagePosition = getImagePosition();
@@ -47,9 +50,9 @@ const DroppablePhase2 = ({ id, type, ok, nexus, stop, bigStop, shape, src, text 
 
     let svgWidth = () => {
         if (stop) return "4vmax";
-        if (nexus) return "7vmax";
+        if (nexus) return "8vmax";
         if (shape === "ellipse") return "12vmax";
-        else return "12vmax";
+        else return "10.5vmax";
     };
 
     return (
@@ -99,8 +102,8 @@ const DroppablePhase2 = ({ id, type, ok, nexus, stop, bigStop, shape, src, text 
                 }
                 {!shape && !ok && <rect
                     ref={setNodeRef}
-                    x="1.1vmax"
-                    y="2.8vmax"
+                    x={stop||bigStop?"1vmax":"3vmax"}
+                    y={stop||bigStop?"4vmax":"2.8vmax"}
                     width="1.5vmax"
                     height="1.5vmax"
                     fill={style}
@@ -110,7 +113,7 @@ const DroppablePhase2 = ({ id, type, ok, nexus, stop, bigStop, shape, src, text 
                     <image {...imagePosition} href={src} />
                 }
                 {ok &&
-                    <text {...textPosition} fill="black" textAnchor="middle">
+                    <text {...textPosition} fill="black" textAnchor="middle" fontFamily='Massallera'>
                         {t(text)}
                     </text>
                 }

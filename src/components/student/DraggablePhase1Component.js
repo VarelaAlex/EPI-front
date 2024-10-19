@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { useTranslation } from 'react-i18next';
+import './font.css'
 
 const DraggablePhase1 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text }) => {
 
@@ -16,20 +17,20 @@ const DraggablePhase1 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text 
     } : undefined;
 
     const getImagePosition = () => {
-        if (nexus) return { x: "0vmax", y: "1.5vmax", width: "6vmax", height: "2.5vmax" };
+        if (nexus) return { x: "0.7vmax", y: "1.5vmax", width: "6vmax", height: "2.5vmax" };
         if (stop) return { x: "0.5vmax", y: "2.5vmax", width: "2vmax", height: "2vmax" };
         if (bigStop) return { x: "0vmax", y: " 2.5vmax", width: "3vmax", height: "3vmax" };
         if (shape === "rect") return { x: "2.7vmax", y: "0.6vmax", width: "4.5vmax", height: "4.5vmax" };
-        if (shape === "ellipse") return { x: "3.4vmax", y: "0.4vmax", width: "4.7vmax", height: "4.7vmax" };
+        if (shape === "ellipse") return { x: "3.4vmax", y: "0.3vmax", width: "4.5vmax", height: "4.5vmax" };
         return {};
     };
 
     const getTextPosition = () => {
         if (bigStop) return { x: "3.4vmax", y: "5.9vmax", fontSize: "2.3vmax" };
         if (stop) return { x: "3vmax", y: "5vmax", fontSize: "1.8vmax" };
-        if (shape === "ellipse") return { x: "5.7vmax", y: "6.2vmax", fontSize: "1.1vmax" };
-        if (shape === "rect") return { x: "5vmax", y: "6vmax", fontSize: "1.1vmax" };
-        return { x: "3.2vmax", y: "5.3vmax", fontSize: "1.1vmax" };
+        if (shape === "ellipse") return { x: "5.7vmax", y: "5.9vmax", fontSize: "1.1vmax" };
+        if (shape === "rect") return { x: "5.2vmax", y: "6.1vmax", fontSize: "1.1vmax" };
+        return { x: "3.8vmax", y: "5.3vmax", fontSize: "1.1vmax" };
     };
 
     const imagePosition = getImagePosition();
@@ -50,9 +51,9 @@ const DraggablePhase1 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text 
 
     let svgWidth = () => {
         if (stop) return "4vmax";
-        if (nexus) return "7vmax";
+        if (nexus) return "8vmax";
         if (shape==="ellipse") return "12vmax";
-        else return "12vmax";
+        else return "11vmax";
     };
 
     return (
@@ -93,6 +94,7 @@ const DraggablePhase1 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text 
                     fill="black"
                     fontSize={textPosition.fontSize}
                     textAnchor="middle"
+                    fontFamily="Massallera"
                 >
                     {t(text)}
                 </text>

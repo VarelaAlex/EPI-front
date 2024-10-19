@@ -7,6 +7,7 @@ import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nex
 import { useNavigate } from 'react-router-dom';
 import { useSession } from '../../SessionComponent';
 import { HomeOutlined, ReloadOutlined } from '@ant-design/icons';
+import '../../fonts/massallera.TTF';
 
 let DnDPhase2 = () => {
 
@@ -142,21 +143,20 @@ let DnDPhase2 = () => {
         useSensor(TouchSensor)
     );
 
-    const getImagePosition = (nexus, stop, bigStop, shape) => {
-        if (nexus) return { x: "1.75vmax", width: "3.5vmax", height: "3vmax" };
-        if (stop) return { width: "2vmax", height: "2vmax" };
-        if (bigStop) return { width: "3vmax", height: "3vmax" };
-        if (shape === "rect") return { x: "2.5vmax", y: "0.3vmax", width: "3.25vmax", height: "3.25vmax" };
-        if (shape === "ellipse") return { x: "2.5vmax", y: "0.5vmax", width: "3.75vmax", height: "3.75vmax" };
-        return {};
+    const getImagePosition = (x, y, nexus, stop, bigStop, shape) => {
+        if (nexus) return { x: "1.5vmax", y: "0.6vmax", width: 80, height: 40 };
+        if (stop) return { x: "0vmax", y: "0vmax", width: "2vmax", height: "2vmax" };
+        if (bigStop) return { x: "0vmax", y: "0vmax", width: "3vmax", height: "3vmax" };
+        if (shape === "ellipse") return { x: 30, y: 0, width: "55", height: "55" };
+        return { x: 38, y: 2, width: "55", height: "55" };
     };
 
-    const getTextPosition = (bigStop, stop, shape) => {
-        if (bigStop) return { x: "3.4vmax", y: "3.5vmax", fontSize: "2.3vmax" };
-        if (stop) return { x: "2.5vmax", y: "2vmax", fontSize: "1.8vmax" };
-        if (shape === "rect") return { x: "4.25vmax", y: "4.75vmax", fontSize: "1vmax" };
-        if (shape === "ellipse") return { x: "4.25vmax", y: "5vmax", fontSize: "1vmax" };
-        return { x: "3.5vmax", y: "3.2vmax", fontSize: "1vmax" };
+    const getTextPosition = (x, y, bigStop, stop, shape) => {
+        if (stop) return { x: "3vmax", y: "2vmax", fontSize: "2vmax" };
+        if (bigStop) return { x: "3.5vmax", y: "3vmax", fontSize: "3vmax" };
+        if (shape === "ellipse") return { x: 60, y: 65, fontSize: "12" };
+        if (shape === "rect") return { x: 60, y: 68, fontSize: "13" };
+        return { x: "4.2vmax", y: "4vmax", fontSize: "1.2vmax" };
     };
 
     let strokeColor = () => {
@@ -175,16 +175,16 @@ let DnDPhase2 = () => {
     let getDragElement = () => {
         if (element.data.current.nexus) {
             return (<g>
-                <image href={element.data.current.src} {...getImagePosition(element.data.current.nexus, element.data.current.stop, element.data.current.bigStop, element.data.current.shape)} />
-                <text {...getTextPosition(element.data.current.bigStop, element.data.current.stop, element.data.current.shape)} fill="black" textAnchor="middle">
+                <image href={element.data.current.src} {...getImagePosition(element.data.current.x, element.data.current.y, element.data.current.nexus, element.data.current.stop, element.data.current.bigStop, element.data.current.shape)} />
+                <text {...getTextPosition(element.data.current.x, element.data.current.y, element.data.current.bigStop, element.data.current.stop, element.data.current.shape)} fill="black" textAnchor="middle" fontFamily='Massallera'>
                     {element.data.current.text}
                 </text>
             </g>);
         }
         if (element.data.current.shape === "rect") {
-            return (<g><rect width="8.5vmax" height="5vmax" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-width="3" />
-                <image href={element.data.current.src} {...getImagePosition(element.data.current.nexus, element.data.current.stop, element.data.current.bigStop, element.data.current.shape)} />
-                <text {...getTextPosition(element.data.current.bigStop, element.data.current.stop, element.data.current.shape)} fill="black" textAnchor="middle">
+            return (<g><rect width="120" height="75" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                <image href={element.data.current.src} {...getImagePosition(element.data.current.x, element.data.current.y, element.data.current.nexus, element.data.current.stop, element.data.current.bigStop, element.data.current.shape)} />
+                <text {...getTextPosition(element.data.current.x, element.data.current.y, element.data.current.bigStop, element.data.current.stop, element.data.current.shape)} fill="black" textAnchor="middle" fontFamily='Massallera'>
                     {element.data.current.text}
                 </text>
             </g>);
@@ -192,32 +192,32 @@ let DnDPhase2 = () => {
         if (element.data.current.shape === "ellipse") {
             return (<g>
                 <ellipse
-                    cx="4.2vmax"
-                    cy="2.9vmax"
-                    rx="4.2vmax"
-                    ry="2.9vmax"
+                    cx="60"
+                    cy="40"
+                    rx="60"
+                    ry="40"
                     fill="white"
                     stroke={strokeColor()}
                     stroke-width="3"
                 />
-                <image href={element.data.current.src} {...getImagePosition(element.data.current.nexus, element.data.current.stop, element.data.current.bigStop, element.data.current.shape)} />
-                <text {...getTextPosition(element.data.current.bigStop, element.data.current.stop, element.data.current.shape)} fill="black" textAnchor="middle">
+                <image href={element.data.current.src} {...getImagePosition(element.data.current.x, element.data.current.y, element.data.current.nexus, element.data.current.stop, element.data.current.bigStop, element.data.current.shape)} />
+                <text {...getTextPosition(element.data.current.x, element.data.current.y, element.data.current.bigStop, element.data.current.stop, element.data.current.shape)} fill="black" textAnchor="middle" fontFamily='Massallera'>
                     {element.data.current.text}
                 </text>
             </g>);
         }
         if (element.data.current.stop) {
             return (<g>
-                <image href={element.data.current.src} {...getImagePosition(element.data.current.nexus, element.data.current.stop, element.data.current.bigStop, element.data.current.shape)} />
-                <text {...getTextPosition(element.data.current.bigStop, element.data.current.stop, element.data.current.shape)} fill="black" textAnchor="middle">
+                <image href={element.data.current.src} {...getImagePosition(element.data.current.x, element.data.current.y, element.data.current.nexus, element.data.current.stop, element.data.current.bigStop, element.data.current.shape)} />
+                <text {...getTextPosition(element.data.current.x, element.data.current.y, element.data.current.bigStop, element.data.current.stop, element.data.current.shape)} fill="black" textAnchor="middle" fontFamily='Massallera'>
                     {element.data.current.text}
                 </text>
             </g>);
         }
         if (element.data.current.bigStop) {
             return (<g>
-                <image href={element.data.current.src} {...getImagePosition(element.data.current.nexus, element.data.current.stop, element.data.current.bigStop, element.data.current.shape)} />
-                <text {...getTextPosition(element.data.current.bigStop, element.data.current.stop, element.data.current.shape)} fill="black" textAnchor="middle">
+                <image href={element.data.current.src} {...getImagePosition(element.data.current.x, element.data.current.y, element.data.current.nexus, element.data.current.stop, element.data.current.bigStop, element.data.current.shape)} />
+                <text {...getTextPosition(element.data.current.x, element.data.current.y, element.data.current.bigStop, element.data.current.stop, element.data.current.shape)} fill="black" textAnchor="middle" fontFamily='Massallera'>
                     {element.data.current.text}
                 </text>
             </g>);
@@ -242,9 +242,9 @@ let DnDPhase2 = () => {
             <Flex align="center" vertical >
                 <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
                     <Flex align="center" justify="center" >
-                        <svg height="21vmax" viewBox={`-2 -2 ${viewBoxWidth(exercise?.networkType)} 250`}>
+                        <svg height="20vmax" viewBox={`-2 -2 ${viewBoxWidth(exercise?.networkType)} 250`}>
                             <path d={`M 220 70 L 220 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(255, 196, 101)" stroke-width="3" />
-                            <path d="M 220 70 L 220 85 L 60 85 L 60 105" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                            <path d="M 220 70 L 220 85 L 60 85 L 60 95" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
                             <path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
                             <path d={`M 350 165 ${pathBottom(exercise?.networkType)}`} fill="none" stroke="rgb(255, 196, 101)" stroke-width="3" />
                             {["I-II", "I-III"].includes(exercise?.networkType) &&

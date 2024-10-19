@@ -1,23 +1,28 @@
 import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { useTranslation } from 'react-i18next';
+import '../../fonts/massallera.TTF';
+import { useSession } from '../../SessionComponent';
 
 const DraggablePhase2 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text, x, y }) => {
 
+    let { exercise } = useSession();
     let { t } = useTranslation();
 
     const getImageProps = () => {
-        if (nexus) return { x: x - 15, y: y - 22, width: "3.5vmax", height: "3vmax" };
-        if (stop) return { x: x - 15, y: y, width: "1.8vmax", height: "1.8vmax" };
-        if (bigStop) return { x: x - 5, y: y - 20, width: "2.3vmax", height: "2.3vmax" };
-        return { x: x - 15, y: y - 23, width: "3.5vmax", height: "3.5vmax" };
+        if (nexus) return { x: x - 20, y: y - (exercise.representation === "ICONIC" ? 10 : 20), width: 60, height: 30 };
+        if (stop) return { x: x - 15, y: y, width: "25", height: "25" };
+        if (bigStop) return { x: x - 5, y: y - 20, width: "40", height: "40" };
+        if (shape === "ellipse") return { x: x - 15, y: y - 27, width: "50", height: "50" };
+        return { x: x - 15, y: y - 22, width: "50", height: "50" };
     };
 
     const getTextProps = () => {
-        if (nexus) return { x: x + 10, y: y + 25, fontSize: "1.1vmax" };
-        if (stop) return { x: x + 20, y: y + 28, fontSize: "1.7vmax" };
-        if (bigStop) return { x: x + 35, y: y + 15, fontSize: "2.1vmax" };
-        return { x: x + 10, y: y + 40, fontSize: "1vmax" };
+        if (nexus) return { x: x + 10, y: y + 27, fontSize: "15" };
+        if (stop) return { x: x + 22, y: y + 22, fontSize: "25" };
+        if (bigStop) return { x: x + 38, y: y + 20, fontSize: "40" };
+        if (shape === "ellipse") return { x: x + 11, y: y + 34, fontSize: "12" };
+        return { x: x + 10, y: y + 38, fontSize: "13" };
     };
 
     const imageProps = getImageProps();
@@ -66,7 +71,7 @@ const DraggablePhase2 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text,
                 />
             }
             <image href={src} {...imageProps} />
-            <text {...textProps} fill="black" textAnchor="middle">
+            <text {...textProps} fill="black" textAnchor="middle" fontFamily='Massallera'>
                 {t(text)}
             </text>
         </g>

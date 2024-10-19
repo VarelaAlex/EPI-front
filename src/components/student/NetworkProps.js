@@ -3,9 +3,9 @@ export const X = 210;
 export const Y = 25;
 
 export const pathTop = (networkType) => {
-    if (networkType === "I-I") return "L 350 85 L 350 105";
-    if (networkType === "I-II") return "L 480 85 L 480 105";
-    if (networkType === "I-III") return "L 570 85 L 570 105";
+    if (networkType === "I-I") return "L 350 85 L 350 95";
+    if (networkType === "I-II") return "L 480 85 L 480 95";
+    if (networkType === "I-III") return "L 570 85 L 570 95";
 };
 
 export const pathBottom = (networkType) => {

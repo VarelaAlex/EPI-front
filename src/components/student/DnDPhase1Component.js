@@ -197,7 +197,7 @@ let DnDPhase1 = () => {
                             <ellipse cx="60" cy="205" rx="60" ry="40" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-width="3" />
                             <ellipse cx="350" cy="205" rx="60" ry="40" fill="rgb(255, 255, 255)" stroke="rgb(255, 196, 101)" stroke-width="3" />
                             <path d={`M 220 70 L 220 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(255, 196, 101)" stroke-width="3" />
-                            <path d="M 220 70 L 220 85 L 60 85 L 60 105" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                            <path d="M 220 70 L 220 85 L 60 85 L 60 95" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
                             <path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
                             <path d={`M 350 165 ${pathBottom(exercise?.networkType)}`} fill="none" stroke="rgb(255, 196, 101)" stroke-width="3" />
                             {["I-II", "I-III"].includes(exercise?.networkType) &&
@@ -249,6 +249,7 @@ let DnDPhase1 = () => {
                                         x={X + element.posX}
                                         y={Y + element.posY}
                                         ok={element.ok}
+                                        shape={element.shape}
                                         src={element.src}
                                         text={element.text}
                                         stop={element.stop}
