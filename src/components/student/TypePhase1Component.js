@@ -34,11 +34,11 @@ let TypePhase1 = () => {
     let [extendedNodes, setExtendedNodes] = useState(INITIAL_EXTENDED_NODES);
 
     const getTextPosition = (bigStop, stop, shape) => {
-        if (bigStop) return { x: "1vmax", y: "4vmax", fontSize: "2.3vmax" };
-        if (stop) return { x: "5vmax", y: "4vmax", fontSize: "1.8vmax" };
-        if (shape === "rect") return { x: "3.75vmax", y: "2.75vmax", fontSize: "1vmax" };
-        if (shape === "ellipse") return { x: "5vmax", y: "3vmax", fontSize: "1vmax" };
-        return { x: "5vmax", y: "2.5vmax", fontSize: "1vmax" };
+        if (bigStop) return { x: "1.5vmax", y: "5vmax", fontSize: "2.3vmax" };
+        if (stop) return { x: "2.75vmax", y: "4vmax", fontSize: "1.8vmax" };
+        if (shape === "rect") return { x: "4.3vmax", y: "3.2vmax", fontSize: "1vmax" };
+        if (shape === "ellipse") return { x: "4.6vmax", y: "3.25vmax", fontSize: "1vmax" };
+        return { x: "4vmax", y: "3.2vmax", fontSize: "1.1vmax" };
     };
 
     let normalize = (word) => {
@@ -114,6 +114,12 @@ let TypePhase1 = () => {
         });
     };
 
+    let svgWidth = (e) => {
+        if (e.stop) return "5vmax";
+        if (e.nexus) return "8vmax";
+        return "9.2vmax";
+    };
+
     return (
         <Card style={{ height: "55vmax", width: "95%" }} >
             <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
@@ -133,9 +139,11 @@ let TypePhase1 = () => {
                 <Flex align="start" vertical style={{ paddingTop: "40px" }}>
                     <Row>
                         <Col key={extendedNodes[0].id}>
-                            <svg height="6.5vmax" width="9vmax">
+                            <svg height="6.5vmax" width={svgWidth(extendedNodes[0])}>
                                 <rect
-                                    width="7.8vmax"
+                                    x="2"
+                                    y="6"
+                                    width="8.5vmax"
                                     height="4.7vmax"
                                     fill="white"
                                     stroke="black"
@@ -154,10 +162,12 @@ let TypePhase1 = () => {
                     <Row>
                         {extendedNodes.slice(1, 5).map((element) => (
                             <Col key={element.id} style={{ paddingRight: "0.5vmax" }}>
-                                <svg height="6.5vmax" width="9vmax">
+                                <svg height="6.5vmax" width={svgWidth(element)}>
                                     {element.shape === "rect" &&
                                         <rect
-                                            width="7.8vmax"
+                                            x="2"
+                                            y="6"
+                                            width="8.5vmax"
                                             height="4.7vmax"
                                             fill="white"
                                             stroke="black"
@@ -166,10 +176,10 @@ let TypePhase1 = () => {
                                     }
                                     {element.shape === "ellipse" &&
                                         <ellipse
-                                            cx="5vmax"
-                                            cy="2.7vmax"
-                                            rx="3.9vmax"
-                                            ry="2.6vmax"
+                                            cx="4.6vmax"
+                                            cy="3.1vmax"
+                                            rx="4.5vmax"
+                                            ry="3vmax"
                                             fill="white"
                                             stroke="black"
                                             stroke-width="3"
@@ -189,10 +199,12 @@ let TypePhase1 = () => {
                     <Row>
                         {extendedNodes.slice(5).map((element) => (
                             <Col key={element.id} style={{ paddingRight: "0.5vmax" }}>
-                                <svg height="6.5vmax" width="9vmax">
+                                <svg height="6.5vmax"  width={svgWidth(element)}>
                                     {element.shape === "rect" &&
                                         <rect
-                                            width="7.8vmax"
+                                            x="2"
+                                            y="6"
+                                            width="8.5vmax"
                                             height="4.7vmax"
                                             fill="white"
                                             stroke="black"
@@ -201,10 +213,10 @@ let TypePhase1 = () => {
                                     }
                                     {element.shape === "ellipse" &&
                                         <ellipse
-                                            cx="5vmax"
-                                            cy="2.7vmax"
-                                            rx="3.9vmax"
-                                            ry="2.6vmax"
+                                            cx="4.6vmax"
+                                            cy="3.1vmax"
+                                            rx="4.5vmax"
+                                            ry="3vmax"
                                             fill="white"
                                             stroke="black"
                                             stroke-width="3"
@@ -224,7 +236,7 @@ let TypePhase1 = () => {
                 </Flex>
                 <Divider style={{ backgroundColor: "grey" }} />
                 <Flex align="center" justify="center" style={{ height: "90%", width: "90%" }} >
-                    <svg height="18vmax" viewBox={`-2 -2 ${viewBoxWidth(exercise?.networkType)} 250`}>
+                    <svg height="19vmax" viewBox={`-2 -2 ${viewBoxWidth(exercise?.networkType)} 250`}>
                         <path d={`M 220 70 L 220 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
                         <path d="M 220 70 L 220 85 L 60 85 L 60 105" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
                         <path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
@@ -252,9 +264,9 @@ let TypePhase1 = () => {
                                 return (
                                     <g key={element.id + element.order}>
                                         <rect
-                                            x={X + element.posX - 50}
+                                            x={X + element.posX - 60}
                                             y={Y + element.posY - 25}
-                                            width="120"
+                                            width="141"
                                             height="70"
                                             fill="rgb(255, 255, 255)"
                                             stroke="rgb(0, 0, 0)"
@@ -263,9 +275,9 @@ let TypePhase1 = () => {
                                         {element.clicked ?
                                             (
                                                 <foreignObject
-                                                    x={X + element.posX - 48}
+                                                    x={X + element.posX - 57}
                                                     y={Y + element.posY - 4}
-                                                    width="116"
+                                                    width="135"
                                                     height="3vmax"
                                                 >
                                                     <Input
