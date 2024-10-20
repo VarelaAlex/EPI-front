@@ -119,6 +119,18 @@ let DnDPhase1 = () => {
         useSensor(TouchSensor)
     );
 
+    let rectX = (exercise) => {
+        if ("I-I" === exercise?.networkType) return "160";
+        if ("I-II" === exercise?.networkType) return "250";
+        if ("I-III" === exercise?.networkType) return "400";
+    };
+
+    let pathRect = (exercise) => {
+        if ("I-I" === exercise?.networkType) return "220";
+        if ("I-II" === exercise?.networkType) return "310";
+        if ("I-III" === exercise?.networkType) return "460";
+    };
+
     return (
         <Card style={{ height: "53vmax", width: "95%" }} >
             <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
@@ -192,12 +204,12 @@ let DnDPhase1 = () => {
                     </Flex>
                     <Divider style={{ backgroundColor: "grey" }} />
                     <Flex align="center" justify="center" style={{ height: "90%", width: "90%" }} >
-                        <svg height="21vmax" viewBox={`-2 0 ${viewBoxWidth(exercise?.networkType)} 250`}>
-                            <rect x="160" y="1" width="120" height="70" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                        <svg height="20vmax" viewBox={`-2 0 ${viewBoxWidth(exercise?.networkType)} 250`}>
+                            <rect x={rectX(exercise)} y="1" width="120" height="70" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-width="3" />
                             <ellipse cx="60" cy="205" rx="60" ry="40" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-width="3" />
                             <ellipse cx="350" cy="205" rx="60" ry="40" fill="rgb(255, 255, 255)" stroke="rgb(255, 196, 101)" stroke-width="3" />
-                            <path d={`M 220 70 L 220 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(255, 196, 101)" stroke-width="3" />
-                            <path d="M 220 70 L 220 85 L 60 85 L 60 95" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                            <path d={`M ${pathRect(exercise)} 70 L ${pathRect(exercise)} 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(255, 196, 101)" stroke-width="3" />
+                            <path d={`M ${pathRect(exercise)} 70 L ${pathRect(exercise)} 85 L 60 85 L 60 95`} fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
                             <path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
                             <path d={`M 350 165 ${pathBottom(exercise?.networkType)}`} fill="none" stroke="rgb(255, 196, 101)" stroke-width="3" />
                             {["I-II", "I-III"].includes(exercise?.networkType) &&

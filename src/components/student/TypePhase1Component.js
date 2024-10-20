@@ -120,6 +120,12 @@ let TypePhase1 = () => {
         return "9.2vmax";
     };
 
+    let pathRect = (exercise) => {
+        if ("I-I" === exercise?.networkType) return "220";
+        if ("I-II" === exercise?.networkType) return "310";
+        if ("I-III" === exercise?.networkType) return "460";
+    };
+
     return (
         <Card style={{ height: "55vmax", width: "95%" }} >
             <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
@@ -136,7 +142,7 @@ let TypePhase1 = () => {
                 }} />
             </div>
             <Flex align="center" vertical >
-                <Flex align="start" vertical style={{ paddingTop: "40px" }}>
+                <Flex align="start" vertical style={{ paddingTop: "20px" }}>
                     <Row>
                         <Col key={extendedNodes[0].id}>
                             <svg height="6.5vmax" width={svgWidth(extendedNodes[0])}>
@@ -199,7 +205,7 @@ let TypePhase1 = () => {
                     <Row>
                         {extendedNodes.slice(5).map((element) => (
                             <Col key={element.id} style={{ paddingRight: "0.5vmax" }}>
-                                <svg height="6.5vmax"  width={svgWidth(element)}>
+                                <svg height="6.5vmax" width={svgWidth(element)}>
                                     {element.shape === "rect" &&
                                         <rect
                                             x="2"
@@ -237,8 +243,8 @@ let TypePhase1 = () => {
                 <Divider style={{ backgroundColor: "grey" }} />
                 <Flex align="center" justify="center" style={{ height: "90%", width: "90%" }} >
                     <svg height="19vmax" viewBox={`-2 -2 ${viewBoxWidth(exercise?.networkType)} 250`}>
-                        <path d={`M 220 70 L 220 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
-                        <path d="M 220 70 L 220 85 L 60 85 L 60 105" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                        <path d={`M ${pathRect(exercise)} 70 L ${pathRect(exercise)} 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                        <path d={`M ${pathRect(exercise)} 70 L ${pathRect(exercise)} 85 L 60 85 L 60 95`} fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
                         <path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
                         <path d={`M 350 165 ${pathBottom(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
                         {["I-II", "I-III"].includes(exercise?.networkType) &&
@@ -267,7 +273,7 @@ let TypePhase1 = () => {
                                             x={X + element.posX - 60}
                                             y={Y + element.posY - 25}
                                             width="141"
-                                            height="70"
+                                            height="75"
                                             fill="rgb(255, 255, 255)"
                                             stroke="rgb(0, 0, 0)"
                                             stroke-width="3"

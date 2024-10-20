@@ -39,6 +39,12 @@ export const stopX = (networkType) => {
 
 export const STOP = 8289;
 
+let type1X = (networkType) => {
+    if ("I-I" === networkType) return 0;
+    if ("I-II" === networkType) return 90;
+    if ("I-III" === networkType) return 240;
+};
+
 export let nodes = (exercise) => {
     const { representation, mainImage, definitionPictogram, definitionImage, definitionText, ampliationPictogram, ampliationImages, ampliationText, title, networkType } = exercise;
 
@@ -46,7 +52,7 @@ export let nodes = (exercise) => {
         {
             id: "1",
             type: "type1",
-            posX: 0,
+            posX: type1X(networkType),
             posY: 0,
             src: ["ICONIC", "MIXED"].includes(representation)
                 ? `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${mainImage}`
