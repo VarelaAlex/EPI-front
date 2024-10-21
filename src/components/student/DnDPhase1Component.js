@@ -44,7 +44,8 @@ let DnDPhase1 = () => {
         let { active, over } = event;
         let node = null;
         let correct = false;
-        let isStop = element.data.current.stop || element.data.current.bigStop;
+        let sintactic = element.data.current.stop || element.data.current.bigStop;
+        let semantic = element.data.current.nexus;
         if (over) {
             if (over.data.current.accepts.includes(active.data.current.type)) {
                 let updated = extendedNodes.map((element) => {
@@ -56,13 +57,18 @@ let DnDPhase1 = () => {
                             correct = true;
                         } else {
                             setFeedback({
-                                phase1: isStop ? {
-                                    ...feedback.phase1,
-                                    incorrectOrderStop: feedback?.phase1?.incorrectOrderStop == null ? 1 : feedback?.phase1?.incorrectOrderStop + 1
-                                } : {
-                                    ...feedback.phase1,
-                                    incorrectOrder: feedback?.phase1?.incorrectOrder == null ? 1 : feedback?.phase1?.incorrectOrder + 1
-                                }
+                                phase1:
+                                    sintactic ? {
+                                        ...feedback.phase1,
+
+                                        incorrectOrderSintactic: feedback?.phase1?.incorrectOrderSintactic == null ? 1 : feedback?.phase1?.incorrectOrderSintactic + 1
+                                    } : semantic ? {
+                                        ...feedback.phase1,
+                                        incorrectOrderSemantic: feedback?.phase1?.incorrectOrderSemantic == null ? 1 : feedback?.phase1?.incorrectOrderSemantic + 1
+                                    } : {
+                                        ...feedback.phase1,
+                                        incorrectOrderLexic: feedback?.phase1?.incorrectOrderLexic == null ? 1 : feedback?.phase1?.incorrectOrderLexic + 1
+                                    }
                             });
                         }
                     }
@@ -72,20 +78,31 @@ let DnDPhase1 = () => {
                 correct && setDroppableNodes(updated);
             } else {
                 setFeedback({
-                    phase1: isStop ? {
+                    phase1: sintactic ? {
                         ...feedback.phase1,
-                        incorrectPosStop: feedback?.phase1?.incorrectPosStop == null ? 1 : feedback?.phase1?.incorrectPosStop + 1
+
+                        incorrectPosSintactic: feedback?.phase1?.incorrectPosSintactic == null ? 1 : feedback?.phase1?.incorrectPosSintactic + 1
+                    } : semantic ? {
+                        ...feedback.phase1,
+                        incorrectPosSemantic: feedback?.phase1?.incorrectPosSemantic == null ? 1 : feedback?.phase1?.incorrectPosSemantic + 1
                     } : {
                         ...feedback.phase1,
-                        incorrectPos: feedback?.phase1?.incorrectPos == null ? 1 : feedback?.phase1?.incorrectPos + 1
+                        incorrectPosLexic: feedback?.phase1?.incorrectPosLexic == null ? 1 : feedback?.phase1?.incorrectPosLexic + 1
                     }
                 });
             }
         } else {
             setFeedback({
-                phase1: {
+                phase1: sintactic ? {
                     ...feedback.phase1,
-                    elementOutOfBounds: feedback?.phase1?.elementOutOfBounds == null ? 1 : feedback?.phase1?.elementOutOfBounds + 1
+
+                    outOfBoundsSintactic: feedback?.phase1?.outOfBoundsSintactic == null ? 1 : feedback?.phase1?.outOfBoundsSintactic + 1
+                } : semantic ? {
+                    ...feedback.phase1,
+                    outOfBoundsSemantic: feedback?.phase1?.outOfBoundsSemantic == null ? 1 : feedback?.phase1?.outOfBoundsSemantic + 1
+                } : {
+                    ...feedback.phase1,
+                    outOfBoundsLexic: feedback?.phase1?.outOfBoundsLexic == null ? 1 : feedback?.phase1?.outOfBoundsLexic + 1
                 }
             });
         }
