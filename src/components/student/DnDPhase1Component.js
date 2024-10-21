@@ -67,7 +67,7 @@ let DnDPhase1 = () => {
                                         incorrectOrderSemantic: feedback?.phase1?.incorrectOrderSemantic == null ? 1 : feedback?.phase1?.incorrectOrderSemantic + 1
                                     } : {
                                         ...feedback.phase1,
-                                        incorrectOrderLexic: feedback?.phase1?.incorrectOrderLexic == null ? 1 : feedback?.phase1?.incorrectOrderLexic + 1
+                                        incorrectOrderLexical: feedback?.phase1?.incorrectOrderLexical == null ? 1 : feedback?.phase1?.incorrectOrderLexical + 1
                                     }
                             });
                         }
@@ -87,7 +87,7 @@ let DnDPhase1 = () => {
                         incorrectPosSemantic: feedback?.phase1?.incorrectPosSemantic == null ? 1 : feedback?.phase1?.incorrectPosSemantic + 1
                     } : {
                         ...feedback.phase1,
-                        incorrectPosLexic: feedback?.phase1?.incorrectPosLexic == null ? 1 : feedback?.phase1?.incorrectPosLexic + 1
+                        incorrectPosLexical: feedback?.phase1?.incorrectPosLexical == null ? 1 : feedback?.phase1?.incorrectPosLexical + 1
                     }
                 });
             }
@@ -102,7 +102,7 @@ let DnDPhase1 = () => {
                     outOfBoundsSemantic: feedback?.phase1?.outOfBoundsSemantic == null ? 1 : feedback?.phase1?.outOfBoundsSemantic + 1
                 } : {
                     ...feedback.phase1,
-                    outOfBoundsLexic: feedback?.phase1?.outOfBoundsLexic == null ? 1 : feedback?.phase1?.outOfBoundsLexic + 1
+                    outOfBoundsLexical: feedback?.phase1?.outOfBoundsLexical == null ? 1 : feedback?.phase1?.outOfBoundsLexical + 1
                 }
             });
         }
