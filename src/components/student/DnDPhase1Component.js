@@ -45,7 +45,7 @@ let DnDPhase1 = () => {
         let node = null;
         let correct = false;
         let sintactic = element.data.current.stop || element.data.current.bigStop;
-        let semantic = element.data.current.nexus;
+        let semantic = element.data.current.type === "type2" || element.data.current.type === "type4";
         if (over) {
             if (over.data.current.accepts.includes(active.data.current.type)) {
                 let updated = extendedNodes.map((element) => {

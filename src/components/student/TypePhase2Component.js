@@ -83,7 +83,8 @@ let TypePhase2 = () => {
                                     elapsedTime: (endTime - startTime.current) / 1000
                                 },
                                 title: exercise.title,
-                                level: exercise.representation,
+                                representation: exercise.representation,
+                                networkType: exercise.networkType,
                                 date: Date.now()
                             });
                             setShowGif(true);

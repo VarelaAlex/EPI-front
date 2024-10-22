@@ -68,7 +68,8 @@ let DnDPhase2 = () => {
         let { active, over } = event;
         let node = null;
         let correct = false;
-        let isStop = element.data.current.stop || element.data.current.bigStop;
+        let sintactic = element.data.current.stop || element.data.current.bigStop;
+        let semantic = element.data.current.nexus;
         if (over) {
             if (over.data.current.accepts.includes(active.data.current.type)) {
                 let updated = extendedNodes.map((element) => {
@@ -81,12 +82,16 @@ let DnDPhase2 = () => {
                         } else {
                             setFeedback({
                                 phase1: { ...feedback.phase1 },
-                                phase2: isStop ? {
+                                phase2: sintactic ? {
                                     ...feedback.phase2,
-                                    incorrectOrderStop: feedback?.phase2?.incorrectOrderStop == null ? 1 : feedback?.phase2?.incorrectOrderStop + 1
+
+                                    incorrectOrderSintactic: feedback?.phase2?.incorrectOrderSintactic == null ? 1 : feedback?.phase2?.incorrectOrderSintactic + 1
+                                } : semantic ? {
+                                    ...feedback.phase2,
+                                    incorrectOrderSemantic: feedback?.phase2?.incorrectOrderSemantic == null ? 1 : feedback?.phase2?.incorrectOrderSemantic + 1
                                 } : {
                                     ...feedback.phase2,
-                                    incorrectOrder: feedback?.phase2?.incorrectOrder == null ? 1 : feedback?.phase2?.incorrectOrder + 1
+                                    incorrectOrderLexical: feedback?.phase2?.incorrectOrderLexical == null ? 1 : feedback?.phase2?.incorrectOrderLexical + 1
                                 }
                             });
                         }
@@ -98,22 +103,34 @@ let DnDPhase2 = () => {
             } else {
                 setFeedback({
                     phase1: { ...feedback.phase1 },
-                    phase2: isStop ? {
+                    phase2: sintactic ? {
                         ...feedback.phase2,
-                        incorrectPosStop: feedback?.phase2?.incorrectPosStop == null ? 1 : feedback?.phase2?.incorrectPosStop + 1
+
+                        incorrectPosSintactic: feedback?.phase2?.incorrectPosSintactic == null ? 1 : feedback?.phase2?.incorrectPosSintactic + 1
+                    } : semantic ? {
+                        ...feedback.phase2,
+                        incorrectPosSemantic: feedback?.phase2?.incorrectPosSemantic == null ? 1 : feedback?.phase2?.incorrectPosSemantic + 1
                     } : {
                         ...feedback.phase2,
-                        incorrectPos: feedback?.phase2?.incorrectPos == null ? 1 : feedback?.phase2?.incorrectPos + 1
+                        incorrectPosLexical: feedback?.phase2?.incorrectPosLexical == null ? 1 : feedback?.phase2?.incorrectPosLexical + 1
                     }
                 });
             }
         } else {
             setFeedback({
                 phase1: { ...feedback.phase1 },
-                phase2: {
-                    ...feedback.phase2,
-                    elementOutOfBounds: feedback?.phase2?.elementOutOfBounds == null ? 1 : feedback?.phase2?.elementOutOfBounds + 1
-                }
+                phase2:
+                    sintactic ? {
+                        ...feedback.phase2,
+
+                        outOfBoundsSintactic: feedback?.phase2?.outOfBoundsSintactic == null ? 1 : feedback?.phase2?.outOfBoundsSintactic + 1
+                    } : semantic ? {
+                        ...feedback.phase2,
+                        outOfBoundsSemantic: feedback?.phase2?.outOfBoundsSemantic == null ? 1 : feedback?.phase2?.outOfBoundsSemantic + 1
+                    } : {
+                        ...feedback.phase2,
+                        outOfBoundsLexical: feedback?.phase2?.outOfBoundsLexical == null ? 1 : feedback?.phase2?.outOfBoundsLexical + 1
+                    }
             });
         }
 
@@ -126,7 +143,8 @@ let DnDPhase2 = () => {
                     elapsedTime: (endTime - startTime.current) / 1000
                 },
                 title: exercise.title,
-                level: exercise.representation,
+                representation: exercise.representation,
+                networkType: exercise.networkType,
                 date: Date.now()
             });
             setShowGif(true);

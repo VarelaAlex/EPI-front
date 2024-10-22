@@ -25,6 +25,7 @@ import ClassroomDetail from './components/teacher/ClassroomDetailComponent';
 import StudentDetail from './components/teacher/StudentDetailComponent';
 import BlankPage from './components/BlankPageComponent';
 import Profile from './components/teacher/ProfileComponent';
+import ClassroomStatistics from './components/teacher/ClassroomStatistics';
 
 let App = () => {
 
@@ -305,6 +306,8 @@ let App = () => {
 								<Route path="/teachers/manageExercises" element={<ExercisesList isMobile={isMobile} />} />
 								<Route path="/teachers/create" element={<CreateExercise isMobile={isMobile} />} />
 								<Route path='/teachers/profile' element={<Profile />} />
+								<Route path='/teachers/classroomStats/:classroomName' element={<ClassroomStatistics />} />
+								<Route path='/teachers/studentStats/:studentId' element={<ClassroomStatistics />} />
 								<Route path='/' element={<BlankPage />} />
 								<Route path="*" element={<NotFound />} />
 							</Routes>
