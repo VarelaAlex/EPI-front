@@ -32,26 +32,26 @@ let ClassroomsList = (props) => {
     },
     {
       title: "Actions",
-      dataIndex: "id",
+      dataIndex: "name",
       align: "right",
-      render: (id) => (
+      render: (name) => (
         isMobile ?
           <div style={{ float: "right" }}>
             <Tooltip title={t("classrooms.table.tooltips.seeStatistics")} mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
-              <Button onClick={() => navigate("/teachers/classroomStatistics/" + id)} icon={<LineChartOutlined />} style={{ marginRight: "1vmax" }} />
+              <Button onClick={() => navigate("/teachers/classroomStats/" + name)} icon={<LineChartOutlined />} style={{ marginRight: "1vmax" }} />
             </Tooltip>
             <Tooltip title={t("classrooms.table.tooltips.delete")} mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
               <Button
                 danger
                 type="primary"
-                onClick={() => deleteClassroom(id)}
+                onClick={() => deleteClassroom(name)}
                 icon={<DeleteOutlined />}
               />
             </Tooltip>
           </div>
           : <div style={{ float: "right" }}>
-            <Button onClick={() => navigate("/teachers/classroomStatistics/" + id)} style={{ marginRight: "1vmax" }}> {t("classrooms.table.buttons.seeStatistics")}</Button >
-            <Button danger type="primary" onClick={() => deleteClassroom(id)}> {t("classrooms.table.buttons.delete")}</Button >
+            <Button onClick={() => navigate("/teachers/classroomStats/" + name)} style={{ marginRight: "1vmax" }}> {t("classrooms.table.buttons.seeStatistics")}</Button >
+            <Button danger type="primary" onClick={() => deleteClassroom(name)}> {t("classrooms.table.buttons.delete")}</Button >
           </div>
       )
     }
@@ -112,8 +112,8 @@ let ClassroomsList = (props) => {
     getClassrooms();
   };
 
-  let deleteClassroom = async (id) => {
-    await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/classrooms/" + id, {
+  let deleteClassroom = async (name) => {
+    await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/classrooms/" + name, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` }
     });

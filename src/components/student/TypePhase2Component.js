@@ -251,7 +251,7 @@ let TypePhase2 = () => {
                                     height="70"
                                     fill="black"
                                     textAnchor="middle"
-                                    fontSize={element.stop ? "1.5vmax" : element.bigStop ? "2.3vmax" : "1.1vmax"}
+                                    fontSize={element.stop ? "1.5vmax" : element.bigStop ? "2.3vmax" : "0.9vmax"}
                                 >
                                     {t(element.text)}
                                 </text>);
@@ -287,7 +287,7 @@ let TypePhase2 = () => {
                                                     autoFocus={true}
                                                     autoComplete='off'
                                                     id={extendedNodes[0].id}
-                                                    style={{ textTransform: "uppercase", textAlign: 'center' }}
+                                                    style={{ textTransform: "uppercase", textAlign: 'center', fontSize:"1.1vmax" }}
                                                     onChange={() => check()}
                                                     value={extendedNodes[0].ok ? extendedNodes[0].text : undefined}
                                                 />
@@ -364,7 +364,7 @@ let TypePhase2 = () => {
                                                         autoFocus={true}
                                                         autoComplete='off'
                                                         id={element.id}
-                                                        style={{ textTransform: element.shape === "rect" ? "uppercase" : "lowercase", textAlign: 'center' }}
+                                                        style={{ textTransform: element.shape === "rect" ? "uppercase" : "lowercase", textAlign: 'center', fontSize:"1.1vmax" }}
                                                         height={"40px"}
                                                         onChange={() => check()}
                                                         value={element.ok ? (element.shape ? element.text : t(element.text)) : undefined}
@@ -445,14 +445,14 @@ let TypePhase2 = () => {
                                                         element.shape === "ellipse" ?
                                                             "6.5vmax" : element.shape === "rect" ?
                                                                 "9.3vmax" : "7.4vmax"}
-                                                    height="40px"
+                                                    height="10vmax"
                                                 >
                                                     <Input
                                                         autoFocus={true}
                                                         autoComplete='off'
                                                         id={element.id}
-                                                        style={{ textTransform: element.shape === "rect" ? "uppercase" : "lowercase", textAlign: 'center' }}
-                                                        height={"40px"}
+                                                        style={{ textTransform: element.shape === "rect" ? "uppercase" : "lowercase", textAlign: 'center', fontSize:"1.1vmax" }}
+                                                        height={"10vmax"}
                                                         onChange={() => check()}
                                                         value={element.ok ? (element.shape ? element.text : t(element.text)) : undefined}
                                                     />

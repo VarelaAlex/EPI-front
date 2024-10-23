@@ -2,11 +2,15 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Card, Typography } from 'antd';
+import { useParams } from 'react-router-dom';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-function ClassroomStatistics() {
-  // Data for stacked bar chart (category and relationship breakdown)
+let ClassroomStatistics = () => {
+
+  let { classroomName } = useParams();
+
   const data = {
     labels: ['Body', 'Transports', 'Food'],
     datasets: [
@@ -54,12 +58,12 @@ function ClassroomStatistics() {
     },
   };
 
+  let { Title } = Typography;
   return (
-    <div style={{ width: '700px', margin: '50px auto' }}>
-      <h2>Combined Exercise Data</h2>
+    <Card style={{ width: "75%" }} title={<Title>{classroomName}</Title>}>
       <Bar data={data} options={options} />
-    </div>
+    </Card>
   );
-}
+};
 
 export default ClassroomStatistics;
