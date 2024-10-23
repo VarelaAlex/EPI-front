@@ -25,7 +25,8 @@ import ClassroomDetail from './components/teacher/ClassroomDetailComponent';
 import StudentDetail from './components/teacher/StudentDetailComponent';
 import BlankPage from './components/BlankPageComponent';
 import Profile from './components/teacher/ProfileComponent';
-import ClassroomStatistics from './components/teacher/ClassroomStatistics';
+import ClassroomStatistics from './components/teacher/ClassroomStatisticsComponent';
+import StudentStatistics from './components/teacher/StudentStatisticsComponent';
 
 let App = () => {
 
@@ -36,6 +37,8 @@ let App = () => {
 	let [open, setOpen] = useState(false);
 	let [api, contextHolder] = notification.useNotification();
 	let [isMobile, setIsMobile] = useState(false);
+	let [classroomId, setClassroomId] = useState();
+	let [studentName, setStudentName] = useState();
 
 	let { t } = useTranslation();
 	let navigate = useNavigate();
@@ -300,14 +303,14 @@ let App = () => {
 								<Route path="/students/exercises" element={<ExercisesCarousel />} />
 								<Route path="/loginTeacher" element={<LoginTeacher />} />
 								<Route path="/registerTeacher" element={<SignupTeacher />} />
-								<Route path="/teachers/menuTeacher" element={<ClassroomsList isMobile={isMobile} />} />
-								<Route path="/teachers/classroomDetail/:classroomName" element={<ClassroomDetail isMobile={isMobile} />} />
+								<Route path="/teachers/menuTeacher" element={<ClassroomsList isMobile={isMobile} setClassroomId={setClassroomId} />} />
+								<Route path="/teachers/classroomDetail/:classroomName" element={<ClassroomDetail isMobile={isMobile} setStudentName={setStudentName} />} />
 								<Route path="/teachers/studentDetail/:studentId" element={<StudentDetail isMobile={isMobile} />} />
 								<Route path="/teachers/manageExercises" element={<ExercisesList isMobile={isMobile} />} />
 								<Route path="/teachers/create" element={<CreateExercise isMobile={isMobile} />} />
 								<Route path='/teachers/profile' element={<Profile />} />
-								<Route path='/teachers/classroomStats/:classroomName' element={<ClassroomStatistics />} />
-								<Route path='/teachers/studentStats/:studentId' element={<ClassroomStatistics />} />
+								<Route path='/teachers/classroomStats/:classroomName' element={<ClassroomStatistics classroomId={classroomId} />} />
+								<Route path='/teachers/studentStats/:studentId' element={<StudentStatistics studentName={studentName} />} />
 								<Route path='/' element={<BlankPage />} />
 								<Route path="*" element={<NotFound />} />
 							</Routes>

@@ -6,7 +6,7 @@ import { LineChartOutlined, DeleteOutlined } from "@ant-design/icons";
 
 let ClassroomsList = (props) => {
 
-  let { isMobile } = props;
+  let { isMobile, setClassroomId } = props;
 
   let [loading, setLoading] = useState(true);
   let [classrooms, setClassrooms] = useState([]);
@@ -34,11 +34,14 @@ let ClassroomsList = (props) => {
       title: "Actions",
       dataIndex: "name",
       align: "right",
-      render: (name) => (
+      render: (name, classroom) => (
         isMobile ?
           <div style={{ float: "right" }}>
             <Tooltip title={t("classrooms.table.tooltips.seeStatistics")} mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
-              <Button onClick={() => navigate("/teachers/classroomStats/" + name)} icon={<LineChartOutlined />} style={{ marginRight: "1vmax" }} />
+              <Button onClick={() => {
+                setClassroomId(classroom.id);
+                navigate("/teachers/classroomStats/" + name);
+              }} icon={<LineChartOutlined />} style={{ marginRight: "1vmax" }} />
             </Tooltip>
             <Tooltip title={t("classrooms.table.tooltips.delete")} mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
               <Button
@@ -50,7 +53,10 @@ let ClassroomsList = (props) => {
             </Tooltip>
           </div>
           : <div style={{ float: "right" }}>
-            <Button onClick={() => navigate("/teachers/classroomStats/" + name)} style={{ marginRight: "1vmax" }}> {t("classrooms.table.buttons.seeStatistics")}</Button >
+            <Button onClick={() => {
+              setClassroomId(classroom.id);
+              navigate("/teachers/classroomStats/" + name);
+            }} style={{ marginRight: "1vmax" }}> {t("classrooms.table.buttons.seeStatistics")}</Button >
             <Button danger type="primary" onClick={() => deleteClassroom(name)}> {t("classrooms.table.buttons.delete")}</Button >
           </div>
       )

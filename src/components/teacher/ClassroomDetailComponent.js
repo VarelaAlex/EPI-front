@@ -6,7 +6,7 @@ import { LineChartOutlined, DeleteOutlined, EditOutlined, CheckOutlined, CloseOu
 
 let ClassroomDetail = (props) => {
 
-    let { isMobile } = props;
+    let { isMobile, setStudentName } = props;
     let { classroomName } = useParams();
 
     let [students, setStudents] = useState([]);
@@ -65,7 +65,9 @@ let ClassroomDetail = (props) => {
         {
             title: t("classrooms.detail.table.studentName"),
             dataIndex: 'name',
-            render: (name, student) => { return name; }
+            render: (name) => {
+                return name;
+            }
         },
         {
             title: t("classrooms.detail.table.studentLastName"),
@@ -81,11 +83,14 @@ let ClassroomDetail = (props) => {
             title: "Actions",
             dataIndex: "id",
             align: "right",
-            render: (id) => (
+            render: (id, student) => (
                 isMobile ?
                     <div style={{ float: "right" }}>
                         <Tooltip title={t("classrooms.detail.table.tooltips.seeStatistics")} mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
-                            <Button onClick={() => navigate("/teachers/studentStatistics/" + id)} icon={<LineChartOutlined />} style={{ marginRight: "1vmax" }} />
+                            <Button onClick={() => {
+                                setStudentName(student.name);
+                                navigate("/teachers/studentStats/" + id);
+                            }} icon={<LineChartOutlined />} style={{ marginRight: "1vmax" }} />
                         </Tooltip>
                         <Tooltip title={t("classrooms.detail.table.tooltips.delete")} mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
                             <Button
@@ -97,7 +102,10 @@ let ClassroomDetail = (props) => {
                         </Tooltip>
                     </div>
                     : <div style={{ float: "right" }}>
-                        <Button onClick={() => navigate("/teachers/studentStatistics/" + id)} style={{ marginRight: "1vmax" }}> {t("classrooms.detail.table.buttons.seeStatistics")}</Button >
+                        <Button onClick={() => {
+                            setStudentName(student.name);
+                            navigate("/teachers/studentStats/" + id);
+                        }} style={{ marginRight: "1vmax" }}> {t("classrooms.detail.table.buttons.seeStatistics")}</Button >
                         <Button danger type="primary" onClick={() => deleteStudent(id)}> {t("classrooms.detail.table.buttons.delete")}</Button >
                     </div>
             )
