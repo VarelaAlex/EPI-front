@@ -1,29 +1,33 @@
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { Button, Flex, Typography } from "antd";
+import { Button, Flex, Image } from "antd";
+import { useTranslation }      from "react-i18next";
+import { useNavigate }         from "react-router-dom";
 
 let SelectRole = () => {
 
-    let { t } = useTranslation();
-    let { Title } = Typography;
+	let { t } = useTranslation();
 
-    let navigate = useNavigate();
+	let navigate = useNavigate();
 
-    return (
-        <Flex align="center" vertical style={{ width: "80%", height: "40vh" }}>
-            <Title style={{ paddingBottom: "5vh" }}>{t("role.title")}</Title>
-            <Flex justify="space-evenly" align="center" style={{ width: "100%" }} >
-                <Button size='large' type="primary" block style={{ width: "40%", height: "9vh" }}
-                    onClick={() => navigate("/loginTeacher")}>
-                    {t("role.teacher")}
-                </Button>
-                <Button size='large' type="primary" block style={{ width: "40%", height: "9vh" }}
-                    onClick={() => navigate("/loginStudent")}>
-                    {t("role.student")}
-                </Button>
-            </Flex>
-        </Flex>
-    );
+	return (
+		<Flex justify="space-evenly" align="flex-start" style={ { width: "100%" } }>
+			<Button  size="large" color="primary" variant="solid" block
+			        style={ { width: "40%", height: "25vh", fontSize: "5vmin" } }
+			        onClick={ () => navigate("/loginTeacher") }>
+				<Flex vertical align="center" justify="space-between" gap={ 20 } style={ { paddingTop: "1vmax" } }>
+					<Image alt={t("role.teacher")} src="icons/teacher.png" height="13vmin" width="13vmin" preview={ false }/>
+					{ t("role.teacher").toUpperCase() }
+				</Flex>
+			</Button>
+			<Button size="large" color="primary" variant="solid" block
+			        style={ { width: "40%", height: "25vh", fontSize: "5vmin" } }
+			        onClick={ () => navigate("/loginStudent") }>
+				<Flex vertical align="center" justify="space-between" gap={ 20 } style={ { paddingTop: "1vmax" } }>
+					<Image alt={t("role.student")} src="icons/student.png" height="13vmin" width="13vmin" preview={ false }/>
+					{ t("role.student").toUpperCase() }
+				</Flex>
+			</Button>
+		</Flex>
+	);
 };
 
 export default SelectRole;

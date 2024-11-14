@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Card, Col, Divider, Flex, Input, Row } from 'antd';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX } from './NetworkProps';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useSession } from '../../SessionComponent';
+import { useTranslation }               from 'react-i18next';
+import { useSession }                   from '../SessionComponent';
 import { HomeOutlined, ReloadOutlined } from '@ant-design/icons';
 
 let TypePhase2 = () => {
@@ -144,12 +144,18 @@ let TypePhase2 = () => {
         return "10.2vmax";
     };
 
-    let pathRect = (exercise) => {
+    let pathRect = () => {
         if ("I-I" === exercise?.networkType) return "220";
         if ("I-II" === exercise?.networkType) return "310";
         if ("I-III" === exercise?.networkType) return "460";
     };
-    
+
+    let firstNodeX = () => {
+        if ("I-I" === exercise?.networkType) return 5;
+        if ("I-II" === exercise?.networkType) return -85;
+        if ("I-III" === exercise?.networkType) return -235;
+    };
+
     return (
         <Card style={{ height: "100%", width: "95%" }} >
             <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
@@ -210,6 +216,7 @@ let TypePhase2 = () => {
                                             height="70"
                                             fill="black"
                                             textAnchor="middle"
+                                            fontFamily="Massallera"
                                         >
                                             {element.text}
                                         </text>
@@ -235,6 +242,7 @@ let TypePhase2 = () => {
                                             height="70"
                                             fill="black"
                                             textAnchor="middle"
+                                            fontFamily="Massallera"
                                         >
                                             {element.text}
                                         </text>
@@ -252,6 +260,7 @@ let TypePhase2 = () => {
                                     fill="black"
                                     textAnchor="middle"
                                     fontSize={element.stop ? "1.5vmax" : element.bigStop ? "2.3vmax" : "0.9vmax"}
+                                    fontFamily="Massallera"
                                 >
                                     {t(element.text)}
                                 </text>);
@@ -278,7 +287,7 @@ let TypePhase2 = () => {
                                     {extendedNodes[0].clicked ?
                                         (
                                             <foreignObject
-                                                x={extendedNodes[0].posX + 5}
+                                                x={extendedNodes[0].posX + firstNodeX()}
                                                 y={`${extendedNodes[0].posY + 1.8}vmax`}
                                                 width="9.3vmax"
                                                 height="4.5vmax"
@@ -287,7 +296,7 @@ let TypePhase2 = () => {
                                                     autoFocus={true}
                                                     autoComplete='off'
                                                     id={extendedNodes[0].id}
-                                                    style={{ textTransform: "uppercase", textAlign: 'center', fontSize:"1.1vmax" }}
+                                                    style={{ textTransform: "uppercase", textAlign: 'center', fontSize: "1.1vmax", fontFamily: "Massallera" }}
                                                     onChange={() => check()}
                                                     value={extendedNodes[0].ok ? extendedNodes[0].text : undefined}
                                                 />
@@ -349,7 +358,7 @@ let TypePhase2 = () => {
                                             (
                                                 <foreignObject
                                                     x={element.shape === "ellipse" ?
-                                                        "13%" : element.nexus ? "0%" :"4%"}
+                                                        "13%" : element.nexus ? "0%" : "4%"}
                                                     y={element.bigStop ?
                                                         "40%" :
                                                         element.shape === "rect" ? `${element.posY + 2}vmax` : "30%"}
@@ -364,7 +373,7 @@ let TypePhase2 = () => {
                                                         autoFocus={true}
                                                         autoComplete='off'
                                                         id={element.id}
-                                                        style={{ textTransform: element.shape === "rect" ? "uppercase" : "lowercase", textAlign: 'center', fontSize:"1.1vmax" }}
+                                                        style={{ textTransform: element.shape === "rect" ? "uppercase" : "lowercase", textAlign: 'center', fontSize: "1.1vmax", fontFamily: "Massallera" }}
                                                         height={"40px"}
                                                         onChange={() => check()}
                                                         value={element.ok ? (element.shape ? element.text : t(element.text)) : undefined}
@@ -434,7 +443,7 @@ let TypePhase2 = () => {
                                             (
                                                 <foreignObject
                                                     x={element.shape === "ellipse" ?
-                                                        "13%" : element.nexus ? "0%" :"4%"}
+                                                        "13%" : element.nexus ? "0%" : "4%"}
                                                     y={element.bigStop || element.stop ?
                                                         "40%" :
                                                         element.shape === "ellipse" ?
@@ -451,7 +460,7 @@ let TypePhase2 = () => {
                                                         autoFocus={true}
                                                         autoComplete='off'
                                                         id={element.id}
-                                                        style={{ textTransform: element.shape === "rect" ? "uppercase" : "lowercase", textAlign: 'center', fontSize:"1.1vmax" }}
+                                                        style={{ textTransform: element.shape === "rect" ? "uppercase" : "lowercase", textAlign: 'center', fontSize: "1.1vmax", fontFamily: "Massallera" }}
                                                         height={"10vmax"}
                                                         onChange={() => check()}
                                                         value={element.ok ? (element.shape ? element.text : t(element.text)) : undefined}

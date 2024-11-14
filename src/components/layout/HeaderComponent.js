@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { Row, Col, Button, Dropdown, Space, Layout, Tooltip, Image } from "antd";
 import { DownloadOutlined, DownOutlined, TranslationOutlined, UserOutlined } from '@ant-design/icons';
-import { Link } from "react-router-dom";
-import { useSession } from "../../SessionComponent";
+import { Link }       from "react-router-dom";
+import { useSession } from "../SessionComponent";
 
-let HeaderComponent = (props) => {
+let Header = (props) => {
 
     let { open, setOpen, isMobile } = props;
     let { login } = useSession();
@@ -69,12 +69,13 @@ let HeaderComponent = (props) => {
                             shape="circle"
                             icon={<UserOutlined />}
                             onClick={() => setOpen(!open)}
+                            data-testid="menu-button"
                         />
                     </Col>
                 }
                 <Col style={{ display: 'flex', alignItems: 'center' }}>
                     <Link to="/" >
-                        <Image src="/logo_text.png" height="5.5vh" preview={false} style={{ borderRadius: '0.75vmax' }} />
+                        <Image alt="logo" src="/logo_text.png" height="5.5vh" preview={false} style={{ borderRadius: '0.75vmax' }} />
                     </Link>
                 </Col>
             </Row>
@@ -120,4 +121,4 @@ let HeaderComponent = (props) => {
     );
 };
 
-export default HeaderComponent;
+export default Header;

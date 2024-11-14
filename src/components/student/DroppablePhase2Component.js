@@ -1,8 +1,8 @@
 import React from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { useTranslation } from 'react-i18next';
-import '../../fonts/massallera.TTF'
-import { useSession } from '../../SessionComponent';
+import '../assets/fonts/massallera.TTF'
+import { useSession } from '../SessionComponent';
 
 const DroppablePhase2 = ({ id, type, ok, nexus, stop, bigStop, shape, src, text }) => {
 

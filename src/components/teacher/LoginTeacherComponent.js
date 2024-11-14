@@ -1,8 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Input, Typography, Form, Alert } from "antd";
-import { useState } from 'react';
-import { useSession } from '../../SessionComponent';
+import { useState }   from 'react';
+import { useSession } from '../SessionComponent';
 
 let LoginTeacher = () => {
 

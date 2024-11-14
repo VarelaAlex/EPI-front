@@ -84,7 +84,7 @@ let SelectImageModal = ({ setMessage, setOpen, open, selectedImages, setSelected
                         key={image}
                         style={selectedImages.includes(image) ? { border: '2px solid #1890ff' } : {}}
                     >
-                        <Image preview={false} width="6vmax" src={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${image}`} />
+                        <Image alt='Imagen' preview={false} width="6vmax" src={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${image}`} />
                     </Card>
                 )}
             </Flex>

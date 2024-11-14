@@ -143,3 +143,9 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# k6
+summary.html
+
+# intellij
+.idea/

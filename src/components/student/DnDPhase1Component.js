@@ -4,8 +4,8 @@ import { Card, Col, Divider, Flex, Row } from 'antd';
 import DroppablePhase1 from './DroppablePhase1Component';
 import DraggablePhase1 from './DraggablePhase1Component';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX, STOP } from './NetworkProps';
-import { useNavigate } from 'react-router-dom';
-import { useSession } from '../../SessionComponent';
+import { useNavigate }                  from 'react-router-dom';
+import { useSession }                   from '../SessionComponent';
 import { HomeOutlined, ReloadOutlined } from '@ant-design/icons';
 
 let DnDPhase1 = () => {

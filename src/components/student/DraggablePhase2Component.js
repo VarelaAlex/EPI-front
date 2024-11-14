@@ -1,8 +1,8 @@
 import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { useTranslation } from 'react-i18next';
-import '../../fonts/massallera.TTF';
-import { useSession } from '../../SessionComponent';
+import '../assets/fonts/massallera.TTF';
+import { useSession } from '../SessionComponent';
 
 const DraggablePhase2 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text, x, y }) => {
 

@@ -3,8 +3,8 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { CATEGORIES, REPRESENTATION } from "../../Globals";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import i18n from "../../i18n";
-import { useSession } from "../../SessionComponent";
+import i18n           from "../../i18n";
+import { useSession } from "../SessionComponent";
 
 let ExercisesCarousel = () => {
 
@@ -150,6 +150,7 @@ let ExercisesCarousel = () => {
                             >
                                 <Flex vertical align="center">
                                     <Image
+                                        alt={t(`representation.${representation.toLocaleLowerCase()}`)}
                                         draggable={false}
                                         preview={false}
                                         src={`/representations/${representation.toLocaleLowerCase()}${selectedRepresentation === index ? "Color" : "BW"}.png`}
@@ -170,6 +171,7 @@ let ExercisesCarousel = () => {
                             >
                                 <Flex vertical align="center">
                                     <Image
+                                        alt={t(`categories.${category.toLocaleLowerCase()}`)}
                                         draggable={false}
                                         preview={false}
                                         src={`/categories/${category.toLocaleLowerCase()}${selectedImage === index ? "Color" : "BW"}.png`}
@@ -218,7 +220,7 @@ let ExercisesCarousel = () => {
                                         }}
                                     >
 
-                                        <Image draggable={false} preview={false} width="15vmax" src={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${card.mainImage}`} />
+                                        <Image alt={card.title} draggable={false} preview={false} width="15vmax" src={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${card.mainImage}`} />
                                         <Divider style={{ marginTop: "1vmax", marginBottom: "1vmax" }} />
                                         <Meta style={{ backgroundColor: a[card.networkType], borderRadius: "12px" }} title={<Text style={{ fontSize: "1.5vmax", textAlign: "center", color: "black" }}>{card.networkType}</Text>} />
                                     </Card>

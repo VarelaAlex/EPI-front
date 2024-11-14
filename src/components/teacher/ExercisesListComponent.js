@@ -2,7 +2,7 @@ import { Empty, Button, Card, Table, Divider, Tooltip, Alert, Spin } from "antd"
 import { useEffect, useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { /*EditOutlined,*/ DeleteOutlined } from "@ant-design/icons";
 
 let ExercisesList = (props) => {
 
@@ -52,9 +52,9 @@ let ExercisesList = (props) => {
             align: "center",
             render: (_id) => (isMobile ?
                 <>
-                    <Tooltip title={t("exercise.table.tooltips.edit")} mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
+                    {/*<Tooltip title={t("exercise.table.tooltips.edit")} mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
                         <Button onClick={() => navigate(`/teachers/exercise/${_id}/edit`)} icon={<EditOutlined />} style={{ marginRight: "1vmax" }} />
-                    </Tooltip>
+                    </Tooltip>*/}
                     <Tooltip title={t("exercise.table.tooltips.delete")} mouseEnterDelay="0.3" trigger={["hover", "focus"]}>
                         <Button
                             danger
@@ -65,7 +65,7 @@ let ExercisesList = (props) => {
                     </Tooltip>
                 </>
                 : <>
-                    <Button onClick={() => navigate(`/teachers/exercise/${_id}/edit`)} style={{ marginRight: "1vmax" }}> {t("exercise.table.buttons.edit")}</Button >
+                    {/*<Button onClick={() => navigate(`/teachers/exercise/${_id}/edit`)} style={{ marginRight: "1vmax" }}> {t("exercise.table.buttons.edit")}</Button >*/}
                     <Button danger type="primary" onClick={() => { deleteExercise(_id); }}> {t("exercise.table.buttons.delete")}</Button >
                 </>
             )

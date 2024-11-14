@@ -7,10 +7,9 @@ let NotFound = () => {
     let { Title } = Typography;
 
     return (
-        <Flex align="center" vertical style={{ width: "80%", height: "40vh" }}>
-            <Flex justify="space-evenly" align="center" style={{ width: "100%" }} >
-                <Title>{t("pageNotFound")}</Title>
-            </Flex>
+        <Flex align="center" vertical style={{ width: "80%", height: "80vh" }}>
+            <Title>{t("pageNotFound.message1")}</Title>
+            <Title level={2}>{t("pageNotFound.message2")}</Title>
         </Flex>
     );
 };

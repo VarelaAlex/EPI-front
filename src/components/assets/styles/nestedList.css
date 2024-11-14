@@ -1,0 +1,50 @@
+.outer-list {
+    counter-reset: section; /* Create a new counter for the outer list */
+}
+
+.outer-list > li {
+    counter-increment: section; /* Increment the outer counter */
+    list-style-type: none; /* Remove default list styling */
+    position: relative; /* Positioning context for the pseudo-element */
+    text-indent: -1em; /* Indent the wrapped text inside li */
+}
+
+.outer-list > li:before {
+    content: counter(section) ". "; /* Display outer counter */
+}
+
+.sub-list {
+    counter-reset: subsection; /* Create a new counter for the inner list */
+}
+
+.sub-list > li {
+    counter-increment: subsection; /* Increment the inner counter */
+    list-style-type: none; /* Remove default list styling */
+    position: relative; /* Positioning context for the pseudo-element */
+}
+
+.sub-list > li:before {
+    content: counter(section) "." counter(subsection) " "; /* Display combined counters */
+}
+
+.sub-list > li {
+    text-indent: -1em; /* Indent the wrapped text inside li */
+}
+
+.sub-sub-list {
+    counter-reset: subsubsection; /* Create a new counter for the sub-list */
+}
+
+.sub-sub-list > li {
+    counter-increment: subsubsection; /* Increment the subsubsection counter */
+    list-style-type: none; /* Remove default list styling */
+    position: relative; /* Positioning context for the pseudo-element */
+}
+
+.sub-sub-list > li:before {
+    content: counter(section) "." counter(subsection) "." counter(subsubsection) " "; /* Display subsubsection numbering */
+}
+
+.sub-sub-list > li {
+    text-indent: -1em; /* Indent the wrapped text inside li */
+}

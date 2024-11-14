@@ -1,312 +1,339 @@
 {
-	"language": {
-		"button": "Language",
-		"spanish": "Spanish",
-		"english": "English"
-	},
-	"pwa": {
-		"button": "Download",
-		"notificationMessage": "Welcome to EPI!",
-		"notificationDescription": "You can download the app by clicking on the button on the right"
-	},
-	"sider": {
-		"teacher": {
-			"welcomeMessage": "Hello",
-			"classrooms": "My classrooms",
-			"exercises": "My exercises",
-			"about": "About Hypertexto strategy",
-			"profile": "My profile"
-		},
-		"student": {
-			"exercises": "Exercises",
-			"howto": "How to do a exercise"
-		},
-		"disconnect": "Disconnect"
-	},
-	"role": {
-		"title": "Who are you?",
-		"teacher": "Teacher",
-		"student": "Student"
-	},
-	"login": {
-		"title": "Login",
-		"button": "Log in",
-		"registerMessage": "Don't you have an account yet?",
-		"registerLink": "Sing up",
-		"form": {
-			"label": {
-				"email": "Email",
-				"username": "Username",
-				"password": "Password"
-			},
-			"placeholder": {
-				"email": "angelicaR@email.com",
-				"username": "ross80"
-			}
-		},
-		"error": {
-			"email": {
-				"empty": "Email is mandatory",
-				"format": "Incorrect email format",
-				"notExist": "There is no teacher with this email"
-			},
-			"password": {
-				"empty": "Password is mandatory",
-				"incorrect": "Incorrect password"
-			},
-			"username": {
-				"empty": "Username is mandatory",
-				"notExist": "There is no student with this username"
-			}
-		}
-	},
-	"signup": {
-		"title": "Sign up",
-		"button": "Sign up",
-		"loginMessage": "Already have an account?",
-		"loginLink": "Log in",
-		"form": {
-			"label": {
-				"name": "Name",
-				"lastName": "Last name",
-				"email": "Email",
-				"username": "Username",
-				"password": "Password",
-				"confirm": "Confirm your password"
-			},
-			"placeholder": {
-				"name": "Angelica",
-				"lastName": "Ross",
-				"email": "angelicaR@email.com",
-				"confirm": "Repeat your password"
-			}
-		},
-		"error": {
-			"email": {
-				"empty": "Email is mandatory",
-				"format": "Incorrect email format",
-				"repeated": "There is already an account with this email"
-			},
-			"name": "Name is mandatory",
-			"lastName": "Last name is mandatory",
-			"password": {
-				"empty": "Password is mandatory",
-				"format": {
-					"mustHave": "Password must meet the following criteria:",
-					"between": "1. Between 8 and 12 characters",
-					"digit": "2. At list one digit",
-					"special": "3. At list one of the following special characters: ! @ # $ % & *"
-				},
-				"confirm": "Please, confirm your password",
-				"unmatch": "The passwords you entered do not match"
-			}
-		}
-	},
-	"classrooms": {
-		"table": {
-			"title": "My classrooms",
-			"className": "Class name",
-			"numberStudents": "Number of students",
-			"empty": "You don't have classrooms yet",
-			"tooltips": {
-				"seeStatistics": "See statistics",
-				"delete": "Delete"
-			},
-			"buttons": {
-				"seeStatistics": "See statistics",
-				"delete": "Delete"
-			}
-		},
-		"addClassroom": {
-			"divider": "Add a new classroom",
-			"label": "Classroom name",
-			"placeholder": "Primary 2ºC",
-			"button": "Add classroom",
-			"error": "Classroom name is mandatory"
-		},
-		"create": {
-			"error": {
-				"name": "Name is mandatory",
-				"teacher": "Teacher's id is mandatory",
-				"repeated": "There is already a classroom with this name"
-			}
-		},
-		"list": {
-			"error": {
-				"teacher": "Teacher's id is mandatory",
-				"notExist": "You don't have classrooms yet"
-			}
-		},
-		"delete": {
-			"error": {
-				"id": "Classroom's id is mandatory",
-				"notExist": "The classroom doesn't exist"
-			}
-		},
-		"detail": {
-			"table": {
-				"title": "My students",
-				"studentUsername": "Username",
-				"studentName": "Name",
-				"studentLastName": "Last name",
-				"studentAge": "Age",
-				"empty": "You don't have students yet",
-				"tooltips": {
-					"seeStatistics": "See statistics",
-					"delete": "Delete"
-				},
-				"buttons": {
-					"seeStatistics": "See statistics",
-					"delete": "Delete"
-				}
-			},
-			"addStudent": {
-				"divider": "Add a new student",
-				"label": {
-					"name": "Student's name",
-					"lastName": "Student's last name",
-					"age": "Student's age"
-				},
-				"error": {
-					"name": "Name is mandatory",
-					"lastName": "Last name is mandatory",
-					"age": "Age is mandatory"
-				},
-				"placeholder": {
-					"name": "Angelica",
-					"lastName": "Ross",
-					"age": "5"
-				},
-				"button": "Add student"
-			},
-			"error": {
-				"id": "Student's id is mandatory",
-				"teacher": "Teacher's id is mandatory",
-				"notExist": "The student doesn't exist"
-			}
-		}
-	},
-	"internalServerError": "Something went wrong, try again later",
-	"exercise": {
-		"create": {
-			"title": "Create Exercise",
-			"label": {
-				"title": "Title",
-				"language": "Language",
-				"category": "Category",
-				"networkType": "Network Type",
-				"representation": "Representation",
-				"mainImage": "Main Image",
-				"definitionText": "Definition Text",
-				"definitionImage": "Definition Image",
-				"ampliationText": "Ampliation Text",
-				"ampliationImage": "Ampliation Image",
-				"definitionPictogram": "Definition Pictogram",
-				"ampliationPictogram": "Ampliation Pictogram"
-			},
-			"error": {
-				"title": "Please enter a title",
-				"language": "Please select a language",
-				"category": "Please select a category",
-				"networkType": "Please select a network type",
-				"representation": "Please select a representation",
-				"definitionText": "Please enter a definition text",
-				"ampliationText": "Please enter an ampliation text",
-				"definitionPictogram": "Please select a definition connector",
-				"ampliationPictogram": "Please select an ampliation connector"
-			},
-			"placeholder": {
-				"title": "The hand",
-				"language": "English",
-				"category": "Body and Food",
-				"networkType": "I-I",
-				"representation": "Iconic",
-				"definitionText": "The arm",
-				"ampliationText": "Fingers",
-				"definitionPictogram": "is part of",
-				"ampliationPictogram": "has"
-			},
-			"button": "Create Exercise"
-		}
-	},
-	"pictograms": {
-		"is": "is",
-		"isFor": "is for",
-		"isPartOf": "is part of",
-		"are": "are",
-		"areFor": "are for",
-		"arePartOf": "are part of",
-		"has": "has",
-		"isUsedFor": "is used for",
-		"isIn": "is in",
-		"have": "have",
-		"areUsedFor": "are used for",
-		"areIn": "are in"
-	},
-	"representation": {
-		"iconic": "Iconic",
-		"mixed": "Mixed",
-		"symbolic": "Symbolic"
-	},
-	"categories": {
-		"family": "Family",
-		"animals": "Animals",
-		"body&food": "Body and food",
-		"transports": "Transports",
-		"seasons": "Seasons"
-	},
-	"student": {
-		"error": {
-			"notExist": "The student doesn't exist"
-		}
-	},
-	"students": {
-		"detail": {
-			"title": "Modify student",
-			"update": {
-				"label": {
-					"name": "Student's name",
-					"lastName": "Student's last name",
-					"age": "Student's age",
-					"classroom": "Student's classroom"
-				},
-				"error": {
-					"name": "Name is mandatory",
-					"lastName": "Last name is mandatory",
-					"age": "Age is mandatory",
-					"classroom": "Classroom is mandatory"
-				},
-				"placeholder": {
-					"name": "Angelica",
-					"lastName": "Ross",
-					"age": "5",
-					"classroom": "Primary 3º A"
-				},
-				"button": "Submit"
-			}
-		}
-	},
-	"profile": {
-		"title": "My profile",
-		"label": {
-			"name": "Name",
-			"lastName": "Last name",
-			"email": "Email"
-		},
-		"error": {
-			"name": "Name is mandatory",
-			"lastName": "Last name is mandatory",
-			"email": {
-				"empty": "Email is mandatory",
-				"format": "Incorrect email format",
-				"repeated": "There is already an account with this email"
-			}
-		},
-		"placeholder": {
-			"name": "Angelica",
-			"lastName": "Ross",
-			"email": "angelicaR@email.com"
-		},
-		"button": "Submit"
-	}
+  "language": {
+    "button": "Language",
+    "spanish": "Spanish",
+    "english": "English"
+  },
+  "pwa": {
+    "button": "Download",
+    "notificationMessage": "Welcome to EPI!",
+    "notificationDescription": "You can download the app by clicking on the button on the right"
+  },
+  "sider": {
+    "teacher": {
+      "welcomeMessage": "Hello",
+      "classrooms": "My classrooms",
+      "exercises": "My exercises",
+      "about": "About Hypertexto strategy",
+      "profile": "My profile"
+    },
+    "student": {
+      "exercises": "Exercises",
+      "howto": "How to do a exercise"
+    },
+    "disconnect": "Disconnect"
+  },
+  "role": {
+    "title": "Who are you?",
+    "teacher": "Teacher",
+    "student": "Student"
+  },
+  "login": {
+    "title": "Login",
+    "button": "Log in",
+    "registerMessage": "Don’t you have an account yet?",
+    "registerLink": "Sing up",
+    "form": {
+      "label": {
+        "email": "Email",
+        "username": "Username",
+        "password": "Password"
+      },
+      "placeholder": {
+        "email": "angelicaR@email.com",
+        "username": "ross80"
+      }
+    },
+    "error": {
+      "email": {
+        "empty": "Email is mandatory",
+        "format": "Incorrect email format",
+        "notExist": "There is no teacher with this email"
+      },
+      "password": {
+        "empty": "Password is mandatory",
+        "incorrect": "Incorrect password"
+      },
+      "username": {
+        "empty": "Username is mandatory",
+        "notExist": "There is no student with this username"
+      }
+    }
+  },
+  "signup": {
+    "title": "Sign up",
+    "button": "Sign up",
+    "loginMessage": "Already have an account?",
+    "loginLink": "Log in",
+    "form": {
+      "label": {
+        "name": "Name",
+        "lastName": "Last name",
+        "email": "Email",
+        "username": "Username",
+        "password": "Password",
+        "confirm": "Confirm your password"
+      },
+      "placeholder": {
+        "name": "Angelica",
+        "lastName": "Ross",
+        "email": "angelicaR@email.com",
+        "confirm": "Repeat your password"
+      }
+    },
+    "error": {
+      "email": {
+        "empty": "Email is mandatory",
+        "format": "Incorrect email format",
+        "repeated": "There is already an account with this email"
+      },
+      "name": "Name is mandatory",
+      "lastName": "Last name is mandatory",
+      "password": {
+        "empty": "Password is mandatory",
+        "format": {
+          "mustHave": "Password must meet the following criteria:",
+          "between": "1. Between 8 and 12 characters",
+          "digit": "2. At list one digit",
+          "special": "3. At list one of the following special characters: ! @ # $ % & *"
+        },
+        "confirm": "Please, confirm your password",
+        "unmatch": "The passwords you entered do not match"
+      }
+    }
+  },
+  "classrooms": {
+    "table": {
+      "title": "My classrooms",
+      "className": "Class name",
+      "numberStudents": "Number of students",
+      "empty": "You don’t have classrooms yet",
+      "tooltips": {
+        "seeStatistics": "See statistics",
+        "delete": "Delete"
+      },
+      "buttons": {
+        "seeStatistics": "See statistics",
+        "delete": "Delete"
+      }
+    },
+    "addClassroom": {
+      "divider": "Add a new classroom",
+      "label": "Classroom name",
+      "placeholder": "Primary 2ºC",
+      "button": "Add classroom",
+      "error": "Classroom name is mandatory"
+    },
+    "create": {
+      "error": {
+        "name": "Name is mandatory",
+        "teacher": "Teacher’s id is mandatory",
+        "repeated": "There is already a classroom with this name"
+      }
+    },
+    "list": {
+      "error": {
+        "teacher": "Teacher’s id is mandatory",
+        "notExist": "You don’t have classrooms yet"
+      }
+    },
+    "delete": {
+      "error": {
+        "id": "Classroom’s id is mandatory",
+        "notExist": "The classroom doesn’t exist"
+      }
+    },
+    "detail": {
+      "table": {
+        "title": "My students",
+        "studentUsername": "Username",
+        "studentName": "Name",
+        "studentLastName": "Last name",
+        "studentAge": "Age",
+        "empty": "You don’t have students yet",
+        "tooltips": {
+          "seeStatistics": "See statistics",
+          "delete": "Delete"
+        },
+        "buttons": {
+          "seeStatistics": "See statistics",
+          "delete": "Delete"
+        }
+      },
+      "addStudent": {
+        "divider": "Add a new student",
+        "label": {
+          "name": "Student’s name",
+          "lastName": "Student’s last name",
+          "age": "Student’s age"
+        },
+        "error": {
+          "name": "Name is mandatory",
+          "lastName": "Last name is mandatory",
+          "age": "Age is mandatory"
+        },
+        "placeholder": {
+          "name": "Angelica",
+          "lastName": "Ross",
+          "age": "5"
+        },
+        "button": "Add student"
+      },
+      "error": {
+        "id": "Student’s id is mandatory",
+        "teacher": "Teacher’s id is mandatory",
+        "notExist": "The student doesn’t exist"
+      }
+    }
+  },
+  "internalServerError": "Something went wrong, try again later",
+  "exercise": {
+    "create": {
+      "title": "Create Exercise",
+      "label": {
+        "title": "Title",
+        "language": "Language",
+        "category": "Category",
+        "networkType": "Network Type",
+        "representation": "Representation",
+        "mainImage": "Main Image",
+        "definitionText": "Definition Text",
+        "definitionImage": "Definition Image",
+        "ampliationText": "Ampliation Text",
+        "ampliationImage": "Ampliation Image",
+        "definitionPictogram": "Definition Pictogram",
+        "ampliationPictogram": "Ampliation Pictogram"
+      },
+      "error": {
+        "title": "Please enter a title",
+        "language": "Please select a language",
+        "category": "Please select a category",
+        "networkType": "Please select a network type",
+        "representation": "Please select a representation",
+        "definitionText": "Please enter a definition text",
+        "ampliationText": "Please enter an ampliation text",
+        "definitionPictogram": "Please select a definition connector",
+        "ampliationPictogram": "Please select an ampliation connector"
+      },
+      "placeholder": {
+        "title": "The hand",
+        "language": "English",
+        "category": "Body and Food",
+        "networkType": "I-I",
+        "representation": "Iconic",
+        "definitionText": "The arm",
+        "ampliationText": "Fingers",
+        "definitionPictogram": "is part of",
+        "ampliationPictogram": "has"
+      },
+      "addExercise": {
+        "divider": "Add a new exercise",
+        "button": "Create exercise"
+      }
+    },
+    "carousel": {
+      "empty": "No exercises exist"
+    },
+    "table": {
+      "title": "My exercises",
+      "name": "Exercise",
+      "category": "Category",
+      "networkType": "Network type",
+      "representation": "Representation",
+      "language": "Language",
+      "empty": "You don’t have exercises yet",
+      "tooltips": {
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "buttons": {
+        "edit": "Edit",
+        "delete": "Delete"
+      }
+    }
+  },
+  "pictograms": {
+    "is": "is",
+    "isFor": "is for",
+    "isPartOf": "is part of",
+    "are": "are",
+    "areFor": "are for",
+    "arePartOf": "are part of",
+    "has": "has",
+    "isUsedFor": "is used for",
+    "isIn": "is in",
+    "have": "have",
+    "areUsedFor": "are used for",
+    "areIn": "are in"
+  },
+  "representation": {
+    "iconic": "Iconic",
+    "mixed": "Mixed",
+    "symbolic": "Symbolic"
+  },
+  "categories": {
+    "family": "Family",
+    "animals": "Animals",
+    "body&food": "Body and Food",
+    "transports": "Transports",
+    "seasons": "Seasons"
+  },
+  "student": {
+    "error": {
+      "notExist": "The student doesn’t exist"
+    }
+  },
+  "students": {
+    "detail": {
+      "title": "Modify student",
+      "update": {
+        "label": {
+          "name": "Student’s name",
+          "lastName": "Student’s last name",
+          "age": "Student’s age",
+          "classroom": "Student’s classroom"
+        },
+        "error": {
+          "name": "Name is mandatory",
+          "lastName": "Last name is mandatory",
+          "age": "Age is mandatory",
+          "classroom": "Classroom is mandatory"
+        },
+        "placeholder": {
+          "name": "Angelica",
+          "lastName": "Ross",
+          "age": "5",
+          "classroom": "Primary 3º A"
+        },
+        "button": "Submit"
+      }
+    }
+  },
+  "profile": {
+    "title": "My profile",
+    "label": {
+      "name": "Name",
+      "lastName": "Last name",
+      "email": "Email"
+    },
+    "error": {
+      "name": "Name is mandatory",
+      "lastName": "Last name is mandatory",
+      "email": {
+        "empty": "Email is mandatory",
+        "format": "Incorrect email format",
+        "repeated": "There is already an account with this email"
+      }
+    },
+    "placeholder": {
+      "name": "Angelica",
+      "lastName": "Ross",
+      "email": "angelicaR@email.com"
+    },
+    "button": "Submit"
+  },
+  "pageNotFound": {
+    "message1": "Oops... It seems the page you are looking for does not exist.",
+    "message2": "Click the icon at the top left to go back."
+  }
 }

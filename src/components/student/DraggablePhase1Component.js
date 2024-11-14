@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { useTranslation } from 'react-i18next';
-import './font.css'
+import '../assets/styles/font.css'
 
 const DraggablePhase1 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text }) => {
 

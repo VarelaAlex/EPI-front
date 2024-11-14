@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Massallera';
-    src: url('../../fonts/massallera.TTF') format('truetype');
+    src: url('../fonts/massallera.TTF') format('truetype');
     font-weight: normal;
     font-style: normal;
   }

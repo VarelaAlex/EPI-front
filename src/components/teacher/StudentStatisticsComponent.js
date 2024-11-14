@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import ChartDataLabels from 'chartjs-plugin-datalabels'; // Import the plugin
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useParams } from 'react-router-dom';
 import { Card, Typography } from 'antd';
 

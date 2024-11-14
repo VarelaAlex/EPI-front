@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, matchPath, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Layout, notification, Flex } from "antd";
 import SelectRole from './components/SelectRoleComponent';
-import HeaderComponent from './components/layout/HeaderComponent';
+import Header from './components/layout/HeaderComponent';
 import Sider from "./components/layout/SiderComponent";
 import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined } from "@ant-design/icons";
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
@@ -18,8 +18,8 @@ import DnDPhase2 from './components/student/DnDPhase2Component';
 import TypePhase1 from './components/student/TypePhase1Component';
 import TypePhase2 from './components/student/TypePhase2Component';
 import ExercisesCarousel from './components/student/ExercisesCarouselComponent';
-import { useSession } from './SessionComponent';
-import { jwtDecode } from 'jwt-decode';
+import { useSession }    from './components/SessionComponent';
+import { jwtDecode }     from 'jwt-decode';
 import NotFound from './components/NotFoundComponent';
 import ClassroomDetail from './components/teacher/ClassroomDetailComponent';
 import StudentDetail from './components/teacher/StudentDetailComponent';
@@ -27,6 +27,7 @@ import BlankPage from './components/BlankPageComponent';
 import Profile from './components/teacher/ProfileComponent';
 import ClassroomStatistics from './components/teacher/ClassroomStatisticsComponent';
 import StudentStatistics from './components/teacher/StudentStatisticsComponent';
+import AboutEPI from './components/teacher/AboutEPIComponent';
 
 let App = () => {
 
@@ -275,7 +276,7 @@ let App = () => {
 		<>
 			{contextHolder}
 			<Layout>
-				<HeaderComponent
+				<Header
 					login={login}
 					open={open}
 					setOpen={setOpen}
@@ -311,6 +312,7 @@ let App = () => {
 								<Route path='/teachers/profile' element={<Profile />} />
 								<Route path='/teachers/classroomStats/:classroomName' element={<ClassroomStatistics classroomId={classroomId} />} />
 								<Route path='/teachers/studentStats/:studentId' element={<StudentStatistics studentName={studentName} />} />
+								<Route path='/teachers/aboutEPI' element={<AboutEPI />} />
 								<Route path='/' element={<BlankPage />} />
 								<Route path="*" element={<NotFound />} />
 							</Routes>

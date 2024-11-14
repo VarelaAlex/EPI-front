@@ -4,10 +4,10 @@ import { Card, Col, Divider, Flex, Row } from 'antd';
 import DroppablePhase2 from './DroppablePhase2Component';
 import DraggablePhase2 from './DraggablePhase2Component';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX } from './NetworkProps';
-import { useNavigate } from 'react-router-dom';
-import { useSession } from '../../SessionComponent';
+import { useNavigate }                  from 'react-router-dom';
+import { useSession }                   from '../SessionComponent';
 import { HomeOutlined, ReloadOutlined } from '@ant-design/icons';
-import '../../fonts/massallera.TTF';
+import '../assets/fonts/massallera.TTF';
 
 let DnDPhase2 = () => {
 

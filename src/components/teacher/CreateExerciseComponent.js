@@ -47,21 +47,21 @@ let CreateExercise = ({ isMobile }) => {
     ];
 
     const definitionPictogramOptions = [
-        { value: 'is', label: <><Image width={20} src='/pictograms/is.png' /> {t("pictograms.is", { lng: selectedLanguage })}</> },
-        { value: 'isFor', label: <><Image width={20} src='/pictograms/isFor.png' /> {t("pictograms.isFor", { lng: selectedLanguage })}</> },
-        { value: 'isPartOf', label: <><Image width={20} src='/pictograms/isPartOf.png' /> {t("pictograms.isPartOf", { lng: selectedLanguage })}</> },
-        { value: 'are', label: <><Image width={20} src='/pictograms/are.png' /> {t("pictograms.are", { lng: selectedLanguage })}</> },
-        { value: 'areFor', label: <><Image width={20} src='/pictograms/areFor.png' /> {t("pictograms.areFor", { lng: selectedLanguage })}</> },
-        { value: 'arePartOf', label: <><Image width={20} src='/pictograms/arePartOf.png' /> {t("pictograms.arePartOf", { lng: selectedLanguage })}</> }
+        { value: 'is', label: <><Image alt={t("pictograms.is", { lng: selectedLanguage })} preview={false} width={20} src='/pictograms/is.png' /> {t("pictograms.is", { lng: selectedLanguage })}</> },
+        { value: 'isFor', label: <><Image alt={t("pictograms.isFor", { lng: selectedLanguage })} preview={false} width={20} src='/pictograms/isFor.png' /> {t("pictograms.isFor", { lng: selectedLanguage })}</> },
+        { value: 'isPartOf', label: <><Image alt={t("pictograms.isPartOf", { lng: selectedLanguage })} preview={false} width={20} src='/pictograms/isPartOf.png' /> {t("pictograms.isPartOf", { lng: selectedLanguage })}</> },
+        { value: 'are', label: <><Image alt={t("pictograms.are", { lng: selectedLanguage })} preview={false} width={20} src='/pictograms/are.png' /> {t("pictograms.are", { lng: selectedLanguage })}</> },
+        { value: 'areFor', label: <><Image alt={t("pictograms.areFor", { lng: selectedLanguage })} preview={false} width={20} src='/pictograms/areFor.png' /> {t("pictograms.areFor", { lng: selectedLanguage })}</> },
+        { value: 'arePartOf', label: <><Image alt={t("pictograms.arePartOf", { lng: selectedLanguage })} preview={false} width={20} src='/pictograms/arePartOf.png' /> {t("pictograms.arePartOf", { lng: selectedLanguage })}</> }
     ];
 
     const ampliationPictogramOptions = [
-        { value: 'has', label: <><Image width={20} src='/pictograms/has.png' /> {t("pictograms.has", { lng: selectedLanguage })}</> },
-        { value: 'isUsedFor', label: <><Image width={20} src='/pictograms/isUsedFor.png' /> {t("pictograms.isUsedFor", { lng: selectedLanguage })}</> },
-        { value: 'isIn', label: <><Image width={20} src='/pictograms/isIn.png' /> {t("pictograms.isIn", { lng: selectedLanguage })}</> },
-        { value: 'have', label: <><Image width={20} src='/pictograms/have.png' /> {t("pictograms.have", { lng: selectedLanguage })}</> },
-        { value: 'areUsedFor', label: <><Image width={20} src='/pictograms/areUsedFor.png' /> {t("pictograms.areUsedFor", { lng: selectedLanguage })}</> },
-        { value: 'areIn', label: <><Image width={20} src='/pictograms/areIn.png' /> {t("pictograms.areIn", { lng: selectedLanguage })}</> }
+        { value: 'has', label: <><Image alt={t("pictograms.has", { lng: selectedLanguage })} preview={false} width={20} src='/pictograms/has.png' /> {t("pictograms.has", { lng: selectedLanguage })}</> },
+        { value: 'isUsedFor', label: <><Image alt={t("pictograms.isUsedFor", { lng: selectedLanguage })} preview={false} width={20} src='/pictograms/isUsedFor.png' /> {t("pictograms.isUsedFor", { lng: selectedLanguage })}</> },
+        { value: 'isIn', label: <><Image alt={t("pictograms.isIn", { lng: selectedLanguage })} preview={false} width={20} src='/pictograms/isIn.png' /> {t("pictograms.isIn", { lng: selectedLanguage })}</> },
+        { value: 'have', label: <><Image alt={t("pictograms.have", { lng: selectedLanguage })} preview={false} width={20} src='/pictograms/have.png' /> {t("pictograms.have", { lng: selectedLanguage })}</> },
+        { value: 'areUsedFor', label: <><Image alt={t("pictograms.areUsedFor", { lng: selectedLanguage })} preview={false} width={20} src='/pictograms/areUsedFor.png' /> {t("pictograms.areUsedFor", { lng: selectedLanguage })}</> },
+        { value: 'areIn', label: <><Image alt={t("pictograms.areIn", { lng: selectedLanguage })} preview={false} width={20} src='/pictograms/areIn.png' /> {t("pictograms.areIn", { lng: selectedLanguage })}</> }
     ];
 
     const getSelectionLimit = (networkType) => {
@@ -129,7 +129,7 @@ let CreateExercise = ({ isMobile }) => {
         <Card title={t("exercise.create.title")} style={{ width: isMobile ? "90vw" : "65vw", marginTop: "2vh" }}>
             {message?.error?.type && <Alert type="error" message={t(message?.error?.type)} showIcon style={{ marginBottom: "1vh" }} />}
             <Form
-                name="register"
+                name="create_exercise"
                 labelCol={{
                     xs: { span: 24 },
                     sm: { span: 10 },
@@ -222,7 +222,7 @@ let CreateExercise = ({ isMobile }) => {
                 >
                     <div>
                         {selectedMainImages && selectedMainImages.map(image =>
-                            <Image key={image} preview={false} width="4vmax" src={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${image}`} />
+                            <Image alt='Imagen seleccionada' key={image} preview={false} width="4vmax" src={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${image}`} />
                         )}
                         {selectedMainImages.length > 0
                             ? <Button type="primary" danger onClick={() => setSelectedMainImages([])}>Clear</Button>
@@ -268,7 +268,7 @@ let CreateExercise = ({ isMobile }) => {
                     >
                         <div>
                             {selectedDefinitionImages && selectedDefinitionImages.map(image =>
-                                <Image key={image} preview={false} width="4vmax" src={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${image}`} />
+                                <Image alt='Imagen seleccionada' key={image} preview={false} width="4vmax" src={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${image}`} />
                             )}
                             {selectedDefinitionImages.length > 0
                                 ? <Button type="primary" danger onClick={() => setSelectedDefinitionImages([])}>Clear</Button>
@@ -326,7 +326,7 @@ let CreateExercise = ({ isMobile }) => {
                     >
                         <div>
                             {selectedAmpliationImages && selectedAmpliationImages.map(image =>
-                                <Image key={image} preview={false} width="4vmax" src={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${image}`} />
+                                <Image alt='Imagen seleccionada' key={image} preview={false} width="4vmax" src={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${image}`} />
                             )}
                             {selectedAmpliationImages.length > 0
                                 ? <Button type="primary" danger onClick={() => setSelectedAmpliationImages([])}>Clear</Button>

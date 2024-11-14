@@ -2,9 +2,10 @@ import React, { useRef, useState } from 'react';
 import { Card, Col, Divider, Flex, Input, Row } from 'antd';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX } from './NetworkProps';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useSession } from '../../SessionComponent';
+import { useTranslation }               from 'react-i18next';
+import { useSession }                   from '../SessionComponent';
 import { HomeOutlined, ReloadOutlined } from '@ant-design/icons';
+import "../assets/styles/font.css";
 
 let TypePhase1 = () => {
 
@@ -36,8 +37,8 @@ let TypePhase1 = () => {
     const getTextPosition = (bigStop, stop, shape) => {
         if (bigStop) return { x: "1.5vmax", y: "5vmax", fontSize: "2.3vmax" };
         if (stop) return { x: "2.75vmax", y: "4vmax", fontSize: "1.8vmax" };
-        if (shape === "rect") return { x: "4.3vmax", y: "3.2vmax", fontSize: "1vmax" };
-        if (shape === "ellipse") return { x: "4.6vmax", y: "3.25vmax", fontSize: "1vmax" };
+        if (shape === "rect") return { x: "4.7vmax", y: "3.2vmax", fontSize: "1vmax" };
+        if (shape === "ellipse") return { x: "4.6vmax", y: "3.5vmax", fontSize: "1vmax" };
         return { x: "4vmax", y: "3.2vmax", fontSize: "1.1vmax" };
     };
 
@@ -149,7 +150,7 @@ let TypePhase1 = () => {
                                 <rect
                                     x="2"
                                     y="6"
-                                    width="8.5vmax"
+                                    width="9vmax"
                                     height="4.7vmax"
                                     fill="white"
                                     stroke="black"
@@ -159,6 +160,7 @@ let TypePhase1 = () => {
                                     {...getTextPosition(extendedNodes[0].bigStop, extendedNodes[0].stop, extendedNodes[0].shape)}
                                     fill="black"
                                     textAnchor="middle"
+                                    fontFamily="Massallera"
                                 >
                                     {extendedNodes[0].text}
                                 </text>
@@ -173,7 +175,7 @@ let TypePhase1 = () => {
                                         <rect
                                             x="2"
                                             y="6"
-                                            width="8.5vmax"
+                                            width="9vmax"
                                             height="4.7vmax"
                                             fill="white"
                                             stroke="black"
@@ -195,6 +197,7 @@ let TypePhase1 = () => {
                                         {...getTextPosition(element.bigStop, element.stop, element.shape)}
                                         fill="black"
                                         textAnchor="middle"
+                                        fontFamily="Massallera"
                                     >
                                         {t(element.text)}
                                     </text>
@@ -210,7 +213,7 @@ let TypePhase1 = () => {
                                         <rect
                                             x="2"
                                             y="6"
-                                            width="8.5vmax"
+                                            width="9vmax"
                                             height="4.7vmax"
                                             fill="white"
                                             stroke="black"
@@ -232,6 +235,7 @@ let TypePhase1 = () => {
                                         {...getTextPosition(element.bigStop, element.stop, element.shape)}
                                         fill="black"
                                         textAnchor="middle"
+                                        fontFamily="Massallera"
                                     >
                                         {t(element.text)}
                                     </text>
@@ -288,7 +292,7 @@ let TypePhase1 = () => {
                                                 >
                                                     <Input
                                                         id={element.id}
-                                                        style={{ textTransform: "uppercase", textAlign: 'center' }}
+                                                        style={{ textTransform: "uppercase", textAlign: 'center', fontFamily: "Massallera" }}
                                                         onChange={() => check()}
                                                         autoFocus={true}
                                                         autoComplete='off'
@@ -342,7 +346,7 @@ let TypePhase1 = () => {
                                                 >
                                                     <Input
                                                         id={element.id}
-                                                        style={{ textTransform: "uppercase", textAlign: 'center' }}
+                                                        style={{ textTransform: "uppercase", textAlign: 'center', fontFamily: "Massallera" }}
                                                         onChange={() => check()}
                                                         autoFocus={true}
                                                         autoComplete='off'
@@ -387,7 +391,7 @@ let TypePhase1 = () => {
                                             >
                                                 <Input
                                                     id={element.id}
-                                                    style={{ textTransform: "lowercase", textAlign: 'center' }}
+                                                    style={{ textTransform: "lowercase", textAlign: 'center', fontFamily: "Massallera" }}
                                                     onChange={() => check()}
                                                     autoFocus={true}
                                                     autoComplete='off'
@@ -431,7 +435,7 @@ let TypePhase1 = () => {
                                             >
                                                 <Input
                                                     id={element.id}
-                                                    style={{ textTransform: "lowercase", textAlign: 'center' }}
+                                                    style={{ textTransform: "lowercase", textAlign: 'center', fontFamily: "Massallera" }}
                                                     onChange={() => check()}
                                                     autoFocus={true}
                                                     autoComplete='off'
@@ -475,7 +479,7 @@ let TypePhase1 = () => {
                                             >
                                                 <Input
                                                     id={element.id}
-                                                    style={{ textTransform: "lowercase", textAlign: 'center' }}
+                                                    style={{ textTransform: "lowercase", textAlign: 'center', fontFamily: "Massallera" }}
                                                     onChange={() => check()}
                                                     autoFocus={true}
                                                     autoComplete='off'

@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Card, Input, Form, Alert } from "antd";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSession } from '../../SessionComponent';
+import { useSession }  from '../SessionComponent';
 
 let LoginStudent = () => {
 
