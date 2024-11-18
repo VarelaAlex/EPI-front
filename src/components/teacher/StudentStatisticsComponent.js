@@ -8,7 +8,6 @@ import { Card, Typography } from 'antd';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels);
 
 let StudentStatistics = ({ studentName }) => {
-
   let { studentId } = useParams();
   const [iconicMixedData, setIconicMixedData] = useState({});
   const [symbolicData, setSymbolicData] = useState({});
@@ -28,14 +27,20 @@ let StudentStatistics = ({ studentName }) => {
           setTotalFeedbacks(totalFeedbacks);
           setIconicMixedErrorsTotal(iconicMixedErrorsTotal);
           setSymbolicErrorsTotal(symbolicErrorsTotal);
-          // Prepare datasets for ICONIC and MIXED errors
+
+          const iconicMixedTotals = {
+            Lexical: Object.values(iconicMixedErrors.Lexical).reduce((sum, error) => sum + error.count, 0),
+            Syntactic: Object.values(iconicMixedErrors.Syntactic).reduce((sum, error) => sum + error.count, 0),
+            Semantic: Object.values(iconicMixedErrors.Semantic).reduce((sum, error) => sum + error.count, 0),
+          };
+
           const iconicMixedDatasets = [
             {
               label: 'Incorrect Order',
               data: [
-                iconicMixedErrors.Lexical.incorrectOrder.count,
-                iconicMixedErrors.Syntactic.incorrectOrder.count,
-                iconicMixedErrors.Semantic.incorrectOrder.count
+                iconicMixedErrors.Lexical.incorrectOrder.count / iconicMixedTotals.Lexical || 0,
+                iconicMixedErrors.Syntactic.incorrectOrder.count / iconicMixedTotals.Syntactic || 0,
+                iconicMixedErrors.Semantic.incorrectOrder.count / iconicMixedTotals.Semantic || 0,
               ],
               backgroundColor: 'rgba(255, 99, 132, 0.6)',
               borderColor: 'rgba(255, 99, 132, 1)',
@@ -44,9 +49,9 @@ let StudentStatistics = ({ studentName }) => {
                 display: true,
                 formatter: (value, context) => {
                   const errorType = context.chart.data.labels[context.dataIndex].split(" ")[0];
-                  return `${value} (${iconicMixedErrors[errorType].incorrectOrder.percentage}%)`;
+                  return `${iconicMixedErrors[errorType].incorrectOrder.count > 0 ? iconicMixedErrors[errorType].incorrectOrder.count : ''} ${iconicMixedErrors[errorType]?.incorrectOrder?.percentage > 0 ? '(' + iconicMixedErrors[errorType].incorrectOrder.percentage + '%)' : ''}`;
                 },
-                color: '#fff',
+                color: '#000',
                 anchor: 'center',
                 align: 'center'
               }
@@ -54,9 +59,9 @@ let StudentStatistics = ({ studentName }) => {
             {
               label: 'Incorrect Position',
               data: [
-                iconicMixedErrors.Lexical.incorrectPos.count,
-                iconicMixedErrors.Syntactic.incorrectPos.count,
-                iconicMixedErrors.Semantic.incorrectPos.count
+                iconicMixedErrors.Lexical.incorrectPos.count / iconicMixedTotals.Lexical || 0,
+                iconicMixedErrors.Syntactic.incorrectPos.count / iconicMixedTotals.Syntactic || 0,
+                iconicMixedErrors.Semantic.incorrectPos.count / iconicMixedTotals.Semantic || 0,
               ],
               backgroundColor: 'rgba(54, 162, 235, 0.6)',
               borderColor: 'rgba(54, 162, 235, 1)',
@@ -65,9 +70,9 @@ let StudentStatistics = ({ studentName }) => {
                 display: true,
                 formatter: (value, context) => {
                   const errorType = context.chart.data.labels[context.dataIndex].split(" ")[0];
-                  return `${value} (${iconicMixedErrors[errorType].incorrectPos.percentage}%)`;
+                  return `${iconicMixedErrors[errorType].incorrectPos.count > 0 ? iconicMixedErrors[errorType].incorrectPos.count : ''} ${iconicMixedErrors[errorType]?.incorrectPos?.percentage > 0 ? '(' + iconicMixedErrors[errorType].incorrectPos.percentage + '%)' : ''}`;
                 },
-                color: '#fff',
+                color: '#000',
                 anchor: 'center',
                 align: 'center'
               }
@@ -75,9 +80,9 @@ let StudentStatistics = ({ studentName }) => {
             {
               label: 'Out of Bounds',
               data: [
-                iconicMixedErrors.Lexical.outOfBounds.count,
-                iconicMixedErrors.Syntactic.outOfBounds.count,
-                iconicMixedErrors.Semantic.outOfBounds.count
+                iconicMixedErrors.Lexical.outOfBounds.count / iconicMixedTotals.Lexical || 0,
+                iconicMixedErrors.Syntactic.outOfBounds.count / iconicMixedTotals.Syntactic || 0,
+                iconicMixedErrors.Semantic.outOfBounds.count / iconicMixedTotals.Semantic || 0,
               ],
               backgroundColor: 'rgba(75, 192, 192, 0.6)',
               borderColor: 'rgba(75, 192, 192, 1)',
@@ -86,9 +91,9 @@ let StudentStatistics = ({ studentName }) => {
                 display: true,
                 formatter: (value, context) => {
                   const errorType = context.chart.data.labels[context.dataIndex].split(" ")[0];
-                  return `${value} (${iconicMixedErrors[errorType].outOfBounds.percentage}%)`;
+                  return `${iconicMixedErrors[errorType].outOfBounds.count > 0 ? iconicMixedErrors[errorType].outOfBounds.count : ''} ${iconicMixedErrors[errorType]?.outOfBounds?.percentage > 0 ? '(' + iconicMixedErrors[errorType].outOfBounds.percentage + '%)' : ''}`;
                 },
-                color: '#fff',
+                color: '#000',
                 anchor: 'center',
                 align: 'center'
               }
@@ -100,7 +105,6 @@ let StudentStatistics = ({ studentName }) => {
             datasets: iconicMixedDatasets,
           });
 
-          // Prepare data for SYMBOLIC errors
           setSymbolicData({
             labels: ['Lexical', 'Syntactic', 'Semantic'],
             datasets: [
@@ -110,16 +114,16 @@ let StudentStatistics = ({ studentName }) => {
                   symbolicErrors.Syntactic.count,
                   symbolicErrors.Semantic.count
                 ],
-                backgroundColor: ['rgba(153, 102, 255, 0.6)', 'rgba(255, 206, 86, 0.6)', 'rgba(75, 192, 192, 0.6)'],
-                borderColor: ['rgba(153, 102, 255, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)'],
+                backgroundColor: ['rgba(153, 160, 255, 0.6)', 'rgba(255, 206, 86, 0.6)', 'rgba(75, 192, 192, 0.6)'],
+                borderColor: ['rgba(153, 160, 255, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)'],
                 borderWidth: 1,
                 datalabels: {
                   display: true,
                   formatter: (value, context) => {
                     const errorType = context.chart.data.labels[context.dataIndex];
-                    return `${value} (${symbolicErrors[errorType].percentage}%)`;
+                    return `${value > 0 ? value : ''} ${symbolicErrors[errorType]?.percentage > 0 ? '(' + symbolicErrors[errorType]?.percentage + '%)' : ''}`;
                   },
-                  color: '#fff',
+                  color: '#000',
                   anchor: 'center',
                   align: 'center'
                 }
@@ -138,7 +142,7 @@ let StudentStatistics = ({ studentName }) => {
   let { Title } = Typography;
   return (
     <Card style={{ width: "60%" }} title={<Title>{studentName}</Title>}>
-      <h2>Número de ejercicios: {totalFeedbacks}</h2>
+      <h2>Total Exercises: {totalFeedbacks}</h2>
 
       <div>
         <h3>ICONIC and MIXED Error Types</h3>
@@ -167,6 +171,7 @@ let StudentStatistics = ({ studentName }) => {
                 y: {
                   stacked: true,
                   beginAtZero: true,
+                  max: 1,
                 },
               },
             }}

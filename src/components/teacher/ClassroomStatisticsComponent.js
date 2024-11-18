@@ -8,11 +8,9 @@ import { useParams } from 'react-router-dom';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels);
 
 let ClassroomStatistics = ({ classroomId }) => {
-
   let { classroomName } = useParams();
   const [chartData, setChartData] = useState({});
   const [total, setTotal] = useState(0);
-  const [chartStackedData, setChartStackedData] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,53 +21,48 @@ let ClassroomStatistics = ({ classroomId }) => {
         if (data && data.stackedData) {
           setTotal(data.totalFeedbacks);
           const stackedData = data.stackedData;
-          setChartStackedData(stackedData);
 
           const representations = Object.keys(stackedData);
           const networkTypes = [...new Set(representations.flatMap(representation => Object.keys(stackedData[representation])))];
 
-          const totalCounts = representations.map(representation => {
-            return networkTypes.reduce((sum, networkType) => sum + (stackedData[representation][networkType]?.count || 0), 0);
-          });
-
+          const normalizedData = {};
           representations.forEach(representation => {
+            const totalForCategory = networkTypes.reduce((sum, networkType) => {
+              return sum + (stackedData[representation][networkType]?.count || 0);
+            }, 0);
+
+            normalizedData[representation] = {};
             networkTypes.forEach(networkType => {
               if (stackedData[representation][networkType]) {
                 const count = stackedData[representation][networkType].count;
-                const total = totalCounts[representations.indexOf(representation)];
-                stackedData[representation][networkType].percentage = ((count / total) * 100).toFixed(2);
+                normalizedData[representation][networkType] = {
+                  ...stackedData[representation][networkType],
+                  normalizedCount: count / totalForCategory || 0,
+                };
               }
             });
           });
 
-          const datasets = networkTypes.map((networkType, index) => ({
-            label: networkType,
-            data: representations.map(representation => stackedData[representation][networkType]?.count || 0),
-            backgroundColor: `rgba(${index * 120}, 100, 130, 1)`,
-            borderColor: `rgba(${index * 120}, 100, 132, 1)`,
-            borderWidth: 1,
-            datalabels: {
-              display: true,
-              formatter: (value, context) => {
-                const rep = context.chart.data.labels[context.dataIndex].split(" ")[0];
-                console.log(context);
-                const percentage = stackedData[rep] && stackedData[rep][networkType] ? stackedData[rep][networkType].percentage : 0;
-                return `${value} (${percentage}%)`;
-              },
-              color: '#fff',
-              anchor: 'center',
-              align: 'center'
-            }
-          }));
-
-          const labelsWithPercentages = representations.map((representation, index) => {
-            const total = totalCounts[index];
-            const percentage = ((total / totalCounts.reduce((sum, count) => sum + count, 0)) * 100).toFixed(2);
-            return `${representation} (${percentage}%)`;
+          const datasets = networkTypes.map((networkType, index) => {
+            let calculatePercentage = (value) => (value * 100).toFixed(2) <= 0 ? '' : (value * 100).toFixed(2) + '%';
+            return ({
+              label: networkType,
+              data: representations.map(representation => normalizedData[representation][networkType]?.normalizedCount || 0),
+              backgroundColor: `rgba(${index * 120}, 100, 130, 1)`,
+              borderColor: `rgba(${index * 120}, 100, 132, 1)`,
+              borderWidth: 1,
+              datalabels: {
+                display: true,
+                formatter: (value, context) => `${stackedData[representations[context.dataIndex]][networkType]?.count || ''} ${calculatePercentage(value)}`,
+                color: '#fff',
+                anchor: 'center',
+                align: 'center'
+              }
+            });
           });
 
           setChartData({
-            labels: labelsWithPercentages,
+            labels: representations,
             datasets: datasets,
           });
         }
@@ -85,7 +78,6 @@ let ClassroomStatistics = ({ classroomId }) => {
   return (
     <Card style={{ width: "60%" }} title={<Title>{classroomName}</Title>}>
       <h2>Total: {total}</h2>
-
       <div>
         {chartData && chartData.labels && (
           <Bar
@@ -99,20 +91,7 @@ let ClassroomStatistics = ({ classroomId }) => {
                 title: {
                   display: true,
                   text: 'Percentage of Exercises by Category and Type',
-                },
-                datalabels: {
-                  display: true,
-                  color: '#fff',
-                  formatter: (value, context) => {
-                    const datasetIndex = context.datasetIndex;
-                    const labelIndex = context.dataIndex;
-                    const rep = chartData.labels[labelIndex];
-                    const networkType = chartData.datasets[datasetIndex].label;
-                    const count = chartStackedData[rep] && chartStackedData[rep][networkType] ? chartStackedData[rep][networkType].count : 0;
-                    const percentage = chartStackedData[rep] && chartStackedData[rep][networkType] ? chartStackedData[rep][networkType].percentage : 0;
-                    return `${count} (${percentage}%)`;
-                  },
-                },
+                }
               },
               scales: {
                 x: {
@@ -121,6 +100,7 @@ let ClassroomStatistics = ({ classroomId }) => {
                 y: {
                   stacked: true,
                   beginAtZero: true,
+                  max: 1,
                 },
               },
             }}
