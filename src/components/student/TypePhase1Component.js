@@ -58,6 +58,7 @@ let TypePhase1 = () => {
                 let text = t(element.text);
                 if (text.length === i.value.length) {
                     if (normalize(text.toLowerCase()) === normalize(i.value.toLowerCase())) {
+                        element.failure=false;
                         if (current === 0 || current === 4) {
                             setTimeout(() => {
                                 setExtendedNodes(extendedNodes.map(node =>
@@ -85,6 +86,7 @@ let TypePhase1 = () => {
                         }
                     }
                     else {
+                        element.failure=true;
                         if (element.shape) {
                             setFeedback({
                                 phase1: {
@@ -154,7 +156,7 @@ let TypePhase1 = () => {
                                     height="4.7vmax"
                                     fill="white"
                                     stroke="black"
-                                    stroke-width="3"
+                                    strokeWidth="3"
                                 />
                                 <text
                                     {...getTextPosition(extendedNodes[0].bigStop, extendedNodes[0].stop, extendedNodes[0].shape)}
@@ -179,7 +181,7 @@ let TypePhase1 = () => {
                                             height="4.7vmax"
                                             fill="white"
                                             stroke="black"
-                                            stroke-width="3"
+                                            strokeWidth="3"
                                         />
                                     }
                                     {element.shape === "ellipse" &&
@@ -190,7 +192,7 @@ let TypePhase1 = () => {
                                             ry="3vmax"
                                             fill="white"
                                             stroke="black"
-                                            stroke-width="3"
+                                            strokeWidth="3"
                                         />
                                     }
                                     <text
@@ -217,7 +219,7 @@ let TypePhase1 = () => {
                                             height="4.7vmax"
                                             fill="white"
                                             stroke="black"
-                                            stroke-width="3"
+                                            strokeWidth="3"
                                         />
                                     }
                                     {element.shape === "ellipse" &&
@@ -228,7 +230,7 @@ let TypePhase1 = () => {
                                             ry="3vmax"
                                             fill="white"
                                             stroke="black"
-                                            stroke-width="3"
+                                            strokeWidth="3"
                                         />
                                     }
                                     <text
@@ -247,16 +249,16 @@ let TypePhase1 = () => {
                 <Divider style={{ backgroundColor: "grey" }} />
                 <Flex align="center" justify="center" style={{ height: "90%", width: "90%" }} >
                     <svg height="19vmax" viewBox={`-2 -2 ${viewBoxWidth(exercise?.networkType)} 250`}>
-                        <path d={`M ${pathRect(exercise)} 70 L ${pathRect(exercise)} 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
-                        <path d={`M ${pathRect(exercise)} 70 L ${pathRect(exercise)} 85 L 60 85 L 60 95`} fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
-                        <path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
-                        <path d={`M 350 165 ${pathBottom(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                        <path d={`M ${pathRect(exercise)} 70 L ${pathRect(exercise)} 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" strokeWidth="3" />
+                        <path d={`M ${pathRect(exercise)} 70 L ${pathRect(exercise)} 85 L 60 85 L 60 95`} fill="none" stroke="rgb(0, 0, 0)" strokeWidth="3" />
+                        <path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" strokeWidth="3" />
+                        <path d={`M 350 165 ${pathBottom(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" strokeWidth="3" />
                         {["I-II", "I-III"].includes(exercise?.networkType) &&
                             <path
                                 d={pathBottom2(exercise?.networkType)}
                                 fill="none"
                                 stroke="rgb(0, 0, 0)"
-                                stroke-width="3"
+                                strokeWidth="3"
                             />
                         }
 
@@ -265,7 +267,7 @@ let TypePhase1 = () => {
                                 d="M 570 145 L 570 150 L 790 150 L 790 165"
                                 fill="none"
                                 stroke="rgb(0, 0, 0)"
-                                stroke-width="3"
+                                strokeWidth="3"
                             />
                         }
 
@@ -280,7 +282,7 @@ let TypePhase1 = () => {
                                             height="75"
                                             fill="rgb(255, 255, 255)"
                                             stroke="rgb(0, 0, 0)"
-                                            stroke-width="3"
+                                            strokeWidth="3"
                                         />
                                         {element.clicked ?
                                             (
@@ -297,6 +299,7 @@ let TypePhase1 = () => {
                                                         autoFocus={true}
                                                         autoComplete='off'
                                                         value={extendedNodes[0].ok ? extendedNodes[0].text : undefined}
+                                                        status={element.failure?"error":""}
                                                     />
                                                 </foreignObject>
                                             ) : (<rect
@@ -334,7 +337,7 @@ let TypePhase1 = () => {
                                             ry="40"
                                             fill="white"
                                             stroke="black"
-                                            stroke-width="3"
+                                            strokeWidth="3"
                                         />
                                         {element.clicked ?
                                             (
@@ -351,6 +354,7 @@ let TypePhase1 = () => {
                                                         autoFocus={true}
                                                         autoComplete='off'
                                                         value={element.ok ? element.text : undefined}
+                                                        status={element.failure?"error":""}
                                                     />
 
                                                 </foreignObject>
@@ -396,6 +400,7 @@ let TypePhase1 = () => {
                                                     autoFocus={true}
                                                     autoComplete='off'
                                                     value={element.ok ? t(element.text) : undefined}
+                                                    status={element.failure?"error":""}
                                                 />
                                             </foreignObject>
                                         ) : (<rect
@@ -440,6 +445,7 @@ let TypePhase1 = () => {
                                                     autoFocus={true}
                                                     autoComplete='off'
                                                     value={element.ok ? t(element.text) : undefined}
+                                                    status={element.failure?"error":""}
                                                 />
                                             </foreignObject>
                                         ) : (<rect
@@ -484,6 +490,7 @@ let TypePhase1 = () => {
                                                     autoFocus={true}
                                                     autoComplete='off'
                                                     value={element.ok ? t(element.text) : undefined}
+                                                    status={element.failure?"error":""}
                                                 />
                                             </foreignObject>
                                         ) : (<rect

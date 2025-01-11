@@ -31,7 +31,6 @@ let TypePhase2 = () => {
                 body: JSON.stringify({ feedback })
             });
         } catch (e) {
-            return;
         }
     };
 
@@ -70,6 +69,7 @@ let TypePhase2 = () => {
                 let text = t(element.text);
                 if (text.length === i.value.length) {
                     if (normalize(text.toLowerCase()) === normalize(i.value.toLowerCase())) {
+                        element.failure=false;
                         i.readOnly = true;
                         element.ok = true;
                         setCurrent(current + 1);
@@ -95,6 +95,7 @@ let TypePhase2 = () => {
                         }
                     }
                     else {
+                        element.failure=true;
                         if (element.shape) {
                             setFeedback({
                                 phase1: { ...feedback.phase1 },
@@ -174,16 +175,16 @@ let TypePhase2 = () => {
             <Flex align="center" vertical >
                 <Flex align="center" justify="center" >
                     <svg height="19vmax" viewBox={`-2 -2 ${viewBoxWidth(exercise?.networkType)} 250`}>
-                        <path d={`M ${pathRect(exercise)} 70 L ${pathRect(exercise)} 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
-                        <path d={`M ${pathRect(exercise)} 70 L ${pathRect(exercise)} 85 L 60 85 L 60 95`} fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
-                        <path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
-                        <path d={`M 350 165 ${pathBottom(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" />
+                        <path d={`M ${pathRect(exercise)} 70 L ${pathRect(exercise)} 85 ${pathTop(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" strokeWidth="3" />
+                        <path d={`M ${pathRect(exercise)} 70 L ${pathRect(exercise)} 85 L 60 85 L 60 95`} fill="none" stroke="rgb(0, 0, 0)" strokeWidth="3" />
+                        <path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" strokeWidth="3" />
+                        <path d={`M 350 165 ${pathBottom(exercise?.networkType)}`} fill="none" stroke="rgb(0, 0, 0)" strokeWidth="3" />
                         {["I-II", "I-III"].includes(exercise?.networkType) &&
                             <path
                                 d={pathBottom2(exercise?.networkType)}
                                 fill="none"
                                 stroke="rgb(0, 0, 0)"
-                                stroke-width="3"
+                                strokeWidth="3"
                             />
                         }
 
@@ -192,7 +193,7 @@ let TypePhase2 = () => {
                                 d="M 570 145 L 570 150 L 790 150 L 790 165"
                                 fill="none"
                                 stroke="rgb(0, 0, 0)"
-                                stroke-width="3"
+                                strokeWidth="3"
                             />
                         }
 
@@ -207,7 +208,7 @@ let TypePhase2 = () => {
                                             height="70"
                                             fill="rgb(255, 255, 255)"
                                             stroke="rgb(0, 0, 0)"
-                                            stroke-width="3"
+                                            strokeWidth="3"
                                         />
                                         <text
                                             x={element.posX + 220}
@@ -233,7 +234,7 @@ let TypePhase2 = () => {
                                             ry="40"
                                             fill="white"
                                             stroke="black"
-                                            stroke-width="3"
+                                            strokeWidth="3"
                                         />
                                         <text
                                             x={element.posX + 220}
@@ -282,7 +283,7 @@ let TypePhase2 = () => {
                                         height="5.5vmax"
                                         fill="white"
                                         stroke="black"
-                                        stroke-width="3"
+                                        strokeWidth="3"
                                     />
                                     {extendedNodes[0].clicked ?
                                         (
@@ -299,6 +300,7 @@ let TypePhase2 = () => {
                                                     style={{ textTransform: "uppercase", textAlign: 'center', fontSize: "1.1vmax", fontFamily: "Massallera" }}
                                                     onChange={() => check()}
                                                     value={extendedNodes[0].ok ? extendedNodes[0].text : undefined}
+                                                    status={extendedNodes[0].failure?"error":""}
                                                 />
                                             </foreignObject>
                                         ) : (<rect
@@ -340,7 +342,7 @@ let TypePhase2 = () => {
                                                 height="5.5vmax"
                                                 fill="white"
                                                 stroke="black"
-                                                stroke-width="3"
+                                                strokeWidth="3"
                                             />
                                         }
                                         {element.shape === "ellipse" &&
@@ -351,7 +353,7 @@ let TypePhase2 = () => {
                                                 ry="3.2vmax"
                                                 fill="white"
                                                 stroke="black"
-                                                stroke-width="3"
+                                                strokeWidth="3"
                                             />
                                         }
                                         {element.clicked ?
@@ -377,6 +379,7 @@ let TypePhase2 = () => {
                                                         height={"40px"}
                                                         onChange={() => check()}
                                                         value={element.ok ? (element.shape ? element.text : t(element.text)) : undefined}
+                                                        status={element.failure?"error":""}
                                                     />
                                                 </foreignObject>
                                             ) : (<rect
@@ -425,7 +428,7 @@ let TypePhase2 = () => {
                                                 height="5.5vmax"
                                                 fill="white"
                                                 stroke="black"
-                                                stroke-width="3"
+                                                strokeWidth="3"
                                             />
                                         }
                                         {element.shape === "ellipse" &&
@@ -436,7 +439,7 @@ let TypePhase2 = () => {
                                                 ry="3.2vmax"
                                                 fill="white"
                                                 stroke="black"
-                                                stroke-width="3"
+                                                strokeWidth="3"
                                             />
                                         }
                                         {element.clicked ?
@@ -464,6 +467,7 @@ let TypePhase2 = () => {
                                                         height={"10vmax"}
                                                         onChange={() => check()}
                                                         value={element.ok ? (element.shape ? element.text : t(element.text)) : undefined}
+                                                        status={element.failure?"error":""}
                                                     />
                                                 </foreignObject>
                                             ) : (<rect

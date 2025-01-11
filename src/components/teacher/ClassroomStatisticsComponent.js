@@ -18,53 +18,37 @@ let ClassroomStatistics = ({ classroomId }) => {
         const response = await fetch(`${process.env.REACT_APP_EXERCISES_SERVICE_URL}/statistics/classroom/${classroomId}`);
         const data = await response.json();
 
-        if (data && data.stackedData) {
+        if (data && data.groupedData) {
           setTotal(data.totalFeedbacks);
-          const stackedData = data.stackedData;
+          const groupedData = data.groupedData;
 
-          const representations = Object.keys(stackedData);
-          const networkTypes = [...new Set(representations.flatMap(representation => Object.keys(stackedData[representation])))];
+          const representationOrder = ["ICONIC", "MIXED", "SYMBOLIC"];
+          const networkTypeOrder = ["I-I", "I-II", "I-III"];
 
-          const normalizedData = {};
-          representations.forEach(representation => {
-            const totalForCategory = networkTypes.reduce((sum, networkType) => {
-              return sum + (stackedData[representation][networkType]?.count || 0);
-            }, 0);
-
-            normalizedData[representation] = {};
-            networkTypes.forEach(networkType => {
-              if (stackedData[representation][networkType]) {
-                const count = stackedData[representation][networkType].count;
-                normalizedData[representation][networkType] = {
-                  ...stackedData[representation][networkType],
-                  normalizedCount: count / totalForCategory || 0,
-                };
-              }
-            });
-          });
-
-          const datasets = networkTypes.map((networkType, index) => {
-            let calculatePercentage = (value) => (value * 100).toFixed(2) <= 0 ? '' : (value * 100).toFixed(2) + '%';
-            return ({
+          // Transform groupedData into chartData
+          const labels = representationOrder;
+          const datasets = networkTypeOrder.map((networkType, index) => {
+            return {
               label: networkType,
-              data: representations.map(representation => normalizedData[representation][networkType]?.normalizedCount || 0),
-              backgroundColor: `rgba(${index * 120}, 100, 130, 1)`,
-              borderColor: `rgba(${index * 120}, 100, 132, 1)`,
+              data: labels.map(rep => groupedData[networkType].representationCounts[rep] || 0),
+              backgroundColor: `rgba(${index * 80 + 100}, ${index * 50 + 100}, 200, 0.6)`,
+              borderColor: `rgba(${index * 80 + 100}, ${index * 50 + 100}, 200, 1)`,
               borderWidth: 1,
               datalabels: {
                 display: true,
-                formatter: (value, context) => `${stackedData[representations[context.dataIndex]][networkType]?.count || ''} ${calculatePercentage(value)}`,
                 color: '#fff',
                 anchor: 'center',
-                align: 'center'
-              }
-            });
+                align: 'center',
+                formatter: (value, context) => {
+                  const totalForRep = labels.reduce((sum, rep) => sum + groupedData[networkType].representationCounts[rep] || 0, 0);
+                  const percentage = totalForRep > 0 ? ((value / totalForRep) * 100).toFixed(2) + '%' : '';
+                  return `${value} (${percentage})`;
+                },
+              },
+            };
           });
 
-          setChartData({
-            labels: representations,
-            datasets: datasets,
-          });
+          setChartData({ labels, datasets });
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -76,38 +60,37 @@ let ClassroomStatistics = ({ classroomId }) => {
 
   let { Title } = Typography;
   return (
-    <Card style={{ width: "60%" }} title={<Title>{classroomName}</Title>}>
-      <h2>Total: {total}</h2>
-      <div>
-        {chartData && chartData.labels && (
-          <Bar
-            data={chartData}
-            options={{
-              responsive: true,
-              plugins: {
-                legend: {
-                  position: 'top',
-                },
-                title: {
-                  display: true,
-                  text: 'Percentage of Exercises by Category and Type',
-                }
-              },
-              scales: {
-                x: {
-                  stacked: true,
-                },
-                y: {
-                  stacked: true,
-                  beginAtZero: true,
-                  max: 1,
-                },
-              },
-            }}
-          />
-        )}
-      </div>
-    </Card>
+      <Card style={{ width: "60%" }} title={<Title>{classroomName}</Title>}>
+        <h2>Total: {total}</h2>
+        <div>
+          {chartData && chartData.labels && (
+              <Bar
+                  data={chartData}
+                  options={{
+                    responsive: true,
+                    plugins: {
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Percentage of Exercises by Representation and Type',
+                      },
+                    },
+                    scales: {
+                      x: {
+                        stacked: true,
+                      },
+                      y: {
+                        stacked: true,
+                        beginAtZero: true,
+                      },
+                    },
+                  }}
+              />
+          )}
+        </div>
+      </Card>
   );
 };
 

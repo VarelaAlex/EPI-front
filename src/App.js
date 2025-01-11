@@ -7,6 +7,7 @@ import Header from './components/layout/HeaderComponent';
 import Sider from "./components/layout/SiderComponent";
 import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined } from "@ant-design/icons";
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
+import HowToDoExercises from "./components/student/HowToDoExercisesComponent";
 import LoginTeacher from './components/teacher/LoginTeacherComponent';
 import SignupTeacher from './components/teacher/SignupTeacherComponent';
 import ClassroomsList from './components/teacher/ClassroomsListComponent';
@@ -302,6 +303,7 @@ let App = () => {
 								<Route path="/exerciseType/phase1" element={<TypePhase1 />} />
 								<Route path="/exerciseType/phase2" element={<TypePhase2 />} />
 								<Route path="/students/exercises" element={<ExercisesCarousel />} />
+								<Route path="/students/howTo" element={<HowToDoExercises />} />
 								<Route path="/loginTeacher" element={<LoginTeacher />} />
 								<Route path="/registerTeacher" element={<SignupTeacher />} />
 								<Route path="/teachers/menuTeacher" element={<ClassroomsList isMobile={isMobile} setClassroomId={setClassroomId} />} />
@@ -319,8 +321,19 @@ let App = () => {
 						</Flex>
 					</Content>
 				</Layout>
-				<Footer style={{ textAlign: "center", backgroundColor: "#001628", color: "white" }}>EPI @ 2024<br />Made with ❤️ by Álex & UniOvi</Footer>
-			</Layout >
+				<Footer style={{backgroundColor: "#001628", color: "white"}}>
+					<Flex align="center" justify="center" style={{ minHeight: "100%" }}>
+						EPI @ 2024 Made with ❤️ by Álex & UniOvi
+						<img
+							src="https://static.arasaac.org/images/by-nc-sa.svg"
+							alt="Creative Commons license CC BY-NC-SA"
+							title="ARASAAC creative commons license CC BY-NC-SA"
+							style={{marginLeft: "10px", height: "50px"}}
+						/>
+					</Flex>
+				</Footer>
+
+			</Layout>
 		</>
 	);
 };
