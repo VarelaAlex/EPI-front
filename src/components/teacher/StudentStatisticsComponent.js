@@ -182,7 +182,7 @@ let StudentStatistics = ({studentName}) => {
                                     symbolicErrors.Semantic.count
                                 ],
                                 barPercentage: 1,
-                                backgroundColor: ['rgb(255,185,99)', 'rgb(109,199,255)', 'rgb(184,137,255)'],
+                                backgroundColor: 'rgb(54, 162, 235, 1)',
                                 datalabels: {
                                     display: true,
                                     formatter: (value, context) => {
