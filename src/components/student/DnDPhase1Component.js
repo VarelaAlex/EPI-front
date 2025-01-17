@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState }                          from 'react';
 import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { Card, Col, Divider, Flex, Row } from 'antd';
+import useFullscreen                                                   from "../../hooks/useFullscreen";
 import DroppablePhase1 from './DroppablePhase1Component';
 import DraggablePhase1 from './DraggablePhase1Component';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX, STOP } from './NetworkProps';
@@ -9,6 +10,21 @@ import { useSession }                   from '../SessionComponent';
 import { HomeOutlined, ReloadOutlined } from '@ant-design/icons';
 
 let DnDPhase1 = () => {
+
+    useEffect(() => {
+        // Function to scroll the page
+        const hideHeader = () => {
+            window.scrollTo({
+                                top: 100, // Adjust this value to match your header's height
+                                behavior: "smooth", // Smooth scrolling effect
+                            });
+        };
+
+        // Scroll on component mount
+        hideHeader();
+    }, []);
+
+    let exitFullscreen  = useFullscreen(true);
 
     const INITIAL_ELEMENT = 0;
 
@@ -160,6 +176,7 @@ let DnDPhase1 = () => {
                     setFeedback({});
                 }} />
                 <HomeOutlined style={{ fontSize: '45px', cursor: 'pointer', paddingLeft: "20px" }} onClick={() => {
+                    exitFullscreen();
                     navigate("/students/exercises");
                 }} />
             </div>

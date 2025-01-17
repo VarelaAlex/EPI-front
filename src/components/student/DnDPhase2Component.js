@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors, DragOverlay } from '@dnd-kit/core';
 import { Card, Col, Divider, Flex, Row } from 'antd';
+import useFullscreen from "../../hooks/useFullscreen";
 import DroppablePhase2 from './DroppablePhase2Component';
 import DraggablePhase2 from './DraggablePhase2Component';
 import { pathBottom2, pathBottom, pathTop, X, Y, viewBoxWidth, stopX, nodes, nexusX } from './NetworkProps';
@@ -10,6 +11,8 @@ import { HomeOutlined, ReloadOutlined } from '@ant-design/icons';
 import '../assets/fonts/massallera.TTF';
 
 let DnDPhase2 = () => {
+
+    useFullscreen();
 
     const INITIAL_ELEMENT = 0;
 
