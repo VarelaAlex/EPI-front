@@ -6,10 +6,8 @@ import {
     Divider,
     Input,
     Tooltip,
-    Form,
     Alert,
     Spin,
-    InputNumber,
     Space,
     Row,
     Typography,
@@ -22,7 +20,7 @@ import {LineChartOutlined, DeleteOutlined, EditOutlined, CheckOutlined, CloseOut
 
 let ClassroomDetail = (props) => {
 
-    let {isMobile, setStudentName} = props;
+    let {isMobile, setStudentName, setClassroomName} = props;
     let {classroomName} = useParams();
 
     let [students, setStudents] = useState([]);
@@ -110,7 +108,7 @@ let ClassroomDetail = (props) => {
                 setMessage({error: jsonData?.error});
             }
         };
-        
+
         getClassroomInfo();
         getStudents();
     }, [classroomName, getStudents]);
@@ -188,39 +186,6 @@ let ClassroomDetail = (props) => {
         }
     ];
 
-    let onFinish = async (values) => {
-        let {name, lastName, age} = values;
-
-        let response = null;
-        try {
-            response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/students", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("accessToken")}`
-                },
-                body: JSON.stringify({
-                    name,
-                    lastName,
-                    age,
-                    classroomName
-                })
-            });
-        } catch (e) {
-            setMessage({error: {type: "internalServerError", message: e}});
-            return;
-        }
-
-        let jsonData = await response?.json();
-        if (response?.ok) {
-            if (jsonData?.classroom != null) {
-            }
-        } else {
-            setMessage({error: jsonData?.error});
-        }
-        getStudents();
-    };
-
     let changeClassroomName = async () => {
 
         let response = null;
@@ -286,75 +251,19 @@ let ClassroomDetail = (props) => {
                         </>
                 } style={{width: "90vw"}}
             >
+	            {message?.error?.type &&
+	             <Alert type="error" message={t(message?.error?.type)} showIcon style={{marginBottom: "1vh"}}/>}
                 {students.length <= 0 ?
                     <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("classrooms.detail.table.empty")}/>
                     : <Table bordered columns={columns} dataSource={students}/>
                 }
                 <Divider orientation="left">{t("classrooms.detail.addStudent.divider")}</Divider>
-                {message?.error?.type &&
-                    <Alert type="error" message={t(message?.error?.type)} showIcon style={{marginBottom: "1vh"}}/>}
-                <Form
-                    name="addStudent"
-                    labelCol={{xs: {span: 24}, sm: {span: 6}}}
-                    wrapperCol={{xs: {span: 14}, sm: {span: 6}}}
-                    onFinish={onFinish}
-                    scrollToFirstError
-                >
-                    <Form.Item
-                        name="name"
-                        label={t("classrooms.detail.addStudent.label.name")}
-                        rules={[
-                            {
-                                required: true,
-                                message: t("classrooms.detail.addStudent.error.name")
-                            },
-                        ]}
-                        validateStatus={message?.error?.name ? 'error' : undefined}
-                        help={message?.error?.name ? t(message?.error?.name) : undefined}
-                        hasFeedback
-                    >
-                        <Input placeholder={t("classrooms.detail.addStudent.placeholder.name")}
-                               onInput={() => setMessage(null)}/>
-                    </Form.Item>
-                    <Form.Item
-                        name="lastName"
-                        label={t("classrooms.detail.addStudent.label.lastName")}
-                        rules={[
-                            {
-                                required: true,
-                                message: t("classrooms.detail.addStudent.error.lastName")
-                            },
-                        ]}
-                        validateStatus={message?.error?.lastName ? 'error' : undefined}
-                        help={message?.error?.lastName ? t(message?.error?.lastName) : undefined}
-                        hasFeedback
-                    >
-                        <Input placeholder={t("classrooms.detail.addStudent.placeholder.lastName")}
-                               onInput={() => setMessage(null)}/>
-                    </Form.Item>
-                    <Form.Item
-                        name="age"
-                        label={t("classrooms.detail.addStudent.label.age")}
-                        rules={[
-                            {
-                                required: true,
-                                type: "number",
-                                message: t("classrooms.detail.addStudent.error.age")
-                            },
-                        ]}
-                        validateStatus={message?.error?.age ? 'error' : undefined}
-                        help={message?.error?.age ? t(message?.error?.age) : undefined}
-                        hasFeedback
-                    >
-                        <InputNumber placeholder={t("classrooms.detail.addStudent.placeholder.age")}
-                                     onInput={() => setMessage(null)}/>
-                    </Form.Item>
-                    <Form.Item wrapperCol={{xs: {span: 24, offset: 0}, sm: {span: 16, offset: 6}}}>
-                        <Button type="primary" htmlType="submit">
-                            {t("classrooms.detail.addStudent.button")}
-                        </Button>
-                    </Form.Item>
-                </Form>
+                <Button type="primary" htmlType="submit" onClick={()=> {
+                    setClassroomName(classroomName);
+                    navigate("/teachers/addStudent");
+                }}>
+                    {t("classrooms.detail.addStudent.button")}
+                </Button>
             </Card>
         </Spin>
     );

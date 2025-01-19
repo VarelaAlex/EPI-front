@@ -8,6 +8,7 @@ import Sider from "./components/layout/SiderComponent";
 import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined } from "@ant-design/icons";
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
 import HowToDoExercises from "./components/student/HowToDoExercisesComponent";
+import CreateStudent from "./components/teacher/CreateStudentComponent";
 import LoginTeacher from './components/teacher/LoginTeacherComponent';
 import SignupTeacher from './components/teacher/SignupTeacherComponent';
 import ClassroomsList from './components/teacher/ClassroomsListComponent';
@@ -40,6 +41,7 @@ let App = () => {
 	let [api, contextHolder] = notification.useNotification();
 	let [isMobile, setIsMobile] = useState(false);
 	let [classroomId, setClassroomId] = useState();
+	let [classroomName, setClassroomName] = useState();
 	let [studentName, setStudentName] = useState();
 
 	let { t } = useTranslation();
@@ -307,8 +309,9 @@ let App = () => {
 								<Route path="/loginTeacher" element={<LoginTeacher />} />
 								<Route path="/registerTeacher" element={<SignupTeacher />} />
 								<Route path="/teachers/menuTeacher" element={<ClassroomsList isMobile={isMobile} setClassroomId={setClassroomId} />} />
-								<Route path="/teachers/classroomDetail/:classroomName" element={<ClassroomDetail isMobile={isMobile} setStudentName={setStudentName} />} />
+								<Route path="/teachers/classroomDetail/:classroomName" element={<ClassroomDetail isMobile={isMobile} setStudentName={setStudentName} setClassroomName={setClassroomName} />} />
 								<Route path="/teachers/studentDetail/:studentId" element={<StudentDetail isMobile={isMobile} />} />
+								<Route path="/teachers/addStudent" element={<CreateStudent classroomName={classroomName}/>} />
 								<Route path="/teachers/manageExercises" element={<ExercisesList isMobile={isMobile} />} />
 								<Route path="/teachers/create" element={<CreateExercise isMobile={isMobile} />} />
 								<Route path='/teachers/profile' element={<Profile />} />
