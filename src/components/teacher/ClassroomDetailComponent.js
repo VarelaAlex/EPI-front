@@ -30,7 +30,7 @@ let ClassroomDetail = (props) => {
     let [editing, setEditing] = useState(false);
     let [message, setMessage] = useState(null);
     let [inputName, setInputName] = useState(classroomName);
-    let [inputLevel, setInputLevel] = useState(classroomName);
+    let [inputLevel, setInputLevel] = useState([]);
 
     let navigate = useNavigate();
 
@@ -86,10 +86,34 @@ let ClassroomDetail = (props) => {
     ];
 
     useEffect(() => {
+        let getClassroomInfo = async () => {
+            let response = null;
+            try {
+                response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/classrooms/" + classroomName, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+                    }
+                });
+            } catch (e) {
+                setMessage({error: {type: "internalServerError", message: e}});
+                return;
+            }
 
-
+            let jsonData = await response?.json();
+            if (response?.ok) {
+                if (jsonData != null) {
+                    const [mainLevel, subLevel] = jsonData[0].level.split("-");
+                    setInputLevel([subLevel, mainLevel]);
+                }
+            } else {
+                setMessage({error: jsonData?.error});
+            }
+        };
+        
+        getClassroomInfo();
         getStudents();
-    }, [getStudents]);
+    }, [classroomName, getStudents]);
 
     let deleteStudent = async (id) => {
         await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/students/" + id, {
@@ -208,7 +232,8 @@ let ClassroomDetail = (props) => {
                     Authorization: `Bearer ${localStorage.getItem("accessToken")}`
                 },
                 body: JSON.stringify({
-                    name: inputName
+                    name: inputName,
+                    level: inputLevel[1] + '-' + inputLevel[0]
                 })
             });
         } catch (e) {
@@ -246,8 +271,8 @@ let ClassroomDetail = (props) => {
                                            onChange={(e) => setInputName(e.target.value)}/>
                                     <Cascader
                                         placeholder={t("classrooms.level.placeholder")}
-                                        value={inputName}
-                                        onChange={(e) => setInputName(e.target.value)}
+                                        value={inputLevel}
+                                        onChange={(value) => setInputLevel(value)}
                                         options={options}
                                         expandTrigger="hover"
                                         displayRender={(labels) => labels[labels.length - 1]}

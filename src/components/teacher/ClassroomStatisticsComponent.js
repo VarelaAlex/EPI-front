@@ -33,6 +33,8 @@ let ClassroomStatistics = ({classroomId}) => {
                                 return 'rgba(54, 162, 235, 1)'
                             case 2:
                                 return 'rgba(75, 192, 192, 1)'
+                            default:
+                                return 'rgba(255, 206, 86, 1)'
                         }
                     }
 

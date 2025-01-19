@@ -1,4 +1,4 @@
-import {Empty, Button, Card, Table, Divider, Input, Tooltip, Form, Alert, Spin, Select, Cascader} from "antd";
+import {Empty, Button, Card, Table, Divider, Input, Tooltip, Form, Alert, Spin, Cascader} from "antd";
 import {useEffect, useState} from "react";
 import {useTranslation} from 'react-i18next';
 import {Link, useNavigate} from "react-router-dom";
@@ -120,7 +120,7 @@ let ClassroomsList = (props) => {
     let onFinish = async (values) => {
         let {name, level} = values;
 
-        let levelValue = level[1] + level[0];
+        let levelValue = level[1] + '-' + level[0];
 
         let response = null;
         try {
