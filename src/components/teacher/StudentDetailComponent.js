@@ -1,248 +1,476 @@
-import { Select, Button, Card, Input, Form, Alert, Spin, InputNumber, DatePicker } from "antd";
-import { useForm } from "antd/es/form/Form";
-import moment                                                                      from "moment";
-import { useEffect, useState } from "react";
-import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from "react-router-dom";
+import { MinusCircleOutlined, PlusOutlined }                                                                         from "@ant-design/icons";
+import { Alert, Button, Card, Checkbox, Col, DatePicker, Form, Input, InputNumber, Row, Select, Space, Spin, Steps } from "antd";
+import moment                                                                                                        from "moment";
+import React, { useEffect, useState }                                                                                from "react";
+import { useTranslation }                                                                                            from "react-i18next";
+import { useNavigate, useParams }                                                                                    from "react-router-dom";
 
-let StudentDetail = () => {
+const { Step } = Steps;
+const { Option } = Select;
 
-	let { studentId } = useParams();
+const StudentDetail = () => {
+	const { studentId, classroomName } = useParams();
+	const [form] = Form.useForm();
+	const [currentStep, setCurrentStep] = useState(0);
+	const [classrooms, setClassrooms] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [message, setMessage] = useState(null);
+	const [showOtherSupportNeeds, setShowOtherSupportNeeds] = useState(false);
+	const [showOtherEducationalSupport, setShowOtherEducationalSupport] = useState(false);
+	const [showNEAE, setShowNEAE] = useState(false);
+	const [showOtherNationalOrigin, setShowOtherNationalOrigin] = useState(false);
+	const [showEducationalSupport, setShowEducationalSupport] = useState(false);
+	const navigate = useNavigate();
+	const { t } = useTranslation();
 
-	let [form] = useForm();
-	let [classrooms, setClassrooms] = useState([]);
-	let [loading, setLoading] = useState(true);
-	let [message, setMessage] = useState(null);
-	let navigate = useNavigate();
-
-	let { t } = useTranslation();
+	const steps = [
+		{
+			title:   "Información Básica",
+			content: (
+				         <>
+					         <Form.Item
+						         name="name"
+						         label="Nombre"
+						         rules={ [{ required: true, message: "Por favor, ingrese el nombre" }] }
+					         >
+						         <Input/>
+					         </Form.Item>
+					         <Form.Item
+						         name="lastName"
+						         label="Apellido"
+						         rules={ [{ required: true, message: "Por favor, ingrese el apellido" }] }
+					         >
+						         <Input/>
+					         </Form.Item>
+					         <Form.Item style={ { margin: "0" } }>
+						         <Form.Item
+							         name="age"
+							         label="Edad"
+							         rules={ [
+								         {
+									         required: true, type: "number", message: "Por favor, ingrese la edad"
+								         }
+							         ] }
+							         style={ {
+								         display: "inline-block"
+							         } }
+						         >
+							         <InputNumber style={ { width: "10rem" } }/>
+						         </Form.Item>
+						         <span style={ { display: "inline-block", margin: "2rem 2rem 0 2rem" } }>-</span>
+						         <Form.Item
+							         name="birthDate"
+							         label="Fecha de Nacimiento"
+							         rules={ [{ required: true, message: "Seleccione la fecha de nacimiento" }] }
+							         style={ {
+								         display: "inline-block"
+							         } }
+						         >
+							         <DatePicker style={ { width: "10rem" } }/>
+						         </Form.Item>
+						         <span style={ { display: "inline-block", margin: "2rem 2rem 0 2rem" } }>-</span>
+						         <Form.Item
+							         name="classroomNumber"
+							         label="Número de Clase"
+							         rules={ [
+								         {
+									         required: true, type: "number", message: "Por favor, ingrese el número de clase"
+								         }
+							         ] }
+							         style={ {
+								         display: "inline-block"
+							         } }
+						         >
+							         <InputNumber style={ { width: "10rem" } }/>
+						         </Form.Item>
+					         </Form.Item>
+					         <Form.Item
+						         name="school"
+						         label="Colegio"
+						         rules={ [{ required: true, message: "Por favor, ingrese el colegio" }] }
+					         >
+						         <Input/>
+					         </Form.Item>
+					         <Form.Item name="classroom" label="Clase"
+					                    rules={ [{ required: true, message: "Por favor, ingrese el apellido" }] }>
+						         <Select placeholder="Seleccione">
+							         { classrooms.map((classroom) => (
+								         <Option key={ classroom.id } value={ classroom.name }>
+									         { classroom.name }
+								         </Option>
+							         )) }
+						         </Select>
+					         </Form.Item>
+				         </>
+			         )
+		}, {
+			title:   "Contexto Familiar",
+			content: (
+				         <>
+					         <Form.Item
+						         name="socioEconomicLevel"
+						         label="Nivel Socioeconómico"
+					         >
+						         <Select placeholder="Seleccione" allowClear>
+							         <Option value="bajo">Bajo</Option>
+							         <Option value="medio">Medio</Option>
+							         <Option value="alto">Alto</Option>
+						         </Select>
+					         </Form.Item>
+					         <Form.Item
+						         name="nationalOrigin"
+						         label="Origen Nacional"
+					         >
+						         <Select
+							         placeholder="Seleccione"
+							         onChange={ (value) => setShowOtherNationalOrigin(value === "otro") }
+							         allowClear
+						         >
+							         <Option value="espania">España</Option>
+							         <Option value="europeo">Otro país europeo</Option>
+							         <Option value="africano">País africano</Option>
+							         <Option value="asiatico">País asiático</Option>
+							         <Option value="norteamericano">País norteamericano</Option>
+							         <Option value="latinoamericano">País latinoamericano</Option>
+							         <Option value="otro">Otro</Option>
+						         </Select>
+					         </Form.Item>
+					         { showOtherNationalOrigin && (
+						         <Form.Item name="otherNationalOrigin" label="Especifique el País">
+							         <Input/>
+						         </Form.Item>
+					         ) }
+				         </>
+			         )
+		}, {
+			title:   "Necesidades Educativas",
+			content: (
+				         <>
+					         <Form.Item
+						         name="learningReadingRisk"
+						         label="Dificultades de Aprendizaje de Lectura"
+					         >
+						         <Select placeholder="Seleccione" allowClear>
+							         <Option value="si">Sí</Option>
+							         <Option value="no">No</Option>
+						         </Select>
+					         </Form.Item>
+					         <Form.Item
+						         name="learningWritingRisk"
+						         label="Dificultades de Aprendizaje de Escritura"
+					         >
+						         <Select placeholder="Seleccione" allowClear>
+							         <Option value="si">Sí</Option>
+							         <Option value="no">No</Option>
+						         </Select>
+					         </Form.Item>
+					         <Form.Item
+						         name="familyBackground"
+						         label="Alguno de los progenitores del alumno presentó dificultades de aprendizaje de la lectura o la escritura"
+					         >
+						         <Select placeholder="Seleccione" allowClear>
+							         <Option value="padre">Sí, el padre</Option>
+							         <Option value="madre">Sí, la madre</Option>
+							         <Option value="ambos">Sí, ambos progenitores</Option>
+							         <Option value="ninguno">No</Option>
+						         </Select>
+					         </Form.Item>
+					         <Form.Item
+						         name="neae"
+						         label="El alumno presenta Necesidades Específicas de Apoyo Educativo (NEAE)"
+					         >
+						         <Select placeholder="Seleccione"
+						                 onChange={ (value) => setShowNEAE(value === "si") }
+						                 allowClear>
+							         <Option value="si">Sí</Option>
+							         <Option value="no">No</Option>
+						         </Select>
+					         </Form.Item>
+					         { showNEAE && (
+						         <Form.Item
+							         name="specificSupportNeeds"
+							         label="Necesidades Específicas"
+						         >
+							         <Checkbox.Group onChange={ (checkedValues) => setShowOtherSupportNeeds(checkedValues.includes("otro")) }>
+								         <Row gutter={ [8, 16] }>
+									         <Col span={ 8 }><Checkbox value="trastornoLenguaje">Trastorno del desarrollo del lenguaje y la comunicación</Checkbox></Col>
+									         <Col span={ 8 }><Checkbox value="tdah">Trastorno por déficit de atención con hiperactividad</Checkbox></Col>
+									         <Col span={ 8 }><Checkbox value="autismo">Trastorno del espectro del autismo</Checkbox></Col>
+									         <Col span={ 16 }><Checkbox value="pendienteEvaluacion">Alumno pendiente de evaluación psicopedagógica</Checkbox></Col>
+									         <Col span={ 8 }><Checkbox value="altasCapacidades">Altas capacidades</Checkbox></Col>
+									         <Col span={ 8 }><Checkbox value="discapacidadCognitiva">Discapacidad cognitiva</Checkbox></Col>
+									         <Col span={ 8 }><Checkbox value="discapacidadFisica">Discapacidad física</Checkbox></Col>
+									         <Col span={ 8 }><Checkbox value="dificultadesEspecificas">Dificultades Específicas de Aprendizaje</Checkbox></Col>
+									         <Col span={ 8 }><Checkbox value="otro">Otro</Checkbox></Col>
+								         </Row>
+							         </Checkbox.Group>
+						         </Form.Item>
+					         ) }
+					         { showOtherSupportNeeds && (
+						         <Form.List name="otherSpecificSupportNeeds">
+							         { (fields, { add, remove }) => (
+								         <>
+									         { fields.map(({ key, name, ...restField }) => (
+										         <Space
+											         key={ key }
+											         style={ {
+												         display: "flex", marginBottom: 8
+											         } }
+											         align="baseline"
+										         >
+											         <Form.Item
+												         name={ name }
+												         { ...restField }
+											         >
+												         <Input addonBefore="Necesidades Específicas"/>
+											         </Form.Item>
+											         <MinusCircleOutlined onClick={ () => remove(name) }/>
+										         </Space>
+									         )) }
+									         <Form.Item>
+										         <Button type="dashed" onClick={ () => add() } block
+										                 icon={ <PlusOutlined/> }>
+											         Add field
+										         </Button>
+									         </Form.Item>
+								         </>
+							         ) }
+						         </Form.List>
+					         ) }
+					         <Form.Item
+						         name="learningDiagnosedDifficulties"
+						         label="Dificultades de Aprendizaje Diagnosticadas"
+					         >
+						         <Checkbox.Group>
+							         <Checkbox value="lectura">En lectura</Checkbox>
+							         <Checkbox value="escritura">En escritura</Checkbox>
+							         <Checkbox value="matematicas">En matemáticas</Checkbox>
+						         </Checkbox.Group>
+					         </Form.Item>
+					         <Form.Item
+						         name="needEducationalSupport"
+						         label="El alumno recibe apoyo educativo"
+					         >
+						         <Select placeholder="Seleccione"
+						                 onChange={ (value) => setShowEducationalSupport(value === "si") }
+						                 allowClear>
+							         <Option value="si">Sí</Option>
+							         <Option value="no">No</Option>
+						         </Select>
+					         </Form.Item>
+					         { showEducationalSupport && <Form.Item
+						         name="educationalSupport"
+						         label="Apoyo educativo"
+					         >
+						         <Checkbox.Group
+							         onChange={ (checkedValues) => setShowOtherEducationalSupport(checkedValues.includes("otros")) }>
+							         <Checkbox value="PT">PT</Checkbox>
+							         <Checkbox value="AL">AL</Checkbox>
+							         <Checkbox value="otros">Otros especialistas</Checkbox>
+						         </Checkbox.Group>
+					         </Form.Item> }
+					         { showOtherEducationalSupport && (
+						         <Form.List name="otherEducationalSupport">
+							         { (fields, { add, remove }) => (
+								         <>
+									         { fields.map(({ key, name, ...restField }) => (
+										         <Space
+											         key={ key }
+											         style={ {
+												         display: "flex", marginBottom: 8
+											         } }
+											         align="baseline"
+										         >
+											         <Form.Item
+												         name={ name }
+												         { ...restField }
+											         >
+												         <Input addonBefore="Otros especialistas"/>
+											         </Form.Item>
+											         <MinusCircleOutlined onClick={ () => remove(name) }/>
+										         </Space>
+									         )) }
+									         <Form.Item>
+										         <Button type="dashed" onClick={ () => add() } block
+										                 icon={ <PlusOutlined/> }>
+											         Add field
+										         </Button>
+									         </Form.Item>
+								         </>
+							         ) }
+						         </Form.List>
+					         ) }
+					         <Form.Item
+						         name="firstWords"
+						         label="La emisión de las primeras palabras se inició "
+					         >
+						         <Select placeholder="Seleccione" allowClear>
+							         <Option value="PT">Antes del año</Option>
+							         <Option value="AL">Entre el año y el año y medio</Option>
+							         <Option value="otros">Entre el año y medio y los dos años</Option>
+							         <Option value="no">Entre los dos años y los dos años y medio</Option>
+							         <Option value="no">Después de los dos años y medio</Option>
+						         </Select>
+					         </Form.Item>
+				         </>
+			         )
+		}
+	];
 
 	useEffect(() => {
-		let getStudent = async () => {
-
-			let jsonDataClassroom;
+		const fetchStudentData = async () => {
 			try {
-				let response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/classrooms/list",
-				                           {
-					                           method: "GET",
-					                           headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` }
-				                           }
-				);
+				const classroomResponse = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/classrooms/list", {
+					method: "GET", headers: { Authorization: `Bearer ${ localStorage.getItem("accessToken") }` }
+				});
+				const classroomsData = await classroomResponse.json();
+				setClassrooms(classroomsData);
 
-				jsonDataClassroom = await response.json();
-				if (response.ok) {
-					setClassrooms(jsonDataClassroom);
-				} else {
-					if (Array.isArray(jsonDataClassroom.error)) {
-						setMessage(jsonDataClassroom.error);
-					} else {
-						let finalError = [];
-						finalError.push(jsonDataClassroom.error);
-						setMessage(finalError);
+				const studentResponse = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/students/" + studentId, {
+					method: "GET", headers: {
+						Authorization: `Bearer ${ localStorage.getItem("accessToken") }`
 					}
+				});
+				const studentData = await studentResponse.json();
+
+				if ( studentData.otherSpecificSupportNeeds ) {
+					studentData.otherSpecificSupportNeeds = studentData.otherSpecificSupportNeeds.split(";");
 				}
-			} catch (error) {
+
+				if ( studentData.specificSupportNeeds ) {
+					studentData.specificSupportNeeds = studentData.specificSupportNeeds.split(";");
+				}
+
+				if ( studentData.otherEducationalSupport ) {
+					studentData.otherEducationalSupport = studentData.otherEducationalSupport.split(";");
+				}
+
+				if ( studentData.educationalSupport ) {
+					studentData.educationalSupport = studentData.educationalSupport.split(";");
+				}
+
+				if ( studentData.otherSpecificSupportNeeds && studentData.specificSupportNeeds && studentData.otherSpecificSupportNeeds.length !== 0 ) {
+					studentData.specificSupportNeeds.push("otro");
+					setShowOtherSupportNeeds(true);
+					setShowNEAE(true);
+				}
+
+				if ( studentData.otherEducationalSupport && studentData.educationalSupport && studentData.otherEducationalSupport.length !== 0 ) {
+					studentData.educationalSupport.push("otros");
+					setShowEducationalSupport(true);
+					setShowOtherEducationalSupport(true);
+				}
+
+				if ( studentData.learningReadingRisk !== null && studentData.learningReadingRisk !== undefined ) {
+					studentData.learningReadingRisk = studentData.learningReadingRisk ? "si" : "no";
+				}
+
+				if ( studentData.learningWritingRisk !== null && studentData.learningWritingRisk !== undefined ) {
+					studentData.learningWritingRisk = studentData.learningWritingRisk ? "si" : "no";
+				}
+
+				let neae = undefined;
+				if ( studentData.specificSupportNeeds !== null && studentData.specificSupportNeeds !== undefined ) {
+					neae = studentData.specificSupportNeeds ? "si" : "no";
+				}
+
+				let needEducationalSupport = undefined;
+				if ( studentData.educationalSupport !== null && studentData.educationalSupport !== undefined ) {
+					needEducationalSupport = studentData.educationalSupport ? "si" : "no";
+				}
+
+				if ( studentData.learningDiagnosedDifficulties ) {
+					studentData.learningDiagnosedDifficulties = studentData.learningDiagnosedDifficulties.split(";");
+				}
+
+				form.setFieldsValue({
+					                    ...studentData,
+					                    neae,
+					                    needEducationalSupport,
+					                    classroom: classroomsData.find((c) => c.id === studentData.classroomId)?.name,
+					                    birthDate: studentData.birthDate ? moment(studentData.birthDate) : null
+				                    });
 			}
-
-			try {
-				setLoading(true);
-				let response = await fetch(
-					process.env.REACT_APP_USERS_SERVICE_URL + "/students/" + studentId,
-					{
-						method: "GET",
-						headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` },
-					}
-				);
-
-				let jsonDataStudent = await response.json();
-
-				if (response.ok) {
-					form.setFieldsValue({
-						                    name: jsonDataStudent.name,
-						                    lastName: jsonDataStudent.lastName,
-						                    age: jsonDataStudent.age,
-						                    classroom: jsonDataClassroom.find((c) => c.id === jsonDataStudent.classroomId).name,
-						                    school: jsonDataStudent.school,
-						                    classroomNumber: jsonDataStudent.classroomNumber,
-						                    birthDate: jsonDataStudent.birthDate ? moment(jsonDataStudent.birthDate) : null,
-					                    });
-				} else {
-					setMessage(Array.isArray(jsonDataStudent.error) ? jsonDataStudent.error : [jsonDataStudent.error]);
-				}
-			} catch (error) {
-			} finally {
+			catch ( error ) {
+				setMessage({ error: { type: "internalError", message: error.message } });
+			}
+			finally {
 				setLoading(false);
 			}
 		};
-
-		getStudent();
+		fetchStudentData();
 	}, [studentId, form]);
 
-
-	let onFinish = async (values) => {
-		let { name, lastName, age, classroom, school, classroomNumber, birthDate } = values;
-
-		let response = null;
+	const onFinish = async () => {
 		try {
-			response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/students/" + studentId, {
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${localStorage.getItem("accessToken")}`
-				},
-				body: JSON.stringify({
-					                     name,
-					                     lastName,
-					                     age,
-					                     classroomId: classrooms.find((c) => c.name === classroom).id,
-					                     school,
-					                     classroomNumber,
-					                     birthDate: birthDate ? birthDate.format('YYYY-MM-DD') : null,
-				                     })
-			});
-		} catch (e) {
-			setMessage({ error: { type: "internalServerError", message: e } });
-			return;
-		}
+			let values = form.getFieldsValue(true);
+			const payload = {
+				...values, classroomId: classrooms.find((c) => c.name === values.classroom).id, birthDate: values.birthDate ? values.birthDate.format("YYYY-MM-DD") : null
+			};
 
-		let jsonData = await response?.json();
-		if (response?.ok) {
-			navigate("/classroomDetail/" + classroom.name);
-		} else {
-			setMessage({ error: jsonData?.error });
+			const response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/students/" + studentId, {
+				method:  "PUT", headers: {
+					"Content-Type": "application/json", Authorization: `Bearer ${ localStorage.getItem("accessToken") }`
+				}, body: JSON.stringify(payload)
+			});
+
+			if ( response.ok ) {
+				navigate("/teachers/classrooms/" + classroomName);
+			} else {
+				const errorData = await response.json();
+				setMessage(errorData.error || { type: "unknownError", message: "Error desconocido" });
+			}
+		}
+		catch ( error ) {
+			setMessage({ error: { type: "internalError", message: error.message } });
 		}
 	};
 
-	let { Option } = Select;
-	return (
-		<Spin spinning={loading} tip="Loading" size="large">
-			<Card title={t("students.detail.title")} style={{ width: "90vw" }}>
-				{message?.error?.type && <Alert type="error" message={t(message?.error?.type)} showIcon style={{ marginBottom: "1vh" }} />}
-				<Form
-					form={form}
-					name="addStudent"
-					labelCol={{ xs: { span: 24 }, sm: { span: 6 } }}
-					wrapperCol={{ xs: { span: 14 }, sm: { span: 6 } }}
-					onFinish={onFinish}
-					scrollToFirstError
-				>
-					<Form.Item
-						name="name"
-						label={t("students.detail.update.label.name")}
-						rules={[
-							{
-								required: true,
-								message: t("students.detail.update.error.name")
-							},
-						]}
-						validateStatus={message?.error?.name ? 'error' : undefined}
-						help={message?.error?.name ? t(message?.error?.name) : undefined}
-						hasFeedback
-					>
+	const next = () => setCurrentStep((prev) => prev + 1);
+	const prev = () => setCurrentStep((prev) => prev - 1);
 
-						<Input placeholder={t("students.detail.update.placeholder.name")} onInput={() => setMessage(null)} />
-					</Form.Item>
-					<Form.Item
-						name="lastName"
-						label={t("students.detail.update.label.lastName")}
-						rules={[
-							{
-								required: true,
-								message: t("students.detail.update.error.lastName")
-							},
-						]}
-						validateStatus={message?.error?.lastName ? 'error' : undefined}
-						help={message?.error?.lastName ? t(message?.error?.lastName) : undefined}
-						hasFeedback
-					>
-						<Input placeholder={t("students.detail.update.placeholder.lastName")} onInput={() => setMessage(null)} />
-					</Form.Item>
-					<Form.Item
-						name="age"
-						label={t("students.detail.update.label.age")}
-						rules={[
-							{
-								required: true,
-								type: "number",
-								message: t("students.detail.update.error.age")
-							},
-						]}
-						validateStatus={message?.error?.age ? 'error' : undefined}
-						help={message?.error?.age ? t(message?.error?.age) : undefined}
-						hasFeedback
-					>
-						<InputNumber placeholder={t("students.detail.update.placeholder.age")} onInput={() => setMessage(null)} />
-					</Form.Item>
-					<Form.Item
-						name="school"
-						label={t("students.detail.update.label.school")}
-						rules={[
-							{
-								required: true,
-								message: t("students.detail.update.error.school")
-							},
-						]}
-						hasFeedback
-					>
-						<Input placeholder={t("students.detail.update.placeholder.school")} onInput={() => setMessage(null)} />
-					</Form.Item>
-					<Form.Item
-						name="classroomNumber"
-						label={t("students.detail.update.label.classroomNumber")}
-						rules={[
-							{
-								required: true,
-								message: t("students.detail.update.error.classroomNumber")
-							},
-						]}
-						hasFeedback
-					>
-						<InputNumber placeholder={t("students.detail.update.placeholder.classroomNumber")} onInput={() => setMessage(null)} />
-					</Form.Item>
-					<Form.Item
-						name="birthDate"
-						label={t("students.detail.update.label.birthDate")}
-						rules={[
-							{
-								required: true,
-								message: t("students.detail.update.error.birthDate")
-							},
-						]}
-						hasFeedback
-					>
-						<DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} onChange={() => setMessage(null)} />
-					</Form.Item>
-					<Form.Item
-						name="classroom"
-						label={t("students.detail.update.label.classroom")}
-						rules={[
-							{
-								required: true,
-								message: t("students.detail.update.error.classroom")
-							},
-						]}
-						validateStatus={message?.error?.age ? 'error' : undefined}
-						help={message?.error?.age ? t(message?.error?.age) : undefined}
-						hasFeedback
-					>
-						<Select
-							placeholder={t("students.detail.update.placeholder.classroom")}
-						>
-							{classrooms.map((c) => (
-								<Option key={c.id} value={c.name}>
-									{c.name}
-								</Option>
-							))}
-						</Select>
-					</Form.Item>
-					<Form.Item wrapperCol={{ xs: { span: 24, offset: 0 }, sm: { span: 16, offset: 6 } }}>
-						<Button type="primary" htmlType="submit">
-							{t("students.detail.update.button")}
-						</Button>
-					</Form.Item>
-				</Form>
-			</Card>
-		</Spin>
+	if ( loading ) {
+		return (
+			<div style={ { textAlign: "center", marginTop: "20vh" } }>
+				<Spin/>
+			</div>
+		);
+	}
+
+	return (
+		<Card title="Modificar Estudiante" style={ { margin: "auto" } }>
+			{ message && <Alert type="error" message={ message } showIcon style={ { marginBottom: "1vh" } }/> }
+			<Form form={ form }
+			      layout="vertical"
+			      onFinish={ onFinish }
+			      style={ { width: "40rem" } }>
+				<Steps current={ currentStep } labelPlacement="vertical" onChange={ value => setCurrentStep(value) }>
+					{ steps.map((item) => (
+						<Step key={ item.title } title={ item.title }/>
+					)) }
+				</Steps>
+				<div style={ { marginTop: "1.5rem" } }>{ steps[ currentStep ].content }</div>
+				<Form.Item>
+					<div style={ { display: "flex", gap: "1rem" } }>
+						{ currentStep > 0 && (
+							<Button block onClick={ prev } style={ { flex: "100%" } }>
+								Anterior
+							</Button>
+						) }
+						{ currentStep < steps.length - 1 && (
+							<Button block type="primary" onClick={ next } style={ { flex: "100%" } }>
+								Siguiente
+							</Button>
+						) }
+						{ currentStep === steps.length - 1 && (
+							<Button block type="primary" htmlType="submit" style={ { flex: "100%" } }>
+								Guardar cambios
+							</Button>
+						) }
+					</div>
+				</Form.Item>
+			</Form>
+		</Card>
 	);
 };
 

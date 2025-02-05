@@ -20,7 +20,7 @@ import {LineChartOutlined, DeleteOutlined, EditOutlined, CheckOutlined, CloseOut
 
 let ClassroomDetail = (props) => {
 
-    let {isMobile, setStudentName, setClassroomName} = props;
+    let {isMobile, setStudentName} = props;
     let {classroomName} = useParams();
 
     let [students, setStudents] = useState([]);
@@ -126,7 +126,7 @@ let ClassroomDetail = (props) => {
             title: t("classrooms.detail.table.studentUsername"),
             dataIndex: 'username',
             render: (username, student) => {
-                return <Link to={"/teachers/studentDetail/" + student.id}>{username}</Link>;
+                return <Link to={ `/teachers/${classroomName}/students/${student.id}`}>{username}</Link>;
             }
         },
         {
@@ -210,7 +210,7 @@ let ClassroomDetail = (props) => {
         if (response?.ok) {
             if (jsonData?.updated != null) {
                 setEditing(false);
-                navigate("/teachers/classroomDetail/" + inputName);
+                navigate("/teachers/classrooms/" + inputName);
             }
         } else {
             setMessage({error: jsonData?.error});
@@ -259,8 +259,7 @@ let ClassroomDetail = (props) => {
                 }
                 <Divider orientation="left">{t("classrooms.detail.addStudent.divider")}</Divider>
                 <Button type="primary" htmlType="submit" onClick={()=> {
-                    setClassroomName(classroomName);
-                    navigate("/teachers/addStudent");
+                    navigate(`/teachers/classrooms/${classroomName}/students`);
                 }}>
                     {t("classrooms.detail.addStudent.button")}
                 </Button>

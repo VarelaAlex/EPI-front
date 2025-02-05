@@ -41,7 +41,6 @@ let App = () => {
 	let [api, contextHolder] = notification.useNotification();
 	let [isMobile, setIsMobile] = useState(false);
 	let [classroomId, setClassroomId] = useState();
-	let [classroomName, setClassroomName] = useState();
 	let [studentName, setStudentName] = useState();
 
 	let { t } = useTranslation();
@@ -309,10 +308,10 @@ let App = () => {
 								<Route path="/loginTeacher" element={<LoginTeacher />} />
 								<Route path="/registerTeacher" element={<SignupTeacher />} />
 								<Route path="/teachers/menuTeacher" element={<ClassroomsList isMobile={isMobile} setClassroomId={setClassroomId} />} />
-								<Route path="/teachers/classroomDetail/:classroomName" element={<ClassroomDetail isMobile={isMobile} setStudentName={setStudentName} setClassroomName={setClassroomName} />} />
-								<Route path="/teachers/studentDetail/:studentId" element={<StudentDetail isMobile={isMobile} />} />
-								<Route path="/teachers/addStudent" element={<CreateStudent classroomName={classroomName}/>} />
-								<Route path="/teachers/manageExercises" element={<ExercisesList isMobile={isMobile} />} />
+								<Route path="/teachers/classrooms/:classroomName" element={<ClassroomDetail isMobile={isMobile} setStudentName={setStudentName} />} />
+								<Route path="/teachers/:classroomName/students/:studentId" element={<StudentDetail />} />
+								<Route path="/teachers/classrooms/:classroomName/students" element={<CreateStudent />} />
+								<Route path="/teachers/manageExercises" element={<ExercisesList />} />
 								<Route path="/teachers/create" element={<CreateExercise isMobile={isMobile} />} />
 								<Route path='/teachers/profile' element={<Profile />} />
 								<Route path='/teachers/classroomStats/:classroomName' element={<ClassroomStatistics classroomId={classroomId} />} />

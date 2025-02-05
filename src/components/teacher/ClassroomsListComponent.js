@@ -48,7 +48,7 @@ let ClassroomsList = (props) => {
             title: t("classrooms.table.className"),
             dataIndex: 'name',
             render: (name) => {
-                return <Link to={"/teachers/classroomDetail/" + name}>{name}</Link>;
+                return <Link to={"/teachers/classrooms/" + name}>{name}</Link>;
             }
         },
         {
