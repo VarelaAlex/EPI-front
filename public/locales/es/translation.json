@@ -9,6 +9,12 @@
     "notificationMessage": "¡Bienvenido/a a EPI!",
     "notificationDescription": "Puedes descargar la aplicación haciendo clic en el botón de la derecha"
   },
+  "iconic": "Icónica",
+  "mixed": "Combinada",
+  "symbolic": "Simbólica",
+  "lexical": "Léxicos",
+  "syntactic": "Sintácticos",
+  "semantic": "Semánticos",
   "sider": {
     "teacher": {
       "welcomeMessage": "Hola",
@@ -107,6 +113,7 @@
       "title": "Mis aulas",
       "className": "Nombre del aula",
       "numberStudents": "Número de alumnos",
+      "actions": "Acciones",
       "empty": "Aún no tienes aulas",
       "tooltips": {
         "seeStatistics": "Ver estadísticas",
@@ -122,7 +129,30 @@
       "label": "Nombre del aula",
       "placeholder": "Primaria 2ºC",
       "button": "Añadir aula",
-      "error": "El nombre del aula es obligatorio"
+      "error": "El nombre del aula es obligatorio",
+      "level": {
+        "label": "Nivel educativo",
+        "placeholder": "Primaria",
+        "EI": {
+          "label": "Educación Infantil",
+          "stage": {
+            "1": "3 años de Educación Infantil",
+            "2": "4 años de Educación Infantil",
+            "3": "5 años de Educación Infantil"
+          }
+        },
+        "EP": {
+          "label": "Educación Primaria",
+          "stage": {
+            "1": "1º de Educación Primaria",
+            "2": "2º de Educación Primaria",
+            "3": "3º de Educación Primaria",
+            "4": "4º de Educación Primaria",
+            "5": "5º de Educación Primaria",
+            "6": "6º de Educación Primaria"
+          }
+        }
+      }
     },
     "create": {
       "error": {
@@ -141,6 +171,12 @@
       "error": {
         "id": "El id del aula es obligatorio",
         "notExist": "El aula no existe"
+      },
+      "popconfirm": {
+        "title": "Eliminar aula",
+        "description": "¿Estás seguro de que quieres eliminar esta aula?",
+        "okText": "Eliminar",
+        "cancelText": "Cancelar"
       }
     },
     "detail": {
@@ -188,6 +224,14 @@
   },
   "internalServerError": "Algo ha ido mal, inténtalo de nuevo más tarde",
   "exercise": {
+    "delete": {
+      "popconfirm": {
+        "title": "Eliminar ejercicio",
+        "description": "¿Estás seguro de que quieres eliminar este ejercicio?",
+        "okText": "Eliminar",
+        "cancelText": "Cancelar"
+      }
+    },
     "create": {
       "title": "Crear ejercicio",
       "label": {
@@ -235,6 +279,7 @@
       "empty": "No existen ejercicios"
     },
     "table": {
+      "actions": "Acciones",
       "title": "Mis ejercicios",
       "name": "Ejercicio",
       "category": "Categoría",
@@ -281,6 +326,14 @@
   "student": {
     "error": {
       "notExist": "El alumno no existe"
+    },
+    "delete": {
+      "popconfirm": {
+        "title": "Eliminar alumno",
+        "description": "¿Estás seguro de que quieres eliminar este alumno?",
+        "okText": "Eliminar",
+        "cancelText": "Cancelar"
+      }
     }
   },
   "students": {
@@ -313,8 +366,14 @@
     "title": "Mi perfil",
     "label": {
       "name": "Nombre",
-      "lastName": "Apellidoa",
-      "email": "Correo electrónico"
+      "lastName": "Apellidos",
+      "email": "Correo electrónico",
+      "teachingStage": "Etapa educativa",
+      "schoolType": "Tipo de centro",
+      "schoolLocation": "Localización del centro",
+      "gender": "Género",
+      "experienceYears": "Años de experiencia",
+      "community": "Comunidad autónoma"
     },
     "error": {
       "name": "El nombre es obligatorio",
@@ -323,14 +382,56 @@
         "empty": "El correo electrónico es obligatorio",
         "format": "Formato de correo electrónico incorrecto",
         "repeated": "Ya existe una cuenta con este correo electrónico"
-      }
+      },
+      "teachingStage": "La etapa educativa es obligatoria",
+      "schoolType": "El tipo de centro es obligatorio",
+      "schoolLocation": "La localización del centro es obligatoria",
+      "gender": "El género es obligatorio",
+      "experienceYears": "Los años de experiencia son obligatorios",
+      "experienceYearsMin": "Los años de experiencia deben ser mayor que 0",
+      "community": "La comunidad autónoma es obligatoria"
     },
     "placeholder": {
       "name": "Angelica",
       "lastName": "Ross",
-      "email": "angelicaR@email.com"
+      "email": "angelicaR@email.com",
+      "teachingStage": "Primaria",
+      "schoolType": "Público",
+      "schoolLocation": "Urbano",
+      "gender": "Mujer",
+      "experienceYears": "5",
+      "community": "Andalucía"
+    },
+    "options": {
+      "infant": "Infantil",
+      "primary": "Primaria",
+      "secondary": "Secundaria",
+      "public": "Público",
+      "private": "Privado",
+      "concerted": "Concertado",
+      "rural": "Rural",
+      "urban": "Urbano",
+      "man": "Hombre",
+      "woman": "Mujer",
+      "nonBinary": "No binario",
+      "preferNotToSay": "Prefiero no decirlo"
     },
     "button": "Aceptar"
+  },
+  "classroomStats": {
+    "title": "Porcentaje de Ejercicios por Representación y Tipo de Red"
+  },
+  "studentStats": {
+    "titleIconic": "Errores de tipo ICÓNICA",
+    "titleMixed": "Errores de tipo COMBINADA",
+    "titleSymbolic": "Errores de tipo SIMBÓLICA",
+    "numberOfExercises": "Número de ejercicios",
+    "errorsByCategoryAndTypeIconic": "Errores por Categoría y Tipo ICÓNICA",
+    "errorsByCategoryAndTypeMixed": "Errores por Categoría y Tipo COMBINADA",
+    "errorsByCategorySymbolic": "Errores por Categoría y Tipo SIMBÓLICA",
+    "incorrectOrder": "Orden incorrecto",
+    "incorrectPos": "Posición incorrecta",
+    "outOfBounds": "Fuera de límites"
   },
   "pageNotFound": {
     "message1": "Vaya... Parece que la página que buscas no existe.",

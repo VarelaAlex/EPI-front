@@ -26,6 +26,7 @@ const DroppablePhase2 = ({ id, type, ok, nexus, stop, bigStop, shape, src, text 
 
     const getTextPosition = () => {
         if (bigStop) return { x: "3.3vmax", y: "5.3vmax", fontSize: "3vmax" };
+        if(text==="and") return {x: "2.4vmax", y: "5.2vmax", fontSize: "1.3vmax"};
         if (stop) return { x: "3.2vmax", y: "4.7vmax", fontSize: "1.8vmax" };
         if (shape === "ellipse") return {x: "5.7vmax", y: "6.1vmax", fontSize: "1vmax" };
         if (shape === "rect") return { x: "5.2vmax", y: "6vmax", fontSize: "1.1vmax" };
@@ -67,7 +68,7 @@ const DroppablePhase2 = ({ id, type, ok, nexus, stop, bigStop, shape, src, text 
                             height="6vmax"
                             fill="white"
                             stroke="black"
-                            stroke-width="3"
+                            strokeWidth="3"
                         />
                         {!ok && <rect
                             ref={setNodeRef}
@@ -87,7 +88,7 @@ const DroppablePhase2 = ({ id, type, ok, nexus, stop, bigStop, shape, src, text 
                         ry="3.5vmax"
                         fill="white"
                         stroke={strokeColor()}
-                        stroke-width="3"
+                        strokeWidth="3"
                     />
                     {!ok && <rect
                         ref={setNodeRef}
@@ -96,7 +97,7 @@ const DroppablePhase2 = ({ id, type, ok, nexus, stop, bigStop, shape, src, text 
                         width="1.5vmax"
                         height="1.5vmax"
                         fill={style}
-                        stroke-width="3"
+                        strokeWidth="3"
                     />}
                 </g>
                 }
@@ -107,7 +108,7 @@ const DroppablePhase2 = ({ id, type, ok, nexus, stop, bigStop, shape, src, text 
                     width="1.5vmax"
                     height="1.5vmax"
                     fill={style}
-                    stroke-width="3"
+                    strokeWidth="3"
                 />}
                 {ok &&
                     <image {...imagePosition} href={src} />

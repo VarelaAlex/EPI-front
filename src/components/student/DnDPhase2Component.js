@@ -171,7 +171,10 @@ let DnDPhase2 = () => {
 		return { x: 38, y: 2, width: "55", height: "55" };
 	};
 
-	const getTextPosition = (x, y, bigStop, stop, shape) => {
+	const getTextPosition = (x, y, bigStop, stop, shape, text) => {
+		if ( text==="and" ) {
+			return { x: "3.3vmax", y: "2vmax", fontSize: "1.3vmax" };
+		}
 		if ( stop ) {
 			return { x: "3vmax", y: "2vmax", fontSize: "2vmax" };
 		}
@@ -217,7 +220,8 @@ let DnDPhase2 = () => {
 						element.data.current.y,
 						element.data.current.bigStop,
 						element.data.current.stop,
-						element.data.current.shape
+						element.data.current.shape,
+						element.data.current.text
 					) } fill="black" textAnchor="middle" fontFamily="Massallera">
 						{ element.data.current.text }
 					</text>
@@ -227,7 +231,7 @@ let DnDPhase2 = () => {
 		if ( element.data.current.shape === "rect" ) {
 			return (
 				<g>
-					<rect width="120" height="75" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-width="3"/>
+					<rect width="120" height="75" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" strokeWidth="3"/>
 					<image href={ element.data.current.src } { ...getImagePosition(
 						element.data.current.x,
 						element.data.current.y,
@@ -241,7 +245,8 @@ let DnDPhase2 = () => {
 						element.data.current.y,
 						element.data.current.bigStop,
 						element.data.current.stop,
-						element.data.current.shape
+						element.data.current.shape,
+						element.data.current.text
 					) } fill="black" textAnchor="middle" fontFamily="Massallera">
 						{ element.data.current.text }
 					</text>
@@ -258,7 +263,7 @@ let DnDPhase2 = () => {
 						ry="40"
 						fill="white"
 						stroke={ strokeColor() }
-						stroke-width="3"
+						strokeWidth="3"
 					/>
 					<image href={ element.data.current.src } { ...getImagePosition(
 						element.data.current.x,
@@ -273,7 +278,8 @@ let DnDPhase2 = () => {
 						element.data.current.y,
 						element.data.current.bigStop,
 						element.data.current.stop,
-						element.data.current.shape
+						element.data.current.shape,
+						element.data.current.text
 					) } fill="black" textAnchor="middle" fontFamily="Massallera">
 						{ element.data.current.text }
 					</text>
@@ -296,7 +302,8 @@ let DnDPhase2 = () => {
 						element.data.current.y,
 						element.data.current.bigStop,
 						element.data.current.stop,
-						element.data.current.shape
+						element.data.current.shape,
+						element.data.current.text
 					) } fill="black" textAnchor="middle" fontFamily="Massallera">
 						{ element.data.current.text }
 					</text>
@@ -319,7 +326,8 @@ let DnDPhase2 = () => {
 						element.data.current.y,
 						element.data.current.bigStop,
 						element.data.current.stop,
-						element.data.current.shape
+						element.data.current.shape,
+						element.data.current.text
 					) } fill="black" textAnchor="middle" fontFamily="Massallera">
 						{ element.data.current.text }
 					</text>
@@ -367,22 +375,22 @@ let DnDPhase2 = () => {
 					<Flex align="center" justify="center">
 						<svg height="20vmax" viewBox={ `-2 -2 ${ viewBoxWidth(exercise?.networkType) } 250` }>
 							<path d={ `M ${ pathRect(exercise) } 70 L ${ pathRect(exercise) } 85 ${ pathTop(exercise?.networkType) }` } fill="none" stroke="rgb(255, 196, 101)"
-							      stroke-width="3"/>
-							<path d={ `M ${ pathRect(exercise) } 70 L ${ pathRect(exercise) } 85 L 60 85 L 60 95` } fill="none" stroke="rgb(0, 0, 0)" stroke-width="3"/>
-							<path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3"/>
-							<path d={ `M 350 165 ${ pathBottom(exercise?.networkType) }` } fill="none" stroke="rgb(255, 196, 101)" stroke-width="3"/>
+							      strokeWidth="3"/>
+							<path d={ `M ${ pathRect(exercise) } 70 L ${ pathRect(exercise) } 85 L 60 85 L 60 95` } fill="none" stroke="rgb(0, 0, 0)" strokeWidth="3"/>
+							<path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" strokeWidth="3"/>
+							<path d={ `M 350 165 ${ pathBottom(exercise?.networkType) }` } fill="none" stroke="rgb(255, 196, 101)" strokeWidth="3"/>
 							{ ["I-II", "I-III"].includes(exercise?.networkType) && <path
 								d={ pathBottom2(exercise?.networkType) }
 								fill="none"
 								stroke="rgb(21, 232, 223)"
-								stroke-width="3"
+								strokeWidth="3"
 							/> }
 
 							{ exercise?.networkType === "I-III" && <path
 								d="M 570 145 L 570 150 L 790 150 L 790 165"
 								fill="none"
 								stroke="rgb(207, 143, 251)"
-								stroke-width="3"
+								strokeWidth="3"
 							/> }
 
 							{ extendedNodes.slice().sort((a, b) => b.order - a.order).map((element) => <DraggablePhase2

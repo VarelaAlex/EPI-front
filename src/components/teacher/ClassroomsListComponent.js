@@ -19,18 +19,23 @@ let ClassroomsList = (props) => {
 
 	const options = [
 		{
-			value: "EI", label: "Educación Infantil", children: [
-				{ value: "1", label: "3 años de Educación Infantil" }, { value: "2", label: "4 años de Educación Infantil" }, { value: "3", label: "5 años de Educación Infantil" }
-			]
+			value:    "EI",
+			label:    t("classrooms.addClassroom.level.EI.label"),
+			children: Object.entries(t("classrooms.addClassroom.level.EI.stage", { returnObjects: true }))
+			                .map(([key, value]) => (
+				                {
+					                value: key, label: value
+				                }
+			                ))
 		}, {
-			value: "EP", label: "Educación Primaria", children: [
-				{ value: "1", label: "1º de Educación Primaria" },
-				{ value: "2", label: "2º de Educación Primaria" },
-				{ value: "3", label: "3º de Educación Primaria" },
-				{ value: "4", label: "4º de Educación Primaria" },
-				{ value: "5", label: "5º de Educación Primaria" },
-				{ value: "6", label: "6º de Educación Primaria" }
-			]
+			value:    "EP",
+			label:    t("classrooms.addClassroom.level.EP.label"),
+			children: Object.entries(t("classrooms.addClassroom.level.EP.stage", { returnObjects: true }))
+			                .map(([key, value]) => (
+				                {
+					                value: key, label: value
+				                }
+			                ))
 		}
 	];
 
@@ -46,7 +51,7 @@ let ClassroomsList = (props) => {
 		}, {
 			title: t("classrooms.table.numberStudents"), dataIndex: "numberStudents", align: "center"
 		}, {
-			title:     "Actions",
+			title:     t("classrooms.table.actions"),
 			dataIndex: "name",
 			align:     "right",
 			render:    (name, classroom) => (
@@ -61,11 +66,11 @@ let ClassroomsList = (props) => {
 					<Tooltip title={ t("classrooms.table.tooltips.delete") } mouseEnterDelay="0.3"
 					         trigger={ ["hover", "focus"] }>
 						<Popconfirm
-							title="Eliminar aula"
-							description="¿Estás seguro de que quieres eliminar este aula?"
-							okText="Eliminar"
+							title={ t("classrooms.delete.popconfirm.title") }
+							description={ t("classrooms.delete.popconfirm.description") }
+							okText={ t("classrooms.delete.popconfirm.okText") }
 							okButtonProps={ { danger: true } }
-							cancelText="Cancelar"
+							cancelText={ t("classrooms.delete.popconfirm.cancelText") }
 							onConfirm={ () => deleteClassroom(name) }
 						>
 							<Button danger type="primary" icon={ <DeleteOutlined/> }> { t("classrooms.detail.table.buttons.delete") }</Button>
@@ -77,11 +82,11 @@ let ClassroomsList = (props) => {
 						navigate("/teachers/classroomStats/" + name);
 					} } style={ { marginRight: "1vmax" } }> { t("classrooms.table.buttons.seeStatistics") }</Button>
 					<Popconfirm
-						title="Eliminar aula"
-						description="¿Estás seguro de que quieres eliminar este aula?"
-						okText="Eliminar"
+						title={ t("classrooms.delete.popconfirm.title") }
+						description={ t("classrooms.delete.popconfirm.description") }
+						okText={ t("classrooms.delete.popconfirm.okText") }
 						okButtonProps={ { danger: true } }
-						cancelText="Cancelar"
+						cancelText={ t("classrooms.delete.popconfirm.cancelText") }
 						onConfirm={ () => deleteClassroom(name) }
 					>
 						<Button danger type="primary"> { t("classrooms.table.buttons.delete") }</Button>
@@ -159,7 +164,7 @@ let ClassroomsList = (props) => {
 				<Divider orientation="left">{ t("classrooms.addClassroom.divider") }</Divider>
 				{ message?.error?.type && <Alert type="error" message={ t(message?.error?.type) } showIcon style={ { marginBottom: "1vh" } }/> }
 				<Form
-					form={form}
+					form={ form }
 					name="addClassroom"
 					labelCol={ { xs: { span: 24 }, sm: { span: 6 } } }
 					wrapperCol={ { xs: { span: 24 }, sm: { span: 18 } } }
@@ -182,11 +187,11 @@ let ClassroomsList = (props) => {
 					</Form.Item>
 					<Form.Item
 						name="level"
-						label={ t("signup.form.label.level") }
+						label={ t("classrooms.addClassroom.level.label") }
 						rules={ [{ required: true, message: t("signup.error.level.empty") }] }
 					>
 						<Cascader
-							placeholder={ t("classrooms.level.placeholder") }
+							placeholder={ t("classrooms.addClassroom.level.placeholder") }
 							options={ options }
 							expandTrigger="hover"
 							displayRender={ (labels) => labels[ labels.length - 1 ] }

@@ -261,19 +261,19 @@ let DnDPhase1 = () => {
 					<Divider style={ { backgroundColor: "grey" } }/>
 					<Flex align="center" justify="center" style={ { height: "90%", width: "90%" } }>
 						<svg height="20vmax" viewBox={ `-2 0 ${ viewBoxWidth(exercise?.networkType) } 250` }>
-							<rect x={ rectX(exercise) } y="1" width="120" height="70" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-width="3"/>
-							<ellipse cx="60" cy="205" rx="60" ry="40" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-width="3"/>
-							<ellipse cx="350" cy="205" rx="60" ry="40" fill="rgb(255, 255, 255)" stroke="rgb(255, 196, 101)" stroke-width="3"/>
+							<rect x={ rectX(exercise) } y="1" width="120" height="70" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" strokeWidth="3"/>
+							<ellipse cx="60" cy="205" rx="60" ry="40" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" strokeWidth="3"/>
+							<ellipse cx="350" cy="205" rx="60" ry="40" fill="rgb(255, 255, 255)" stroke="rgb(255, 196, 101)" strokeWidth="3"/>
 							<path d={ `M ${ pathRect(exercise) } 70 L ${ pathRect(exercise) } 85 ${ pathTop(exercise?.networkType) }` } fill="none" stroke="rgb(255, 196, 101)"
-							      stroke-width="3"/>
-							<path d={ `M ${ pathRect(exercise) } 70 L ${ pathRect(exercise) } 85 L 60 85 L 60 95` } fill="none" stroke="rgb(0, 0, 0)" stroke-width="3"/>
-							<path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3"/>
-							<path d={ `M 350 165 ${ pathBottom(exercise?.networkType) }` } fill="none" stroke="rgb(255, 196, 101)" stroke-width="3"/>
+							      strokeWidth="3"/>
+							<path d={ `M ${ pathRect(exercise) } 70 L ${ pathRect(exercise) } 85 L 60 85 L 60 95` } fill="none" stroke="rgb(0, 0, 0)" strokeWidth="3"/>
+							<path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" strokeWidth="3"/>
+							<path d={ `M 350 165 ${ pathBottom(exercise?.networkType) }` } fill="none" stroke="rgb(255, 196, 101)" strokeWidth="3"/>
 							{ ["I-II", "I-III"].includes(exercise?.networkType) && <path
 								d={ pathBottom2(exercise?.networkType) }
 								fill="none"
 								stroke="rgb(21, 232, 223)"
-								stroke-width="3"
+								strokeWidth="3"
 							/> }
 							{ ["I-II", "I-III"].includes(exercise?.networkType) && <ellipse
 								cx={ exercise?.networkType === "I-II" ? "610" : "570" }
@@ -282,13 +282,13 @@ let DnDPhase1 = () => {
 								ry="40"
 								fill="rgb(255, 255, 255)"
 								stroke="rgb(21, 232, 223)"
-								stroke-width="3"
+								strokeWidth="3"
 							/> }
 							{ exercise?.networkType === "I-III" && <path
 								d="M 570 145 L 570 150 L 790 150 L 790 165"
 								fill="none"
 								stroke="rgb(207, 143, 251)"
-								stroke-width="3"
+								strokeWidth="3"
 							/> }
 							{ exercise?.networkType === "I-III" && <ellipse
 								cx="790"
@@ -297,7 +297,7 @@ let DnDPhase1 = () => {
 								ry="40"
 								fill="rgb(255, 255, 255)"
 								stroke="rgb(207, 143, 251)"
-								stroke-width="3"
+								strokeWidth="3"
 							/> }
 							{ droppableNodes.filter((value, index, self) => index === self.findIndex((t) => (
 							                                                t.type === value.type

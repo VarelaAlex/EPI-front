@@ -114,7 +114,7 @@ let ClassroomDetail = (props) => {
 				return age;
 			}
 		}, {
-			title:     "Actions",
+			title:     t("classrooms.table.actions"),
 			dataIndex: "id",
 			align:     "right",
 			render:    (id, student) => (
@@ -127,10 +127,11 @@ let ClassroomDetail = (props) => {
 						} } icon={ <LineChartOutlined/> } style={ { marginRight: "1vmax" } }/>
 					</Tooltip>
 					<Popconfirm
-						title="Are you sure?"
-						description="Click 'Cancel' to stop deletion in 5 seconds."
-						okText="Delete"
-						cancelText="Cancel"
+						title={ t("student.delete.popconfirm.title") }
+						description={ t("student.delete.popconfirm.description") }
+						okText={ t("student.delete.popconfirm.okText") }
+						okButtonProps={ { danger: true } }
+						cancelText={ t("student.delete.popconfirm.cancelText") }
 						onConfirm={ () => deleteStudent(id) }
 					>
 						<Tooltip title={ t("classrooms.detail.table.tooltips.delete") } mouseEnterDelay="0.3"
@@ -144,11 +145,11 @@ let ClassroomDetail = (props) => {
 						navigate("/teachers/studentStats/" + id);
 					} } style={ { marginRight: "1vmax" } }> { t("classrooms.detail.table.buttons.seeStatistics") }</Button>
 					<Popconfirm
-						title="Eliminar alumno"
-						description="¿Estás seguro de que quieres eliminar este alumno?"
-						okText="Eliminar"
+						title={ t("student.delete.popconfirm.title") }
+						description={ t("student.delete.popconfirm.description") }
+						okText={ t("student.delete.popconfirm.okText") }
 						okButtonProps={ { danger: true } }
-						cancelText="Cancelar"
+						cancelText={ t("student.delete.popconfirm.cancelText") }
 						onConfirm={ () => deleteStudent(id) }
 					>
 						<Button danger type="primary"> { t("classrooms.detail.table.buttons.delete") }</Button>

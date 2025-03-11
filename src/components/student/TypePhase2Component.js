@@ -134,6 +134,9 @@ let TypePhase2 = () => {
 	};
 
 	let svgWidth = (e) => {
+		if(e.text==="and") {
+			return "5vmax";
+		}
 		if ( e.stop ) {
 			return "4vmax";
 		}
@@ -441,7 +444,7 @@ let TypePhase2 = () => {
 					<Row>
 						{ extendedNodes.slice(5)
 						               .map((element) => (
-							               <Col key={ element.id } style={ { paddingRight: "0.5vmax" } }>
+							               <Col key={ element.id } style={ { paddingRight: "0.3vmax" } }>
 								               <svg height="7vmax" width={ svgWidth(element) }>
 									               <g key={ element.id + element.order }>
 										               { element.shape === "rect" && <rect
@@ -454,7 +457,7 @@ let TypePhase2 = () => {
 											               strokeWidth="3"
 										               /> }
 										               { element.shape === "ellipse" && <ellipse
-											               cx="4.6vmax"
+											               cx="5.5vmax"
 											               cy="3.3vmax"
 											               rx="4.5vmax"
 											               ry="3.2vmax"
@@ -464,11 +467,11 @@ let TypePhase2 = () => {
 										               /> }
 										               { element.clicked ? (
 											               <foreignObject
-												               x={ element.shape === "ellipse" ? "13%" : element.nexus ? "0%" : "4%" }
+												               x={ element.text === "and" ? "0" : element.shape === "ellipse" ? "22%" : element.nexus ? "0%" : "4%" }
 												               y={ element.bigStop || element.stop ? "40%" : element.shape === "ellipse" ? "30%" : element.shape === "rect"
 												                                                                                                   ? "25%"
 												                                                                                                   : "30%" }
-												               width={ element.bigStop || element.stop ? "3vmax" : element.shape === "ellipse" ? "6.5vmax" : element.shape
+												               width={element.text === "and" ? "5vmax" : element.bigStop || element.stop ? "3vmax" : element.shape === "ellipse" ? "6.5vmax" : element.shape
 												                                                                                                             === "rect"
 												                                                                                                             ? "9.3vmax"
 												                                                                                                             : "7.4vmax" }
@@ -518,7 +521,7 @@ let TypePhase2 = () => {
 												                 onPointerOut={ (event) => { event.target.style.fill = "#f8cecc"; } }
 												                 x={ element.shape === "rect" ? "41%" : element.bigStop ? "10%" : element.nexus ? "2.5vmax" : element.stop
 												                                                                                                              ? "1vmax"
-												                                                                                                              : "3.8vmax" }
+												                                                                                                              : "4.8vmax" }
 												                 y={ element.shape === "rect" ? "28%" : element.bigStop ? "50%" : "34%" }
 												                 width="1.5vmax"
 												                 height="1.5vmax"

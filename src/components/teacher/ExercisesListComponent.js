@@ -31,7 +31,7 @@ let ExercisesList = (props) => {
 		}, {
 			title: t("exercise.table.language"), dataIndex: "language", align: "center"
 		}, {
-			title:     "Actions",
+			title:     t("exercise.table.actions"),
 			dataIndex: "_id",
 			align:     "center",
 			render:    (_id) => (
@@ -41,11 +41,11 @@ let ExercisesList = (props) => {
 					 </Tooltip>*/ }
 					<Tooltip title={ t("exercise.table.tooltips.delete") } mouseEnterDelay="0.3" trigger={ ["hover", "focus"] }>
 						<Popconfirm
-							title="Eliminar ejercicio"
-							description="¿Estás seguro de que quieres eliminar este ejercicio?"
-							okText="Eliminar"
+							title={ t("exercise.delete.popconfirm.title") }
+							description={ t("exercise.delete.popconfirm.description") }
+							okText={ t("exercise.delete.popconfirm.okText") }
 							okButtonProps={ { danger: true } }
-							cancelText="Cancelar"
+							cancelText={ t("exercise.delete.popconfirm.cancelText") }
 							onConfirm={ () => deleteExercise(_id) }
 						>
 							<Button danger type="primary" icon={ <DeleteOutlined/> }/>
@@ -54,11 +54,11 @@ let ExercisesList = (props) => {
 				</> : <>
 					{/*<Button onClick={() => navigate(`/teachers/exercise/${_id}/edit`)} style={{ marginRight: "1vmax" }}> {t("exercise.table.buttons.edit")}</Button >*/ }
 					<Popconfirm
-						title="Eliminar ejercicio"
-						description="¿Estás seguro de que quieres eliminar este ejercicio?"
-						okText="Eliminar"
+						title={ t("exercise.delete.popconfirm.title") }
+						description={ t("exercise.delete.popconfirm.description") }
+						okText={ t("exercise.delete.popconfirm.okText") }
 						okButtonProps={ { danger: true } }
-						cancelText="Cancelar"
+						cancelText={ t("exercise.delete.popconfirm.cancelText") }
 						onConfirm={ () => deleteExercise(_id) }
 					>
 						<Button danger type="primary"> { t("exercise.table.buttons.delete") }</Button>

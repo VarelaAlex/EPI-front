@@ -1,5 +1,5 @@
-import { Alert, Button, Card, Form, Input, Select } from "antd";
-import { useForm }                                  from "antd/es/form/Form";
+import { Alert, Button, Card, Form, Input, InputNumber, Select } from "antd";
+import { useForm }                                               from "antd/es/form/Form";
 import { useEffect, useState }                      from "react";
 import { useTranslation }                           from "react-i18next";
 import { useNavigate }                              from "react-router-dom";
@@ -116,10 +116,10 @@ let Profile = () => {
 					label={ t("profile.label.teachingStage") }
 					rules={ [{ required: true, message: t("profile.error.teachingStage") }] }
 				>
-					<Select placeholder={ t("profile.placeholder.teachingStage") }>
-						<Option value="infantil">{ t("profile.options.infantil") }</Option>
-						<Option value="primaria">{ t("profile.options.primaria") }</Option>
-						<Option value="secundaria">{ t("profile.options.secundaria") }</Option>
+					<Select placeholder={ t("profile.placeholder.teachingStage") } allowClear>
+						<Option value="infantil">{ t("profile.options.infant") }</Option>
+						<Option value="primaria">{ t("profile.options.primary") }</Option>
+						<Option value="secundaria">{ t("profile.options.secondary") }</Option>
 					</Select>
 				</Form.Item>
 				<Form.Item
@@ -127,9 +127,9 @@ let Profile = () => {
 					label={ t("profile.label.schoolType") }
 					rules={ [{ required: true, message: t("profile.error.schoolType") }] }
 				>
-					<Select placeholder={ t("profile.placeholder.schoolType") }>
+					<Select placeholder={ t("profile.placeholder.schoolType") } allowClear>
 						<Option value="public">{ t("profile.options.public") }</Option>
-						<Option value="concertado">{ t("profile.options.concertado") }</Option>
+						<Option value="concertado">{ t("profile.options.concerted") }</Option>
 						<Option value="private">{ t("profile.options.private") }</Option>
 					</Select>
 				</Form.Item>
@@ -138,7 +138,7 @@ let Profile = () => {
 					label={ t("profile.label.schoolLocation") }
 					rules={ [{ required: true, message: t("profile.error.schoolLocation") }] }
 				>
-					<Select placeholder={ t("profile.placeholder.schoolLocation") }>
+					<Select placeholder={ t("profile.placeholder.schoolLocation") } allowClear>
 						<Option value="rural">{ t("profile.options.rural") }</Option>
 						<Option value="urban">{ t("profile.options.urban") }</Option>
 					</Select>
@@ -148,9 +148,9 @@ let Profile = () => {
 					label={ t("profile.label.gender") }
 					rules={ [{ required: true, message: t("profile.error.gender") }] }
 				>
-					<Select placeholder={ t("profile.placeholder.gender") }>
-						<Option value="male">{ t("profile.options.male") }</Option>
-						<Option value="female">{ t("profile.options.female") }</Option>
+					<Select placeholder={ t("profile.placeholder.gender") } allowClear>
+						<Option value="male">{ t("profile.options.man") }</Option>
+						<Option value="female">{ t("profile.options.woman") }</Option>
 						<Option value="nonBinary">{ t("profile.options.nonBinary") }</Option>
 						<Option value="preferNotToSay">{ t("profile.options.preferNotToSay") }</Option>
 					</Select>
@@ -160,16 +160,16 @@ let Profile = () => {
 				<Form.Item
 					name="experienceYears"
 					label={ t("profile.label.experienceYears") }
-					rules={ [{ required: true, message: t("profile.error.experienceYears") }] }
+					rules={ [{ required: true, message: t("profile.error.experienceYears") }, { type: "number", min: 0, message: t("profile.error.experienceYearsMin") }] }
 				>
-					<Input type="number" placeholder={ t("profile.placeholder.experienceYears") }/>
+					<InputNumber placeholder={ t("profile.placeholder.experienceYears") } min={0}/>
 				</Form.Item>
 				<Form.Item
 					name="community"
 					label={ t("profile.label.community") }
-					rules={ [{ required: true, message: t("profile.error.community.empty") }] }
+					rules={ [{ required: true, message: t("profile.error.community") }] }
 				>
-					<Select placeholder={ t("profile.placeholder.community") }>
+					<Select placeholder={ t("profile.placeholder.community") } allowClear>
 						{ COMMUNITIES.map((community) => (
 							<Select.Option key={ community.key } value={ community.content }>
 								{ community.content }

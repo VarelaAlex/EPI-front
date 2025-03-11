@@ -27,6 +27,7 @@ const DraggablePhase1 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text 
 
     const getTextPosition = () => {
         if (bigStop) return { x: "3.4vmax", y: "5.9vmax", fontSize: "2.3vmax" };
+        if(text==="and") return {x: "2.4vmax", y: "5.2vmax", fontSize: "1.3vmax"};
         if (stop) return { x: "3vmax", y: "5vmax", fontSize: "1.8vmax" };
         if (shape === "ellipse") return { x: "5.7vmax", y: "5.9vmax", fontSize: "1.1vmax" };
         if (shape === "rect") return { x: "5.2vmax", y: "6.1vmax", fontSize: "1.1vmax" };
@@ -67,7 +68,7 @@ const DraggablePhase1 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text 
                         height="6vmax"
                         fill="white"
                         stroke="black"
-                        stroke-width="3"
+                        strokeWidth="3"
                     />
                 }
                 {shape === "ellipse" &&
@@ -78,7 +79,7 @@ const DraggablePhase1 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text 
                         ry="3.5vmax"
                         fill="white"
                         stroke={strokeColor()}
-                        stroke-width="3"
+                        strokeWidth="3"
                     />
                 }
                 <image

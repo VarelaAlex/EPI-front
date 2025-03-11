@@ -467,7 +467,7 @@ let TypePhase1 = () => {
 										<foreignObject
 											x={ X + element.posX - 30 }
 											y={ Y + element.posY - 4 }
-											width="50"
+											width="60"
 											height="3vmax"
 										>
 											<Input
@@ -517,7 +517,7 @@ let TypePhase1 = () => {
 									element.clicked ? (
 										<foreignObject
 											x={ X + element.posX - 50 }
-											y={ Y + element.posY - 4 }
+											y={ Y + element.posY - 9 }
 											width="116"
 											height="3vmax"
 										>
@@ -555,7 +555,7 @@ let TypePhase1 = () => {
 											onPointerOver={ (event) => { event.target.style.fill = "#ea9999"; } }
 											onPointerOut={ (event) => { event.target.style.fill = "#f8cecc"; } }
 											x={ X + element.posX }
-											y={ Y + element.posY }
+											y={ Y + element.posY-5 }
 											width="1.5vmax"
 											height="1.5vmax"
 											fill="#f8cecc"
