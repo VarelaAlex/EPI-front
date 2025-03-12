@@ -121,10 +121,12 @@ let ClassroomDetail = (props) => {
 				isMobile ? <div style={ { float: "right" } }>
 					<Tooltip title={ t("classrooms.detail.table.tooltips.seeStatistics") } mouseEnterDelay="0.3"
 					         trigger={ ["hover", "focus"] }>
-						<Button onClick={ () => {
-							setStudentName(student.name);
-							navigate("/teachers/studentStats/" + id);
-						} } icon={ <LineChartOutlined/> } style={ { marginRight: "1vmax" } }/>
+						<Button onClick=
+							        { () => {
+								        setStudentName(student.name);
+								        navigate("/teachers/studentStats/" + id);
+							        } } icon={ <LineChartOutlined/> } style={ { marginRight: "1vmax" } }
+						/>
 					</Tooltip>
 					<Popconfirm
 						title={ t("student.delete.popconfirm.title") }
@@ -140,10 +142,22 @@ let ClassroomDetail = (props) => {
 						</Tooltip>
 					</Popconfirm>
 				</div> : <div style={ { float: "right" } }>
-					<Button onClick={ () => {
-						setStudentName(student.name);
-						navigate("/teachers/studentStats/" + id);
-					} } style={ { marginRight: "1vmax" } }> { t("classrooms.detail.table.buttons.seeStatistics") }</Button>
+					<Button onClick=
+						        { () => {
+							        setStudentName(student.name);
+							        navigate(`/teachers/${ classroomName }/students/${ student.id }/surveys/${(student.age > 5 ? "B" : "A")}`);
+						        } } style={ { marginRight: "1vmax" } }
+					>
+						{ t("classrooms.detail.table.buttons.survey") }
+					</Button>
+					<Button onClick=
+						        { () => {
+							        setStudentName(student.name);
+							        navigate("/teachers/studentStats/" + id);
+						        } } style={ { marginRight: "1vmax" } }
+					>
+						{ t("classrooms.detail.table.buttons.seeStatistics") }
+					</Button>
 					<Popconfirm
 						title={ t("student.delete.popconfirm.title") }
 						description={ t("student.delete.popconfirm.description") }

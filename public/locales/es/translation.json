@@ -193,7 +193,8 @@
         },
         "buttons": {
           "seeStatistics": "Ver estadísticas",
-          "delete": "Eliminar"
+          "delete": "Eliminar",
+          "survey": "Completar encuesta"
         }
       },
       "addStudent": {
@@ -432,6 +433,62 @@
     "incorrectOrder": "Orden incorrecto",
     "incorrectPos": "Posición incorrecta",
     "outOfBounds": "Fuera de límites"
+  },
+  "surveyA": {
+    "title": "Cuestionario para la detección temprana de las dificultades de aprendizaje en la lectura, escritura y cálculo en el alumnado que inicia Educación Infantil de 5 años (A)",
+    "button": {
+      "next": "Siguiente",
+      "prev": "Anterior",
+      "submit": "Enviar"
+    },
+    "options":{
+      "never": "Nunca",
+      "almostNever": "Casi nunca",
+      "fewTimes": "Pocas veces",
+      "sometimes": "Algunas veces",
+      "often": "A menudo",
+      "unknown": "No sabe / No es adecuado"
+    },
+    "steps": {
+      "generalBehavior": "Comportamiento general",
+      "speechAbility": "Capacidad de habla",
+      "memoryAbility": "Capacidad de memorización",
+      "attentionAbility": "Capacidad de atención",
+      "sequenceAbility": "Capacidad de secuencia",
+      "muscleCoordination": "Coordinación muscular",
+      "spatialOrientation": "Sentido del espacio y la orientación",
+      "emotionsSocialAdaptation": "Emociones y adaptación social"
+    }
+  },
+  "surveyB": {
+    "title": "Cuestionario para la detección temprana de las dificultades de aprendizaje en la lectura,escritura y cálculo en el alumnado que inicia 1º de Educación Primaria (B)",
+    "button": {
+      "next": "Siguiente",
+      "prev": "Anterior",
+      "submit": "Enviar"
+    },
+    "options":{
+      "never": "Nunca",
+      "almostNever": "Casi nunca",
+      "fewTimes": "Pocas veces",
+      "sometimes": "Algunas veces",
+      "often": "A menudo",
+      "unknown": "No sabe / No es adecuado"
+    },
+    "steps": {
+      "reading": "Lectura",
+      "orthography": "Ortogrfía y escritura al dictado",
+      "writeExpression": "Expresión escrita",
+      "generalBehavior": "Comportamiento general",
+      "mathAbility": "Capacidad matemática",
+      "speechAbility": "Capacidad de habla",
+      "memoryAbility": "Capacidad de memorización",
+      "attentionAbility": "Capacidad de atención",
+      "sequenceAbility": "Capacidad de secuencia",
+      "muscleCoordination": "Coordinación muscular",
+      "spatialOrientation": "Sentido del espacio y la orientación",
+      "emotionsSocialAdaptation": "Emociones y adaptación social"
+    }
   },
   "pageNotFound": {
     "message1": "Vaya... Parece que la página que buscas no existe.",

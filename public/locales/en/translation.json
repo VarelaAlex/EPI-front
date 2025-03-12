@@ -193,7 +193,8 @@
         },
         "buttons": {
           "seeStatistics": "See statistics",
-          "delete": "Delete"
+          "delete": "Delete",
+          "survey": "Complete survey"
         }
       },
       "addStudent": {

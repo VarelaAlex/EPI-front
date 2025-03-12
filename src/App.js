@@ -30,6 +30,8 @@ import Profile from './components/teacher/ProfileComponent';
 import ClassroomStatistics from './components/teacher/ClassroomStatisticsComponent';
 import StudentStatistics from './components/teacher/StudentStatisticsComponent';
 import AboutEPI from './components/teacher/AboutEPIComponent';
+import SurveyA from "./components/teacher/SurveyAComponent";
+import SurveyB from "./components/teacher/SurveyBComponent";
 
 let App = () => {
 
@@ -316,6 +318,8 @@ let App = () => {
 								<Route path='/teachers/profile' element={<Profile />} />
 								<Route path='/teachers/classroomStats/:classroomName' element={<ClassroomStatistics classroomId={classroomId} />} />
 								<Route path='/teachers/studentStats/:studentId' element={<StudentStatistics studentName={studentName} />} />
+								<Route path='/teachers/:classroomName/students/:studentId/surveys/A' element={<SurveyA/>} />
+								<Route path='/teachers/:classroomName/students/:studentId/surveys/B' element={<SurveyB/>} />
 								<Route path='/teachers/aboutEPI' element={<AboutEPI />} />
 								<Route path='/' element={<BlankPage />} />
 								<Route path="*" element={<NotFound />} />
