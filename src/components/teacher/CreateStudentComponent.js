@@ -136,7 +136,7 @@ const CreateStudent = () => {
 				         <>
 					         <Form.Item
 						         name="learningReadingRisk"
-						         label="Dificultades de Aprendizaje de Lectura"
+						         label="¿Alumno en riesgo de dificultades de aprendizaje de la lectura?"
 					         >
 						         <Select placeholder="Seleccione" allowClear>
 							         <Option value="si">Sí</Option>
@@ -145,7 +145,7 @@ const CreateStudent = () => {
 					         </Form.Item>
 					         <Form.Item
 						         name="learningWritingRisk"
-						         label="Dificultades de Aprendizaje de Escritura"
+						         label="¿Alumno en riesgo de dificultades de aprendizaje de la escritura?"
 					         >
 						         <Select placeholder="Seleccione" allowClear>
 							         <Option value="si">Sí</Option>
@@ -301,6 +301,7 @@ const CreateStudent = () => {
 							         <Option value="entreDosYDosMedio">Entre los dos años y los dos años y
 								         medio</Option>
 							         <Option value="despuesDos">Después de los dos años y medio</Option>
+							         <Option value="noComunica">No se comunica oralmente</Option>
 						         </Select>
 					         </Form.Item>
 				         </>
