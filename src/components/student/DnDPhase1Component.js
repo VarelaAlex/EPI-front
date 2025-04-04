@@ -3,6 +3,7 @@ import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors }          
 import { Card, Col, Divider, Flex, Row }                                                    from "antd";
 import React, { useEffect, useRef, useState }                                               from "react";
 import { useNavigate }                                                                      from "react-router-dom";
+import { finishExperiment, finishTracking, initTracking, registerElement, startExperiment } from "../../scriptTest";
 import useFullscreen                                                                        from "../../hooks/useFullscreen";
 import { useSession }                                                                       from "../SessionComponent";
 import DraggablePhase1                                                                      from "./DraggablePhase1Component";
@@ -12,6 +13,11 @@ import { nexusX, nodes, pathBottom, pathBottom2, pathTop, STOP, stopX, viewBoxWi
 let DnDPhase1 = () => {
 
 	useEffect(() => {
+		registerElement("prueba1-epi", 1, document.getElementById ("okButton"));
+		registerElement("prueba1-epi", 2, document.getElementById ("okButton"));
+		initTracking("prueba1-epi");
+		startExperiment();
+
 		// Function to scroll the page
 		const hideHeader = () => {
 			window.scrollTo({
@@ -145,6 +151,7 @@ let DnDPhase1 = () => {
 			            });
 			setShowGif(true);
 			setTimer(setTimeout(() => {
+				finishTracking("/exerciseDnD/phase2");
 				setShowGif(false);
 				navigate("/exerciseDnD/phase2");
 			}, 3000));
