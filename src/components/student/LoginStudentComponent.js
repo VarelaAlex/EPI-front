@@ -3,6 +3,7 @@ import { Button, Card, Input, Form, Alert } from "antd";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSession }  from '../SessionComponent';
+import {registerValor1, registerValor2, registerValor3, startExperiment} from "../../scriptTest";
 
 let LoginStudent = () => {
 
@@ -41,6 +42,10 @@ let LoginStudent = () => {
             localStorage.setItem("name", jsonData.name);
             localStorage.setItem("role", "S");
             setLogin(true);
+            startExperiment();
+            registerValor1("AA");
+            registerValor2(123);
+            registerValor3(new Date());
             navigate("/students/exercises");
         } else {
             setMessage({ error: jsonData?.error });

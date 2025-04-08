@@ -9,6 +9,7 @@ import DraggablePhase2                                                          
 import DroppablePhase2                                                                from "./DroppablePhase2Component";
 import { nexusX, nodes, pathBottom, pathBottom2, pathTop, stopX, viewBoxWidth, X, Y } from "./NetworkProps";
 import "../assets/fonts/massallera.TTF";
+import {finishExperiment, finishTracking, initTracking, registerElement} from "../../scriptTest";
 
 let DnDPhase2 = () => {
 
@@ -17,6 +18,15 @@ let DnDPhase2 = () => {
 	const INITIAL_ELEMENT = 0;
 
 	let { setExercise, feedback, setFeedback, exercise } = useSession();
+
+	let exerciseNodes = nodes(exercise);
+
+	useEffect(() => {
+		exerciseNodes.forEach((node) => {
+			registerElement("epi-testB", 1, document.getElementById(node.id));
+		})
+		initTracking("epi-testB");
+	}, []);
 
 	useEffect(() => {
 		if ( feedback?.phase2?.elapsedTime ) {
@@ -27,7 +37,6 @@ let DnDPhase2 = () => {
 	let startTime = useRef(Date.now());
 
 	let navigate = useNavigate();
-	let exerciseNodes = nodes(exercise);
 	let [showGif, setShowGif] = useState(false);
 	let [element, setElement] = useState();
 
@@ -146,6 +155,8 @@ let DnDPhase2 = () => {
 			            });
 			setShowGif(true);
 			setTimer(setTimeout(() => {
+				finishTracking("/students/exercises");
+				finishExperiment()
 				setShowGif(false);
 				navigate("/students/exercises");
 			}, 3000));

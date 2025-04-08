@@ -3,7 +3,14 @@ import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors }          
 import { Card, Col, Divider, Flex, Row }                                                    from "antd";
 import React, { useEffect, useRef, useState }                                               from "react";
 import { useNavigate }                                                                      from "react-router-dom";
-import { finishExperiment, finishTracking, initTracking, registerElement, startExperiment } from "../../scriptTest";
+import {
+	finishTracking,
+	initTracking,
+	registerElement,
+	registerValor1,
+	registerValor2,
+	registerValor3
+} from "../../scriptTest";
 import useFullscreen                                                                        from "../../hooks/useFullscreen";
 import { useSession }                                                                       from "../SessionComponent";
 import DraggablePhase1                                                                      from "./DraggablePhase1Component";
@@ -12,11 +19,15 @@ import { nexusX, nodes, pathBottom, pathBottom2, pathTop, STOP, stopX, viewBoxWi
 
 let DnDPhase1 = () => {
 
+	const INITIAL_ELEMENT = 0;
+	let { setExercise, exercise, feedback, setFeedback } = useSession();
+	let exerciseNodes = nodes(exercise);
+
 	useEffect(() => {
-		registerElement("prueba1-epi", 1, document.getElementById ("okButton"));
-		registerElement("prueba1-epi", 2, document.getElementById ("okButton"));
-		initTracking("prueba1-epi");
-		startExperiment();
+		exerciseNodes.forEach((node) => {
+			registerElement("epi-testA", node.id, document.getElementById(node.id));
+		})
+		initTracking("epi-testA");
 
 		// Function to scroll the page
 		const hideHeader = () => {
@@ -32,13 +43,9 @@ let DnDPhase1 = () => {
 
 	let exitFullscreen = useFullscreen(true);
 
-	const INITIAL_ELEMENT = 0;
-
-	let { setExercise, exercise, feedback, setFeedback } = useSession();
 	let startTime = useRef(Date.now());
 
 	let navigate = useNavigate();
-	let exerciseNodes = nodes(exercise);
 
 	const INITIAL_EXTENDED_NODES = [
 		{ ...exerciseNodes[ 0 ], order: 0, id: "1-1" },

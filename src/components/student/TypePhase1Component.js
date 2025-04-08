@@ -1,23 +1,31 @@
 import { HomeOutlined, ReloadOutlined }                                               from "@ant-design/icons";
 import { Card, Col, Divider, Flex, Input, Row }                                       from "antd";
-import React, { useRef, useState }                                                    from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { useTranslation }                                                             from "react-i18next";
 import { useNavigate }                                                                from "react-router-dom";
 import { useSession }                                                                 from "../SessionComponent";
 import { nexusX, nodes, pathBottom, pathBottom2, pathTop, stopX, viewBoxWidth, X, Y } from "./NetworkProps";
 import "../assets/styles/font.css";
+import {initTracking, registerElement} from "../../scriptTest";
 
 let TypePhase1 = () => {
 
 	const INITIAL_ELEMENT = 0;
 	const INITIAL_ID = "1-1";
-
 	let { setExercise, exercise, feedback, setFeedback } = useSession();
+	let exerciseNodes = nodes(exercise);
+
+	useEffect(() => {
+		exerciseNodes.forEach((node) => {
+			registerElement("prueba3-epi", 1, document.getElementById(node.id));
+		})
+		initTracking("prueba3-epi");
+	}, []);
+
 	let startTime = useRef(Date.now());
 
 	let { t } = useTranslation();
 	let navigate = useNavigate();
-	let exerciseNodes = nodes(exercise);
 
 	const INITIAL_EXTENDED_NODES = [
 		{ ...exerciseNodes[ 0 ], order: 0, id: "1-1" },
