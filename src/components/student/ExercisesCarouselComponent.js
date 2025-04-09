@@ -8,7 +8,7 @@ import { useSession }                                                           
 
 let ExercisesCarousel = () => {
 
-	let { setExercise, setFeedback } = useSession();
+	let { setExercise, setFeedback, lang, setLang } = useSession();
 
 	let [exercises, setExercises] = useState([]);
 	let [message, setMessage] = useState(null);
@@ -20,7 +20,6 @@ let ExercisesCarousel = () => {
 
 	let navigate = useNavigate();
 	let { t } = useTranslation();
-	let [lang, setLang] = useState(i18n.language.split("-")[ 0 ]);
 
 	const carouselRef = useRef(null);
 	const isDragging = useRef(false);
@@ -149,7 +148,10 @@ let ExercisesCarousel = () => {
 						width={ 70 }
 						preview={ false }
 						style={ { cursor: "pointer" } }
-						onClick={ () => setLang("es") }
+						onClick={ () => {
+							setLang("es");
+							i18n.changeLanguage("es");
+						} }
 					/>
 					<Image
 						src={ lang === "en" ? "/icons/en.png" : "/icons/en-bw.png" }
@@ -157,7 +159,10 @@ let ExercisesCarousel = () => {
 						width={ 70 }
 						preview={ false }
 						style={ { cursor: "pointer" } }
-						onClick={ () => setLang("en") }
+						onClick={ () => {
+							setLang("en");
+							i18n.changeLanguage("en");
+						} }
 					/>
 				</Flex>
 				{ message?.error?.type && <Alert type="error" message={ t(message?.error?.type) } showIcon style={ { marginBottom: "1vh" } }/> }

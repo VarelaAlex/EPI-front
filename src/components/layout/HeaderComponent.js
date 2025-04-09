@@ -8,7 +8,7 @@ import { useSession } from "../SessionComponent";
 let Header = (props) => {
 
     let { open, setOpen, isMobile } = props;
-    let { login } = useSession();
+    let { login, setLang } = useSession();
 
     let [highlighted, setHighlighted] = useState(false);
     let [isReadyForInstall, setIsReadyForInstall] = useState(false);
@@ -32,6 +32,7 @@ let Header = (props) => {
         items,
         onClick: (locale) => {
             i18n.changeLanguage(locale.key);
+            setLang(locale.key);
         },
     };
 
