@@ -685,13 +685,13 @@ function postDateDD(id, value) {
 }
 
 function postAJAXDemographicData(parametros) {
-	if ( emittingData ) {
+	//if ( emittingData ) {
 		$.ajax({
 			       data: JSON.stringify(parametros), url: urlDemographicData, type: "post", success: function (response) {
 			}, error:    function () {
 			}
 		       });
-	}
+	//}
 }
 
 export function registerValor1(value) {postStringDD(19, value);}

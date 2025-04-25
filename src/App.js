@@ -56,6 +56,7 @@ let App = () => {
 		localStorage.removeItem("refreshToken");
 		localStorage.removeItem("name");
 		localStorage.removeItem("role");
+		localStorage.removeItem("user");
 		setLogin(false);
 		setFeedback({});
 		setExercise({});

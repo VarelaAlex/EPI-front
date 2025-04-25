@@ -6,10 +6,7 @@ import { useNavigate }                                                          
 import {
 	finishTracking,
 	initTracking,
-	registerElement,
-	registerValor1,
-	registerValor2,
-	registerValor3
+	registerElement
 } from "../../scriptTest";
 import useFullscreen                                                                        from "../../hooks/useFullscreen";
 import { useSession }                                                                       from "../SessionComponent";
@@ -25,9 +22,9 @@ let DnDPhase1 = () => {
 
 	useEffect(() => {
 		exerciseNodes.forEach((node) => {
-			registerElement("epi-testA", node.id, document.getElementById(node.id));
+			registerElement(`${exercise.title}_${exercise.representation}_${exercise.networkType}.phase1`, node.id, document.getElementById(node.id));
 		})
-		initTracking("epi-testA");
+		initTracking(`${exercise.title}_${exercise.representation}_${exercise.networkType}.phase1`);
 
 		// Function to scroll the page
 		const hideHeader = () => {

@@ -23,9 +23,9 @@ let DnDPhase2 = () => {
 
 	useEffect(() => {
 		exerciseNodes.forEach((node) => {
-			registerElement("epi-testB", 1, document.getElementById(node.id));
+			registerElement(`${exercise.title}_${exercise.representation}_${exercise.networkType}.phase2`, 1, document.getElementById(node.id));
 		})
-		initTracking("epi-testB");
+		initTracking(`${exercise.title}_${exercise.representation}_${exercise.networkType}.phase2`);
 	}, []);
 
 	useEffect(() => {
@@ -155,8 +155,8 @@ let DnDPhase2 = () => {
 			            });
 			setShowGif(true);
 			setTimer(setTimeout(() => {
+				finishExperiment();
 				finishTracking("/students/exercises");
-				finishExperiment()
 				setShowGif(false);
 				navigate("/students/exercises");
 			}, 3000));

@@ -43,8 +43,8 @@ let LoginStudent = () => {
             localStorage.setItem("role", "S");
             setLogin(true);
             startExperiment();
-            registerValor1("AA");
-            registerValor2(123);
+            registerValor1(jsonData.username);
+            registerValor2(jsonData.id);
             registerValor3(new Date());
             navigate("/students/exercises");
         } else {
