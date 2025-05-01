@@ -69,7 +69,7 @@ let ExercisesList = (props) => {
 	];
 
 	let deleteExercise = async (id) => {
-		await fetch(`${process.env.REACT_APP_EXERCISES_SERVICE_URL}/${id}`, {
+		await fetch(`${process.env.REACT_APP_EXERCISES_SERVICE_URL}/exercises/${id}`, {
 			method: "DELETE", headers: { Authorization: `Bearer ${ localStorage.getItem("accessToken") }` }
 		});
 		getExercises();
@@ -77,7 +77,7 @@ let ExercisesList = (props) => {
 
 	let getExercises = async () => {
 		setLoading(true);
-		let response = await fetch(`${process.env.REACT_APP_EXERCISES_SERVICE_URL}/teacher`, {
+		let response = await fetch(`${process.env.REACT_APP_EXERCISES_SERVICE_URL}/exercises/teacher`, {
 			method: "GET", headers: { Authorization: `Bearer ${ localStorage.getItem("accessToken") }` }
 		});
 
