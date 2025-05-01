@@ -90,7 +90,7 @@ let CreateExercise = ({ isMobile }) => {
 
         let response = null;
         try {
-            response = await fetch(`${process.env.REACT_APP_EXERCISES_SERVICE_URL}/exercises`, {
+            response = await fetch(`${process.env.REACT_APP_EXERCISES_SERVICE_URL}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

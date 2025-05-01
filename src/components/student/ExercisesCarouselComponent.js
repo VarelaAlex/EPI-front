@@ -34,7 +34,7 @@ let ExercisesCarousel = () => {
 		setLoading(true);
 		let response = null;
 		try {
-			response = await fetch(process.env.REACT_APP_EXERCISES_SERVICE_URL + `/exercises/list/${ lang }`, {
+			response = await fetch(`${process.env.REACT_APP_EXERCISES_SERVICE_URL}/list/${ lang }`, {
 				method:  "POST", headers: {
 					"Content-Type": "application/json", Authorization: `Bearer ${ localStorage.getItem("accessToken") }`
 				}, body: JSON.stringify({ category, representation })
