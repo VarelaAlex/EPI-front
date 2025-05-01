@@ -89,12 +89,12 @@ let ClassroomDetail = (props) => {
 		getStudents();
 	}, [classroomName, getStudents]);
 
-	let deleteStudent = async (id) => {
+	let deleteStudent = useCallback(async (id) => {
 		await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/students/" + id, {
 			method: "DELETE", headers: { Authorization: `Bearer ${ localStorage.getItem("accessToken") }` }
 		});
-		getStudents();
-	};
+		await getStudents();
+	}, [getStudents]);
 
 	const columns = [
 		{

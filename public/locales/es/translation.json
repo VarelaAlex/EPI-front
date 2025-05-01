@@ -68,9 +68,18 @@
   },
   "signup": {
     "title": "Regístrate",
-    "button": "Regístrate",
+    "button": {
+      "next": "Siguiente",
+      "prev": "Anterior",
+      "submit": "Enviar"
+    },
     "loginMessage": "¿Ya tienes una cuenta?",
     "loginLink": "Iniciar sesión",
+    "steps": {
+      "basicInfo": "Información básica",
+      "additionalInfo": "Información adicional",
+      "finalInfo": "Detalles finales"
+    },
     "form": {
       "label": {
         "name": "Nombre",
@@ -78,13 +87,40 @@
         "email": "Correo electrónico",
         "username": "Nombre de usuario",
         "password": "Contraseña",
-        "confirm": "Confirma tu contraseña"
+        "confirm": "Confirma tu contraseña",
+        "teachingStage": "Etapa educativa",
+        "schoolType": "Tipo de centro",
+        "schoolLocation": "Ubicación del centro",
+        "gender": "Género",
+        "experienceYears": "Años de experiencia",
+        "community": "Comunidad autónoma"
       },
       "placeholder": {
         "name": "Angelica",
         "lastName": "Ross",
         "email": "angelicaR@email.com",
-        "confirm": "Repite tu contraseña"
+        "password": "******",
+        "confirm": "Repite tu contraseña",
+        "teachingStage": "Selecciona una etapa educativa",
+        "schoolType": "Selecciona un tipo de centro",
+        "schoolLocation": "Selecciona el tipo de ubicación",
+        "gender": "Selecciona tu género",
+        "experienceYears": "Ej. 5",
+        "community": "Selecciona tu comunidad"
+      },
+      "options": {
+        "infantil": "Infantil",
+        "primaria": "Primaria",
+        "secundaria": "Secundaria",
+        "public": "Público",
+        "concertado": "Concertado",
+        "private": "Privado",
+        "rural": "Rural",
+        "urban": "Urbano",
+        "male": "Hombre",
+        "female": "Mujer",
+        "nonBinary": "No binario",
+        "preferNotToSay": "Prefiero no decirlo"
       }
     },
     "error": {
@@ -97,16 +133,23 @@
       "lastName": "Los apellidos son obligatorios",
       "password": {
         "empty": "La contraseña es obligatoria",
-        "format": {
-          "mustHave": "La contraseña debe cumplir con los siguientes criterios:",
-          "between": "1. Entre 8 y 12 caracteres",
-          "digit": "2. Al menos un dígito",
-          "special": "3. Al menos uno de los siguientes caracteres especiales: ! @ # $ % & *"
-        },
+        "format": "La contraseña debe tener entre 8 y 12 caracteres, incluir al menos un número y un carácter especial (! @ # $ % & *)",
         "confirm": "Por favor, confirma tu contraseña",
         "unmatch": "Las contraseñas no coinciden"
+      },
+      "teachingStage": "La etapa educativa es obligatoria",
+      "schoolType": "El tipo de centro es obligatorio",
+      "schoolLocation": "La ubicación del centro es obligatoria",
+      "gender": "El género es obligatorio",
+      "experienceYears": "Introduce tus años de experiencia",
+      "community": {
+        "empty": "Selecciona tu comunidad autónoma"
       }
-    }
+    },
+    "validationError": "Revisa los campos del formulario",
+    "internalServerError": "Ocurrió un error en el servidor. Intenta de nuevo más tarde.",
+    "invalidServerResponse": "Respuesta inesperada del servidor. Intenta más tarde.",
+    "unknownError": "Ocurrió un error desconocido. Intenta nuevamente."
   },
   "classrooms": {
     "table": {
@@ -461,7 +504,7 @@
     }
   },
   "surveyB": {
-    "title": "Cuestionario para la detección temprana de las dificultades de aprendizaje en la lectura,escritura y cálculo en el alumnado que inicia 1º de Educación Primaria (B)",
+    "title": "Cuestionario para la detección temprana de las dificultades de aprendizaje en la lectura, escritura y cálculo en el alumnado que inicia 1º de Educación Primaria (B)",
     "button": {
       "next": "Siguiente",
       "prev": "Anterior",
