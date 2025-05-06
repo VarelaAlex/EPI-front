@@ -6,7 +6,7 @@ import { useNavigate }                                                          
 import { useSession }                                                                 from "../SessionComponent";
 import { nexusX, nodes, pathBottom, pathBottom2, pathTop, stopX, viewBoxWidth, X, Y } from "./NetworkProps";
 import "../assets/styles/font.css";
-import {initTracking, registerElement} from "../../scriptTest";
+import {finishTracking, initTracking, registerElement} from "../../scriptTest";
 
 let TypePhase1 = () => {
 
@@ -17,9 +17,9 @@ let TypePhase1 = () => {
 
 	useEffect(() => {
 		exerciseNodes.forEach((node) => {
-			registerElement("prueba3-epi", 1, document.getElementById(node.id));
+			registerElement(`${exercise.title}_${exercise.representation}_${exercise.networkType}.phase1`, node.id, document.getElementById(node.id));
 		})
-		initTracking("prueba3-epi");
+		initTracking(`${exercise.title}_${exercise.representation}_${exercise.networkType}.phase1`);
 	}, []);
 
 	let startTime = useRef(Date.now());
@@ -97,6 +97,7 @@ let TypePhase1 = () => {
 							            });
 							setShowGif(true);
 							setTimer(setTimeout(() => {
+								finishTracking("/exerciseType/phase2");
 								setShowGif(false);
 								navigate("/exerciseType/phase2");
 							}, 3000));

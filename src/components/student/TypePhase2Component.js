@@ -5,6 +5,7 @@ import { useTranslation }                                                       
 import { useNavigate }                                                                from "react-router-dom";
 import { useSession }                                                                 from "../SessionComponent";
 import { nexusX, nodes, pathBottom, pathBottom2, pathTop, stopX, viewBoxWidth, X, Y } from "./NetworkProps";
+import {finishExperiment, finishTracking, initTracking, registerElement} from "../../scriptTest";
 
 let TypePhase2 = () => {
 
@@ -13,6 +14,13 @@ let TypePhase2 = () => {
 
 	let { setExercise, exercise, feedback, setFeedback } = useSession();
 	let startTime = useRef(Date.now());
+
+	useEffect(() => {
+		exerciseNodes.forEach((node) => {
+			registerElement(`${exercise.title}_${exercise.representation}_${exercise.networkType}.phase2`, 1, document.getElementById(node.id));
+		})
+		initTracking(`${exercise.title}_${exercise.representation}_${exercise.networkType}.phase2`);
+	}, []);
 
 	useEffect(() => {
 		if ( feedback?.phase2?.elapsedTime ) {
@@ -85,6 +93,8 @@ let TypePhase2 = () => {
 							            });
 							setShowGif(true);
 							setTimer(setTimeout(() => {
+								finishExperiment();
+								finishTracking("/students/exercises");
 								setShowGif(false);
 								navigate("/students/exercises");
 							}, 3000));
