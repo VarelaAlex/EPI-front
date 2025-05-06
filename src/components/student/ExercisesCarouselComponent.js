@@ -34,7 +34,7 @@ let ExercisesCarousel = () => {
 		setLoading(true);
 		let response = null;
 		try {
-			response = await fetch(`${process.env.REACT_APP_EXERCISES_SERVICE_URL}/exercises/list/${ lang }`, {
+			response = await fetch(`${process.env.REACT_APP_EXERCISES_SERVICE_URL}/exercises/list/${ lang.split("-")[0] }`, {
 				method:  "POST", headers: {
 					"Content-Type": "application/json", Authorization: `Bearer ${ localStorage.getItem("accessToken") }`
 				}, body: JSON.stringify({ category, representation })
@@ -143,7 +143,7 @@ let ExercisesCarousel = () => {
 			<div style={ { width: "100vw", padding: "1vw", overflow: "hidden" } }>
 				<Flex style={ { position: "absolute", top: "1vmax", right: "3vmax", gap: "1rem" } }>
 					<Image
-						src={ lang === "es" ? "/icons/es.png" : "/icons/es-bw.png" }
+						src={ lang.startsWith("es") ? "/icons/es.png" : "/icons/es-bw.png" }
 						alt="Español"
 						width={ 70 }
 						preview={ false }
@@ -154,7 +154,7 @@ let ExercisesCarousel = () => {
 						} }
 					/>
 					<Image
-						src={ lang === "en" ? "/icons/en.png" : "/icons/en-bw.png" }
+						src={ lang.startsWith("en") ? "/icons/en.png" : "/icons/en-bw.png" }
 						alt="English"
 						width={ 70 }
 						preview={ false }

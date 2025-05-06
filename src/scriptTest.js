@@ -22,7 +22,7 @@ const EVENT_TRACKING_END = 200;
 const COMPONENT_COMBOBOX = 2;
 const COMPONENT_OPTION = 3;
 
-const user = createUser();
+let user = createUser();
 
 let list = [];
 let sceneId = 0;
@@ -53,7 +53,7 @@ let urlExperimentStatus = urlBase + "/TrackerServer/restws/experiment/status/" +
 
 export function startExperiment() {
 	//We create a new user
-	let user = createUser();
+	user = createUser();
 	console.log("Creating user session " + user);
 }
 

@@ -1,5 +1,5 @@
 import { Alert, Button, Card, Flex, Form, Radio, Steps, Typography } from "antd";
-import { useState }                                                  from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation }                                            from "react-i18next";
 import { useNavigate, useParams }                                    from "react-router-dom";
 
@@ -14,6 +14,18 @@ const SurveyB = () => {
 	const [currentStep, setCurrentStep] = useState(0);
 	const [form] = Form.useForm();
 	const [message, setMessage] = useState(null);
+
+	const stepsContainerRef = useRef(null);
+
+	useEffect(() => {
+		if (stepsContainerRef.current) {
+			const stepItems = stepsContainerRef.current.querySelectorAll(".ant-steps-item");
+			const currentItem = stepItems[currentStep];
+			if (currentItem && currentItem.scrollIntoView) {
+				currentItem.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+			}
+		}
+	}, [currentStep]);
 
 	const responseOptions = [
 		{ label: t("surveyB.options.never"), value: 0 },
@@ -523,11 +535,20 @@ const SurveyB = () => {
 			{ message?.error?.type && (
 				<Alert type="error" message={ t(message?.error?.type) } showIcon style={ { marginBottom: "1vh" } }/>
 			) }
-			<Steps current={ currentStep } size="small" labelPlacement="vertical" onChange={ (value) => setCurrentStep(value) }>
-				{ steps.map((item) => (
-					<Step key={ item.title } title={ item.title }/>
-				)) }
-			</Steps>
+			<div
+				ref={stepsContainerRef}
+				style={{
+					overflowX: "auto",
+					maxWidth: "100%",
+					paddingBottom: "1rem",
+				}}
+			>
+				<Steps current={ currentStep } size="small" labelPlacement="vertical" onChange={ (value) => setCurrentStep(value) }>
+					{ steps.map((item) => (
+						<Step key={ item.title } title={ item.title }/>
+					)) }
+				</Steps>
+			</div>
 			<Flex justify="space-around">
 				<Form labelWrap form={ form } name="surveyB" layout="vertical" onFinish={ onFinish } initialValues={ { remember: true } } style={ { marginTop: "2rem" } }>
 					{ steps[ currentStep ].content }
