@@ -43,7 +43,7 @@ let elements = [];
 let emittingData = false;
 
 let idExperiment = 18;
-let urlBase = "http://156.35.163.173:8080";
+let urlBase = "https://interactionlab.hci.uniovi.es:8443";
 
 let url = urlBase + "/TrackerServer/restws/track";
 let urlBackgroundTracker = urlBase + "/TrackerServer/restws/backgroundTracker";
