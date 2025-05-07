@@ -6,7 +6,7 @@ import { useNavigate }                                                          
 import { useSession }                                                                 from "../SessionComponent";
 import { nexusX, nodes, pathBottom, pathBottom2, pathTop, stopX, viewBoxWidth, X, Y } from "./NetworkProps";
 import "../assets/styles/font.css";
-import {finishTracking, initTracking, registerElement} from "../../scriptTest";
+import {finishTracking, initTracking, registerElement} from "../../scriptTest2";
 
 let TypePhase1 = () => {
 

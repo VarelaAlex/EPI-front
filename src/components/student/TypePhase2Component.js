@@ -5,7 +5,7 @@ import { useTranslation }                                                       
 import { useNavigate }                                                                from "react-router-dom";
 import { useSession }                                                                 from "../SessionComponent";
 import { nexusX, nodes, pathBottom, pathBottom2, pathTop, stopX, viewBoxWidth, X, Y } from "./NetworkProps";
-import {finishExperiment, finishTracking, initTracking, registerElement} from "../../scriptTest";
+import {finishExperiment, finishTracking, initTracking, registerElement} from "../../scriptTest2";
 
 let TypePhase2 = () => {
 

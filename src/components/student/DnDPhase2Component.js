@@ -9,7 +9,7 @@ import DraggablePhase2                                                          
 import DroppablePhase2                                                                from "./DroppablePhase2Component";
 import { nexusX, nodes, pathBottom, pathBottom2, pathTop, stopX, viewBoxWidth, X, Y } from "./NetworkProps";
 import "../assets/fonts/massallera.TTF";
-import {finishExperiment, finishTracking, initTracking, registerElement} from "../../scriptTest";
+import {finishExperiment, finishTracking, initTracking, registerElement} from "../../scriptTest2";
 
 let DnDPhase2 = () => {
 

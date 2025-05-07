@@ -7,7 +7,7 @@ import {
 	finishTracking,
 	initTracking,
 	registerElement
-} from "../../scriptTest";
+} from "../../scriptTest2";
 import useFullscreen                                                                        from "../../hooks/useFullscreen";
 import { useSession }                                                                       from "../SessionComponent";
 import DraggablePhase1                                                                      from "./DraggablePhase1Component";
