@@ -145,7 +145,7 @@ let ClassroomDetail = (props) => {
 					<Button onClick=
 						        { () => {
 							        setStudentName(student.name);
-							        navigate(`/teachers/${ classroomName }/students/${ student.id }/surveys/${(student.age > 5 ? "B" : "A")}`);
+							        navigate(`/teachers/${ classroomName }/students/${ student.id }/surveys/${(student.age > 5 ? "A" : "A")}`);
 						        } } style={ { marginRight: "1vmax" } }
 					>
 						{ t("classrooms.detail.table.buttons.survey") }
