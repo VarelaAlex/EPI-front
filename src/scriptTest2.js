@@ -42,7 +42,7 @@ let newPage = null;
 let elements = [];
 let emittingData = false;
 
-let idExperiment = 18;
+let idExperiment = 25;
 let urlBase = "https://interactionlab.hci.uniovi.es:8443";
 
 let url = urlBase + "/TrackerServer/restws/track";
@@ -690,5 +690,5 @@ function postAJAXDemographicData(parametros) {
 }
 
 export function registerID(value) {
-    postStringDD(38, value);
+    postStringDD(59, value);
 }
