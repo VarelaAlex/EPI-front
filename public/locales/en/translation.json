@@ -237,7 +237,8 @@
         "buttons": {
           "seeStatistics": "See statistics",
           "delete": "Delete",
-          "survey": "Complete survey"
+          "survey": "Complete survey",
+          "surveyCompleted": "Completed"
         }
       },
       "addStudent": {

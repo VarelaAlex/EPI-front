@@ -1,8 +1,23 @@
-import { CheckOutlined, CloseOutlined, DeleteOutlined, EditOutlined, LineChartOutlined }                                  from "@ant-design/icons";
-import { Alert, Button, Card, Cascader, Divider, Empty, Input, Popconfirm, Row, Space, Spin, Table, Tooltip, Typography } from "antd";
-import { useCallback, useEffect, useState }                                                                               from "react";
-import { useTranslation }                                                                                                 from "react-i18next";
-import { Link, useNavigate, useParams }                                                                                   from "react-router-dom";
+import {CheckOutlined, CloseOutlined, DeleteOutlined, EditOutlined, LineChartOutlined} from "@ant-design/icons";
+import {
+    Alert,
+    Button,
+    Card,
+    Cascader,
+    Divider,
+    Empty,
+    Input,
+    Popconfirm,
+    Row,
+    Space,
+    Spin,
+    Table,
+    Tooltip,
+    Typography
+} from "antd";
+import {useCallback, useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
+import {Link, useNavigate, useParams} from "react-router-dom";
 
 let ClassroomDetail = (props) => {
 
@@ -28,6 +43,18 @@ let ClassroomDetail = (props) => {
 
 		if ( response.ok ) {
 			let jsonData = await response.json();
+			for (const student of jsonData) {
+				let responseSurvey = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/surveys/" + student.id, {
+					method: "GET", headers: { Authorization: `Bearer ${ localStorage.getItem("accessToken") }` }
+				});
+
+				if( responseSurvey.ok ) {
+					let jsonDataSurvey = await responseSurvey.json();
+					if( jsonDataSurvey?.id ) {
+						student.surveyCompleted = true;
+                    }
+				}
+			}
 			setStudents(jsonData);
 		} else {
 			let jsonData = await response.json();
@@ -142,13 +169,13 @@ let ClassroomDetail = (props) => {
 						</Tooltip>
 					</Popconfirm>
 				</div> : <div style={ { float: "right" } }>
-					<Button onClick=
+					<Button disabled={student.surveyCompleted} onClick=
 						        { () => {
 							        setStudentName(student.name);
 							        navigate(`/teachers/${ classroomName }/students/${ student.id }/surveys/${(student.age > 5 ? "A" : "A")}`);
 						        } } style={ { marginRight: "1vmax" } }
 					>
-						{ t("classrooms.detail.table.buttons.survey") }
+						{ !student.surveyCompleted?t("classrooms.detail.table.buttons.survey"):`${t("classrooms.detail.table.buttons.surveyCompleted")} ✅` }
 					</Button>
 					<Button onClick=
 						        { () => {
