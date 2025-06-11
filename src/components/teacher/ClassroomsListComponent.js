@@ -3,6 +3,7 @@ import { Alert, Button, Card, Cascader, Divider, Empty, Form, Input, Popconfirm,
 import { useEffect, useState }                                                                          from "react";
 import { useTranslation }                                                                               from "react-i18next";
 import { Link, useNavigate }                                                                            from "react-router-dom";
+import * as XLSX from "xlsx";
 
 let ClassroomsList = (props) => {
 
@@ -43,6 +44,66 @@ let ClassroomsList = (props) => {
 		getClassrooms();
 	}, []);
 
+	let generateReport = async (classroomName) => {
+
+		try {
+			const response = await fetch(
+				`${process.env.REACT_APP_USERS_SERVICE_URL}/classrooms/report/${classroomName}`,
+				{
+					method: "GET",
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+					},
+				}
+			);
+
+			if (!response.ok) {
+				const errorData = await response.json();
+				setMessage({ error: { type: "internalServerError", message: errorData } });
+				return;
+			}
+
+			const { result } = await response.json();
+
+			const formattedData = result.map(row => ({
+				"Aula": row.classroomName,
+				"Nombre de usuario": row.username,
+				"Edad": row.age,
+				"Nivel socioeconómico": row.socioEconomicLevel,
+				"Origen nacional": row.nationalOrigin,
+				"Riesgo lectura": row.learningReadingRisk,
+				"Riesgo escritura": row.learningWritingRisk,
+				"Necesidades específicas de apoyo": row.specificSupportNeeds,
+				"Otras necesidades específicas": row.otherSpecificSupportNeeds,
+				"Antecedentes familiares": row.familyBackground,
+				"Dificultades diagnosticadas": row.learningDiagnosedDifficulties,
+				"Apoyo educativo": row.educationalSupport,
+				"Otro apoyo": row.otherEducationalSupport,
+				"Primeras palabras": row.firstWords,
+				"Puntuación encuesta": row.score,
+				"Código encuesta": row.surveyCode,
+			}));
+			const worksheet = XLSX.utils.json_to_sheet(formattedData);
+
+			// Crear un libro de Excel
+			const workbook = XLSX.utils.book_new();
+			XLSX.utils.book_append_sheet(workbook, worksheet, "Informe");
+
+			const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+			const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+
+			const link = document.createElement("a");
+			link.href = URL.createObjectURL(blob);
+			link.download = `informe_${classroomName}.xlsx`;
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+		} catch (e) {
+			setMessage({ error: { type: "internalServerError", message: e } });
+		}
+	};
+
+
 	const columns = [
 		{
 			title: t("classrooms.table.className"), dataIndex: "name", render: (name) => {
@@ -81,6 +142,7 @@ let ClassroomsList = (props) => {
 						setClassroomId(classroom.id);
 						navigate("/teachers/classroomStats/" + name);
 					} } style={ { marginRight: "1vmax" } }> { t("classrooms.table.buttons.seeStatistics") }</Button>
+					<Button onClick={ () => generateReport(name) } style={ { marginRight: "1vmax" } }> { t("classrooms.table.buttons.generateReport") }</Button>
 					<Popconfirm
 						title={ t("classrooms.delete.popconfirm.title") }
 						description={ t("classrooms.delete.popconfirm.description") }

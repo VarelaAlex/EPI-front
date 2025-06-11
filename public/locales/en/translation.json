@@ -164,7 +164,8 @@
       },
       "buttons": {
         "seeStatistics": "See statistics",
-        "delete": "Delete"
+        "delete": "Delete",
+        "generateReport" : "Generate Report"
       }
     },
     "addClassroom": {
