@@ -305,11 +305,13 @@ const StudentDetail = () => {
 						         label="La emisión de las primeras palabras se inició "
 					         >
 						         <Select placeholder="Seleccione" allowClear>
-							         <Option value="PT">Antes del año</Option>
-							         <Option value="AL">Entre el año y el año y medio</Option>
-							         <Option value="otros">Entre el año y medio y los dos años</Option>
-							         <Option value="no">Entre los dos años y los dos años y medio</Option>
-							         <Option value="no">Después de los dos años y medio</Option>
+							         <Option value="antesUno">Antes del año</Option>
+							         <Option value="entreUnoYUnoMedio">Entre el año y el año y medio</Option>
+							         <Option value="entreUnoMedioYDos">Entre el año y medio y los dos años</Option>
+							         <Option value="entreDosYDosMedio">Entre los dos años y los dos años y
+								         medio</Option>
+							         <Option value="despuesDos">Después de los dos años y medio</Option>
+							         <Option value="noComunica">No se comunica oralmente</Option>
 						         </Select>
 					         </Form.Item>
 				         </>
