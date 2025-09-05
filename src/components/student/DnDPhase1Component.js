@@ -3,6 +3,7 @@ import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors }          
 import { Card, Col, Divider, Flex, Row }                                                    from "antd";
 import React, { useEffect, useRef, useState }                                               from "react";
 import { useNavigate }                                                                      from "react-router-dom";
+import { usePlayAudio }                                                                     from "../../hooks/usePlayAudio";
 import {
 	finishTracking,
 	initTracking,
@@ -19,6 +20,8 @@ let DnDPhase1 = () => {
 	const INITIAL_ELEMENT = 0;
 	let { setExercise, exercise, feedback, setFeedback } = useSession();
 	let exerciseNodes = nodes(exercise);
+
+	let playAudio = usePlayAudio();
 
 	useEffect(() => {
 		exerciseNodes.forEach((node) => {
@@ -73,6 +76,7 @@ let DnDPhase1 = () => {
 
 	let handleDragStart = (event) => {
 		setElement(event.active);
+		playAudio("/sounds/"+extendedNodes.find((node) => node.type === event.active.data.current.type).src.split('/').at(-1)+".mp3");
 	};
 
 	let handleDragEnd = (event) => {
