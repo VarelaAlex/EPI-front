@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, matchPath, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import { Layout, notification, Flex } from "antd";
+import {Layout, notification, Flex, Switch} from "antd";
 import SelectRole from './components/SelectRoleComponent';
 import Header from './components/layout/HeaderComponent';
 import Sider from "./components/layout/SiderComponent";
@@ -32,6 +32,7 @@ import StudentStatistics from './components/teacher/StudentStatisticsComponent';
 import AboutEPI from './components/teacher/AboutEPIComponent';
 import SurveyA from "./components/teacher/SurveyAComponent";
 import SurveyB from "./components/teacher/SurveyBComponent";
+import SelectMode from "./components/student/SelectModeComponent";
 
 let App = () => {
 
@@ -126,6 +127,12 @@ let App = () => {
 	];
 
 	let studentMenuItems = [
+        {
+            key: "mode",
+            label: <Link to="/students/selectMode" onClick={() => setOpen(false)}>{t("sider.student.mode")}</Link>,
+            danger: false,
+            icon: <Switch />
+        },
 		{
 			key: "exercises",
 			label: <Link to="/students/exercises" onClick={() => setOpen(false)}>{t("sider.student.exercises")}</Link>,
@@ -307,6 +314,7 @@ let App = () => {
 								<Route path="/exerciseType/phase1" element={<TypePhase1 />} />
 								<Route path="/exerciseType/phase2" element={<TypePhase2 />} />
 								<Route path="/students/exercises" element={<ExercisesCarousel />} />
+                                <Route path="/students/selectMode" element={<SelectMode />} />
 								<Route path="/students/howTo" element={<HowToDoExercises />} />
 								<Route path="/loginTeacher" element={<LoginTeacher />} />
 								<Route path="/registerTeacher" element={<SignupTeacher />} />

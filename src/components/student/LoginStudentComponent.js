@@ -50,7 +50,7 @@ let LoginStudent = () => {
             registerValor3(new Date());
             */
             registerID(jsonData.id);
-            navigate("/students/exercises");
+            navigate("/students/selectMode");
         } else {
             setMessage({ error: jsonData?.error });
         }
