@@ -8,6 +8,7 @@ import Sider from "./components/layout/SiderComponent";
 import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined } from "@ant-design/icons";
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
 import HowToDoExercises from "./components/student/HowToDoExercisesComponent";
+import PictogramActivity from "./components/student/PictogramActivity";
 import CreateStudent from "./components/teacher/CreateStudentComponent";
 import LoginTeacher from './components/teacher/LoginTeacherComponent';
 import SignupTeacher from './components/teacher/SignupTeacherComponent';
@@ -315,6 +316,7 @@ let App = () => {
 								<Route path="/exerciseType/phase2" element={<TypePhase2 />} />
 								<Route path="/students/exercises" element={<ExercisesCarousel />} />
                                 <Route path="/students/selectMode" element={<SelectMode />} />
+								<Route path="/students/pretraining" element={<PictogramActivity />} />
 								<Route path="/students/howTo" element={<HowToDoExercises />} />
 								<Route path="/loginTeacher" element={<LoginTeacher />} />
 								<Route path="/registerTeacher" element={<SignupTeacher />} />
