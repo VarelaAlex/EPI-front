@@ -7,9 +7,10 @@ import Header from './components/layout/HeaderComponent';
 import Sider from "./components/layout/SiderComponent";
 import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined } from "@ant-design/icons";
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
-import HowToDoExercises from "./components/student/HowToDoExercisesComponent";
-import PictogramActivity from "./components/student/PictogramActivity";
-import CreateStudent from "./components/teacher/CreateStudentComponent";
+import HowToDoExercises           from "./components/student/HowToDoExercisesComponent";
+import PhrasesActivity from "./components/student/PhrasesActivityComponent";
+import PictogramActivity from "./components/student/PictogramActivityComponent";
+import CreateStudent              from "./components/teacher/CreateStudentComponent";
 import LoginTeacher from './components/teacher/LoginTeacherComponent';
 import SignupTeacher from './components/teacher/SignupTeacherComponent';
 import ClassroomsList from './components/teacher/ClassroomsListComponent';
@@ -316,7 +317,8 @@ let App = () => {
 								<Route path="/exerciseType/phase2" element={<TypePhase2 />} />
 								<Route path="/students/exercises" element={<ExercisesCarousel />} />
                                 <Route path="/students/selectMode" element={<SelectMode />} />
-								<Route path="/students/pretraining" element={<PictogramActivity />} />
+								<Route path="/students/pretraining/block/1/activity/:activity" element={<PictogramActivity key={location.pathname}/>} />
+								<Route path="/students/pretraining/block/2/activity/:activity" element={<PhrasesActivity key={location.pathname}/>} />
 								<Route path="/students/howTo" element={<HowToDoExercises />} />
 								<Route path="/loginTeacher" element={<LoginTeacher />} />
 								<Route path="/registerTeacher" element={<SignupTeacher />} />

@@ -12,7 +12,7 @@ let SelectMode = () => {
         <Flex justify="space-evenly" align="flex-start" style={ { width: "100%" } }>
             <Button  size="large" color="primary" variant="solid" block
                      style={ { width: "40%", height: "25vh", fontSize: "5vmin" } }
-                     onClick={ () => console.log("Pretraining") }>
+                     onClick={ () => navigate("/students/pretraining/block/1/activity/1") }>
                 <Flex vertical align="center" justify="space-between" gap={ 20 } style={ { paddingTop: "1vmax" } }>
                     <Image alt={t("mode.pretraining")} src="icons/pretraining.png" height="13vmin" width="13vmin" preview={ false }/>
                     { t("mode.pretraining").toUpperCase() }
