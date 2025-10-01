@@ -35,6 +35,7 @@ import AboutEPI from './components/teacher/AboutEPIComponent';
 import SurveyA from "./components/teacher/SurveyAComponent";
 import SurveyB from "./components/teacher/SurveyBComponent";
 import SelectMode from "./components/student/SelectModeComponent";
+import NetworkActivity from "./components/student/NetworkActivityComponent";
 
 let App = () => {
 
@@ -318,9 +319,10 @@ let App = () => {
 								<Route path="/students/exercises" element={<ExercisesCarousel />} />
                                 <Route path="/students/selectMode" element={<SelectMode />} />
 								<Route path="/students/pretraining/block/1/activity/:activity" element={<PictogramActivity key={location.pathname}/>} />
-								<Route path="/students/pretraining/block/2/activity/:activity" element={<PhrasesActivity key={location.pathname}/>} />
-								<Route path="/students/howTo" element={<HowToDoExercises />} />
-								<Route path="/loginTeacher" element={<LoginTeacher />} />
+                                <Route path="/students/pretraining/block/2/activity/:activity" element={<PhrasesActivity key={location.pathname}/>} />
+                                <Route path="/students/pretraining/block/3/activity/:activity" element={<NetworkActivity key={location.pathname}/>} />
+                                <Route path="/students/howTo" element={<HowToDoExercises />} />
+                                <Route path="/loginTeacher" element={<LoginTeacher />} />
 								<Route path="/registerTeacher" element={<SignupTeacher />} />
 								<Route path="/teachers/menuTeacher" element={<ClassroomsList isMobile={isMobile} setClassroomId={setClassroomId} />} />
 								<Route path="/teachers/classrooms/:classroomName" element={<ClassroomDetail isMobile={isMobile} setStudentName={setStudentName} />} />

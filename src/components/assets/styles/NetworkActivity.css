@@ -1,0 +1,66 @@
+.network-container {
+    padding: 20px;
+}
+
+.network-structure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.subject-node {
+    width: 160px;
+    height: 80px;
+    border: 3px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    margin-bottom: 40px;
+    background: #fff;
+}
+
+.branches {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.branch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.relation-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.oval {
+    width: 140px;
+    height: 100px;
+    border: 3px solid black;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.oval:nth-child(even) {
+    border-color: goldenrod;
+}
+
+.dropzone {
+    width: 80px;
+    height: 60px;
+    border: 2px dashed #999;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dropzone.filled {
+    border: none;
+}
