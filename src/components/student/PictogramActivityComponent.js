@@ -23,6 +23,7 @@ function CustomDragLayer() {
             pointerEvents: "none",
             zIndex: 100,
             transform: `translate(${currentOffset.x}px, ${currentOffset.y}px)`,
+            touchAction: "none"
         }}
     >
         <Card
@@ -38,13 +39,23 @@ function CustomDragLayer() {
 }
 
 const HTML5toTouch = {
-    backends: [{id: 'html5', backend: HTML5Backend}, {
-        id: 'touch',
-        backend: TouchBackend,
-        options: {enableMouseEvents: true},
-        preview: true,
-        transition: TouchTransition
-    }]
+    backends: [
+        { id: "html5", backend: HTML5Backend },
+        {
+            id: "touch",
+            backend: TouchBackend,
+            options: {
+                enableMouseEvents: true,
+                enableTouchEvents: true,
+                ignoreContextMenu: true,
+                delayTouchStart: 0,
+                delayMouseStart: 0,
+            },
+            preview: true,
+            transition: TouchTransition,
+            skipDispatchOnTransition: true
+        },
+    ],
 };
 
 let {Title} = Typography;
@@ -115,7 +126,7 @@ let DropZone = ({blinking, onDrop, forwardRef}) => {
     };
 
     return (<div ref={setRef} className={`dropzone ${blinking ? "blink" : ""}`}>
-        <div style={{fontSize: 18, fontWeight: 600}}>Arrastra aquí</div>
+        <Image src="/icons/drag.png" alt="dragzone" height="5em"/>
     </div>);
 };
 
@@ -286,7 +297,7 @@ let PictogramActivity = () => {
         setTimeout(doMove, 90);
     };
 
-    return (<DndProvider backend={MultiBackend} options={HTML5toTouch}>
+    return (<DndProvider backend={MultiBackend} options={HTML5toTouch} >
         <CustomDragLayer/>
         <div style={{padding: 20, position: "relative"}}>
 

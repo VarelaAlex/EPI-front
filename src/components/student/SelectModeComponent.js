@@ -14,16 +14,16 @@ let SelectMode = () => {
                      style={ { width: "40%", height: "25vh", fontSize: "5vmin" } }
                      onClick={ () => navigate("/students/pretraining/block/1/activity/1") }>
                 <Flex vertical align="center" justify="space-between" gap={ 20 } style={ { paddingTop: "1vmax" } }>
-                    <Image alt={t("mode.pretraining")} src="icons/pretraining.png" height="13vmin" width="13vmin" preview={ false }/>
-                    { t("mode.pretraining").toUpperCase() }
+                    <Image alt={t("student.mode.pretraining")} src="/icons/crawl.png" height="13vmin" width="13vmin" preview={ false }/>
+                    { t("student.mode.pretraining").toUpperCase() }
                 </Flex>
             </Button>
             <Button size="large" color="primary" variant="solid" block
                     style={ { width: "40%", height: "25vh", fontSize: "5vmin" } }
                     onClick={ () => navigate("/students/exercises") }>
                 <Flex vertical align="center" justify="space-between" gap={ 20 } style={ { paddingTop: "1vmax" } }>
-                    <Image alt={t("mode.training")} src="icons/training.png" height="13vmin" width="13vmin" preview={ false }/>
-                    { t("mode.training").toUpperCase() }
+                    <Image alt={t("student.mode.training")} src="/icons/running.png" height="13vmin" width="13vmin" preview={ false }/>
+                    { t("student.mode.training").toUpperCase() }
                 </Flex>
             </Button>
         </Flex>

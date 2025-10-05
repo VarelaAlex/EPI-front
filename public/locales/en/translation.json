@@ -25,7 +25,8 @@
     },
     "student": {
       "exercises": "Exercises",
-      "howto": "How to do a exercise"
+      "howto": "How to do a exercise",
+      "mode": "Select the mode"
     },
     "disconnect": "Disconnect"
   },
@@ -380,6 +381,10 @@
         "okText": "Delete",
         "cancelText": "Cancel"
       }
+    },
+    "mode": {
+      "training": "Training",
+      "pretraining": "Preparation"
     }
   },
   "students": {

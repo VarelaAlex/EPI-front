@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, matchPath, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import {Layout, notification, Flex, Switch} from "antd";
+import {Layout, notification, Flex} from "antd";
 import SelectRole from './components/SelectRoleComponent';
 import Header from './components/layout/HeaderComponent';
 import Sider from "./components/layout/SiderComponent";
-import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined } from "@ant-design/icons";
+import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined, ExperimentOutlined } from "@ant-design/icons";
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
 import HowToDoExercises           from "./components/student/HowToDoExercisesComponent";
 import PhrasesActivity from "./components/student/PhrasesActivityComponent";
@@ -134,7 +134,7 @@ let App = () => {
             key: "mode",
             label: <Link to="/students/selectMode" onClick={() => setOpen(false)}>{t("sider.student.mode")}</Link>,
             danger: false,
-            icon: <Switch />
+            icon: <ExperimentOutlined/>
         },
 		{
 			key: "exercises",

@@ -25,7 +25,8 @@
     },
     "student": {
       "exercises": "Ejercicios",
-      "howto": "Cómo hacer un ejercicio"
+      "howto": "Cómo hacer un ejercicio",
+      "mode": "Selecciona el modo"
     },
     "disconnect": "Cerrar sesión"
   },
@@ -380,6 +381,10 @@
         "okText": "Eliminar",
         "cancelText": "Cancelar"
       }
+    },
+    "mode": {
+      "training": "Entrenamiento",
+      "pretraining": "Preparación"
     }
   },
   "students": {

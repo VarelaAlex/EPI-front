@@ -39,7 +39,7 @@
     "xlsx": "^0.18.5"
   },
   "scripts": {
-    "startDev": "react-scripts start",
+    "startDev": "node startEnv.js && react-scripts start",
     "start": "serve -s build -n -p $PORT",
     "build": "react-scripts build",
     "test": "react-scripts test",

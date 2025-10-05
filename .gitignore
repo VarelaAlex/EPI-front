@@ -149,3 +149,5 @@ summary.html
 
 # intellij
 .idea/
+
+startEnv.js
