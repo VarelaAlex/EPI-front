@@ -1,4 +1,10 @@
 {
+  "funding": {
+    "title": "Project Funding",
+    "body": "Project funded under the 2023 Call for “KNOWLEDGE GENERATION PROJECTS” and for actions aimed at training predoctoral research staff associated with these projects, within the framework of the State Program to Promote Scientific and Technical Research and its Transfer, of the State Plan for Scientific, Technical and Innovation Research 2021–2023.",
+    "code": "[PID2023-147792NB-I00]"
+  },
+  "help": "Help",
   "language": {
     "button": "Language",
     "spanish": "Spanish",
@@ -28,6 +34,7 @@
       "howto": "How to do a exercise",
       "mode": "Select the mode"
     },
+    "funding": "Funding",
     "disconnect": "Disconnect"
   },
   "role": {

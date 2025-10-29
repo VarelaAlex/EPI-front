@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, matchPath, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import {Layout, notification, Flex} from "antd";
+import {Layout, notification, Flex, Image, Typography} from "antd";
 import SelectRole from './components/SelectRoleComponent';
 import Header from './components/layout/HeaderComponent';
 import Sider from "./components/layout/SiderComponent";
-import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined, ExperimentOutlined } from "@ant-design/icons";
+import { UserOutlined, InfoCircleOutlined, LogoutOutlined, FormOutlined, ExperimentOutlined, DollarOutlined } from "@ant-design/icons";
 import ClassroomOutlined from './components/icons/ClassroomOutlined';
 import HowToDoExercises           from "./components/student/HowToDoExercisesComponent";
 import PhrasesActivity from "./components/student/PhrasesActivityComponent";
@@ -35,7 +35,10 @@ import AboutEPI from './components/teacher/AboutEPIComponent';
 import SurveyA from "./components/teacher/SurveyAComponent";
 import SurveyB from "./components/teacher/SurveyBComponent";
 import SelectMode from "./components/student/SelectModeComponent";
-import NetworkActivity from "./components/student/NetworkActivityComponent";
+import SentenceNetwork from "./components/student/SentenceNetworkComponent";
+import SentenceNetworkSequential from "./components/student/SentenceNetworkSequentialComponent";
+import SelectPhase from "./components/student/SelectPhaseComponent";
+import Funding from "./components/FundingComponent";
 
 let App = () => {
 
@@ -96,6 +99,21 @@ let App = () => {
 		}
 	};
 
+    const drawerFooter = [
+        {
+            key: "team",
+            label: <Link to="/funding" onClick={() => setOpen(false)}>{t("sider.funding")}</Link>,
+            danger: false,
+            icon: <DollarOutlined />
+        },
+        {
+            key: "menuDisconnect",
+            label: <Link to="/selectRole" onClick={disconnect}>{t("sider.disconnect")}</Link>,
+            danger: true,
+            icon: <LogoutOutlined />
+        }
+    ];
+
 	let teacherMenuItems = [
 		{
 			key: "classrooms",
@@ -121,12 +139,6 @@ let App = () => {
 			danger: false,
 			icon: <UserOutlined />
 		},
-		{
-			key: "menuDisconnect",
-			label: <Link to="/selectRole" onClick={disconnect}>{t("sider.disconnect")}</Link>,
-			danger: true,
-			icon: <LogoutOutlined />
-		}
 	];
 
 	let studentMenuItems = [
@@ -148,12 +160,6 @@ let App = () => {
 			danger: false,
 			icon: <InfoCircleOutlined />
 		},
-		{
-			key: "menuDisconnect",
-			label: <Link to="/selectRole" onClick={disconnect}>{t("sider.disconnect")}</Link>,
-			danger: true,
-			icon: <LogoutOutlined />
-		}
 	];
 
 	useEffect(() => {
@@ -246,7 +252,7 @@ let App = () => {
 
 					if (role === "T") {
 
-						const isAllowedPath = matchPath("/teachers/:path/*", location.pathname);
+						const isAllowedPath = matchPath("/teachers/:path/*", location.pathname) || location.pathname.startsWith("/funding");
 
 						if (!isAllowedPath) {
 							navigate("/teachers/menuTeacher");
@@ -255,7 +261,7 @@ let App = () => {
 
 					if (role === "S") {
 
-						const isAllowedPath = matchPath("/students/:path/*", location.pathname) || location.pathname.startsWith("/exercise");
+						const isAllowedPath = matchPath("/students/:path/*", location.pathname) || location.pathname.startsWith("/exercise") || location.pathname.startsWith("/funding");
 
 						if (!isAllowedPath) {
 							navigate("/students/exercises");
@@ -266,7 +272,7 @@ let App = () => {
 					navigate("/selectRole");
 				}
 			} else {
-				if (!["/loginTeacher", "/loginStudent", "/registerTeacher", "/selectRole"].includes(location.pathname)) {
+				if (!["/loginTeacher", "/loginStudent", "/registerTeacher", "/selectRole", "/funding"].includes(location.pathname)) {
 					disconnect();
 					navigate("/selectRole");
 				}
@@ -287,6 +293,8 @@ let App = () => {
 		}
 	}, [api, t]);
 
+    let {Text} = Typography;
+
 	return (
 		<>
 			{contextHolder}
@@ -304,7 +312,8 @@ let App = () => {
 							setLogin={setLogin}
 							open={open}
 							setOpen={setOpen}
-							menuItems={localStorage.getItem("role") === "T" ? teacherMenuItems : studentMenuItems}
+							menu={localStorage.getItem("role") === "T" ? teacherMenuItems : studentMenuItems}
+                            drawerFooter={drawerFooter}
 						/>
 					}
 					<Content style={{ minHeight: "100vh", background: "url(/bg.svg) no-repeat", backgroundSize: "cover" }} >
@@ -312,6 +321,7 @@ let App = () => {
 							<Routes>
 								<Route path="/selectRole" element={<SelectRole />} />
 								<Route path="/loginStudent" element={<LoginStudent />} />
+								<Route path="/funding" element={<Funding />} />
 								<Route path="/exerciseDnD/phase1" element={<DnDPhase1 />} />
 								<Route path="/exerciseDnD/phase2" element={<DnDPhase2 />} />
 								<Route path="/exerciseType/phase1" element={<TypePhase1 />} />
@@ -320,7 +330,9 @@ let App = () => {
                                 <Route path="/students/selectMode" element={<SelectMode />} />
 								<Route path="/students/pretraining/block/1/activity/:activity" element={<PictogramActivity key={location.pathname}/>} />
                                 <Route path="/students/pretraining/block/2/activity/:activity" element={<PhrasesActivity key={location.pathname}/>} />
-                                <Route path="/students/pretraining/block/3/activity/:activity" element={<NetworkActivity key={location.pathname}/>} />
+                                <Route path="/students/pretraining/block/3/activity/1" element={<SentenceNetwork />} />
+                                <Route path="/students/pretraining/block/3/activity/2" element={<SentenceNetworkSequential />} />
+                                <Route path="/students/pretraining/" element={<SelectPhase />} />
                                 <Route path="/students/howTo" element={<HowToDoExercises />} />
                                 <Route path="/loginTeacher" element={<LoginTeacher />} />
 								<Route path="/registerTeacher" element={<SignupTeacher />} />
@@ -344,13 +356,17 @@ let App = () => {
 				</Layout>
 				<Footer style={{backgroundColor: "#001628", color: "white"}}>
 					<Flex align="center" justify="center" style={{ minHeight: "100%" }}>
-						EPI @ 2024 Made with ❤️ by Álex & UniOvi
-						<img
+						<Text style={{color:"white"}}><Typography.Link href="https://www.unioviedo.es/hyper/" style={{color:"white"}} underline>PEPI</Typography.Link> @ 2025 Made with ❤️ by <Typography.Link href="https://github.com/VarelaAlex" style={{color:"white"}} underline>Álex</Typography.Link> & <Typography.Link href="https://grupoadir.es/" style={{color:"white"}} underline>ADIR</Typography.Link></Text>
+                        <Link to="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                            <Image
 							src="https://static.arasaac.org/images/by-nc-sa.svg"
 							alt="Creative Commons license CC BY-NC-SA"
 							title="ARASAAC creative commons license CC BY-NC-SA"
-							style={{marginLeft: "10px", height: "50px"}}
+                            preview={false}
+                            style={{padding: "0px 10px"}}
 						/>
+                        </Link>
+                        <Typography.Link href="/funding" style={{color:"white"}} underline>Financiación</Typography.Link>
 					</Flex>
 				</Footer>
 

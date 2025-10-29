@@ -1,141 +1,57 @@
-import {Card, Col, Image, Row, Typography} from "antd";
+import {Card, Col, Row} from "antd";
 import React, {useEffect, useRef, useState} from "react";
-import {DndProvider, useDrag, useDragLayer, useDrop} from "react-dnd";
-import {getEmptyImage, HTML5Backend} from "react-dnd-html5-backend";
-import {TouchBackend} from "react-dnd-touch-backend";
-import {MultiBackend, TouchTransition} from "dnd-multi-backend";
+import {DndProvider} from "react-dnd";
+import {MultiBackend} from "dnd-multi-backend";
 import {useNavigate, useParams} from "react-router-dom";
+import CustomDragLayer from "./dnd/CustomDragLayerComponent";
 import "../assets/styles/PictogramActivity.css";
 import '../assets/styles/font.css'
-
-function CustomDragLayer() {
-    const {item, isDragging, currentOffset} = useDragLayer((monitor) => ({
-        item: monitor.getItem(), isDragging: monitor.isDragging(), currentOffset: monitor.getSourceClientOffset(),
-    }))
-
-    if (!isDragging || !currentOffset) return null
-
-    return (<div
-        style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            pointerEvents: "none",
-            zIndex: 100,
-            transform: `translate(${currentOffset.x}px, ${currentOffset.y}px)`,
-            touchAction: "none"
-        }}
-    >
-        <Card
-            hoverable
-            style={{
-                width: 140, height: 140, textAlign: "center", opacity: 0.8,
-            }}
-        >
-            <Image alt={item.id} src={`/pictograms/${item.id}.png`} preview={ false }/>
-            <div style={{fontWeight: "700", fontFamily: "Massallera"}}>{item.label}</div>
-        </Card>
-    </div>)
-}
-
-const HTML5toTouch = {
-    backends: [
-        { id: "html5", backend: HTML5Backend },
-        {
-            id: "touch",
-            backend: TouchBackend,
-            options: {
-                enableMouseEvents: true,
-                enableTouchEvents: true,
-                ignoreContextMenu: true,
-                delayTouchStart: 0,
-                delayMouseStart: 0,
-            },
-            preview: true,
-            transition: TouchTransition,
-            skipDispatchOnTransition: true
-        },
-    ],
-};
-
-let {Title} = Typography;
+import {HTML5toTouch} from "rdndmb-html5-to-touch";
+import DraggablePictogram from "./dnd/DraggablePictogramComponent";
+import DropZone from "./dnd/DropZoneComponent";
+import ActivityToolsComponent from "./dnd/ActivityToolsComponent";
+import {useTranslation} from "react-i18next";
+import { usePretraining } from "../../hooks/usePretraining";
 
 let pictograms = [{
-    activity: "1", content: [
-        {id: "is", label: "es", audio: "/sounds/is.mp3"},
-        {id: "isFor", label: "es para", audio: "/sounds/isFor.mp3"},
-        {id: "isPartOf", label: "es parte de", audio: "/sounds/isPartOf.mp3"}
-    ]
+    activity: "1",
+    content: [{id: "is", label: "es", audio: "/sounds/is.mp3"}, {
+        id: "isFor",
+        label: "es para",
+        audio: "/sounds/isFor.mp3"
+    }, {id: "isPartOf", label: "es parte de", audio: "/sounds/isPartOf.mp3"}]
 }, {
-    activity: "2", content: [
-        {id: "has", label: "tiene", audio: "/sounds/has.mp3"},
-        {id: "isUsedFor", label: "sirve para", audio: "/sounds/isUsedFor.mp3"},
-        {id: "isIn", label: "está en", audio: "/sounds/isIn.mp3"}
-    ]
+    activity: "2",
+    content: [{id: "has", label: "tiene", audio: "/sounds/has.mp3"}, {
+        id: "isUsedFor",
+        label: "sirve para",
+        audio: "/sounds/isUsedFor.mp3"
+    }, {id: "isIn", label: "está en", audio: "/sounds/isIn.mp3"}]
 }];
 
-let DraggablePictogram = ({pictogram, isBlinking, isEscaping, onPlay, forwardRef}) => {
-    let [{isDragging}, drag, preview] = useDrag(() => ({
-        type: "PICTO", item: {...pictogram}, // send full pictogram
-        collect: (monitor) => ({isDragging: !!monitor.isDragging()}),
-    }));
-
-    // hide default preview
-    useEffect(() => {
-        preview(getEmptyImage(), {captureDraggingState: true});
-    }, [preview]);
-
-    let setRef = (node) => {
-        drag(node);
-        if (!forwardRef) return;
-        if (typeof forwardRef === "function") {
-            forwardRef(node);
-        } else {
-            forwardRef.current = node;
-        }
-    };
-
-    return (<div
-        ref={setRef}
-        className={`pictogram-card ${isBlinking ? "blink" : ""} ${isEscaping ? "escape" : ""}`}
-        style={{opacity: isDragging ? 0 : 1}}
-        onClick={() => onPlay(pictogram.id)}
-    >
-        <Card hoverable style={{width: 140, height: 140, textAlign: "center"}}>
-            <Image alt={pictogram.id} src={`/pictograms/${pictogram.id}.png`} preview={ false }/>
-            <div style={{fontWeight: "700", fontFamily: "Massallera"}}>{pictogram.label}</div>
-        </Card>
-    </div>);
-};
-
-let DropZone = ({blinking, onDrop, forwardRef}) => {
-    let [, drop] = useDrop(() => ({
-        accept: "PICTO", drop: (item) => onDrop(item.id)
-    }));
-
-    let setRef = (node) => {
-        drop(node);
-        if (!forwardRef) {
-            return;
-        }
-        if (typeof forwardRef === "function") {
-            forwardRef(node);
-        } else {
-            forwardRef.current = node;
-        }
-    };
-
-    return (<div ref={setRef} className={`dropzone ${blinking ? "blink" : ""}`}>
-        <Image src="/icons/drag.png" alt="dragzone" height="5em"/>
-    </div>);
-};
-
 let PictogramActivity = () => {
+
+    const { maxUnlocked, updateUnlockedPhase, fetchUnlockedPhase } = usePretraining();
+
+    let {t} = useTranslation();
     let [help, setHelp] = useState(false);
     let [escapingId, setEscapingId] = useState(null);
 
+    let [droppedPictogram, setDroppedPictogram] = useState(null);
+    let [hiddenId, setHiddenId] = useState(null);
+
     let [targetId, setTargetId] = useState("es");
     let targetRef = useRef(targetId);
+    const maxUnlockedRef = useRef(maxUnlocked);
+
+    useEffect(() => {
+        maxUnlockedRef.current = maxUnlocked;
+    }, [maxUnlocked]);
+
+
+    useEffect(() => {
+        fetchUnlockedPhase();
+    }, []);
 
     useEffect(() => {
         targetRef.current = targetId;
@@ -150,6 +66,7 @@ let PictogramActivity = () => {
     let audiosRef = useRef({});
     let correctAudioRef = useRef(null);
     let errorAudioRef = useRef(null);
+    let audioHelpRef = useRef(new Audio("/sounds/pictogramActivityHelp.mp3"));
     let repeatTimerRef = useRef(null);
 
     let {activity} = useParams();
@@ -186,9 +103,7 @@ let PictogramActivity = () => {
             audiosRef.current[targetId]?.play().catch(() => {
             });
         };
-        if (!help) {
             playTargetAudio();
-        }
 
         if (repeatTimerRef.current) {
             clearInterval(repeatTimerRef.current);
@@ -206,33 +121,54 @@ let PictogramActivity = () => {
         };
     }, [targetId, help]);
 
-    let playPictogramAudio = (id) => {
-        audiosRef.current[id]?.play().catch(() => {
-        });
-    };
+
 
     let handleDrop = (draggedId) => {
-        if (draggedId === targetRef.current) {
+        const currentTarget = targetRef.current;
+        const draggedPictogram = pictograms
+            .find(p => p.activity === activity)
+            ?.content.find(p => p.id === draggedId);
+
+        if (draggedId === currentTarget) {
             correctAudioRef.current?.play().catch(() => {
             });
             attemptsRef.current = 0;
             setHelp(false);
             setEscapingId(null);
 
-            successStreakRef.current++;
-            if (successStreakRef.current >= 5) {
-                if (activity === "1") {
-                    navigate("/students/pretraining/block/1/activity/2");
-                    return;
-                } else {
-                    navigate("/students/pretraining/block/2/activity/1");
-                }
-            }
+            setHiddenId(draggedId);
+            setDroppedPictogram(draggedPictogram);
 
-            let nextIds = pictograms.find(p => p.activity === activity)
-                ?.content.map((p) => p.id)
-                .filter((id) => id !== targetRef.current);
-            setTargetId(nextIds[Math.floor(Math.random() * nextIds.length)]);
+            successStreakRef.current++;
+
+            setTimeout(() => {
+                setDroppedPictogram(null);
+                setHiddenId(null);
+
+                if (successStreakRef.current >= 5) {
+                    console.log(maxUnlocked)
+                    // Incrementamos pretrainingPhase solo si la fase actual es igual a la máxima desbloqueada
+                    if (parseInt(activity) >= maxUnlockedRef.current) {
+                        updateUnlockedPhase(maxUnlockedRef.current + 1)
+                            .then(() => console.log("Fase desbloqueada actualizada"))
+                            .catch((err) => console.error(err));
+                    }
+
+                    if (activity === "1") {
+                        navigate("/students/pretraining/block/1/activity/2");
+                        return;
+                    } else {
+                        navigate("/students/pretraining/block/2/activity/1");
+                        return;
+                    }
+                }
+
+                let nextIds = pictograms.find(p => p.activity === activity)
+                    ?.content.map(p => p.id)
+                    .filter(id => id !== currentTarget);
+                setTargetId(nextIds[Math.floor(Math.random() * nextIds.length)]);
+            }, 1000);
+
         } else {
             errorAudioRef.current?.play().catch(() => {
             });
@@ -240,8 +176,8 @@ let PictogramActivity = () => {
             setTimeout(() => setEscapingId(null), 700);
 
             successStreakRef.current = 0;
-
             attemptsRef.current = attemptsRef.current + 1;
+
             if (attemptsRef.current >= 5) {
                 setHelp(true);
                 setTimeout(() => animateHandGuide(), 50);
@@ -297,14 +233,21 @@ let PictogramActivity = () => {
         setTimeout(doMove, 90);
     };
 
-    return (<DndProvider backend={MultiBackend} options={HTML5toTouch} >
-        <CustomDragLayer/>
-        <div style={{padding: 20, position: "relative"}}>
+    function play(audio) {
+        if (audio) {
+            audio.currentTime = 0;
+            audio.play().catch(() => {
+            });
+        }
+    }
 
+    return (<DndProvider backend={MultiBackend} options={HTML5toTouch}>
+        <CustomDragLayer/>
+        <Card style={{padding: "2vh", width: "80%"}}>
+            <ActivityToolsComponent content={t("Escucha y coloca el elemento correcto en el cuadrado inferior")}
+                                    playHelp={()=>play(audioHelpRef.current)}/>
             <Row justify="center" gutter={[16, 16]} style={{marginBottom: 24}}>
-                {pictograms.find(p => p.activity === activity)
-                    ?.content
-                    .map((p) => (<Col key={p.id}>
+                {pictograms.find(p => p.activity === activity)?.content.map((p) => (<Col key={p.id}>
                         <DraggablePictogram
                             pictogram={p}
                             isBlinking={p.id === targetId}
@@ -312,19 +255,24 @@ let PictogramActivity = () => {
                             forwardRef={(el) => {
                                 pictogramRefs.current[p.id] = el;
                             }}
-                            onPlay={(id) => playPictogramAudio(id)}
+                            hidden={p.id === hiddenId}
                         />
                     </Col>))}
             </Row>
 
             <Row justify="center">
                 <Col>
-                    <DropZone blinking={true} forwardRef={dropRef} onDrop={handleDrop}/>
+                    <DropZone
+                        blinking={true}
+                        forwardRef={dropRef}
+                        onDrop={handleDrop}
+                        droppedPictogram={droppedPictogram}
+                    />
                 </Col>
             </Row>
 
             {help && <span ref={handRef} className="hand-guide">🖐️</span>}
-        </div>
+        </Card>
     </DndProvider>);
 };
 

@@ -1,4 +1,10 @@
 {
+  "funding": {
+    "title": "Financiación del Proyecto",
+    "body": "Proyecto financiado dentro de la Convocatoria de Ayudas 2023 a “PROYECTOS DE GENERACIÓN DE CONOCIMIENTO” y a actuaciones para la formación de personal investigador predoctoral asociadas a dichos proyectos, en el marco del Programa Estatal para Impulsar la Investigación Científico-Técnica y su Transferencia, del Plan Estatal de Investigación Científica, Técnica y de Innovación 2021-2023",
+    "code": "[PID2023-147792NB-I00]"
+  },
+  "help": "Ayuda",
   "language": {
     "button": "Idioma",
     "spanish": "Español",
@@ -28,6 +34,7 @@
       "howto": "Cómo hacer un ejercicio",
       "mode": "Selecciona el modo"
     },
+    "funding": "Financiación",
     "disconnect": "Cerrar sesión"
   },
   "role": {

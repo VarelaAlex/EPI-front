@@ -4,18 +4,10 @@ import { useTranslation } from "react-i18next";
 
 let Sider = (props) => {
 
-    let { open, setOpen, menuItems } = props;
+    let { open, setOpen, menu, drawerFooter } = props;
 
     let { t } = useTranslation();
     let { Text } = Typography;
-
-    let [menu, footer] = menuItems.reduce(
-        (acc, item) => {
-            acc[item.danger ? 1 : 0].push(item);
-            return acc;
-        },
-        [[], []]
-    );
 
     return (
         <Drawer
@@ -28,7 +20,7 @@ let Sider = (props) => {
                 footer: { fontSize: "2vh" }
             }}
             closeIcon={<CloseOutlined style={{ color: "white" }} />}
-            footer={<Menu mode="vertical" items={footer} />}
+            footer={<Menu mode="vertical" items={drawerFooter} />}
         >
             <Menu mode="vertical" items={menu} defaultSelectedKeys={menu[0]?.key} />
         </Drawer>
