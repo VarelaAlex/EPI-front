@@ -46,8 +46,14 @@ const DropZone = ({zone, placedWord, onDrop, canDropHere}) => {
 const SentenceNetworkSequential = () => {
     const {t} = useTranslation();
     const sentences = [
+        // TRÍO 1
         {
-            id: 1,
+            phrase: [
+                {text: "El perro", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7202`, audio: new Audio("/sounds/dog.mp3")}
+            ],
+            audio: new Audio("/sounds/dog.mp3")
+        },
+        {
             phrase: [
                 {text: "El perro", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7202`, audio: new Audio("/sounds/dog.mp3")},
                 {text: "es", image: "/pictograms/is.png", audio: new Audio("/sounds/is.mp3"), draggable: true},
@@ -57,7 +63,6 @@ const SentenceNetworkSequential = () => {
             audio: new Audio("/sounds/dog-animal.mp3")
         },
         {
-            id: 2,
             phrase: [
                 {text: "El perro", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7202`, audio: new Audio("/sounds/dog.mp3")},
                 {text: "tiene", image: "/pictograms/has.png", audio: new Audio("/sounds/has.mp3"), draggable: true},
@@ -66,8 +71,14 @@ const SentenceNetworkSequential = () => {
             ],
             audio: new Audio("/sounds/dog-tail.mp3")
         },
+        // TRÍO 2
         {
-            id: 3,
+            phrase: [
+                {text: "La ballena", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2268`, audio: new Audio("/sounds/whale.mp3")}
+            ],
+            audio: new Audio("/sounds/whale.mp3")
+        },
+        {
             phrase: [
                 {text: "La ballena", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2268`, audio: new Audio("/sounds/whale.mp3")},
                 {text: "es", image: "/pictograms/is.png", audio: new Audio("/sounds/is.mp3"), draggable: true},
@@ -77,7 +88,6 @@ const SentenceNetworkSequential = () => {
             audio: new Audio("/sounds/whale-mammal.mp3")
         },
         {
-            id: 4,
             phrase: [
                 {text: "La ballena", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2268`, audio: new Audio("/sounds/whale.mp3")},
                 {text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true},
@@ -101,7 +111,7 @@ const SentenceNetworkSequential = () => {
 
     const [placedWords, setPlacedWords] = useState(initializePlacedWords());
     const [currentStep, setCurrentStep] = useState(0);
-    const [currentPairIndex, setCurrentPairIndex] = useState(0);
+    const [currentTrioIndex, setCurrentTrioIndex] = useState(0);
     const [showNetwork, setShowNetwork] = useState(false);
 
     const audioHelpRef = useRef(new Audio("/sounds/sentenceActivity2Help.mp3"));
@@ -109,41 +119,56 @@ const SentenceNetworkSequential = () => {
     useEffect(() => {
         const timer = setTimeout(() => setShowNetwork(true), 1000);
         return () => clearTimeout(timer);
-    }, [currentPairIndex]);
+    }, [currentTrioIndex]);
+
+    // Índices de las 3 frases del trío actual
+    const firstSentenceIdx = currentTrioIndex * 3;
+    const secondSentenceIdx = currentTrioIndex * 3 + 1;
+    const thirdSentenceIdx = currentTrioIndex * 3 + 2;
 
     const placementOrder = [
-        {key: 'center', word: sentences[currentPairIndex].phrase[0].text, sentence: currentPairIndex, wordIdx: 0},
-        {key: 'linkLeft', word: sentences[currentPairIndex].phrase[1].text, sentence: currentPairIndex, wordIdx: 1},
-        {key: 'endLeft', word: sentences[currentPairIndex].phrase[2].text, sentence: currentPairIndex, wordIdx: 2},
-        {key: 'dotLeft', word: '.', sentence: currentPairIndex, wordIdx: 3},
-        {key: 'centerReuse', word: sentences[currentPairIndex + 1].phrase[0].text, sentence: currentPairIndex + 1, wordIdx: 0},
-        {key: 'linkRight', word: sentences[currentPairIndex + 1].phrase[1].text, sentence: currentPairIndex + 1, wordIdx: 1},
-        {key: 'endRight', word: sentences[currentPairIndex + 1].phrase[2].text, sentence: currentPairIndex + 1, wordIdx: 2},
-        {key: 'dotRight', word: '.', sentence: currentPairIndex + 1, wordIdx: 3},
+        // Paso 0: Primera palabra (solo una palabra)
+        {key: 'center', word: sentences[firstSentenceIdx].phrase[0].text, sentence: firstSentenceIdx, wordIdx: 0},
+        // Pasos 1-4: Segunda frase (rama izquierda)
+        {key: 'centerReuse', word: sentences[secondSentenceIdx].phrase[0].text, sentence: secondSentenceIdx, wordIdx: 0},
+        {key: 'linkLeft', word: sentences[secondSentenceIdx].phrase[1].text, sentence: secondSentenceIdx, wordIdx: 1},
+        {key: 'endLeft', word: sentences[secondSentenceIdx].phrase[2].text, sentence: secondSentenceIdx, wordIdx: 2},
+        {key: 'dotLeft', word: '.', sentence: secondSentenceIdx, wordIdx: 3},
+        // Pasos 5-8: Tercera frase (rama derecha)
+        {key: 'centerReuse2', word: sentences[thirdSentenceIdx].phrase[0].text, sentence: thirdSentenceIdx, wordIdx: 0},
+        {key: 'linkRight', word: sentences[thirdSentenceIdx].phrase[1].text, sentence: thirdSentenceIdx, wordIdx: 1},
+        {key: 'endRight', word: sentences[thirdSentenceIdx].phrase[2].text, sentence: thirdSentenceIdx, wordIdx: 2},
+        {key: 'dotRight', word: '.', sentence: thirdSentenceIdx, wordIdx: 3},
     ];
 
     const handleDrop = (zone, word, wordKey, image) => {
         const expectedPlacement = placementOrder[currentStep];
-        const isCorrectZone = expectedPlacement && (expectedPlacement.key === zone || (expectedPlacement.key === 'centerReuse' && zone === 'center'));
+        const isCorrectZone = expectedPlacement && (
+            expectedPlacement.key === zone ||
+            (expectedPlacement.key === 'centerReuse' && zone === 'center') ||
+            (expectedPlacement.key === 'centerReuse2' && zone === 'center')
+        );
         const isCorrectWord = expectedPlacement && expectedPlacement.word === word;
         const isCorrectSentence = wordKey === `s${expectedPlacement.sentence}w${expectedPlacement.wordIdx}`;
 
         if (isCorrectZone && isCorrectWord && isCorrectSentence) {
-            const zoneKey = expectedPlacement.key === 'centerReuse' ? 'center' : expectedPlacement.key;
+            const zoneKey = (expectedPlacement.key === 'centerReuse' || expectedPlacement.key === 'centerReuse2') ? 'center' : expectedPlacement.key;
             const updates = {[zoneKey]: {text: word, image: image}, [wordKey]: {text: word, image: image}};
             setPlacedWords(prev => ({...prev, ...updates}));
             handleDropSuccess();
 
-            if (currentStep === 3) {
+            // Limpiar el centro después de colocar la primera palabra y después de la segunda frase
+            if (currentStep === 0 || currentStep === 4) {
                 setTimeout(() => {
                     setPlacedWords(prev => ({...prev, center: null}));
                 }, 500);
             }
 
-            if (currentStep === 7) {
+            // Si completamos el trío completo
+            if (currentStep === 8) {
                 setTimeout(() => {
-                    if (currentPairIndex < sentences.length - 2) {
-                        setCurrentPairIndex(prev => prev + 2);
+                    if (currentTrioIndex < Math.floor(sentences.length / 3) - 1) {
+                        setCurrentTrioIndex(prev => prev + 1);
                         setCurrentStep(0);
                         setShowNetwork(false);
                         setPlacedWords(initializePlacedWords());
@@ -165,14 +190,18 @@ const SentenceNetworkSequential = () => {
     const canDropInZone = (zoneKey) => {
         const expectedPlacement = placementOrder[currentStep];
         if (!expectedPlacement) return false;
-        if (expectedPlacement.key === 'centerReuse' && zoneKey === 'center') return true;
+        if ((expectedPlacement.key === 'centerReuse' || expectedPlacement.key === 'centerReuse2') && zoneKey === 'center') return true;
         return expectedPlacement.key === zoneKey;
     };
     const isSentenceCompleted = (sentenceIdx) => {
         return sentences[sentenceIdx].phrase.every((_, wordIdx) => isWordPlaced(sentenceIdx, wordIdx));
     };
 
-    const currentSentences = sentences.slice(currentPairIndex, currentPairIndex + 2);
+    const currentSentences = [
+        sentences[firstSentenceIdx],
+        sentences[secondSentenceIdx],
+        sentences[thirdSentenceIdx]
+    ];
 
     return (
         <DndProvider backend={MultiBackend} options={HTML5toTouch}>
@@ -183,7 +212,7 @@ const SentenceNetworkSequential = () => {
 
                 <div style={{marginBottom: 40, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 12}}>
                     {currentSentences.map((sentence, idx) => {
-                        const sentenceIdx = currentPairIndex + idx;
+                        const sentenceIdx = firstSentenceIdx + idx;
                         return (
                             <div key={sentenceIdx} style={{display: 'flex', alignItems: 'center', flexWrap: 'nowrap', gap: 8}}>
                                 <div style={{display: 'flex', alignItems: 'center', flexWrap: 'nowrap'}}>
