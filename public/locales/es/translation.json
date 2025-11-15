@@ -368,7 +368,7 @@
   "representation": {
     "iconic": "Icónica",
     "mixed": "Combinada",
-    "symbolic": "Simbólica"
+    "symbolic": "Fonológica"
   },
   "categories": {
     "family": "Familia",
@@ -392,6 +392,10 @@
     "mode": {
       "training": "Entrenamiento",
       "pretraining": "Preparación"
+    },
+    "trainingMode": {
+      "free": "Libre",
+      "ruled": "Pautado"
     }
   },
   "students": {

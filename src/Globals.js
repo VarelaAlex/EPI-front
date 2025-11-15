@@ -6,6 +6,109 @@ export const REPRESENTATION = {
 	ICONIC: "ICONIC", MIXED: "MIXED", SYMBOLIC: "SYMBOLIC"
 };
 
+export const NETWORK_TYPE = {
+    I: "I-I", II: "I-II", III: "I-III",
+}
+
+export const EXERCISE_RULES = {
+    I1: {
+        networks: [NETWORK_TYPE.I],
+        representations: [REPRESENTATION.ICONIC]
+    },
+    I2: {
+        networks: [NETWORK_TYPE.I, NETWORK_TYPE.II],
+        representations: [REPRESENTATION.ICONIC]
+    },
+    I3: {
+        networks: [NETWORK_TYPE.I, NETWORK_TYPE.II, NETWORK_TYPE.III],
+        representations: [REPRESENTATION.ICONIC]
+    },
+    M1: {
+        conditions: [
+            {
+                networks: [NETWORK_TYPE.I, NETWORK_TYPE.II, NETWORK_TYPE.III],
+                representations: [REPRESENTATION.ICONIC]
+            },
+            {
+                networks: [NETWORK_TYPE.I],
+                representations: [REPRESENTATION.MIXED]
+            }
+        ]
+    },
+    M2: {
+        conditions: [
+            {
+                networks: [NETWORK_TYPE.I, NETWORK_TYPE.II, NETWORK_TYPE.III],
+                representations: [REPRESENTATION.ICONIC]
+            },
+            {
+                networks: [NETWORK_TYPE.I, NETWORK_TYPE.II],
+                representations: [REPRESENTATION.ICONIC, REPRESENTATION.MIXED]
+            }
+        ]
+    },
+    M3: {
+        conditions: [
+            {
+                networks: [NETWORK_TYPE.I, NETWORK_TYPE.II, NETWORK_TYPE.III],
+                representations: [REPRESENTATION.ICONIC]
+            },
+            {
+                networks: [NETWORK_TYPE.I, NETWORK_TYPE.II, NETWORK_TYPE.III],
+                representations: [REPRESENTATION.ICONIC, REPRESENTATION.MIXED]
+            }
+        ]
+    },
+    S1: {
+        conditions: [
+            {
+                networks: [NETWORK_TYPE.I, NETWORK_TYPE.II, NETWORK_TYPE.III],
+                representations: [REPRESENTATION.ICONIC]
+            },
+            {
+                networks: [NETWORK_TYPE.I, NETWORK_TYPE.II, NETWORK_TYPE.III],
+                representations: [REPRESENTATION.ICONIC, REPRESENTATION.MIXED]
+            },
+            {
+                networks: [NETWORK_TYPE.I],
+                representations: [REPRESENTATION.ICONIC, REPRESENTATION.MIXED, REPRESENTATION.SYMBOLIC]
+            }
+        ]
+    },
+    S2: {
+        conditions: [
+            {
+                networks: [NETWORK_TYPE.I, NETWORK_TYPE.II, NETWORK_TYPE.III],
+                representations: [REPRESENTATION.ICONIC]
+            },
+            {
+                networks: [NETWORK_TYPE.I, NETWORK_TYPE.II, NETWORK_TYPE.III],
+                representations: [REPRESENTATION.ICONIC, REPRESENTATION.MIXED]
+            },
+            {
+                networks: [NETWORK_TYPE.I, NETWORK_TYPE.II],
+                representations: [REPRESENTATION.ICONIC, REPRESENTATION.MIXED, REPRESENTATION.SYMBOLIC]
+            }
+        ]
+    },
+    S3: {
+        conditions: [
+            {
+                networks: [NETWORK_TYPE.I, NETWORK_TYPE.II, NETWORK_TYPE.III],
+                representations: [REPRESENTATION.ICONIC]
+            },
+            {
+                networks: [NETWORK_TYPE.I, NETWORK_TYPE.II, NETWORK_TYPE.III],
+                representations: [REPRESENTATION.ICONIC, REPRESENTATION.MIXED]
+            },
+            {
+                networks: [NETWORK_TYPE.I, NETWORK_TYPE.II, NETWORK_TYPE.III],
+                representations: [REPRESENTATION.ICONIC, REPRESENTATION.MIXED, REPRESENTATION.SYMBOLIC]
+            }
+        ]
+    }
+};
+
 export const COMMUNITIES = [
 	{ key: "ANDALUCIA", content: "Andalucía" },
 	{ key: "ARAGON", content: "Aragón" },

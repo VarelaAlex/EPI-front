@@ -392,6 +392,10 @@
     "mode": {
       "training": "Training",
       "pretraining": "Preparation"
+    },
+    "trainingMode": {
+      "free": "Free",
+      "ruled": "Ruled"
     }
   },
   "students": {

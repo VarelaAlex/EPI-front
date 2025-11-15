@@ -2,7 +2,7 @@ import { HomeOutlined, ReloadOutlined }                                         
 import { DndContext, DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors }   from "@dnd-kit/core";
 import { Card, Col, Divider, Flex, Row }                                              from "antd";
 import React, { useEffect, useRef, useState }                                         from "react";
-import { useNavigate }                                                                from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import useFullscreen                                                                  from "../../hooks/useFullscreen";
 import { useSession }                                                                 from "../SessionComponent";
 import DraggablePhase2                                                                from "./DraggablePhase2Component";
@@ -10,16 +10,22 @@ import DroppablePhase2                                                          
 import { nexusX, nodes, pathBottom, pathBottom2, pathTop, stopX, viewBoxWidth, X, Y } from "./NetworkProps";
 import "../assets/fonts/massallera.TTF";
 import {finishExperiment, finishTracking, initTracking, registerElement} from "../../scriptTest2";
+import {useCompleteExercise} from "../../hooks/useCompleteExercise";
+import {useExerciseProgressUpdater} from "../../hooks/useExerciseProgressUpdater";
 
 let DnDPhase2 = () => {
+
+    let {trainingMode} = useParams();
 
 	useFullscreen();
 
 	const INITIAL_ELEMENT = 0;
 
 	let { setExercise, feedback, setFeedback, exercise } = useSession();
+    let {completeExercise, message} = useCompleteExercise();
+    const updateExerciseProgress = useExerciseProgressUpdater();
 
-	let exerciseNodes = nodes(exercise);
+    let exerciseNodes = nodes(exercise);
 
 	useEffect(() => {
 		exerciseNodes.forEach((node) => {
@@ -158,7 +164,12 @@ let DnDPhase2 = () => {
 				finishExperiment();
 				finishTracking("/students/exercises");
 				setShowGif(false);
-				navigate("/students/exercises");
+                completeExercise(exercise._id).then(()=> {
+                    updateExerciseProgress(exercise.representation, exercise.networkType).then(() => {
+                        navigate(`/students/exercises/${trainingMode}`)
+                    })
+
+                });
 			}, 3000));
 		}
 		setElement(null);
@@ -378,7 +389,7 @@ let DnDPhase2 = () => {
 					setCurrent(undefined);
 					setFeedback(undefined);
 					clearTimeout(timer);
-					navigate("/students/exercises");
+					navigate(`/students/exercises/${trainingMode}`);
 				} }/>
 			</div>
 			<Flex align="center" vertical>

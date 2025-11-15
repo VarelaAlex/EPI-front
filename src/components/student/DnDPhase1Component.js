@@ -2,7 +2,7 @@ import { HomeOutlined, ReloadOutlined }                                         
 import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors }                      from "@dnd-kit/core";
 import { Card, Col, Divider, Flex, Row }                                                    from "antd";
 import React, { useEffect, useRef, useState }                                               from "react";
-import { useNavigate }                                                                      from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import { usePlayAudio }                                                                     from "../../hooks/usePlayAudio";
 import {
 	finishTracking,
@@ -16,6 +16,8 @@ import DroppablePhase1                                                          
 import { nexusX, nodes, pathBottom, pathBottom2, pathTop, STOP, stopX, viewBoxWidth, X, Y } from "./NetworkProps";
 
 let DnDPhase1 = () => {
+
+    let {trainingMode} = useParams();
 
 	const INITIAL_ELEMENT = 0;
 	let { setExercise, exercise, feedback, setFeedback } = useSession();
@@ -161,7 +163,7 @@ let DnDPhase1 = () => {
 			setTimer(setTimeout(() => {
 				finishTracking("/exerciseDnD/phase2");
 				setShowGif(false);
-				navigate("/exerciseDnD/phase2");
+				navigate(`/exerciseDnD/phase2/${trainingMode}`);
 			}, 3000));
 		}
 	};
@@ -212,7 +214,7 @@ let DnDPhase1 = () => {
 					setCurrent(undefined);
 					setFeedback(undefined);
 					clearTimeout(timer);
-					navigate("/students/exercises");
+					navigate(`/students/exercises/${trainingMode}`);
 				} }/>
 			</div>
 			<Flex align="center" vertical>

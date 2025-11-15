@@ -1,13 +1,14 @@
 import { Alert, Card, Col, Divider, Empty, Flex, Image, Row, Spin, Typography } from "antd";
 import { useCallback, useEffect, useRef, useState }                             from "react";
 import { useTranslation }                                                       from "react-i18next";
-import { useNavigate }                                                          from "react-router-dom";
-import { CATEGORIES, REPRESENTATION }                                           from "../../Globals";
+import {useNavigate, useParams} from "react-router-dom";
+import { CATEGORIES, REPRESENTATION, EXERCISE_RULES }                                           from "../../Globals";
 import i18n                                                                     from "../../i18n";
 import { useSession }                                                           from "../SessionComponent";
 
 let ExercisesCarousel = () => {
 
+    let {trainingMode} = useParams();
 	let { setExercise, setFeedback, lang, setLang } = useSession();
 
 	let [exercises, setExercises] = useState([]);
@@ -29,6 +30,31 @@ let ExercisesCarousel = () => {
 	const lastX = useRef(0);
 	const lastTime = useRef(0);
 	const requestId = useRef(null);
+    let enabledExercisesRef = useRef(null);
+
+    function matchesCondition(item, condition) {
+        return condition.networks.includes(item.networkType) &&
+            condition.representations.includes(item.representation);
+    }
+
+    function isItemEnabled(item, exerciseId) {
+        const rule = EXERCISE_RULES[exerciseId];
+
+        if (!rule) {
+            return true;
+        }
+
+        if (rule.networks && rule.representations) {
+            return rule.networks.includes(item.networkType) &&
+                rule.representations.includes(item.representation);
+        }
+
+        if (rule.conditions) {
+            return rule.conditions.some(condition => matchesCondition(item, condition));
+        }
+
+        return false;
+    }
 
 	const getExercises = useCallback(async () => {
 		setLoading(true);
@@ -57,12 +83,39 @@ let ExercisesCarousel = () => {
 
 				return networkTypeComparison;
 			});
+            jsonData.map((item) => {
+                item.enabled = isItemEnabled(item, enabledExercisesRef.current);
+            });
 			setExercises(jsonData);
 		} else {
 			setMessage({ error: jsonData?.error });
 		}
 		setLoading(false);
 	}, [lang, category, representation]);
+
+    useEffect(() => {
+        let getEnabledExercises = async () => {
+            let response = null;
+            try {
+                response = await fetch(`${process.env.REACT_APP_USERS_SERVICE_URL}/students/enabledExercises`, {
+                    method:  "GET", headers: {
+                        "Content-Type": "application/json", Authorization: `Bearer ${ localStorage.getItem("accessToken") }`
+                    }
+                });
+            }
+            catch ( error ) {
+            }
+
+            let jsonData = await response?.json();
+            if ( response?.ok ) {
+                enabledExercisesRef.current = (jsonData.enabledExercises);
+                getExercises();
+            }
+        }
+        if(trainingMode === "ruled") {
+            getEnabledExercises();
+        }
+    },[])
 
 	useEffect(() => {
 		getExercises();
@@ -223,16 +276,17 @@ let ExercisesCarousel = () => {
 					>
 						{ exercises.map((card, index) => (
 							["ICONIC", "MIXED"].includes(card.representation) ? <Card
+
 								key={ index }
-								hoverable
+								hoverable={card.enabled}
 								size="small"
-								style={ { textAlign: "center", userSelect: "none", minWidth: "20vmax", height: "25vmax", alignItems: "center" } }
+								style={ { textAlign: "center", userSelect: "none", minWidth: "20vmax", height: "25vmax", alignItems: "center", opacity: card.enabled ? 1 : 0.7 } }
 								title={ <Title level={ 4 } style={ { fontSize: "1.3vmax", textAlign: "center" } }>{ card.title }</Title> }
 								onClick={ () => {
-									if ( velocity.current === 0 ) {
+									if ( velocity.current === 0 && card.enabled ) {
 										setExercise(card);
 										setFeedback({});
-										navigate("/exerciseDnD/phase1");
+										navigate(`/exerciseDnD/phase1/${trainingMode}`);
 									}
 								} }
 							>
@@ -244,15 +298,15 @@ let ExercisesCarousel = () => {
 								      title={ <Text style={ { fontSize: "1.5vmax", textAlign: "center", color: "black" } }>{ card.networkType }</Text> }/>
 							</Card> : <Card
 								key={ index }
-								hoverable
+                                hoverable={card.enabled}
 								size="small"
-								style={ { textAlign: "center", userSelect: "none", minWidth: "20vmax", height: "25vmax", alignItems: "center" } }
+								style={ { textAlign: "center", userSelect: "none", minWidth: "20vmax", height: "25vmax", alignItems: "center", opacity: card.enabled ? 1 : 0.7 } }
 								title={ null }
 								onClick={ () => {
-									if ( velocity.current === 0 ) {
+									if ( velocity.current === 0 && card.enabled ) {
 										setExercise(card);
 										setFeedback({});
-										navigate("/exerciseType/phase1");
+										navigate(`/exerciseType/phase1/${trainingMode}`);
 									}
 								} }
 							>

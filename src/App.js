@@ -39,6 +39,7 @@ import SentenceNetwork from "./components/student/SentenceNetworkComponent";
 import SentenceNetworkSequential from "./components/student/SentenceNetworkSequentialComponent";
 import SelectPhase from "./components/student/SelectPhaseComponent";
 import Funding from "./components/FundingComponent";
+import SelectTrainingMode from "./components/student/SelectTrainingModeComponent";
 
 let App = () => {
 
@@ -150,7 +151,7 @@ let App = () => {
         },
 		{
 			key: "exercises",
-			label: <Link to="/students/exercises" onClick={() => setOpen(false)}>{t("sider.student.exercises")}</Link>,
+			label: <Link to="/students/trainingMode" onClick={() => setOpen(false)}>{t("sider.student.exercises")}</Link>,
 			danger: false,
 			icon: <FormOutlined />
 		},
@@ -264,7 +265,7 @@ let App = () => {
 						const isAllowedPath = matchPath("/students/:path/*", location.pathname) || location.pathname.startsWith("/exercise") || location.pathname.startsWith("/funding");
 
 						if (!isAllowedPath) {
-							navigate("/students/exercises");
+							navigate("/students/selectMode");
 						}
 					}
 				} else {
@@ -322,11 +323,12 @@ let App = () => {
 								<Route path="/selectRole" element={<SelectRole />} />
 								<Route path="/loginStudent" element={<LoginStudent />} />
 								<Route path="/funding" element={<Funding />} />
-								<Route path="/exerciseDnD/phase1" element={<DnDPhase1 />} />
-								<Route path="/exerciseDnD/phase2" element={<DnDPhase2 />} />
-								<Route path="/exerciseType/phase1" element={<TypePhase1 />} />
-								<Route path="/exerciseType/phase2" element={<TypePhase2 />} />
-								<Route path="/students/exercises" element={<ExercisesCarousel />} />
+								<Route path="/exerciseDnD/phase1/:trainingMode" element={<DnDPhase1 />} />
+								<Route path="/exerciseDnD/phase2/:trainingMode" element={<DnDPhase2 />} />
+								<Route path="/exerciseType/phase1/:trainingMode" element={<TypePhase1 />} />
+								<Route path="/exerciseType/phase2/:trainingMode" element={<TypePhase2 />} />
+								<Route path="/students/exercises/:trainingMode" element={<ExercisesCarousel />} />
+								<Route path="/students/trainingMode" element={<SelectTrainingMode />} />
                                 <Route path="/students/selectMode" element={<SelectMode />} />
 								<Route path="/students/pretraining/block/1/activity/:activity" element={<PictogramActivity key={location.pathname}/>} />
                                 <Route path="/students/pretraining/block/2/activity/:activity" element={<PhrasesActivity key={location.pathname}/>} />

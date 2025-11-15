@@ -2,12 +2,14 @@ import { HomeOutlined, ReloadOutlined }                                         
 import { Card, Col, Divider, Flex, Input, Row }                                       from "antd";
 import React, { useEffect, useRef, useState }                                         from "react";
 import { useTranslation }                                                             from "react-i18next";
-import { useNavigate }                                                                from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import { useSession }                                                                 from "../SessionComponent";
 import { nexusX, nodes, pathBottom, pathBottom2, pathTop, stopX, viewBoxWidth, X, Y } from "./NetworkProps";
 import {finishExperiment, finishTracking, initTracking, registerElement} from "../../scriptTest2";
 
 let TypePhase2 = () => {
+
+    let {trainingMode} = useParams();
 
 	const INITIAL_ELEMENT = 0;
 	const INITIAL_ID = "1-1";
@@ -96,7 +98,7 @@ let TypePhase2 = () => {
 								finishExperiment();
 								finishTracking("/students/exercises");
 								setShowGif(false);
-								navigate("/students/exercises");
+								navigate(`/students/${trainingMode}`);
 							}, 3000));
 						}
 					} else {
@@ -199,7 +201,7 @@ let TypePhase2 = () => {
 					setCurrent(undefined);
 					setFeedback(undefined);
 					clearTimeout(timer);
-					navigate("/students/exercises");
+					navigate(`/students/exercises/${trainingMode}`);
 				} }/>
 			</div>
 			<Flex align="center" vertical>
