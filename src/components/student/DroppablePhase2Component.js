@@ -25,6 +25,13 @@ const DroppablePhase2 = ({ id, type, ok, nexus, stop, bigStop, shape, src, text 
     };
 
     const getTextPosition = () => {
+        if(!src) {
+            if (shape === "ellipse") return { x: "5.7vmax", y: "4vmax", fontSize: "1vmax" };
+            if (shape === "rect") return { x: "5.2vmax", y: "4vmax", fontSize: "1vmax" };
+            if(text==="and") return {x: "2vmax", y: "5.2vmax", fontSize: "1.3vmax"};
+            if (stop) return { x: "2vmax", y: "4.7vmax", fontSize: "1.8vmax" };
+            return { x: "3.8vmax", y: "4.2vmax", fontSize: "1.1vmax" };
+        }
         if (bigStop) return { x: "3.3vmax", y: "5.3vmax", fontSize: "3vmax" };
         if(text==="and") return {x: "2.4vmax", y: "5.2vmax", fontSize: "1.3vmax"};
         if (stop) return { x: "3.2vmax", y: "4.7vmax", fontSize: "1.8vmax" };
@@ -39,11 +46,11 @@ const DroppablePhase2 = ({ id, type, ok, nexus, stop, bigStop, shape, src, text 
     let strokeColor = () => {
         switch (id) {
             case "5":
-                return "rgb(255, 196, 101)";
+                return "black";
             case "8":
-                return "rgb(21, 232, 223)";
+                return "black";
             case "10":
-                return "rgb(207, 143, 251)";
+                return "black";
             default:
                 return "black";
         }
@@ -110,7 +117,7 @@ const DroppablePhase2 = ({ id, type, ok, nexus, stop, bigStop, shape, src, text 
                     fill={style}
                     strokeWidth="3"
                 />}
-                {ok &&
+                {ok && src &&
                     <image {...imagePosition} href={src} />
                 }
                 {ok &&

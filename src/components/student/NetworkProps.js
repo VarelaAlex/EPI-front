@@ -1,3 +1,6 @@
+import {conceptAmpliationAudioMap, conceptDefinitionAudioMap} from "../../Globals";
+import {normalizeKey} from "../../services/normalize";
+
 export const X = 210;
 export const Y = 25;
 
@@ -94,8 +97,9 @@ export let nodes = (exercise) => {
 			posX:  type1X(networkType),
 			posY:  0,
 			src:   ["ICONIC", "MIXED"].includes(representation) ? `${ process.env.REACT_APP_ARASAAC_URL }/pictograms/${ mainImage }` : null,
-			text:  ["MIXED", "SYMBOLIC"].includes(representation) ? title : null,
-			shape: "rect"
+			text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? title : null,
+			shape: "rect",
+			sound: `/sounds/${normalizeKey(title)}.mp3`
 		}, {
 			order: 2,
 			id:    "2",
@@ -104,7 +108,8 @@ export let nodes = (exercise) => {
 			posY:  90,
 			src:   ["ICONIC", "MIXED"].includes(representation) ? `/pictograms/${ definitionPictogram }.png` : null,
 			nexus: true,
-			text:  ["MIXED", "SYMBOLIC"].includes(representation) ? `pictograms.${ definitionPictogram }` : null
+			text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? `pictograms.${ definitionPictogram }` : null,
+			sound: `/sounds/${definitionPictogram}.mp3`
 		}, {
 			order: 3,
 			id:    "3",
@@ -113,7 +118,8 @@ export let nodes = (exercise) => {
 			posY:  170,
 			shape: "ellipse",
 			src:   ["ICONIC", "MIXED"].includes(representation) ? `${ process.env.REACT_APP_ARASAAC_URL }/pictograms/${ definitionImage }` : null,
-			text:  ["MIXED", "SYMBOLIC"].includes(representation) ? definitionText : null
+			text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? definitionText : null,
+			sound: `/sounds/${conceptDefinitionAudioMap[["ICONIC", "MIXED"].includes(representation) ? normalizeKey(definitionImage) : normalizeKey(definitionText)]}.mp3`
 		}, {
 			order: 6,
 			id:    "4",
@@ -122,7 +128,8 @@ export let nodes = (exercise) => {
 			posY:  90,
 			src:   ["ICONIC", "MIXED"].includes(representation) ? `/pictograms/${ ampliationPictogram }.png` : null,
 			nexus: true,
-			text:  ["MIXED", "SYMBOLIC"].includes(representation) ? `pictograms.${ ampliationPictogram }` : null
+			text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? `pictograms.${ ampliationPictogram }` : null,
+			sound: `/sounds/${ampliationPictogram}.mp3`
 		}, {
 			order: 7,
 			id:    "5",
@@ -131,9 +138,15 @@ export let nodes = (exercise) => {
 			posY:  170,
 			shape: "ellipse",
 			src:   ["ICONIC", "MIXED"].includes(representation) ? `${ process.env.REACT_APP_ARASAAC_URL }/pictograms/${ ampliationImages[ 0 ] }` : null,
-			text:  ["MIXED", "SYMBOLIC"].includes(representation) ? ampliationText[ 0 ] : null
+			text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? ampliationText[ 0 ] : null,
+			sound: `/sounds/${conceptAmpliationAudioMap[["ICONIC", "MIXED"].includes(representation) ? normalizeKey(ampliationImages[0]) : normalizeKey(ampliationText[0])]}.mp3`
 		}, {
-			id: "6", type: "type6", posX: -70, posY: 190, text: ["MIXED", "SYMBOLIC"].includes(representation) ? "." : null
+			id: "6",
+			type: "type6",
+			posX: -70,
+			posY: 190,
+			text: ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? "." : null,
+			sound: `/sounds/stop.mp3`
 		}
 	];
 
@@ -144,11 +157,12 @@ export let nodes = (exercise) => {
 			               type:  "type7",
 			               posX:  240,
 			               posY:  190,
-			               text:  ["MIXED", "SYMBOLIC"].includes(representation) ? (
+			               text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? (
 				               networkType === "I-II" ? exercise.language === "es" ? "y" : "and" : ","
 			               ) : null,
 			               src:   ["ICONIC", "MIXED"].includes(representation) ? `${ process.env.REACT_APP_ARASAAC_URL }/pictograms/${ STOP }` : null,
-			               stop:  true
+			               stop:  true,
+			               sound: `/sounds/stop.mp3`
 		               }, {
 			               order: 9,
 			               id:    "8",
@@ -157,7 +171,8 @@ export let nodes = (exercise) => {
 			               posY:  170,
 			               shape: "ellipse",
 			               src:   ["ICONIC", "MIXED"].includes(representation) ? `${ process.env.REACT_APP_ARASAAC_URL }/pictograms/${ ampliationImages[ 1 ] }` : null,
-			               text:  ["MIXED", "SYMBOLIC"].includes(representation) ? ampliationText[ 1 ] : null
+			               text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? ampliationText[ 1 ] : null,
+			sound: `/sounds/${conceptAmpliationAudioMap[["ICONIC", "MIXED"].includes(representation) ? normalizeKey(ampliationImages[1]) : normalizeKey(ampliationText[1])]}.mp3`
 		               });
 	}
 
@@ -168,9 +183,10 @@ export let nodes = (exercise) => {
 			               type:  "type9",
 			               posX:  460,
 			               posY:  190,
-			               text:  ["MIXED", "SYMBOLIC"].includes(representation) ? exercise.language === "es" ? "y" : "and" : null,
+			               text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? exercise.language === "es" ? "y" : "and" : null,
 			               src:   ["ICONIC", "MIXED"].includes(representation) ? `${ process.env.REACT_APP_ARASAAC_URL }/pictograms/${ STOP }` : null,
-			               stop:  true
+			               stop:  true,
+					       sound: `/sounds/stop.mp3`
 		               }, {
 			               order: 11,
 			               id:    "10",
@@ -179,7 +195,8 @@ export let nodes = (exercise) => {
 			               posY:  170,
 			               shape: "ellipse",
 			               src:   ["ICONIC", "MIXED"].includes(representation) ? `${ process.env.REACT_APP_ARASAAC_URL }/pictograms/${ ampliationImages[ 2 ] }` : null,
-			               text:  ["MIXED", "SYMBOLIC"].includes(representation) ? ampliationText[ 2 ] : null
+			               text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? ampliationText[ 2 ] : null,
+						   sound: `/sounds/${conceptAmpliationAudioMap[["ICONIC", "MIXED"].includes(representation) ? normalizeKey(ampliationImages[2]) : normalizeKey(ampliationText[2])]}.mp3`
 		               });
 	}
 

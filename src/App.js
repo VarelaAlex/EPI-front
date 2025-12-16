@@ -40,10 +40,17 @@ import SentenceNetworkSequential from "./components/student/SentenceNetworkSeque
 import SelectPhase from "./components/student/SelectPhaseComponent";
 import Funding from "./components/FundingComponent";
 import SelectTrainingMode from "./components/student/SelectTrainingModeComponent";
+import useFullscreen from "./hooks/useFullscreen";
+import AudioPermissionModal from "./components/AudioPermissionModalComponent";
+import {useAvatar} from "./components/AvatarContext";
+import RuledExercisesSelector from "./components/student/RuledExercisesSelectorComponent";
+import AvatarNavigationListener from "./components/AvatarNavigationListener";
 
 let App = () => {
 
 	let { login, setLogin, setFeedback, setExercise } = useSession();
+	let {hideAvatar, disableVoice} = useAvatar();
+    let exitFullscreen = useFullscreen();
 
 	const MOBILE_BREAKPOINT = 430;
 
@@ -65,9 +72,15 @@ let App = () => {
 		localStorage.removeItem("name");
 		localStorage.removeItem("role");
 		localStorage.removeItem("user");
+		localStorage.removeItem("greeted-main");
+		localStorage.removeItem("greeted-pretraining");
+		localStorage.removeItem("greeted-training");
 		setLogin(false);
 		setFeedback({});
 		setExercise({});
+		hideAvatar();
+		disableVoice();
+        exitFullscreen();
 	}, [setExercise, setFeedback, setLogin]);
 
 	let logout = async () => {
@@ -299,6 +312,8 @@ let App = () => {
 	return (
 		<>
 			{contextHolder}
+            <AudioPermissionModal/>
+			<AvatarNavigationListener />
 			<Layout>
 				<Header
 					login={login}
@@ -327,7 +342,8 @@ let App = () => {
 								<Route path="/exerciseDnD/phase2/:trainingMode" element={<DnDPhase2 />} />
 								<Route path="/exerciseType/phase1/:trainingMode" element={<TypePhase1 />} />
 								<Route path="/exerciseType/phase2/:trainingMode" element={<TypePhase2 />} />
-								<Route path="/students/exercises/:trainingMode" element={<ExercisesCarousel />} />
+								<Route path="/students/exercises/free" element={<ExercisesCarousel />} />
+								<Route path="/students/exercises/ruled" element={<RuledExercisesSelector />} />
 								<Route path="/students/trainingMode" element={<SelectTrainingMode />} />
                                 <Route path="/students/selectMode" element={<SelectMode />} />
 								<Route path="/students/pretraining/block/1/activity/:activity" element={<PictogramActivity key={location.pathname}/>} />
@@ -358,7 +374,7 @@ let App = () => {
 				</Layout>
 				<Footer style={{backgroundColor: "#001628", color: "white"}}>
 					<Flex align="center" justify="center" style={{ minHeight: "100%" }}>
-						<Text style={{color:"white"}}><Typography.Link href="https://www.unioviedo.es/hyper/" style={{color:"white"}} underline>PEPI</Typography.Link> @ 2025 Made with ❤️ by <Typography.Link href="https://github.com/VarelaAlex" style={{color:"white"}} underline>Álex</Typography.Link> & <Typography.Link href="https://grupoadir.es/" style={{color:"white"}} underline>ADIR</Typography.Link></Text>
+                        <Text style={{color:"white"}}>PEPI @ 2025 Made with ❤️ by <Typography.Link href="https://github.com/VarelaAlex" style={{color:"white"}} underline>Álex</Typography.Link> & <Typography.Link href="https://grupoadir.es/" style={{color:"white"}} underline>ADIR</Typography.Link> – based on <Typography.Link href="https://www.unioviedo.es/hyper/" style={{color:"white"}} underline>Hyper</Typography.Link></Text>
                         <Link to="https://creativecommons.org/licenses/by-nc-sa/4.0/">
                             <Image
 							src="https://static.arasaac.org/images/by-nc-sa.svg"
@@ -371,7 +387,6 @@ let App = () => {
                         <Typography.Link href="/funding" style={{color:"white"}} underline>Financiación</Typography.Link>
 					</Flex>
 				</Footer>
-
 			</Layout>
 		</>
 	);

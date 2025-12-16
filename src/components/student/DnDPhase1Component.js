@@ -9,19 +9,23 @@ import {
 	initTracking,
 	registerElement
 } from "../../scriptTest2";
-import useFullscreen                                                                        from "../../hooks/useFullscreen";
 import { useSession }                                                                       from "../SessionComponent";
 import DraggablePhase1                                                                      from "./DraggablePhase1Component";
 import DroppablePhase1                                                                      from "./DroppablePhase1Component";
 import { nexusX, nodes, pathBottom, pathBottom2, pathTop, STOP, stopX, viewBoxWidth, X, Y } from "./NetworkProps";
+import {useAvatar} from "../AvatarContext";
+import {HAPPY_SPEAKING, NEUTRAL, WORRIED_SPEAKING} from "../Avatar";
 
 let DnDPhase1 = () => {
 
     let {trainingMode} = useParams();
 
+    let {changeEmotionSequence, stopAudio} = useAvatar();
+
 	const INITIAL_ELEMENT = 0;
 	let { setExercise, exercise, feedback, setFeedback } = useSession();
 	let exerciseNodes = nodes(exercise);
+	let [countErrors, setCountErrors] = useState(0);
 
 	let playAudio = usePlayAudio();
 
@@ -42,8 +46,6 @@ let DnDPhase1 = () => {
 		// Scroll on component mount
 		hideHeader();
 	}, []);
-
-	let exitFullscreen = useFullscreen(true);
 
 	let startTime = useRef(Date.now());
 
@@ -68,7 +70,6 @@ let DnDPhase1 = () => {
 		}
 	];
 
-	let [showGif, setShowGif] = useState(false);
 	let [element, setElement] = useState();
 	let [extendedNodes, setExtendedNodes] = useState(INITIAL_EXTENDED_NODES);
 	let [timer, setTimer] = useState(undefined);
@@ -77,8 +78,51 @@ let DnDPhase1 = () => {
 	let [current, setCurrent] = useState(INITIAL_ELEMENT);
 
 	let handleDragStart = (event) => {
-		setElement(event.active);
-		playAudio("/sounds/"+extendedNodes.find((node) => node.type === event.active.data.current.type).src.split('/').at(-1)+".mp3");
+		let { active } = event;
+		setElement(active);
+		extendedNodes.map((element) => {
+			if ( element.id === active.id ) {
+				if ( element.order !== current ) {
+					if(countErrors < 3) {
+						changeEmotionSequence([
+							{
+								emotionDuring: NEUTRAL,
+								emotionAfter: NEUTRAL,
+								text: "",
+								audio: `/sounds/error.mp3`,
+								afterDelay: 500
+							}
+						]);
+					} else {
+						let phrases = [
+							"No pasa nada, es normal cometer errores.",
+							"Todos nos equivocamos. Lo importante es que te estás esforzando.",
+							"Vaya, parece que no tocaba mover este elemento ahora. No tiene que salirte bien siempre, vamos a seguir intentándolo.",
+						]
+						let index = Math.floor(Math.random() * phrases.length) + 1;
+
+						changeEmotionSequence([
+							{
+								emotionDuring: WORRIED_SPEAKING,
+								emotionAfter: NEUTRAL,
+								text: phrases[index],
+								audio: `/sounds/incorrect-order${index}.mp3`,
+								afterDelay: 500
+							},
+							{
+								emotionDuring: WORRIED_SPEAKING,
+								emotionAfter: NEUTRAL,
+								text: "Piensa, ¿qué elemento tienes que mover ahora a la red?",
+								audio: `/sounds/incorrect-order-end.mp3`,
+								afterDelay: 500
+							}
+						]);
+					}
+				} else {
+					playAudio(`${extendedNodes.find((node) => node.type === active.data.current.type).sound}`);
+				}
+			}
+		});
 	};
 
 	let handleDragEnd = (event) => {
@@ -100,7 +144,6 @@ let DnDPhase1 = () => {
 							setFeedback({
 								            phase1: sintactic ? {
 									            ...feedback.phase1,
-
 									            incorrectOrderSintactic: feedback?.phase1?.incorrectOrderSintactic == null ? 1 : feedback?.phase1?.incorrectOrderSintactic + 1
 								            } : semantic ? {
 									            ...feedback.phase1,
@@ -110,6 +153,7 @@ let DnDPhase1 = () => {
 									            incorrectOrderLexical: feedback?.phase1?.incorrectOrderLexical == null ? 1 : feedback?.phase1?.incorrectOrderLexical + 1
 								            }
 							            });
+							setCountErrors(countErrors + 1);
 						}
 					}
 					return element;
@@ -128,6 +172,35 @@ let DnDPhase1 = () => {
 						            ...feedback.phase1, incorrectPosLexical: feedback?.phase1?.incorrectPosLexical == null ? 1 : feedback?.phase1?.incorrectPosLexical + 1
 					            }
 				            });
+				setCountErrors(countErrors + 1);
+				if(countErrors < 3) {
+					changeEmotionSequence([
+						{
+							emotionDuring: WORRIED_SPEAKING,
+							emotionAfter: NEUTRAL,
+							text: "",
+							audio: `/sounds/error.mp3`,
+							afterDelay: 500
+						}
+					]);
+				} else {
+					let phrases = [
+						"¡Ups! No pasa nada. Piensa, ¿dónde debo colocar este elemento?",
+						"Vaya, a veces nos equivocamos, es normal. Piensa, ¿cuál es el lugar en el que hay que colocar este elemento?",
+						"Parece que este no es el sitio correcto. Te estás esforzando y eso es lo importante. Sigue así y piensa, ¿dónde debes colocar este elemento?"
+					]
+					let index = Math.floor(Math.random() * phrases.length) + 1;
+
+					changeEmotionSequence([
+						{
+							emotionDuring: WORRIED_SPEAKING,
+							emotionAfter: NEUTRAL,
+							text: phrases[index],
+							audio: `/sounds/incorrect-pos${index}.mp3`,
+							afterDelay: 500
+						}
+					]);
+				}
 			}
 		} else {
 			setFeedback({
@@ -141,6 +214,7 @@ let DnDPhase1 = () => {
 					            ...feedback.phase1, outOfBoundsLexical: feedback?.phase1?.outOfBoundsLexical == null ? 1 : feedback?.phase1?.outOfBoundsLexical + 1
 				            }
 			            });
+			setCountErrors(countErrors + 1);
 		}
 
 		if ( ["1-1", "6-2"].includes(node?.id) && node?.order === current ) {
@@ -159,11 +233,19 @@ let DnDPhase1 = () => {
 					                         ) / 1000
 				            }
 			            });
-			setShowGif(true);
-			setTimer(setTimeout(() => {
+            changeEmotionSequence([
+                {
+                    emotionDuring: HAPPY_SPEAKING,
+                    emotionAfter: NEUTRAL,
+                    text: "¡Has hecho un gran trabajo!",
+                    audio: "/sounds/good_job.mp3",
+                    afterDelay: 3000
+                }
+            ]);
+
+            setTimer(setTimeout(() => {
 				finishTracking("/exerciseDnD/phase2");
-				setShowGif(false);
-				navigate(`/exerciseDnD/phase2/${trainingMode}`);
+                navigate(`/exerciseDnD/phase2/${trainingMode}`);
 			}, 3000));
 		}
 	};
@@ -206,7 +288,6 @@ let DnDPhase1 = () => {
 					setFeedback({});
 				} }/>
 				<HomeOutlined style={ { fontSize: "45px", cursor: "pointer", paddingLeft: "20px" } } onClick={ () => {
-					exitFullscreen();
 					setExercise(undefined);
 					setExtendedNodes(undefined);
 					setDroppableNodes(undefined);
@@ -218,7 +299,7 @@ let DnDPhase1 = () => {
 				} }/>
 			</div>
 			<Flex align="center" vertical>
-				<DndContext onDragStart={ handleDragStart } onDragEnd={ handleDragEnd } sensors={ sensors }>
+				<DndContext onDragStart={ handleDragStart } onDragEnd={ handleDragEnd } sensors={ sensors } autoScroll={false}>
 					<Flex align="start" vertical style={ { paddingTop: "10px" } }>
 						<Row>
 							<Col>
@@ -280,16 +361,16 @@ let DnDPhase1 = () => {
 						<svg height="20vmax" viewBox={ `-2 0 ${ viewBoxWidth(exercise?.networkType) } 250` }>
 							<rect x={ rectX(exercise) } y="1" width="120" height="70" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" strokeWidth="3"/>
 							<ellipse cx="60" cy="205" rx="60" ry="40" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" strokeWidth="3"/>
-							<ellipse cx="350" cy="205" rx="60" ry="40" fill="rgb(255, 255, 255)" stroke="rgb(255, 196, 101)" strokeWidth="3"/>
-							<path d={ `M ${ pathRect(exercise) } 70 L ${ pathRect(exercise) } 85 ${ pathTop(exercise?.networkType) }` } fill="none" stroke="rgb(255, 196, 101)"
+							<ellipse cx="350" cy="205" rx="60" ry="40" fill="rgb(255, 255, 255)" stroke="black" strokeWidth="3"/>
+							<path d={ `M ${ pathRect(exercise) } 70 L ${ pathRect(exercise) } 85 ${ pathTop(exercise?.networkType) }` } fill="none" stroke="black"
 							      strokeWidth="3"/>
 							<path d={ `M ${ pathRect(exercise) } 70 L ${ pathRect(exercise) } 85 L 60 85 L 60 95` } fill="none" stroke="rgb(0, 0, 0)" strokeWidth="3"/>
 							<path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" strokeWidth="3"/>
-							<path d={ `M 350 165 ${ pathBottom(exercise?.networkType) }` } fill="none" stroke="rgb(255, 196, 101)" strokeWidth="3"/>
+							<path d={ `M 350 165 ${ pathBottom(exercise?.networkType) }` } fill="none" stroke="black" strokeWidth="3"/>
 							{ ["I-II", "I-III"].includes(exercise?.networkType) && <path
 								d={ pathBottom2(exercise?.networkType) }
 								fill="none"
-								stroke="rgb(21, 232, 223)"
+								stroke="black"
 								strokeWidth="3"
 							/> }
 							{ ["I-II", "I-III"].includes(exercise?.networkType) && <ellipse
@@ -298,13 +379,13 @@ let DnDPhase1 = () => {
 								rx="60"
 								ry="40"
 								fill="rgb(255, 255, 255)"
-								stroke="rgb(21, 232, 223)"
+								stroke="black"
 								strokeWidth="3"
 							/> }
 							{ exercise?.networkType === "I-III" && <path
 								d="M 570 145 L 570 150 L 790 150 L 790 165"
 								fill="none"
-								stroke="rgb(207, 143, 251)"
+								stroke="black"
 								strokeWidth="3"
 							/> }
 							{ exercise?.networkType === "I-III" && <ellipse
@@ -313,7 +394,7 @@ let DnDPhase1 = () => {
 								rx="60"
 								ry="40"
 								fill="rgb(255, 255, 255)"
-								stroke="rgb(207, 143, 251)"
+								stroke="black"
 								strokeWidth="3"
 							/> }
 							{ droppableNodes.filter((value, index, self) => index === self.findIndex((t) => (
@@ -335,13 +416,13 @@ let DnDPhase1 = () => {
 						</svg>
 					</Flex>
 				</DndContext>
-				{ showGif && <img
-					src="/reinforcement/pocoyo.gif"
-					className="moving-image"
-					alt="Moving"
-					style={ {
-						position: "fixed", right: "20vw", bottom: "50vh", height: "20vmax", transform: "scaleX(-1)"
-					} }/> }
+                {/*{showGif && <img
+                    src="/reinforcement/pocoyo.gif"
+                    className="moving-image"
+                    alt="Moving"
+                    style={{
+                        position: "fixed", right: "20vw", bottom: "50vh", height: "20vmax", transform: "scaleX(-1)"
+                    }}/>}*/}
 			</Flex>
 		</Card>
 	);

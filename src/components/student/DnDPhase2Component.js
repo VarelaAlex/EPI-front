@@ -3,26 +3,28 @@ import { DndContext, DragOverlay, MouseSensor, TouchSensor, useSensor, useSensor
 import { Card, Col, Divider, Flex, Row }                                              from "antd";
 import React, { useEffect, useRef, useState }                                         from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import useFullscreen                                                                  from "../../hooks/useFullscreen";
 import { useSession }                                                                 from "../SessionComponent";
 import DraggablePhase2                                                                from "./DraggablePhase2Component";
 import DroppablePhase2                                                                from "./DroppablePhase2Component";
 import { nexusX, nodes, pathBottom, pathBottom2, pathTop, stopX, viewBoxWidth, X, Y } from "./NetworkProps";
 import "../assets/fonts/massallera.TTF";
 import {finishExperiment, finishTracking, initTracking, registerElement} from "../../scriptTest2";
-import {useCompleteExercise} from "../../hooks/useCompleteExercise";
 import {useExerciseProgressUpdater} from "../../hooks/useExerciseProgressUpdater";
+import {usePlayAudio} from "../../hooks/usePlayAudio";
+import {HAPPY_SPEAKING, NEUTRAL, WORRIED_SPEAKING} from "../Avatar";
+import {useAvatar} from "../AvatarContext";
+import { getNextExercise } from '../../services/getNextExercise';
+import {TRAINING_MODES} from "../../Globals";
 
 let DnDPhase2 = () => {
 
     let {trainingMode} = useParams();
 
-	useFullscreen();
+    let playAudio = usePlayAudio();
 
-	const INITIAL_ELEMENT = 0;
+    const INITIAL_ELEMENT = 0;
 
 	let { setExercise, feedback, setFeedback, exercise } = useSession();
-    let {completeExercise, message} = useCompleteExercise();
     const updateExerciseProgress = useExerciseProgressUpdater();
 
     let exerciseNodes = nodes(exercise);
@@ -43,7 +45,6 @@ let DnDPhase2 = () => {
 	let startTime = useRef(Date.now());
 
 	let navigate = useNavigate();
-	let [showGif, setShowGif] = useState(false);
 	let [element, setElement] = useState();
 
 	const INITIAL_EXTENDED_NODES = [
@@ -64,6 +65,8 @@ let DnDPhase2 = () => {
 			bigStop: true
 		}
 	];
+
+	let {changeEmotionSequence} = useAvatar();
 
 	let [extendedNodes, setExtendedNodes] = useState(INITIAL_EXTENDED_NODES);
 
@@ -86,7 +89,39 @@ let DnDPhase2 = () => {
 	};
 
 	let handleDragStart = (event) => {
-		setElement(event.active);
+		let { active } = event;
+		setElement(active);
+		extendedNodes.map((element) => {
+			if ( element.id === active.id ) {
+				if ( element.order !== current ) {
+					let phrases = [
+						"No pasa nada, es normal cometer errores.",
+						"Todos nos equivocamos. Lo importante es que te estás esforzando.",
+						"Vaya, parece que no tocaba mover este elemento ahora. No tiene que salirte bien siempre, vamos a seguir intentándolo.",
+					]
+					let index = Math.floor(Math.random() * phrases.length) + 1;
+
+					changeEmotionSequence([
+						{
+							emotionDuring: WORRIED_SPEAKING,
+							emotionAfter: NEUTRAL,
+							text: phrases[index],
+							audio: `/sounds/incorrect-order${index}.mp3`,
+							afterDelay: 500
+						},
+						{
+							emotionDuring: WORRIED_SPEAKING,
+							emotionAfter: NEUTRAL,
+							text: "Piensa, ¿qué elemento tienes que mover ahora a la red?",
+							audio: `/sounds/incorrect-order-end.mp3`,
+							afterDelay: 500
+						}
+					]);
+				} else {
+					playAudio(`${extendedNodes.find((node) => node.type === active.data.current.type).sound}`);
+				}
+			}
+		});
 	};
 
 	let handleDragEnd = (event) => {
@@ -134,6 +169,22 @@ let DnDPhase2 = () => {
 						...feedback.phase2, incorrectPosLexical: feedback?.phase2?.incorrectPosLexical == null ? 1 : feedback?.phase2?.incorrectPosLexical + 1
 					}
 				            });
+				let phrases = [
+					"¡Ups! No pasa nada. Piensa, ¿dónde debo colocar este elemento?",
+					"Vaya, a veces nos equivocamos, es normal. Piensa, ¿cuál es el lugar en el que hay que colocar este elemento?",
+					"Parece que este no es el sitio correcto. Te estás esforzando y eso es lo importante. Sigue así y piensa, ¿dónde debes colocar este elemento?"
+				]
+				let index = Math.floor(Math.random() * phrases.length) + 1;
+
+				changeEmotionSequence([
+					{
+						emotionDuring: WORRIED_SPEAKING,
+						emotionAfter: NEUTRAL,
+						text: phrases[index],
+						audio: `/sounds/incorrect-pos${index}.mp3`,
+						afterDelay: 500
+					}
+				]);
 			}
 		} else {
 			setFeedback({
@@ -159,17 +210,28 @@ let DnDPhase2 = () => {
 					             ) / 1000
 				}, title:           exercise.title, representation: exercise.representation, networkType: exercise.networkType, date: Date.now()
 			            });
-			setShowGif(true);
+			changeEmotionSequence([
+				{
+					emotionDuring: HAPPY_SPEAKING,
+					emotionAfter: NEUTRAL,
+					text: "¡Has hecho un gran trabajo!",
+					audio: "/sounds/good_job.mp3",
+					afterDelay: 3000
+				}
+			]);
 			setTimer(setTimeout(() => {
 				finishExperiment();
 				finishTracking("/students/exercises");
-				setShowGif(false);
-                completeExercise(exercise._id).then(()=> {
-                    updateExerciseProgress(exercise.representation, exercise.networkType).then(() => {
-                        navigate(`/students/exercises/${trainingMode}`)
-                    })
-
-                });
+				updateExerciseProgress(exercise.closedOrder).then(() => {
+					if(trainingMode.toUpperCase()===TRAINING_MODES.RULED) {
+						getNextExercise(exercise.closedOrder).then((nextExercise) => {
+							setExercise(nextExercise);
+							navigate(`/exerciseDnD/phase1/ruled`);
+						});
+					} else {
+						navigate(`/students/exercises/${trainingMode}`)
+					}
+				});
 			}, 3000));
 		}
 		setElement(null);
@@ -193,7 +255,24 @@ let DnDPhase2 = () => {
 		return { x: 38, y: 2, width: "55", height: "55" };
 	};
 
-	const getTextPosition = (x, y, bigStop, stop, shape, text) => {
+	const getTextPosition = (x, y, bigStop, stop, shape, text, src) => {
+
+		if(!src) {
+			if ( shape === "ellipse" ) {
+				return { x: 60, y: 45, fontSize: "13" };
+			}
+			if ( shape === "rect" ) {
+				return { x: 60, y: 45, fontSize: "13" };
+			}
+			if ( text==="and" ) {
+				return { x: "1vmax", y: "2vmax", fontSize: "1.3vmax" };
+			}
+			if ( stop ) {
+				return { x: "1vmax", y: "2vmax", fontSize: "2vmax" };
+			}
+			return { x: "4.2vmax", y: "2vmax", fontSize: "1.2vmax" };
+		}
+
 		if ( text==="and" ) {
 			return { x: "3.3vmax", y: "2vmax", fontSize: "1.3vmax" };
 		}
@@ -215,11 +294,11 @@ let DnDPhase2 = () => {
 	let strokeColor = () => {
 		switch ( element.data.current.type ) {
 			case "type5":
-				return "rgb(255, 196, 101)";
+				return "black";
 			case "type8":
-				return "rgb(21, 232, 223)";
+				return "black";
 			case "type10":
-				return "rgb(207, 143, 251)";
+				return "black";
 			default:
 				return "black";
 		}
@@ -229,21 +308,22 @@ let DnDPhase2 = () => {
 		if ( element.data.current.nexus ) {
 			return (
 				<g>
-					<image href={ element.data.current.src } { ...getImagePosition(
+					{element.data.current.src && <image href={ element.data.current.src } { ...getImagePosition(
 						element.data.current.x,
 						element.data.current.y,
 						element.data.current.nexus,
 						element.data.current.stop,
 						element.data.current.bigStop,
 						element.data.current.shape
-					) } />
+					) } />}
 					<text { ...getTextPosition(
 						element.data.current.x,
 						element.data.current.y,
 						element.data.current.bigStop,
 						element.data.current.stop,
 						element.data.current.shape,
-						element.data.current.text
+						element.data.current.text,
+						element.data.current.src
 					) } fill="black" textAnchor="middle" fontFamily="Massallera">
 						{ element.data.current.text }
 					</text>
@@ -268,7 +348,8 @@ let DnDPhase2 = () => {
 						element.data.current.bigStop,
 						element.data.current.stop,
 						element.data.current.shape,
-						element.data.current.text
+						element.data.current.text,
+						element.data.current.src
 					) } fill="black" textAnchor="middle" fontFamily="Massallera">
 						{ element.data.current.text }
 					</text>
@@ -301,7 +382,8 @@ let DnDPhase2 = () => {
 						element.data.current.bigStop,
 						element.data.current.stop,
 						element.data.current.shape,
-						element.data.current.text
+						element.data.current.text,
+						element.data.current.src
 					) } fill="black" textAnchor="middle" fontFamily="Massallera">
 						{ element.data.current.text }
 					</text>
@@ -325,7 +407,8 @@ let DnDPhase2 = () => {
 						element.data.current.bigStop,
 						element.data.current.stop,
 						element.data.current.shape,
-						element.data.current.text
+						element.data.current.text,
+						element.data.current.src
 					) } fill="black" textAnchor="middle" fontFamily="Massallera">
 						{ element.data.current.text }
 					</text>
@@ -349,7 +432,8 @@ let DnDPhase2 = () => {
 						element.data.current.bigStop,
 						element.data.current.stop,
 						element.data.current.shape,
-						element.data.current.text
+						element.data.current.text,
+						element.data.current.src
 					) } fill="black" textAnchor="middle" fontFamily="Massallera">
 						{ element.data.current.text }
 					</text>
@@ -396,22 +480,22 @@ let DnDPhase2 = () => {
 				<DndContext onDragStart={ handleDragStart } onDragEnd={ handleDragEnd } sensors={ sensors }>
 					<Flex align="center" justify="center">
 						<svg height="20vmax" viewBox={ `-2 -2 ${ viewBoxWidth(exercise?.networkType) } 250` }>
-							<path d={ `M ${ pathRect(exercise) } 70 L ${ pathRect(exercise) } 85 ${ pathTop(exercise?.networkType) }` } fill="none" stroke="rgb(255, 196, 101)"
+							<path d={ `M ${ pathRect(exercise) } 70 L ${ pathRect(exercise) } 85 ${ pathTop(exercise?.networkType) }` } fill="none" stroke="black"
 							      strokeWidth="3"/>
 							<path d={ `M ${ pathRect(exercise) } 70 L ${ pathRect(exercise) } 85 L 60 85 L 60 95` } fill="none" stroke="rgb(0, 0, 0)" strokeWidth="3"/>
 							<path d="M 60 150 L 60 165" fill="none" stroke="rgb(0, 0, 0)" strokeWidth="3"/>
-							<path d={ `M 350 165 ${ pathBottom(exercise?.networkType) }` } fill="none" stroke="rgb(255, 196, 101)" strokeWidth="3"/>
+							<path d={ `M 350 165 ${ pathBottom(exercise?.networkType) }` } fill="none" stroke="black" strokeWidth="3"/>
 							{ ["I-II", "I-III"].includes(exercise?.networkType) && <path
 								d={ pathBottom2(exercise?.networkType) }
 								fill="none"
-								stroke="rgb(21, 232, 223)"
+								stroke="black"
 								strokeWidth="3"
 							/> }
 
 							{ exercise?.networkType === "I-III" && <path
 								d="M 570 145 L 570 150 L 790 150 L 790 165"
 								fill="none"
-								stroke="rgb(207, 143, 251)"
+								stroke="black"
 								strokeWidth="3"
 							/> }
 
@@ -494,13 +578,6 @@ let DnDPhase2 = () => {
 						</Row>
 					</Flex>
 				</DndContext>
-				{ showGif && <img
-					src="/reinforcement/pawpatrol.webp"
-					className="moving-image"
-					alt="Moving"
-					style={ {
-						position: "fixed", right: "20vw", bottom: "50vh", height: "20vmax", transform: "scaleX(-1)"
-					} }/> }
 			</Flex>
 		</Card>
 	);

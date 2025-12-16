@@ -1,14 +1,12 @@
 import { Alert, Card, Col, Divider, Empty, Flex, Image, Row, Spin, Typography } from "antd";
 import { useCallback, useEffect, useRef, useState }                             from "react";
 import { useTranslation }                                                       from "react-i18next";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import { CATEGORIES, REPRESENTATION, EXERCISE_RULES }                                           from "../../Globals";
 import i18n                                                                     from "../../i18n";
 import { useSession }                                                           from "../SessionComponent";
 
 let ExercisesCarousel = () => {
-
-    let {trainingMode} = useParams();
 	let { setExercise, setFeedback, lang, setLang } = useSession();
 
 	let [exercises, setExercises] = useState([]);
@@ -93,30 +91,6 @@ let ExercisesCarousel = () => {
 		setLoading(false);
 	}, [lang, category, representation]);
 
-    useEffect(() => {
-        let getEnabledExercises = async () => {
-            let response = null;
-            try {
-                response = await fetch(`${process.env.REACT_APP_USERS_SERVICE_URL}/students/enabledExercises`, {
-                    method:  "GET", headers: {
-                        "Content-Type": "application/json", Authorization: `Bearer ${ localStorage.getItem("accessToken") }`
-                    }
-                });
-            }
-            catch ( error ) {
-            }
-
-            let jsonData = await response?.json();
-            if ( response?.ok ) {
-                enabledExercisesRef.current = (jsonData.enabledExercises);
-                getExercises();
-            }
-        }
-        if(trainingMode === "ruled") {
-            getEnabledExercises();
-        }
-    },[])
-
 	useEffect(() => {
 		getExercises();
 	}, [getExercises, category, representation]);
@@ -188,7 +162,7 @@ let ExercisesCarousel = () => {
 	let { Meta } = Card;
 
 	let { Text, Title } = Typography;
-	let a = {
+	let networkTypeColors = {
 		"I-I": "#ffc464", "I-II": "#16e8df", "I-III": "#cf8ffc"
 	};
 	return (
@@ -286,7 +260,7 @@ let ExercisesCarousel = () => {
 									if ( velocity.current === 0 && card.enabled ) {
 										setExercise(card);
 										setFeedback({});
-										navigate(`/exerciseDnD/phase1/${trainingMode}`);
+										navigate(`/exerciseDnD/phase1/free`);
 									}
 								} }
 							>
@@ -294,7 +268,7 @@ let ExercisesCarousel = () => {
 								<Image alt={ card.title } draggable={ false } preview={ false } width="15vmax"
 								       src={ `${ process.env.REACT_APP_ARASAAC_URL }/pictograms/${ card.mainImage }` }/>
 								<Divider style={ { marginTop: "1vmax", marginBottom: "1vmax" } }/>
-								<Meta style={ { backgroundColor: a[ card.networkType ], borderRadius: "12px" } }
+								<Meta style={ { backgroundColor: networkTypeColors[ card.networkType ], borderRadius: "12px" } }
 								      title={ <Text style={ { fontSize: "1.5vmax", textAlign: "center", color: "black" } }>{ card.networkType }</Text> }/>
 							</Card> : <Card
 								key={ index }
@@ -306,13 +280,18 @@ let ExercisesCarousel = () => {
 									if ( velocity.current === 0 && card.enabled ) {
 										setExercise(card);
 										setFeedback({});
-										navigate(`/exerciseType/phase1/${trainingMode}`);
+										if(card.representation === REPRESENTATION.SYMBOLIC) {
+											navigate(`/exerciseType/phase1/free`);
+										}
+										if(card.representation === REPRESENTATION.GLOBAL) {
+											navigate(`/exerciseDnD/phase1/free`);
+										}
 									}
 								} }
 							>
 								<Title style={ { fontSize: "2.3vmax", textAlign: "center", marginTop: "8vmax" } }>{ card.title }</Title>
 								<Divider style={ { marginTop: "9.45vmax", marginBottom: "1vmax" } }/>
-								<Meta style={ { backgroundColor: a[ card.networkType ], borderRadius: "12px" } }
+								<Meta style={ { backgroundColor: networkTypeColors[ card.networkType ], borderRadius: "12px" } }
 								      title={ <Text style={ { fontSize: "1.5vmax", textAlign: "center", color: "black" } }>{ card.networkType }</Text> }/>
 							</Card>
 						)) }

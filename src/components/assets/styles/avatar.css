@@ -1,0 +1,64 @@
+/* ====== FUENTE MASSALLERA ====== */
+/* Si usas Vite o CRA, pon este archivo en /public/fonts/Massallera.ttf */
+@font-face {
+    font-family: "Massallera";
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* ====== AVATAR ====== */
+
+.avatar-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+/* ====== BOCADILLO ====== */
+.avatar-bubble {
+    max-width: 300px;
+    min-height: 80px;
+    height: auto;
+    background: white;
+    padding: 18px 22px;
+    border-radius: 70%;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    margin-bottom: 15px;
+    font-size: 20px;
+    line-height: 1.25;
+    position: relative;
+    animation: fadeIn 0.2s ease-out;
+    font-family: "Massallera", sans-serif;
+    text-align: center;
+    align-content: center;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+
+/* 🔻 Triángulo del bocadillo apuntando al avatar */
+.avatar-bubble::after {
+    content: "";
+    position: absolute;
+    bottom: -15px;
+    right: 90px;                      /* Ajustado para alinearlo mejor */
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 20px solid white;     /* Flecha apuntando hacia abajo */
+}
+
+.avatar-img {
+    width: 130px;
+    height: auto;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

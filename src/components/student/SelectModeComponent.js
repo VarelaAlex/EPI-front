@@ -1,12 +1,83 @@
 import { Button, Flex, Image } from "antd";
 import { useTranslation }      from "react-i18next";
 import { useNavigate }         from "react-router-dom";
+import {useEffect} from "react";
+import {useAvatar} from "../AvatarContext";
+import {NEUTRAL, NEUTRAL_SPEAKING} from "../Avatar";
 
 let SelectMode = () => {
 
     let { t } = useTranslation();
 
     let navigate = useNavigate();
+
+
+    let { changeEmotionSequence } =  useAvatar();
+    useEffect(() => {
+
+        const hasVisited = localStorage.getItem("hasVisited-main");
+        const greeted = localStorage.getItem("greeted-main");
+
+        if(!greeted) {
+            if (hasVisited) {
+                localStorage.setItem("greeted-main", "true");
+                let phrases = [
+                    "¡Hola de nuevo! ¡Me alegra volver a verte!",
+                    "¡Qué bien que estés aquí! ¡Vamos a trabajar!",
+                    "¡Hola! ¡Trabajemos un rato juntos!",
+                    "¡Me alegra verte! ¡Vamos a entrenar!",
+                    "¡Qué bien que hayas vuelto! ¡Organicemos la información!",
+                    "¡Hola de nuevo! ¡Vamos a trabajar!",
+                    "¡Me encanta verte de nuevo! ¡Trabajemos juntos!",
+                ]
+                let index = Math.floor(Math.random() * phrases.length) + 1;
+
+                changeEmotionSequence([
+                    {
+                        emotionDuring: NEUTRAL_SPEAKING,
+                        emotionAfter: NEUTRAL,
+                        text: phrases[index],
+                        audio: `/sounds/greeting${index}.mp3`,
+                        afterDelay: 500
+                    }
+                ]);
+            } else {
+                localStorage.setItem("hasVisited-main", "true");
+                localStorage.setItem("greeted-main", "true");
+
+                changeEmotionSequence([
+                    {
+                        emotionDuring: NEUTRAL_SPEAKING,
+                        emotionAfter: NEUTRAL,
+                        text: "¡Hola! ¡Yo soy PEPI! Y voy a ayudarte a aprender a organizar la información.",
+                        audio: "/sounds/intro1.mp3",
+                        afterDelay: 500
+                    },
+                    {
+                        emotionDuring: NEUTRAL_SPEAKING,
+                        emotionAfter: NEUTRAL,
+                        text: "A veces, te saldrá a la primera. Otras, nos equivocaremos, pero cometer errores es normal, forma parte del aprendizaje.",
+                        audio: "/sounds/intro2.mp3",
+                        afterDelay: 500
+                    },
+                    {
+                        emotionDuring: NEUTRAL_SPEAKING,
+                        emotionAfter: NEUTRAL,
+                        text: "Lo importante es seguir intentándolo, así que, juntos, vamos a hacerlo lo mejor que podamos.",
+                        audio: "/sounds/intro3.mp3",
+                        afterDelay: 500
+                    },
+                    {
+                        emotionDuring: NEUTRAL_SPEAKING,
+                        emotionAfter: NEUTRAL,
+                        text: "Primero tienes que prepararte para luego empezar a entrenar. ¡Empieza por la preparación!",
+                        audio: "/sounds/intro4.mp3",
+                        afterDelay: 500
+                    }
+                ]);
+            }
+        }
+    }, []);
 
     return (
         <Flex justify="space-evenly" align="flex-start" style={ { width: "100%" } }>

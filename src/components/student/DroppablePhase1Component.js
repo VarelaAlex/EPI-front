@@ -24,6 +24,13 @@ const DroppablePhase1 = ({ id, type, ok, nexus, stop, bigStop, x, y, src, text, 
     };
 
     const getTextProps = () => {
+        if(!src) {
+            if (nexus) return { x: x + 10, y: y + 12, fontSize: "15" };
+            if (shape === "ellipse") return { x: x + 11, y: y + 15, fontSize: "13" };
+            if(text==="and") return {x: x + 30, y: y + 25, fontSize: "15"};
+            if (stop) return { x: x + 15, y: y + 22, fontSize: "25" };
+            return { x: x + 10, y: y + 20, fontSize: "13" };
+        }
         if (nexus) return { x: x + 10, y: y + 25, fontSize: "15" };
         if(text==="and") return {x: x + 30, y: y + 25, fontSize: "15"};
         if (stop) return { x: x + 22, y: y + 22, fontSize: "25" };
@@ -48,7 +55,7 @@ const DroppablePhase1 = ({ id, type, ok, nexus, stop, bigStop, x, y, src, text, 
                     strokeWidth="3"
                 />
             }
-            {ok &&
+            {ok && src &&
                 <image {...imageProps} href={src} />
             }
             {ok &&

@@ -1,4 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
+// javascript
+import React, {useEffect, useRef, useState, useMemo} from 'react';
 import {Card, Button, Image as AntdImage} from 'antd';
 import {SoundOutlined} from '@ant-design/icons';
 import {DndProvider, useDrop} from 'react-dnd';
@@ -12,6 +13,9 @@ import {DraggableWord} from "./dnd/DraggableWord";
 import {StaticWord} from "./dnd/StaticWord";
 import '../assets/styles/font.css';
 import {STOP} from "./NetworkProps";
+import {useNavigate} from 'react-router-dom';
+import {useAvatar} from "../AvatarContext";
+import {NEUTRAL, NEUTRAL_SPEAKING} from "../Avatar";
 
 const ItemTypes = { WORD: 'word' };
 
@@ -43,60 +47,324 @@ const DropZone = ({zone, placedWord, onDrop, canDropHere}) => {
     );
 };
 
-const SentenceNetworkSequential = () => {
+const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
     const {t} = useTranslation();
+    const navigate = useNavigate();
+
     const sentences = [
-        // TRÍO 1
+        // TRÍO 1 – PERRO
         {
             phrase: [
-                {text: "El perro", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7202`, audio: new Audio("/sounds/dog.mp3")}
+                { text: "El perro", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7202`, audio: new Audio("/sounds/dog.mp3") }
             ],
             audio: new Audio("/sounds/dog.mp3")
         },
         {
             phrase: [
-                {text: "El perro", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7202`, audio: new Audio("/sounds/dog.mp3")},
-                {text: "es", image: "/pictograms/is.png", audio: new Audio("/sounds/is.mp3"), draggable: true},
-                {text: "un animal", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6901`, audio: new Audio("/sounds/animal.mp3")},
-                {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3")}
+                { text: "El perro", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7202`, audio: new Audio("/sounds/dog.mp3") },
+                { text: "es", image: "/pictograms/is.png", audio: new Audio("/sounds/is.mp3"), draggable: true },
+                { text: "un animal", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6901`, audio: new Audio("/sounds/animal.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
             ],
             audio: new Audio("/sounds/dog-animal.mp3")
         },
         {
             phrase: [
-                {text: "El perro", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7202`, audio: new Audio("/sounds/dog.mp3")},
-                {text: "tiene", image: "/pictograms/has.png", audio: new Audio("/sounds/has.mp3"), draggable: true},
-                {text: "cola", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/5967`, audio: new Audio("/sounds/tail.mp3")},
-                {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3")}
+                { text: "El perro", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7202`, audio: new Audio("/sounds/dog.mp3") },
+                { text: "tiene", image: "/pictograms/has.png", audio: new Audio("/sounds/has.mp3"), draggable: true },
+                { text: "cola", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/5967`, audio: new Audio("/sounds/tail.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
             ],
             audio: new Audio("/sounds/dog-tail.mp3")
         },
-        // TRÍO 2
+
+        // TRÍO 2 – BALLENA
         {
             phrase: [
-                {text: "La ballena", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2268`, audio: new Audio("/sounds/whale.mp3")}
+                { text: "La ballena", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2268`, audio: new Audio("/sounds/whale.mp3") }
             ],
             audio: new Audio("/sounds/whale.mp3")
         },
         {
             phrase: [
-                {text: "La ballena", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2268`, audio: new Audio("/sounds/whale.mp3")},
-                {text: "es", image: "/pictograms/is.png", audio: new Audio("/sounds/is.mp3"), draggable: true},
-                {text: "un mamífero", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7777`, audio: new Audio("/sounds/mammal.mp3")},
-                {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3")}
+                { text: "La ballena", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2268`, audio: new Audio("/sounds/whale.mp3") },
+                { text: "es", image: "/pictograms/is.png", audio: new Audio("/sounds/is.mp3"), draggable: true },
+                { text: "un mamífero", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7777`, audio: new Audio("/sounds/mammal.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
             ],
             audio: new Audio("/sounds/whale-mammal.mp3")
         },
         {
             phrase: [
-                {text: "La ballena", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2268`, audio: new Audio("/sounds/whale.mp3")},
-                {text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true},
-                {text: "el mar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2925`, audio: new Audio("/sounds/sea.mp3")},
-                {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3")}
+                { text: "La ballena", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2268`, audio: new Audio("/sounds/whale.mp3") },
+                { text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true },
+                { text: "el mar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2925`, audio: new Audio("/sounds/sea.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
             ],
             audio: new Audio("/sounds/whale-sea.mp3")
+        },
+
+        // TRÍO 3 – CASA
+        {
+            phrase: [
+                { text: "La casa", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6964`, audio: new Audio("/sounds/house.mp3") }
+            ],
+            audio: new Audio("/sounds/house.mp3")
+        },
+        {
+            phrase: [
+                { text: "La casa", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6964`, audio: new Audio("/sounds/house.mp3") },
+                { text: "es para", image: "/pictograms/isFor.png", audio: new Audio("/sounds/isFor.mp3"), draggable: true },
+                { text: "vivir", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/11605`, audio: new Audio("/sounds/live.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/casa-def.mp3")
+        },
+        {
+            phrase: [
+                { text: "La casa", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6964`, audio: new Audio("/sounds/house.mp3") },
+                { text: "sirve para", image: "/pictograms/isUsedFor.png", audio: new Audio("/sounds/isUsedFor.mp3"), draggable: true },
+                { text: "vivir", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/11605`, audio: new Audio("/sounds/live.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/casa-amp.mp3")
+        },
+
+        // TRÍO 4 – SOL
+        {
+            phrase: [
+                { text: "El sol", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7252`, audio: new Audio("/sounds/sun.mp3") }
+            ],
+            audio: new Audio("/sounds/sun.mp3")
+        },
+        {
+            phrase: [
+                { text: "El sol", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7252`, audio: new Audio("/sounds/sun.mp3") },
+                { text: "es", image: "/pictograms/is.png", audio: new Audio("/sounds/is.mp3"), draggable: true },
+                { text: "una estrella", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2752`, audio: new Audio("/sounds/star.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/sol-def.mp3")
+        },
+        {
+            phrase: [
+                { text: "El sol", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7252`, audio: new Audio("/sounds/sun.mp3") },
+                { text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true },
+                { text: "el cielo", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6978`, audio: new Audio("/sounds/sunbathe.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/sol-amp.mp3")
+        },
+
+        // TRÍO 5 – VERANO
+        {
+            phrase: [
+                { text: "El verano", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/5604`, audio: new Audio("/sounds/summer.mp3") }
+            ],
+            audio: new Audio("/sounds/summer.mp3")
+        },
+        {
+            phrase: [
+                { text: "El verano", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/5604`, audio: new Audio("/sounds/summer.mp3") },
+                { text: "es parte de", image: "/pictograms/isPartOf.png", audio: new Audio("/sounds/isPartOf.mp3"), draggable: true },
+                { text: "el año", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6903`, audio: new Audio("/sounds/year.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/verano-def.mp3")
+        },
+        {
+            phrase: [
+                { text: "El verano", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/5604`, audio: new Audio("/sounds/summer.mp3") },
+                { text: "sirve para", image: "/pictograms/isUsedFor.png", audio: new Audio("/sounds/isUsedFor.mp3"), draggable: true },
+                { text: "tomar el sol", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/26500`, audio: new Audio("/sounds/sunbathe.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/verano-amp.mp3")
+        },
+
+        // TRÍO 6 – MANZANA
+        {
+            phrase: [
+                { text: "La manzana", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2462`, audio: new Audio("/sounds/apple.mp3") }
+            ],
+            audio: new Audio("/sounds/apple.mp3")
+        },
+        {
+            phrase: [
+                { text: "La manzana", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2462`, audio: new Audio("/sounds/apple.mp3") },
+                { text: "es", image: "/pictograms/is.png", audio: new Audio("/sounds/is.mp3"), draggable: true },
+                { text: "una fruta", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/28339`, audio: new Audio("/sounds/fruit.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/manzana-def.mp3")
+        },
+        {
+            phrase: [
+                { text: "La manzana", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2462`, audio: new Audio("/sounds/apple.mp3") },
+                { text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true },
+                { text: "el frutero", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/16303`, audio: new Audio("/sounds/frutero.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/manzana-amp.mp3")
+        },
+
+        // TRÍO 7 – CAMA
+        {
+            phrase: [
+                { text: "La cama", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/25900`, audio: new Audio("/sounds/bed.mp3") }
+            ],
+            audio: new Audio("/sounds/bed.mp3")
+        },
+        {
+            phrase: [
+                { text: "La cama", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/25900`, audio: new Audio("/sounds/bed.mp3") },
+                { text: "es para", image: "/pictograms/isFor.png", audio: new Audio("/sounds/isFor.mp3"), draggable: true },
+                { text: "dormir", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6479`, audio: new Audio("/sounds/sleep.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/cama-def.mp3")
+        },
+        {
+            phrase: [
+                { text: "La cama", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/25900`, audio: new Audio("/sounds/bed.mp3") },
+                { text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true },
+                { text: "la habitación", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/33068`, audio: new Audio("/sounds/room.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/cama-amp.mp3")
+        },
+
+        // TRÍO 8 – CALLE
+        {
+            phrase: [
+                { text: "La calle", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2299`, audio: new Audio("/sounds/street.mp3") }
+            ],
+            audio: new Audio("/sounds/street.mp3")
+        },
+        {
+            phrase: [
+                { text: "La calle", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2299`, audio: new Audio("/sounds/street.mp3") },
+                { text: "es parte de", image: "/pictograms/isPartOf.png", audio: new Audio("/sounds/isPartOf.mp3"), draggable: true },
+                { text: "la ciudad", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2704`, audio: new Audio("/sounds/city.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/calle-def.mp3")
+        },
+        {
+            phrase: [
+                { text: "La calle", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2299`, audio: new Audio("/sounds/street.mp3") },
+                { text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true },
+                { text: "la ciudad", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2704`, audio: new Audio("/sounds/city.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/calle-amp.mp3")
+        },
+
+        // TRÍO 9 – COCHE
+        {
+            phrase: [
+                { text: "El coche", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2339`, audio: new Audio("/sounds/car.mp3") }
+            ],
+            audio: new Audio("/sounds/car.mp3")
+        },
+        {
+            phrase: [
+                { text: "El coche", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2339`, audio: new Audio("/sounds/car.mp3") },
+                { text: "es para", image: "/pictograms/isFor.png", audio: new Audio("/sounds/isFor.mp3"), draggable: true },
+                { text: "viajar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/36974`, audio: new Audio("/sounds/travel.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/coche-def.mp3")
+        },
+        {
+            phrase: [
+                { text: "El coche", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2339`, audio: new Audio("/sounds/car.mp3") },
+                { text: "tiene", image: "/pictograms/has.png", audio: new Audio("/sounds/has.mp3"), draggable: true },
+                { text: "ruedas", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6209`, audio: new Audio("/sounds/wheels.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/coche-amp.mp3")
+        },
+
+        // TRÍO 10 – COLUMPIO
+        {
+            phrase: [
+                { text: "El columpio", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/4608`, audio: new Audio("/sounds/swing.mp3") }
+            ],
+            audio: new Audio("/sounds/swing.mp3")
+        },
+        {
+            phrase: [
+                { text: "El columpio", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/4608`, audio: new Audio("/sounds/swing.mp3") },
+                { text: "es para", image: "/pictograms/isFor.png", audio: new Audio("/sounds/isFor.mp3"), draggable: true },
+                { text: "jugar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6537`, audio: new Audio("/sounds/play.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/columpio-def.mp3")
+        },
+        {
+            phrase: [
+                { text: "El columpio", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/4608`, audio: new Audio("/sounds/swing.mp3") },
+                { text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true },
+                { text: "el parque", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2859`, audio: new Audio("/sounds/park.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/columpio-amp.mp3")
+        },
+
+        // TRÍO 11 – AGUA
+        {
+            phrase: [
+                { text: "El agua", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2248`, audio: new Audio("/sounds/water.mp3") }
+            ],
+            audio: new Audio("/sounds/water.mp3")
+        },
+        {
+            phrase: [
+                { text: "El agua", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2248`, audio: new Audio("/sounds/water.mp3") },
+                { text: "es para", image: "/pictograms/isFor.png", audio: new Audio("/sounds/isFor.mp3"), draggable: true },
+                { text: "beber", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6061`, audio: new Audio("/sounds/drink.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/agua-def.mp3")
+        },
+        {
+            phrase: [
+                { text: "El agua", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2248`, audio: new Audio("/sounds/water.mp3") },
+                { text: "sirve para", image: "/pictograms/isUsedFor.png", audio: new Audio("/sounds/isUsedFor.mp3"), draggable: true },
+                { text: "lavarse", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/26803`, audio: new Audio("/sounds/wash.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/agua-amp.mp3")
+        },
+
+        // TRÍO 12 – MAR
+        {
+            phrase: [
+                { text: "El mar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2925`, audio: new Audio("/sounds/sea.mp3") }
+            ],
+            audio: new Audio("/sounds/sea.mp3")
+        },
+        {
+            phrase: [
+                { text: "El mar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2925`, audio: new Audio("/sounds/sea.mp3") },
+                { text: "es para", image: "/pictograms/isFor.png", audio: new Audio("/sounds/isFor.mp3"), draggable: true },
+                { text: "bañarse", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/38782`, audio: new Audio("/sounds/bathe.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/mar-def.mp3")
+        },
+        {
+            phrase: [
+                { text: "El mar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2925`, audio: new Audio("/sounds/sea.mp3") },
+                { text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true },
+                { text: "la playa", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/30518`, audio: new Audio("/sounds/beach.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/mar-amp.mp3")
         }
     ];
+
     const {play, handleDropSuccess, handleDropError} = useSentenceAudio();
 
     const initializePlacedWords = () => {
@@ -111,30 +379,56 @@ const SentenceNetworkSequential = () => {
 
     const [placedWords, setPlacedWords] = useState(initializePlacedWords());
     const [currentStep, setCurrentStep] = useState(0);
-    const [currentTrioIndex, setCurrentTrioIndex] = useState(0);
+    // trioPointer is index into the shuffled trio order
+    const [trioPointer, setTrioPointer] = useState(0);
     const [showNetwork, setShowNetwork] = useState(false);
+    const [completedTrios, setCompletedTrios] = useState(0);
 
     const audioHelpRef = useRef(new Audio("/sounds/sentenceActivity2Help.mp3"));
+
+    // compute trio count and a shuffled order of trio indices (Fisher-Yates)
+    const trioCount = Math.floor(sentences.length / 3);
+    const trioOrder = useMemo(() => {
+        const arr = Array.from({length: trioCount}, (_, i) => i);
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }, [trioCount]);
+
+    // current trio number (0-based trio index in original sentences)
+    const currentTrioIndex = trioOrder[trioPointer] ?? 0;
+
+    let { changeEmotionSequence } =  useAvatar();
+    useEffect(() => {
+
+        changeEmotionSequence([
+            {
+                emotionDuring: NEUTRAL_SPEAKING,
+                emotionAfter: NEUTRAL,
+                text: "¡Ya estás en el último ejercicio de la preparación! ¡Enhorabuena! Coloca cada elemento del texto en su lugar en la red.",
+                audio: "/sounds/intro-activity6.mp3",
+                afterDelay: 500
+            }
+        ]);
+    }, []);
 
     useEffect(() => {
         const timer = setTimeout(() => setShowNetwork(true), 1000);
         return () => clearTimeout(timer);
     }, [currentTrioIndex]);
 
-    // Índices de las 3 frases del trío actual
     const firstSentenceIdx = currentTrioIndex * 3;
     const secondSentenceIdx = currentTrioIndex * 3 + 1;
     const thirdSentenceIdx = currentTrioIndex * 3 + 2;
 
     const placementOrder = [
-        // Paso 0: Primera palabra (solo una palabra)
         {key: 'center', word: sentences[firstSentenceIdx].phrase[0].text, sentence: firstSentenceIdx, wordIdx: 0},
-        // Pasos 1-4: Segunda frase (rama izquierda)
         {key: 'centerReuse', word: sentences[secondSentenceIdx].phrase[0].text, sentence: secondSentenceIdx, wordIdx: 0},
         {key: 'linkLeft', word: sentences[secondSentenceIdx].phrase[1].text, sentence: secondSentenceIdx, wordIdx: 1},
         {key: 'endLeft', word: sentences[secondSentenceIdx].phrase[2].text, sentence: secondSentenceIdx, wordIdx: 2},
         {key: 'dotLeft', word: '.', sentence: secondSentenceIdx, wordIdx: 3},
-        // Pasos 5-8: Tercera frase (rama derecha)
         {key: 'centerReuse2', word: sentences[thirdSentenceIdx].phrase[0].text, sentence: thirdSentenceIdx, wordIdx: 0},
         {key: 'linkRight', word: sentences[thirdSentenceIdx].phrase[1].text, sentence: thirdSentenceIdx, wordIdx: 1},
         {key: 'endRight', word: sentences[thirdSentenceIdx].phrase[2].text, sentence: thirdSentenceIdx, wordIdx: 2},
@@ -157,21 +451,43 @@ const SentenceNetworkSequential = () => {
             setPlacedWords(prev => ({...prev, ...updates}));
             handleDropSuccess();
 
-            // Limpiar el centro después de colocar la primera palabra y después de la segunda frase
             if (currentStep === 0 || currentStep === 4) {
                 setTimeout(() => {
                     setPlacedWords(prev => ({...prev, center: null}));
                 }, 500);
             }
 
-            // Si completamos el trío completo
+            // If completed this trio (last step)
             if (currentStep === 8) {
                 setTimeout(() => {
-                    if (currentTrioIndex < Math.floor(sentences.length / 3) - 1) {
-                        setCurrentTrioIndex(prev => prev + 1);
+                    // count this completed trio
+                    setCompletedTrios(prev => {
+                        const newCount = prev + 1;
+
+                        // if reached 5, call updateUnlockedPhase and navigate
+                        if (newCount >= 5) {
+                            if (typeof updateUnlockedPhase === 'function') {
+                                try {
+                                    updateUnlockedPhase();
+                                } catch (e) {
+                                    // ignore errors from caller
+                                }
+                            }
+                            navigate('/students/selectMode');
+                        }
+
+                        return newCount;
+                    });
+
+                    // advance to next trio if available
+                    if (trioPointer < trioOrder.length - 1) {
+                        setTrioPointer(prev => prev + 1);
                         setCurrentStep(0);
                         setShowNetwork(false);
                         setPlacedWords(initializePlacedWords());
+                    } else {
+                        // no more trios - keep UI consistent
+                        setShowNetwork(false);
                     }
                 }, 1000);
             } else {
@@ -229,7 +545,10 @@ const SentenceNetworkSequential = () => {
                                     })}
                                 </div>
                                 {!isSentenceCompleted(sentenceIdx) && (
-                                    <Button icon={<SoundOutlined/>} onClick={() => play(currentSentences[idx].audio)} style={{marginLeft: 8}}/>
+                                    <Button icon={<SoundOutlined style={{fontSize: 50, color: 'black'}}/>}
+                                            type="link"
+                                            size="large"
+                                            onClick={() => play(currentSentences[idx].audio)}/>
                                 )}
                             </div>
                         );

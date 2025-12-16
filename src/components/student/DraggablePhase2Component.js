@@ -18,6 +18,13 @@ const DraggablePhase2 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text,
     };
 
     const getTextProps = () => {
+        if(!src) {
+            if (nexus) return { x: x + 10, y: y + 15, fontSize: "15" };
+            if(text==="and") return {x: x + 30, y: y + 25, fontSize: "15"};
+            if (stop) return { x: x + 22, y: y + 22, fontSize: "25" };
+            if (shape === "ellipse") return { x: x + 11, y: y + 18, fontSize: "13" };
+            return { x: x + 10, y: y + 18, fontSize: "13" };
+        }
         if (nexus) return { x: x + 10, y: y + 27, fontSize: "15" };
         if(text==="and") return {x: x + 30, y: y + 25, fontSize: "15"};
         if (stop) return { x: x + 22, y: y + 22, fontSize: "25" };
@@ -38,11 +45,11 @@ const DraggablePhase2 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text,
     let strokeColor = () => {
         switch (id) {
             case "5":
-                return "rgb(255, 196, 101)";
+                return "black";
             case "8":
-                return "rgb(21, 232, 223)";
+                return "black";
             case "10":
-                return "rgb(207, 143, 251)";
+                return "black";
             default:
                 return "black";
         }
@@ -71,7 +78,7 @@ const DraggablePhase2 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text,
                     strokeWidth="3"
                 />
             }
-            <image href={src} {...imageProps} />
+            {src && <image href={src} {...imageProps} />}
             <text {...textProps} fill="black" textAnchor="middle" fontFamily='Massallera'>
                 {t(text)}
             </text>

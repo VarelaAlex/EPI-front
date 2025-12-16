@@ -26,6 +26,13 @@ const DraggablePhase1 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text 
     };
 
     const getTextPosition = () => {
+        if(!src) {
+            if (shape === "ellipse") return { x: "5.7vmax", y: "4.1vmax", fontSize: "1vmax" };
+            if (shape === "rect") return { x: "5.2vmax", y: "4.1vmax", fontSize: "1vmax" };
+            if(text==="and") return {x: "2.4vmax", y: "5.2vmax", fontSize: "1.3vmax"};
+            if (stop) return { x: "2vmax", y: "5vmax", fontSize: "1.8vmax" };
+            return { x: "3.8vmax", y: "4.2vmax", fontSize: "1.1vmax" };
+        }
         if (bigStop) return { x: "3.4vmax", y: "5.9vmax", fontSize: "2.3vmax" };
         if(text==="and") return {x: "2.4vmax", y: "5.2vmax", fontSize: "1.3vmax"};
         if (stop) return { x: "3vmax", y: "5vmax", fontSize: "1.8vmax" };
@@ -40,11 +47,11 @@ const DraggablePhase1 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text 
     let strokeColor = () => {
         switch (id) {
             case "5":
-                return "rgb(255, 196, 101)";
+                return "black";
             case "8":
-                return "rgb(21, 232, 223)";
+                return "black";
             case "10":
-                return "rgb(207, 143, 251)";
+                return "black";
             default:
                 return "black";
         }
@@ -82,13 +89,14 @@ const DraggablePhase1 = ({ id, type, ok, shape, src, stop, bigStop, nexus, text 
                         strokeWidth="3"
                     />
                 }
-                <image
+                {src && <image
                     x={imagePosition.x}
                     y={imagePosition.y}
                     width={imagePosition.width}
                     height={imagePosition.height}
                     href={src}
-                />
+                />}
+
                 <text
                     x={textPosition.x}
                     y={textPosition.y}

@@ -3,7 +3,12 @@ import { useCallback, useEffect } from "react";
 const useFullscreen = (shouldStayFullscreen = false) => {
 	useEffect(() => {
 		const enterFullscreen = () => {
-			if ( document.fullscreenEnabled && !document.fullscreenElement ) {
+            const isTouchDevice =
+                navigator.maxTouchPoints > 0 ||
+                "ontouchstart" in window ||
+                /Android|webOS|iPhone|iPad|iPod|Tablet|Mobile/i.test(navigator.userAgent);
+
+			if (isTouchDevice && document.fullscreenEnabled && !document.fullscreenElement ) {
 				document.documentElement.requestFullscreen().catch((err) => {
 					console.error(`Error entering fullscreen: ${ err.message }`);
 				});

@@ -6,6 +6,9 @@ import {useNavigate, useParams} from "react-router-dom";
 import { useSession }                                                                 from "../SessionComponent";
 import { nexusX, nodes, pathBottom, pathBottom2, pathTop, stopX, viewBoxWidth, X, Y } from "./NetworkProps";
 import {finishExperiment, finishTracking, initTracking, registerElement} from "../../scriptTest2";
+import {useExerciseProgressUpdater} from "../../hooks/useExerciseProgressUpdater";
+import {getNextExercise} from "../../services/getNextExercise";
+import {TRAINING_MODES} from "../../Globals";
 
 let TypePhase2 = () => {
 
@@ -13,6 +16,8 @@ let TypePhase2 = () => {
 
 	const INITIAL_ELEMENT = 0;
 	const INITIAL_ID = "1-1";
+
+	const updateExerciseProgress = useExerciseProgressUpdater();
 
 	let { setExercise, exercise, feedback, setFeedback } = useSession();
 	let startTime = useRef(Date.now());
@@ -57,8 +62,6 @@ let TypePhase2 = () => {
 		{ ...exerciseNodes[ 5 ], order: exerciseNodes.length + 2, id: "6-3", type: "type6-3", posX: nexusX(exercise?.networkType) + stopX(exercise?.networkType), bigStop: true }
 	];
 
-	let [showGif, setShowGif] = useState(false);
-
 	let [extendedNodes, setExtendedNodes] = useState(INITIAL_EXTENDED_NODES);
 
 	let [id, setId] = useState(INITIAL_ID);
@@ -93,12 +96,20 @@ let TypePhase2 = () => {
 									             ) / 1000
 								}, title:           exercise.title, representation: exercise.representation, networkType: exercise.networkType, date: Date.now()
 							            });
-							setShowGif(true);
 							setTimer(setTimeout(() => {
 								finishExperiment();
 								finishTracking("/students/exercises");
-								setShowGif(false);
-								navigate(`/students/${trainingMode}`);
+								updateExerciseProgress(exercise.closedOrder).then(() => {
+									if(trainingMode.toUpperCase()===TRAINING_MODES.RULED) {
+										getNextExercise(exercise.closedOrder).then((nextExercise) => {
+											setExercise(nextExercise);
+											navigate(`/exerciseType/phase1/ruled`);
+										});
+									} else {
+										navigate(`/students/exercises/${trainingMode}`)
+									}
+								});
+
 							}, 3000));
 						}
 					} else {
@@ -546,13 +557,6 @@ let TypePhase2 = () => {
 						               )) }
 					</Row>
 				</Flex>
-				{ showGif && <img
-					src="/reinforcement/bluey.gif"
-					className="moving-image"
-					alt="Moving"
-					style={ {
-						position: "fixed", right: "20vw", bottom: "50vh", height: "20vmax", transform: "scaleX(-1)"
-					} }/> }
 			</Flex>
 		</Card>
 	);

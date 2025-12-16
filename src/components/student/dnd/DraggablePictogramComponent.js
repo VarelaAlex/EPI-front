@@ -3,7 +3,7 @@ import {useDrag} from "react-dnd";
 import {getEmptyImage} from "react-dnd-html5-backend";
 import {Card, Col, Image, Row} from "antd";
 
-const DraggablePictogram = ({pictogram, isBlinking, isEscaping, onPlay, forwardRef, hidden, disabled}) => {
+const DraggablePictogram = ({pictogram, isBlinking, isEscaping, isHighlighted, onPlay, forwardRef, hidden, disabled}) => {
     const audioRef = useRef(null);
 
     useEffect(() => {
@@ -44,7 +44,7 @@ const DraggablePictogram = ({pictogram, isBlinking, isEscaping, onPlay, forwardR
 
     return (<div
             ref={setRef}
-            className={`pictogram-card ${isBlinking ? "blink" : ""} ${isEscaping ? "escape" : ""}`}
+            className={`pictogram-card ${isBlinking ? "blink" : ""} ${isEscaping ? "escape" : ""} ${isHighlighted ? "highlight" : ""}`}
             onMouseDown={handleMouseDown}
             onTouchStart={handleTouchStart}
             onPointerDown={handlePointerDown}

@@ -40,8 +40,6 @@ let TypePhase1 = () => {
 		{ ...exerciseNodes[ 5 ], order: exerciseNodes.length + 2, id: "6-3", type: "type6-3", posX: nexusX(exercise?.networkType) + stopX(exercise?.networkType), bigStop: true }
 	];
 
-	let [showGif, setShowGif] = useState(false);
-
 	let [extendedNodes, setExtendedNodes] = useState(INITIAL_EXTENDED_NODES);
 
 	const getTextPosition = (bigStop, stop, shape) => {
@@ -97,10 +95,8 @@ let TypePhase1 = () => {
 									                         ) / 1000
 								            }
 							            });
-							setShowGif(true);
 							setTimer(setTimeout(() => {
 								finishTracking("/exerciseType/phase2");
-								setShowGif(false);
 								navigate(`/exerciseType/phase2/${trainingMode}`);
 							}, 3000));
 						}
@@ -579,13 +575,6 @@ let TypePhase1 = () => {
 						}) }
 					</svg>
 				</Flex>
-				{ showGif && <img
-					src="/reinforcement/pato.gif"
-					className="moving-image"
-					alt="Moving"
-					style={ {
-						position: "fixed", right: "20vw", bottom: "50vh", height: "20vmax", transform: "scaleX(-1)"
-					} }/> }
 			</Flex>
 		</Card>
 	);

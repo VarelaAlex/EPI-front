@@ -1,5 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Card, Button, Image as AntdImage} from 'antd';
+// javascript
+import React, {useEffect, useRef, useState, useMemo} from 'react';
+import {Button, Card, Image as AntdImage} from 'antd';
 import {SoundOutlined} from '@ant-design/icons';
 import {DndProvider, useDrop} from 'react-dnd';
 import {MultiBackend} from 'dnd-multi-backend';
@@ -10,56 +11,33 @@ import ActivityToolsComponent from "./dnd/ActivityToolsComponent";
 import {useSentenceAudio} from "../../hooks/useSentenceAudio";
 import {CustomDragPreview} from "./dnd/CustomDragPreview";
 import {DraggableWord} from "./dnd/DraggableWord";
-import {StaticWord} from "./dnd/StaticWord";
 import {usePretraining} from "../../hooks/usePretraining";
 import {STOP} from "./NetworkProps";
 import '../assets/styles/font.css';
+import {useAvatar} from "../AvatarContext";
+import {NEUTRAL, NEUTRAL_SPEAKING} from "../Avatar";
 
-const ItemTypes = { WORD: 'word' };
+const ItemTypes = {WORD: 'word'};
 
 const DropZone = ({zone, placedWord, targetWord, onDrop, leftPlaced, onDropSuccess, onDropError, play}) => {
-    const {maxUnlocked, updateUnlockedPhase, fetchUnlockedPhase} = usePretraining();
-    const maxUnlockedRef = useRef(maxUnlocked);
-
-    useEffect(() => {
-        maxUnlockedRef.current = maxUnlocked;
-    }, [maxUnlocked]);
-
-    useEffect(() => {
-        fetchUnlockedPhase();
-    }, []);
-
+    // DropZone no longer manages unlocking — that's handled at parent level
     const [{isOver, canDrop}, drop] = useDrop({
-        accept: ItemTypes.WORD,
-        drop: (item) => {
-            const isCorrect = (item.word === targetWord && zone === 'left') ||
-                (item.word === targetWord && zone === 'right' && leftPlaced);
+        accept: ItemTypes.WORD, drop: (item) => {
+            const isCorrect = item.word === targetWord;
 
             if (isCorrect) {
                 onDrop(zone, {text: item.word, image: item.image});
                 onDropSuccess();
-
-                if (zone === 'right' && leftPlaced) {
-                    if (5 >= maxUnlockedRef.current) {
-                        updateUnlockedPhase(maxUnlockedRef.current + 1)
-                            .then(() => console.log("Fase desbloqueada actualizada"))
-                            .catch((err) => console.error(err));
-                    }
-                }
             } else {
                 onDropError();
             }
-        },
-        canDrop: (item) => {
+        }, canDrop: (item) => {
+            // la zona right solo acepta si left ya está colocado (si quieres otra política modifícalo)
             if (zone === 'right' && !leftPlaced) return false;
-            return ((item.word === targetWord && zone === 'left') ||
-                (item.word === targetWord && zone === 'right'));
-        },
-        collect: (monitor) => ({
-            isOver: monitor.isOver(),
-            canDrop: monitor.canDrop()
-        }),
-        hover: (item, monitor) => {
+            return item.word === targetWord;
+        }, collect: (monitor) => ({
+            isOver: monitor.isOver(), canDrop: monitor.canDrop()
+        }), hover: (item, monitor) => {
             if (!monitor.canDrop()) {
                 onDropError();
             }
@@ -68,43 +46,46 @@ const DropZone = ({zone, placedWord, targetWord, onDrop, leftPlaced, onDropSucce
 
     const backgroundColor = isOver && canDrop ? '#bae7ff' : '#e6f7ff';
 
-    return (
-        <div
-            ref={drop}
-            onClick={play}
-            style={{
-                width: 100,
-                height: 80,
-                border: '2px dashed #91d5ff',
-                borderRadius: 8,
-                background: backgroundColor,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                cursor: placedWord ? 'default' : 'pointer'
-            }}
-        >
-            {placedWord && (
-                <div style={{textAlign: 'center'}}>
-                    <AntdImage
-                        src={placedWord.image}
-                        alt={placedWord.text}
-                        style={{width: 40, height: 40, objectFit: 'contain'}}
-                        preview={false}
-                    />
-                    <div style={{fontFamily: 'Massallera', fontSize: 14}}>
-                        {placedWord.text}
-                    </div>
-                </div>
-            )}
-        </div>
-    );
+    return (<div
+        ref={drop}
+        style={{
+            width: 100,
+            height: 80,
+            border: '2px dashed #91d5ff',
+            borderRadius: 8,
+            background: backgroundColor,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        }}
+    >
+        {placedWord && (<div style={{textAlign: 'center'}}>
+            <AntdImage
+                src={placedWord.image}
+                alt={placedWord.text}
+                style={{width: 40, height: 40, objectFit: 'contain'}}
+                preview={false}
+            />
+            <div style={{fontFamily: 'Massallera', fontSize: 14}}>
+                {placedWord.text}
+            </div>
+        </div>)}
+    </div>);
 };
 
 const SentenceNetwork = () => {
     const {t} = useTranslation();
     const navigate = useNavigate();
-    const sentences = [
+    const {play, handleDropSuccess, handleDropError} = useSentenceAudio();
+    const {maxUnlocked, updateUnlockedPhase, fetchUnlockedPhase} = usePretraining();
+
+    const maxUnlockedRef = useRef(maxUnlocked);
+    useEffect(() => { maxUnlockedRef.current = maxUnlocked; }, [maxUnlocked]);
+
+    useEffect(() => { fetchUnlockedPhase(); }, []);
+
+    // base sentences (unchanged order inside each adjacent pair)
+    const baseSentences = [
         {
             id: 1,
             phrase: [
@@ -144,20 +125,302 @@ const SentenceNetwork = () => {
                 {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3")}
             ],
             audio: new Audio("/sounds/whale-sea.mp3")
+        },
+        // ... rest unchanged (kept as in original)
+        {
+            id: 5,
+            phrase: [
+                { text: "La casa", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6964`, audio: new Audio("/sounds/house.mp3") },
+                { text: "es para", image: "/pictograms/isFor.png", audio: new Audio("/sounds/isFor.mp3"), draggable: true },
+                { text: "vivir", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/11605`, audio: new Audio("/sounds/live.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/casa-def.mp3")
+        },
+        {
+            id: 6,
+            phrase: [
+                { text: "La casa", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6964`, audio: new Audio("/sounds/house.mp3") },
+                { text: "sirve para", image: "/pictograms/isUsedFor.png", audio: new Audio("/sounds/isUsedFor.mp3"), draggable: true },
+                { text: "vivir", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/11605`, audio: new Audio("/sounds/live.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/casa-amp.mp3")
+        },
+        {
+            id: 7,
+            phrase: [
+                { text: "El sol", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7252`, audio: new Audio("/sounds/sun.mp3") },
+                { text: "es", image: "/pictograms/is.png", audio: new Audio("/sounds/is.mp3"), draggable: true },
+                { text: "una estrella", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2752`, audio: new Audio("/sounds/star.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/sol-def.mp3")
+        },
+        {
+            id: 8,
+            phrase: [
+                { text: "El sol", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7252`, audio: new Audio("/sounds/sun.mp3") },
+                { text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true },
+                { text: "el cielo", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6978`, audio: new Audio("/sounds/sunbathe.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/sol-amp.mp3")
+        },
+        {
+            id: 9,
+            phrase: [
+                { text: "El verano", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/5604`, audio: new Audio("/sounds/summer.mp3") },
+                { text: "es parte de", image: "/pictograms/isPartOf.png", audio: new Audio("/sounds/isPartOf.mp3"), draggable: true },
+                { text: "el año", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6903`, audio: new Audio("/sounds/year.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/verano-def.mp3")
+        },
+        {
+            id: 10,
+            phrase: [
+                { text: "El verano", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/5604`, audio: new Audio("/sounds/summer.mp3") },
+                { text: "sirve para", image: "/pictograms/isUsedFor.png", audio: new Audio("/sounds/isUsedFor.mp3"), draggable: true },
+                { text: "tomar el sol", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/26500`, audio: new Audio("/sounds/sunbathe.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/verano-amp.mp3")
+        },
+        {
+            id: 11,
+            phrase: [
+                { text: "La manzana", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2462`, audio: new Audio("/sounds/apple.mp3") },
+                { text: "es", image: "/pictograms/is.png", audio: new Audio("/sounds/is.mp3"), draggable: true },
+                { text: "una fruta", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/28339`, audio: new Audio("/sounds/fruit.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/manzana-def.mp3")
+        },
+        {
+            id: 12,
+            phrase: [
+                { text: "La manzana", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2462`, audio: new Audio("/sounds/apple.mp3") },
+                { text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true },
+                { text: "el frutero", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/16303`, audio: new Audio("/sounds/frutero.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/manzana-amp.mp3")
+        },
+        {
+            id: 13,
+            phrase: [
+                { text: "La cama", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/25900`, audio: new Audio("/sounds/bed.mp3") },
+                { text: "es para", image: "/pictograms/isFor.png", audio: new Audio("/sounds/isFor.mp3"), draggable: true },
+                { text: "dormir", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6479`, audio: new Audio("/sounds/sleep.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/cama-def.mp3")
+        },
+        {
+            id: 14,
+            phrase: [
+                { text: "La cama", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/25900`, audio: new Audio("/sounds/bed.mp3") },
+                { text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true },
+                { text: "la habitación", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/33068`, audio: new Audio("/sounds/room.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/cama-amp.mp3")
+        },
+        {
+            id: 15,
+            phrase: [
+                { text: "La calle", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2299`, audio: new Audio("/sounds/street.mp3") },
+                { text: "es parte de", image: "/pictograms/isPartOf.png", audio: new Audio("/sounds/isPartOf.mp3"), draggable: true },
+                { text: "la ciudad", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2704`, audio: new Audio("/sounds/city.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/calle-def.mp3")
+        },
+        {
+            id: 16,
+            phrase: [
+                { text: "La calle", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2299`, audio: new Audio("/sounds/street.mp3") },
+                { text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true },
+                { text: "la ciudad", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2704`, audio: new Audio("/sounds/city.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/calle-amp.mp3")
+        },
+        {
+            id: 17,
+            phrase: [
+                { text: "El coche", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2339`, audio: new Audio("/sounds/car.mp3") },
+                { text: "es para", image: "/pictograms/isFor.png", audio: new Audio("/sounds/isFor.mp3"), draggable: true },
+                { text: "viajar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/36974`, audio: new Audio("/sounds/travel.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/coche-def.mp3")
+        },
+        {
+            id: 18,
+            phrase: [
+                { text: "El coche", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2339`, audio: new Audio("/sounds/car.mp3") },
+                { text: "tiene", image: "/pictograms/has.png", audio: new Audio("/sounds/has.mp3"), draggable: true },
+                { text: "ruedas", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6209`, audio: new Audio("/sounds/wheels.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/coche-amp.mp3")
+        },
+        {
+            id: 19,
+            phrase: [
+                { text: "El columpio", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/4608`, audio: new Audio("/sounds/swing.mp3") },
+                { text: "es para", image: "/pictograms/isFor.png", audio: new Audio("/sounds/isFor.mp3"), draggable: true },
+                { text: "jugar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6537`, audio: new Audio("/sounds/play.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/columpio-def.mp3")
+        },
+        {
+            id: 20,
+            phrase: [
+                { text: "El columpio", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/4608`, audio: new Audio("/sounds/swing.mp3") },
+                { text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true },
+                { text: "el parque", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2859`, audio: new Audio("/sounds/park.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/columpio-amp.mp3")
+        },
+        {
+            id: 21,
+            phrase: [
+                { text: "El agua", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2248`, audio: new Audio("/sounds/water.mp3") },
+                { text: "es para", image: "/pictograms/isFor.png", audio: new Audio("/sounds/isFor.mp3"), draggable: true },
+                { text: "beber", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6061`, audio: new Audio("/sounds/drink.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/agua-def.mp3")
+        },
+        {
+            id: 22,
+            phrase: [
+                { text: "El agua", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2248`, audio: new Audio("/sounds/water.mp3") },
+                { text: "sirve para", image: "/pictograms/isUsedFor.png", audio: new Audio("/sounds/isUsedFor.mp3"), draggable: true },
+                { text: "lavarse", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/26803`, audio: new Audio("/sounds/wash.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/agua-amp.mp3")
+        },
+        {
+            id: 23,
+            phrase: [
+                { text: "El mar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2925`, audio: new Audio("/sounds/sea.mp3") },
+                { text: "es para", image: "/pictograms/isFor.png", audio: new Audio("/sounds/isFor.mp3"), draggable: true },
+                { text: "bañarse", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/38782`, audio: new Audio("/sounds/bathe.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/mar-def.mp3")
+        },
+        {
+            id: 24,
+            phrase: [
+                { text: "El mar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2925`, audio: new Audio("/sounds/sea.mp3") },
+                { text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true },
+                { text: "la playa", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/30518`, audio: new Audio("/sounds/beach.mp3") },
+                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
+            ],
+            audio: new Audio("/sounds/mar-amp.mp3")
         }
     ];
 
-    const {play, handleDropSuccess, handleDropError} = useSentenceAudio();
+    // Build pairs and shuffle pairs while keeping internal pair order
+    const shuffledSentences = useMemo(() => {
+        const pairs = [];
+        for (let i = 0; i < baseSentences.length; i += 2) {
+            const second = baseSentences[i + 1];
+            // ensure there's a second (defensive)
+            if (second) pairs.push([baseSentences[i], second]);
+        }
+        // Fisher-Yates shuffle on pairs
+        for (let i = pairs.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
+        }
+        return pairs.flat();
+    }, []); // run once on mount
 
+    // fijas que solicitaste (siempre las mismas)
+    const leftFixed = [{
+        text: 'es',
+        image: '/pictograms/is.png',
+        audio: new Audio("/sounds/is.mp3")
+    }, {
+        text: 'es parte de',
+        image: '/pictograms/isPartOf.png',
+        audio: new Audio("/sounds/isPartOf.mp3")
+    }, {text: 'es para', image: '/pictograms/isFor.png', audio: new Audio("/sounds/isFor.mp3")}];
+
+    const rightFixed = [{
+        text: 'tiene',
+        image: '/pictograms/has.png',
+        audio: new Audio("/sounds/has.mp3")
+    }, {text: 'está en', image: '/pictograms/isIn.png', audio: new Audio("/sounds/isIn.mp3")}, {
+        text: 'sirve para',
+        image: '/pictograms/isUsedFor.png',
+        audio: new Audio("/sounds/isUsedFor.mp3")
+    }];
+
+    // estado de colocación en las zonas
     const [placedLinks, setPlacedLinks] = useState({left: null, right: null});
-    const [showNetwork, setShowNetwork] = useState(false);
     const [currentPairIndex, setCurrentPairIndex] = useState(0);
+    const [showNetwork, setShowNetwork] = useState(false);
 
-    const audioHelpRef = useRef(new Audio("/sounds/sentenceActivity1Help.mp3"));
+    // track completed pairs correctly
+    const [completedPairs, setCompletedPairs] = useState(0);
+    const unlockAppliedRef = useRef(false);
+
+    // audio central: arranca con la primera frase del par actual
+    const currentAudioRef = useRef(shuffledSentences[0]?.audio || null);
+
+    let { changeEmotionSequence } =  useAvatar();
+    useEffect(() => {
+
+            changeEmotionSequence([
+                {
+                    emotionDuring: NEUTRAL_SPEAKING,
+                    emotionAfter: NEUTRAL,
+                    text: "¡Ahora vamos a colocar los pictogramas en mi red! ¿ves que tiene dos lados? Escucha y coloca el pictograma a cada lado de la red.",
+                    audio: "/sounds/intro-activity5.mp3",
+                    afterDelay: 500
+                }
+            ]);
+    }, []);
+
+    useEffect(() => {
+        currentAudioRef.current = shuffledSentences[currentPairIndex]?.audio;
+    }, [currentPairIndex, shuffledSentences]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => setShowNetwork(true), 200);
+        return () => clearTimeout(timer);
+    }, [currentPairIndex]);
+
+    // when completedPairs reaches 5, run update + navigate (once)
+    useEffect(() => {
+        if (completedPairs === 5 && !unlockAppliedRef.current) {
+            unlockAppliedRef.current = true;
+            if (maxUnlockedRef.current <= 5) {
+                updateUnlockedPhase(maxUnlockedRef.current + 1)
+                    .then(() => console.log("Fase desbloqueada actualizada"))
+                    .catch((err) => console.error(err));
+            }
+            setTimeout(() => navigate("/students/pretraining/block/3/activity/2"), 1200);
+        }
+    }, [completedPairs, updateUnlockedPhase, navigate]);
 
     const handleNextPair = () => {
-        if(currentPairIndex >= sentences.length - 2) {
-            setTimeout(() => navigate("/students/pretraining/block/3/activity/2"), 2000);
+        const next = currentPairIndex + 1; // we increment by 1 because sentences array is flattened but pairs are contiguous; using +1 still moves to next sentence; keep consistent with original two-step approach:
+        // advance to next pair (skip next sentence if we want to keep stepping by pairs)
+        const nextPairStart = currentPairIndex + 2;
+        if (nextPairStart >= shuffledSentences.length - 1) {
+            // if not more pairs, navigate as before (keep the same route)
+            setTimeout(() => navigate("/students/pretraining/block/3/activity/2"), 1200);
         } else {
             setPlacedLinks({left: null, right: null});
             setShowNetwork(false);
@@ -165,121 +428,222 @@ const SentenceNetwork = () => {
         }
     };
 
-    useEffect(() => {
-        const timer = setTimeout(() => setShowNetwork(true), 2000);
-        return () => clearTimeout(timer);
-    }, [currentPairIndex]);
-
     const handleDrop = (zone, word) => {
         setPlacedLinks(prev => {
             const newLinks = {...prev, [zone]: word};
-            if (newLinks.left && newLinks.right) {
-                setTimeout(() => handleNextPair(), 1000);
+
+            // cuando colocas en la izquierda correctamente, cambiamos audio central al de la segunda frase
+            if (zone === 'left') {
+                currentAudioRef.current = shuffledSentences[currentPairIndex + 1]?.audio || currentAudioRef.current;
             }
+
+            if (newLinks.left && newLinks.right) {
+                // both placed correctly: increment completedPairs and move to next pair
+                setCompletedPairs(prev => prev + 1);
+                setTimeout(() => handleNextPair(), 800);
+            }
+
             return newLinks;
         });
     };
 
-    const currentSentences = sentences.slice(currentPairIndex, currentPairIndex + 2);
+    // zona actual: par de frases (two sentences)
+    const currentSentences = shuffledSentences.slice(currentPairIndex, currentPairIndex + 2);
 
-    return (
-        <DndProvider backend={MultiBackend} options={HTML5toTouch}>
-            <CustomDragPreview/>
-            <Card style={{padding: 32, minWidth: 1000, marginTop: '2vw', fontFamily: "Massallera"}}>
-                <ActivityToolsComponent
-                    content={t("Escucha y completa la red")}
-                    playHelp={() => play(audioHelpRef.current)}
-                />
+    // estilo compactado verticalmente
+    const columnStyle = {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+        alignItems: 'center',
+        marginTop: 8
+    };
 
-                <div style={{marginBottom: 40, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 12}}>
-                    {currentSentences.map((sentence, idx) => (
-                        <div key={idx} style={{display: 'flex', alignItems: 'center', flexWrap: 'nowrap', gap: 8}}>
-                            <div style={{display: 'flex', alignItems: 'center', flexWrap: 'nowrap'}}>
-                                {sentence.phrase.map((wordData, i) => {
-                                    const isDraggable = wordData.draggable;
-                                    const isPlaced = (placedLinks.left && placedLinks.left.text === wordData.text) ||
-                                        (placedLinks.right && placedLinks.right.text === wordData.text);
+    const rowStyle = {
+        display: 'flex',
+        gap: 12,
+        justifyContent: 'center'
+    };
 
-                                    if (isDraggable) {
-                                        if (isPlaced) {
-                                            return <StaticWord key={`${wordData.text}-${i}`} wordData={wordData}/>;
-                                        }
-                                        return (
-                                            <DraggableWord
-                                                key={`${wordData.text}-${i}`}
-                                                wordData={wordData}
-                                                isPlaced={isPlaced}
-                                                onDragStart={() => play(wordData.audio)}
-                                            />
-                                        );
-                                    }
-                                    return <StaticWord key={`${wordData.text}-${i}`} wordData={wordData}/>;
-                                })}
-                            </div>
-                            <Button
-                                icon={<SoundOutlined/>}
-                                onClick={() => play(sentence.audio)}
-                                style={{marginLeft: 8}}
+    return (<DndProvider backend={MultiBackend} options={HTML5toTouch}>
+        <CustomDragPreview/>
+        <Card style={{padding: 20, minWidth: 900, marginTop: '2vw', fontFamily: "Massallera"}}>
+            <ActivityToolsComponent
+                content={t("Escucha y completa la red")}
+                playHelp={() => play(new Audio("/sounds/sentenceActivity1Help.mp3"))}
+            />
+
+            {/* Pictogramas izquierda - play central - pictogramas derecha */}
+            <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                gap: 24,
+                marginTop: 6,
+                marginBottom: 6
+            }}>
+                {/* Columna izquierda: 2 arriba, 1 abajo */}
+                <div style={columnStyle}>
+                    <div style={rowStyle}>
+                        <DraggableWord
+                            key="left-2"
+                            wordData={{word: leftFixed[0].text, text: leftFixed[0].text, image: leftFixed[0].image}}
+                            isPlaced={(placedLinks.left && placedLinks.left.text === leftFixed[0].text) ||
+                                (placedLinks.right && placedLinks.right.text === leftFixed[0].text)}
+                            onDragStart={() => play(leftFixed[0].audio)}
+                        />
+                    </div>
+                    <div style={rowStyle}>
+                        {leftFixed.slice(1, 3).map((w, i) => (
+                            <DraggableWord
+                                key={`left-${i}`}
+                                wordData={{word: w.text, text: w.text, image: w.image}}
+                                isPlaced={(placedLinks.left && placedLinks.left.text === w.text) ||
+                                    (placedLinks.right && placedLinks.right.text === w.text)}
+                                onDragStart={() => play(w.audio)}
                             />
+                        ))}
+                    </div>
+                </div>
+
+                {/* Botón central */}
+                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                    <Button
+                        icon={<SoundOutlined style={{fontSize: 50, color: 'black'}}/>}
+                        type="link"
+                        size="large"
+                        onClick={() => play(currentAudioRef.current)}
+                    />
+                </div>
+
+                {/* Columna derecha: 2 arriba, 1 abajo */}
+                <div style={columnStyle}>
+                    <div style={rowStyle}>
+                        <DraggableWord
+                            key="right-2"
+                            wordData={{word: rightFixed[0].text, text: rightFixed[0].text, image: rightFixed[0].image}}
+                            isPlaced={(placedLinks.left && placedLinks.left.text === rightFixed[0].text) ||
+                                (placedLinks.right && placedLinks.right.text === rightFixed[0].text)}
+                            onDragStart={() => play(rightFixed[0].audio)}
+                        />
+                    </div>
+                    <div style={rowStyle}>
+                        {rightFixed.slice(1, 3).map((w, i) => (
+                            <DraggableWord
+                                key={`right-${i}`}
+                                wordData={{word: w.text, text: w.text, image: w.image}}
+                                isPlaced={(placedLinks.left && placedLinks.left.text === w.text) ||
+                                    (placedLinks.right && placedLinks.right.text === w.text)}
+                                onDragStart={() => play(w.audio)}
+                            />
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* Red SVG + DropZones (más cerca de pictogramas, menos separación) */}
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                marginTop: 10,
+                opacity: showNetwork ? 1 : 0,
+                transition: 'opacity 0.25s ease-in-out'
+            }}>
+                <svg width="900" height="380" viewBox="0 0 900 380">
+                    {/* Nodo central */}
+                    <rect x="370" y="12" width="160" height="100" rx="12" fill="white" stroke="black"
+                          strokeWidth="2"/>
+                    <foreignObject x="370" y="12" width="160" height="100">
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}>
+                            <AntdImage src={currentSentences[0].phrase[0].image}
+                                       alt={currentSentences[0].phrase[0].text}
+                                       style={{width: 60, height: 60, objectFit: 'contain', marginBottom: 4}}
+                                       preview={false}/>
+                            <div style={{
+                                fontFamily: 'Massallera',
+                                fontSize: 15
+                            }}>{currentSentences[0].phrase[0].text}</div>
                         </div>
-                    ))}
-                </div>
+                    </foreignObject>
 
-                <div style={{display: 'flex', justifyContent: 'center', marginTop: 40, opacity: showNetwork ? 1 : 0, transition: 'opacity 0.3s ease-in-out'}}>
-                    <svg width="900" height="380" viewBox="0 0 900 380">
-                        <rect x="370" y="20" width="160" height="110" rx="12" fill="white" stroke="black" strokeWidth="2"/>
-                        <foreignObject x="370" y="20" width="160" height="110">
-                            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                <AntdImage src={currentSentences[0].phrase[0].image} alt={currentSentences[0].phrase[0].text}
-                                           style={{width: 65, height: 65, objectFit: 'contain', marginBottom: 4}} preview={false}/>
-                                <div style={{fontFamily: 'Massallera', fontSize: 16}}>{currentSentences[0].phrase[0].text}</div>
-                            </div>
-                        </foreignObject>
+                    {/* líneas */}
+                    <line x1="450" y1="112" x2="450" y2="138" stroke="#000" strokeWidth="2"/>
+                    <line x1="450" y1="138" x2="250" y2="138" stroke="#000" strokeWidth="2"/>
+                    <line x1="250" y1="138" x2="250" y2="250" stroke="#000" strokeWidth="2"/>
+                    <line x1="450" y1="138" x2="650" y2="138" stroke="#000" strokeWidth="2"/>
+                    <line x1="650" y1="138" x2="650" y2="250" stroke="#000" strokeWidth="2"/>
 
-                        <line x1="450" y1="130" x2="450" y2="155" stroke="#000" strokeWidth="2"/>
-                        <line x1="450" y1="155" x2="250" y2="155" stroke="#000" strokeWidth="2"/>
-                        <line x1="250" y1="155" x2="250" y2="270" stroke="#000" strokeWidth="2"/>
-                        <line x1="450" y1="155" x2="650" y2="155" stroke="#000" strokeWidth="2"/>
-                        <line x1="650" y1="155" x2="650" y2="270" stroke="#000" strokeWidth="2"/>
+                    {/* DropZone izquierda */}
+                    <foreignObject x="200" y="150" width="110" height="80">
+                        <DropZone zone="left" placedWord={placedLinks.left}
+                                  targetWord={currentSentences[0].phrase[1].text}
+                                  onDrop={handleDrop} leftPlaced={!!placedLinks.left}
+                                  onDropSuccess={handleDropSuccess}
+                                  onDropError={handleDropError}
+                                  play={() => play(currentSentences[0].phrase[1].audio)}/>
+                    </foreignObject>
 
-                        <foreignObject x="200" y="165" width="110" height="90">
-                            <DropZone zone="left" placedWord={placedLinks.left} targetWord={currentSentences[0].phrase[1].text}
-                                      onDrop={handleDrop} leftPlaced={!!placedLinks.left} onDropSuccess={handleDropSuccess}
-                                      onDropError={handleDropError} play={() => play(currentSentences[0].phrase[1].audio)}/>
-                        </foreignObject>
+                    {/* DropZone derecha */}
+                    <foreignObject x="600" y="150" width="110" height="80">
+                        <DropZone zone="right" placedWord={placedLinks.right}
+                                  targetWord={currentSentences[1].phrase[1].text}
+                                  onDrop={handleDrop} leftPlaced={!!placedLinks.left}
+                                  onDropSuccess={handleDropSuccess}
+                                  onDropError={handleDropError}
+                                  play={() => play(currentSentences[1].phrase[1].audio)}/>
+                    </foreignObject>
 
-                        <foreignObject x="600" y="165" width="110" height="90">
-                            <DropZone zone="right" placedWord={placedLinks.right} targetWord={currentSentences[1].phrase[1].text}
-                                      onDrop={handleDrop} leftPlaced={!!placedLinks.left} onDropSuccess={handleDropSuccess}
-                                      onDropError={handleDropError} play={() => play(currentSentences[1].phrase[1].audio)}/>
-                        </foreignObject>
+                    {/* STOP pictograms bajo nodos */}
+                    <image x="350" y="280" style={{height: '2.8vmax'}}
+                           href={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`}/>
+                    <ellipse cx="250" cy="290" rx="80" ry="46" fill="white" stroke="black" strokeWidth="2"/>
+                    <foreignObject x="185" y="245" width="130" height="80">
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}>
+                            <AntdImage src={currentSentences[0].phrase[2].image}
+                                       alt={currentSentences[0].phrase[2].text}
+                                       style={{width: 60, height: 60, objectFit: 'contain', marginBottom: 4}}
+                                       preview={false}/>
+                            <div style={{
+                                fontFamily: 'Massallera',
+                                fontSize: 14
+                            }}>{currentSentences[0].phrase[2].text}</div>
+                        </div>
+                    </foreignObject>
 
-                        <image x="350" y="300" style={{height: '3vmax'}} href={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`}/>
-
-                        <ellipse cx="250" cy="310" rx="90" ry="55" fill="white" stroke="black" strokeWidth="2"/>
-                        <foreignObject x="185" y="265" width="130" height="90">
-                            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                <AntdImage src={currentSentences[0].phrase[2].image} alt={currentSentences[0].phrase[2].text}
-                                           style={{width: 65, height: 65, objectFit: 'contain', marginBottom: 4}} preview={false}/>
-                                <div style={{fontFamily: 'Massallera', fontSize: 15}}>{currentSentences[0].phrase[2].text}</div>
-                            </div>
-                        </foreignObject>
-
-                        <image x="750" y="300" style={{height: '3vmax'}} href={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`}/>
-
-                        <ellipse cx="650" cy="310" rx="90" ry="55" fill="white" stroke="black" strokeWidth="2"/>
-                        <foreignObject x="585" y="265" width="130" height="90">
-                            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                <AntdImage src={currentSentences[1].phrase[2].image} alt={currentSentences[1].phrase[2].text}
-                                           style={{width: 65, height: 65, objectFit: 'contain', marginBottom: 4}} preview={false}/>
-                                <div style={{fontFamily: 'Massallera', fontSize: 15}}>{currentSentences[1].phrase[2].text}</div>
-                            </div>
-                        </foreignObject>
-                    </svg>
-                </div>
-            </Card>
-        </DndProvider>
-    );
+                    <image x="750" y="280" style={{height: '2.8vmax'}}
+                           href={`${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`}/>
+                    <ellipse cx="650" cy="290" rx="80" ry="46" fill="white" stroke="black" strokeWidth="2"/>
+                    <foreignObject x="585" y="245" width="130" height="80">
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}>
+                            <AntdImage src={currentSentences[1].phrase[2].image}
+                                       alt={currentSentences[1].phrase[2].text}
+                                       style={{width: 60, height: 60, objectFit: 'contain', marginBottom: 4}}
+                                       preview={false}/>
+                            <div style={{
+                                fontFamily: 'Massallera',
+                                fontSize: 14
+                            }}>{currentSentences[1].phrase[2].text}</div>
+                        </div>
+                    </foreignObject>
+                </svg>
+            </div>
+        </Card>
+    </DndProvider>);
 };
 
 export default SentenceNetwork;

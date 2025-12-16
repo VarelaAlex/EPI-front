@@ -5,6 +5,8 @@ import * as swr from './serviceWorkerRegistration';
 import './i18n';
 import { BrowserRouter }   from 'react-router-dom';
 import { SessionProvider } from './components/SessionComponent';
+import {AvatarProvider} from "./components/AvatarContext";
+import Avatar from "./components/Avatar";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -21,7 +23,10 @@ swr.register({
 root.render(
   <BrowserRouter>
     <SessionProvider>
-      <App />
+        <AvatarProvider>
+            <App />
+            <Avatar />
+        </AvatarProvider>
     </SessionProvider>
   </BrowserRouter>
 );

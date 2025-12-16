@@ -33,3 +33,12 @@
     opacity: 0; /* aparecerá cuando la animación la muestre */
     transform: translate(-50%, -50%);
 }
+
+.highlight {
+    animation: yellowGlow 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes yellowGlow {
+    from { box-shadow: 0 0 0px 0px rgba(255, 230, 0, 0.6); }
+    to   { box-shadow: 0 0 12px 6px rgba(255, 230, 0, 1); }
+}

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { usePretraining } from "../../hooks/usePretraining";
 import { useEffect } from "react";
 import "../assets/styles/font.css";
+import {useAvatar} from "../AvatarContext";
+import {NEUTRAL, NEUTRAL_SPEAKING} from "../Avatar";
 
 const SelectPhase = () => {
     const navigate = useNavigate();
@@ -23,6 +25,65 @@ const SelectPhase = () => {
 
     const phases = [1, 2, 3, 4, 5, 6];
 
+    let { Title } = Typography;
+
+    let { changeEmotionSequence } =  useAvatar();
+    useEffect(() => {
+
+        const hasVisited = localStorage.getItem("hasVisited-pretraining");
+        const greeted = localStorage.getItem("greeted-pretraining");
+
+        if(!greeted) {
+            if (hasVisited) {
+                localStorage.setItem("greeted-pretraining", "true");
+                let phrases = [
+                    "¡Vamos a seguir trabajando! ¡Voy a seguir enseñándote mis pictogramas!",
+                    "¡A trabajar! ¡Vamos a por ello!",
+                    "¡Seguimos aprendiendo los pictogramas!",
+                    "¡Voy a enseñarte algo más sobre mis pictogramas!",
+                ]
+                let index = Math.floor(Math.random() * phrases.length) + 1;
+
+                changeEmotionSequence([
+                    {
+                        emotionDuring: NEUTRAL_SPEAKING,
+                        emotionAfter: NEUTRAL,
+                        text: phrases[index],
+                        audio: `/sounds/greeting-pretraining${index}.mp3`,
+                        afterDelay: 500
+                    }
+                ]);
+            } else {
+                localStorage.setItem("hasVisited-pretraining", "true");
+                localStorage.setItem("greeted-pretraining", "true");
+
+                changeEmotionSequence([
+                    {
+                        emotionDuring: NEUTRAL_SPEAKING,
+                        emotionAfter: NEUTRAL,
+                        text: "Te voy a enseñar algunos elementos que tienes que aprender para poder organizar la información.",
+                        audio: "/sounds/intro-pretraining1.mp3",
+                        afterDelay: 500
+                    },
+                    {
+                        emotionDuring: NEUTRAL_SPEAKING,
+                        emotionAfter: NEUTRAL,
+                        text: "¡Se llaman pictogramas!",
+                        audio: "/sounds/intro-pretraining2.mp3",
+                        afterDelay: 500
+                    },
+                    {
+                        emotionDuring: NEUTRAL_SPEAKING,
+                        emotionAfter: NEUTRAL,
+                        text: "¡Haz cada una de las actividades que te voy a enseñar!",
+                        audio: "/sounds/intro-pretraining3.mp3",
+                        afterDelay: 500
+                    }
+                ]);
+            }
+        }
+    }, []);
+
     if (loading) {
         return (
             <div
@@ -38,8 +99,6 @@ const SelectPhase = () => {
         );
     }
 
-    let { Title } = Typography;
-
     return (
         <Card style={{ maxWidth: "80%"}}>
             <Row gutter={[64, 32]} justify="center" align="middle" style={{ marginBottom: "5vh" }}>
@@ -49,7 +108,7 @@ const SelectPhase = () => {
             </Row>
             <Row gutter={[32, 32]} justify="center" align="middle">
                 {phases.map((num) => {
-                    const disabled = false;
+                    const disabled = num > maxUnlocked;
 
                     return (
                         <Col

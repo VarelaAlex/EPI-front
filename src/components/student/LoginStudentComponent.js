@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSession }  from '../SessionComponent';
 //import {registerValor1, registerValor2, registerValor3, startExperiment} from "../../scriptTest";
 import {registerID, startExperiment} from "../../scriptTest2";
+import {useAvatar} from "../AvatarContext";
 
 let LoginStudent = () => {
 
@@ -15,6 +16,7 @@ let LoginStudent = () => {
     let [message, setMessage] = useState(null);
 
     let navigate = useNavigate();
+    let {showAvatar, enableVoice} = useAvatar();
 
     let onFinish = async (values) => {
         let { username } = values;
@@ -50,6 +52,8 @@ let LoginStudent = () => {
             registerValor3(new Date());
             */
             registerID(jsonData.id);
+            showAvatar();
+            enableVoice();
             navigate("/students/selectMode");
         } else {
             setMessage({ error: jsonData?.error });
