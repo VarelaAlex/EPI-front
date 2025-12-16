@@ -368,7 +368,8 @@
   "representation": {
     "iconic": "Iconic",
     "mixed": "Mixed",
-    "symbolic": "Symbolic"
+    "symbolic": "Symbolic",
+    "global": "Global"
   },
   "categories": {
     "family": "Family",
@@ -394,8 +395,8 @@
       "pretraining": "Preparation"
     },
     "trainingMode": {
-      "free": "Free",
-      "ruled": "Ruled"
+      "free": "Opened",
+      "ruled": "Closed"
     }
   },
   "students": {
