@@ -14,6 +14,7 @@ const SurveyB = () => {
 	const [currentStep, setCurrentStep] = useState(0);
 	const [form] = Form.useForm();
 	const [message, setMessage] = useState(null);
+	const [surveyId, setSurveyId] = useState(null);
 
 	const stepsContainerRef = useRef(null);
 
@@ -36,40 +37,83 @@ const SurveyB = () => {
 		{ label: t("surveyB.options.unknown"), value: -1 }
 	];
 
+	useEffect(() => {
+		const loadSurvey = async () => {
+			try {
+				const response = await fetch(
+					`${process.env.REACT_APP_USERS_SERVICE_URL}/surveys/${studentId}/B`,
+					{
+						headers: {
+							Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+						}
+					}
+				);
+
+				if (!response.ok) return;
+
+				const data = await response.json();
+
+				// Campos que NO son respuestas
+				const {
+					id,
+					studentId: responseStudentId,
+					teacherId,
+					score,
+					date,
+					surveyCode,
+					...responses
+				} = data;
+
+				setSurveyId(data.id);
+
+
+				// Cargamos SOLO lo que exista
+				form.setFieldsValue(responses);
+
+			} catch (e) {
+				console.error("Error cargando encuesta", e);
+			}
+		};
+
+		if (studentId) {
+			loadSurvey();
+		}
+	}, [studentId, form]);
+
 	const steps = [
 		{
 			title:   t("surveyB.steps.reading"),
 			content: (
 				         <>
-					         <Form.Item name="reading.1" label="Su competencia en la lectura es peor que la de los alumnos de su misma edad">
+					         <Form.Item name="reading_1" label="Su competencia en la lectura es peor que la de los alumnos de su misma edad" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="reading.2" label="Tiene dificultad para reconocer palabras muy frecuentes o familiares">
+					         <Form.Item name="reading_2" label="Tiene dificultad para reconocer palabras muy frecuentes o familiares" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="reading.3" label="Cuando lee en voz alta, se equivoca de palabras">
+					         <Form.Item name="reading_3" label="Cuando lee en voz alta, se equivoca de palabras" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="reading.4" label="Su actitud a la hora de leer es peor que la de los alumnos de su misma edad">
+					         <Form.Item name="reading_4" label="Su actitud a la hora de leer es peor que la de los alumnos de su misma edad" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="reading.5" label="Cuando revisa sus producciones, no encuentra los errores">
+					         <Form.Item name="reading_5" label="Cuando revisa sus producciones, no encuentra los errores" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
@@ -82,14 +126,14 @@ const SurveyB = () => {
 			title:   t("surveyB.steps.orthography"),
 			content: (
 				         <>
-					         <Form.Item name="orthography.1" label="Se equivoca en la tarea de escribir al dictado, cometiendo errores en las letras, palabras o lo deja en blanco">
+					         <Form.Item name="orthography_1" label="Se equivoca en la tarea de escribir al dictado, cometiendo errores en las letras, palabras o lo deja en blanco" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="orthography.2"
+					         <Form.Item name="orthography_2"
 					                    label="Comete muchos errores a la hora de escribir, tales como saltarse letras, no mantiene el mismo tamano de las letras o no respeta la pauta">
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
@@ -97,7 +141,7 @@ const SurveyB = () => {
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="orthography.3" label="Necesita mas tiempo que otros alumnos para copiar un texto">
+					         <Form.Item name="orthography_3" label="Necesita mas tiempo que otros alumnos para copiar un texto" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
@@ -110,14 +154,14 @@ const SurveyB = () => {
 			title:   t("surveyB.steps.writeExpression"),
 			content: (
 				         <>
-					         <Form.Item name="writeExpression.1" label="Muchas palabras de su vocabulario oral, no las sabe escribir">
+					         <Form.Item name="writeExpression_1" label="Muchas palabras de su vocabulario oral, no las sabe escribir" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="writeExpression.2" label="La expresion escrita es peor que la oral">
+					         <Form.Item name="writeExpression_2" label="La expresion escrita es peor que la oral" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
@@ -130,35 +174,35 @@ const SurveyB = () => {
 			title:   t("surveyB.steps.generalBehavior"),
 			content: (
 				         <>
-					         <Form.Item name="generalBehavior.1" label="En la libreta, deja muchas marcas de goma de borrar, incluso se rompe o se arruga la hoja de tanto borar">
+					         <Form.Item name="generalBehavior_1" label="En la libreta, deja muchas marcas de goma de borrar, incluso se rompe o se arruga la hoja de tanto borar" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="generalBehavior.2" label="Su comportamiento para la tarea de casa es irregular">
+					         <Form.Item name="generalBehavior_2" label="Su comportamiento para la tarea de casa es irregular" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="generalBehavior.3" label="El comportamiento en la clase es bueno, pero su rendimiento es bajo">
+					         <Form.Item name="generalBehavior_3" label="El comportamiento en la clase es bueno, pero su rendimiento es bajo" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="generalBehavior.4" label="Los padres dicen que el alumno estudia mucho, pero, incluso así, su rendimiento en clase es bajo">
+					         <Form.Item name="generalBehavior_4" label="Los padres dicen que el alumno estudia mucho, pero, incluso así, su rendimiento en clase es bajo" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="generalBehavior.5"
+					         <Form.Item name="generalBehavior_5"
 					                    label="Los padres dicen que el alumno ha leído muchas veces el contenido que debe escribir de memoria, pero el resultado de la escritura de memoria no es bueno">
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
@@ -172,21 +216,21 @@ const SurveyB = () => {
 			title:   t("surveyB.steps.mathAbility"),
 			content: (
 				         <>
-					         <Form.Item name="mathAbility.1" label="Para cálculos sencillos (por ejemplo, 3+2), necesita los dedos o hacer marcas en el papel">
+					         <Form.Item name="mathAbility_1" label="Para cálculos sencillos (por ejemplo, 3+2), necesita los dedos o hacer marcas en el papel" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="mathAbility.2" label="Tiene dificultades para resolver problemas">
+					         <Form.Item name="mathAbility_2" label="Tiene dificultades para resolver problemas" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="mathAbility.3" label="Tiene dificultades para comprender el valor de los numeros que ha de conocer por su edad">
+					         <Form.Item name="mathAbility_3" label="Tiene dificultades para comprender el valor de los numeros que ha de conocer por su edad" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
@@ -199,28 +243,28 @@ const SurveyB = () => {
 			title:   t("surveyB.steps.speechAbility"),
 			content: (
 				         <>
-					         <Form.Item name="speechAbility.1" label="Reacciona lentamente cuando tiene que contestar preguntas de forma oral">
+					         <Form.Item name="speechAbility_1" label="Reacciona lentamente cuando tiene que contestar preguntas de forma oral" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="speechAbility.2" label="Se expresa oralmente con dificultad (por ejemplo, no encuentra las palabras para expresar sus ideas)">
+					         <Form.Item name="speechAbility_2" label="Se expresa oralmente con dificultad (por ejemplo, no encuentra las palabras para expresar sus ideas)" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="speechAbility.3" label="Comete errores gramaticales cuando habla">
+					         <Form.Item name="speechAbility_3" label="Comete errores gramaticales cuando habla" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="speechAbility.4" label="Tiene dificultades para pronunciar bien">
+					         <Form.Item name="speechAbility_4" label="Tiene dificultades para pronunciar bien" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
@@ -233,7 +277,7 @@ const SurveyB = () => {
 			title:   t("surveyB.steps.memoryAbility"),
 			content: (
 				         <>
-					         <Form.Item name="memoryAbility.1"
+					         <Form.Item name="memoryAbility_1"
 					                    label="Pierde sus pertenencias personales, tales como libretas, lápices, o estuches, o se olvida de hacer o traer los deberes">
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
@@ -241,14 +285,14 @@ const SurveyB = () => {
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="memoryAbility.2" label="Le cuesta seguir una serie de varias indicaciones seguidas">
+					         <Form.Item name="memoryAbility_2" label="Le cuesta seguir una serie de varias indicaciones seguidas" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="memoryAbility.3"
+					         <Form.Item name="memoryAbility_3"
 					                    label="Necesita que otras personas le recuerden varias veces ciertas informaciones, como las fechas de los exámenes">
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
@@ -256,28 +300,28 @@ const SurveyB = () => {
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="memoryAbility.4" label="Le cuesta aprender de memoria los nombres de personas o lugares">
+					         <Form.Item name="memoryAbility_4" label="Le cuesta aprender de memoria los nombres de personas o lugares" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="memoryAbility.5" label="Le cuesta aprender canciones o poemas infantiles, incluso los que son sencillos">
+					         <Form.Item name="memoryAbility_5" label="Le cuesta aprender canciones o poemas infantiles, incluso los que son sencillos" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="memoryAbility.6" label="Tiene dificultad para aprender un horario que sea un poco complejo">
+					         <Form.Item name="memoryAbility_6" label="Tiene dificultad para aprender un horario que sea un poco complejo" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="memoryAbility.7"
+					         <Form.Item name="memoryAbility_7"
 					                    label="Tiene dificultad para recordar sus datos personales, tales como su fecha de nacimiento, su número de teléfono, su dirección, etc.">
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
@@ -291,14 +335,14 @@ const SurveyB = () => {
 			title:   t("surveyB.steps.attentionAbility"),
 			content: (
 				         <>
-					         <Form.Item name="attentionAbility.1" label="Se distrae con facilidad">
+					         <Form.Item name="attentionAbility_1" label="Se distrae con facilidad" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="attentionAbility.2"
+					         <Form.Item name="attentionAbility_2"
 					                    label="Tiene dificultad para concentrarse en una cosa durante mucho tiempo (por ejemplo, cuando hace tareas, se para con frecuencia, se levanta a hablar con otras personas)">
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
@@ -306,7 +350,7 @@ const SurveyB = () => {
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="attentionAbility.3"
+					         <Form.Item name="attentionAbility_3"
 					                    label="Tiene dificultad para repetir datos que acaba de escuchar, como números de teléfono, nombres de personas o contenido de cuentos">
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
@@ -320,28 +364,28 @@ const SurveyB = () => {
 			title:   t("surveyB.steps.sequenceAbility"),
 			content: (
 				         <>
-					         <Form.Item name="sequenceAbility.1" label="Cambia el orden de las letras en las palabras">
+					         <Form.Item name="sequenceAbility_1" label="Cambia el orden de las letras en las palabras" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="sequenceAbility.2" label="Le cuesta escribir bien las fechas, siguiendo el orden de día, mes, año">
+					         <Form.Item name="sequenceAbility_2" label="Le cuesta escribir bien las fechas, siguiendo el orden de día, mes, año" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="sequenceAbility.3" label="Tiene dificultad para asimilar los conceptos de tiempo (no distingue ayer, hoy y mañana)">
+					         <Form.Item name="sequenceAbility_3" label="Tiene dificultad para asimilar los conceptos de tiempo (no distingue ayer, hoy y mañana)" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="sequenceAbility.4"
+					         <Form.Item name="sequenceAbility_4"
 					                    label="Se equivoca de orden cuando tiene que aprender de memoria algunas palabras o números en una secuencia (por ejemplo, el orden de las cuatro estaciones o nmeros de teléfono)">
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
@@ -349,7 +393,7 @@ const SurveyB = () => {
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="sequenceAbility.5" label="Necesita mucho tiempo para aprender a decir la hora">
+					         <Form.Item name="sequenceAbility_5" label="Necesita mucho tiempo para aprender a decir la hora" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
@@ -362,28 +406,28 @@ const SurveyB = () => {
 			title:   t("surveyB.steps.muscleCoordination"),
 			content: (
 				         <>
-					         <Form.Item name="muscleCoordination.1" label="Cuando colorea un dibujo se sale de los límites">
+					         <Form.Item name="muscleCoordination_1" label="Cuando colorea un dibujo se sale de los límites" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="muscleCoordination.2" label="Tiene dificultad cuando corre y salta (por ejemplo, se cae a menudo o se lesiona)">
+					         <Form.Item name="muscleCoordination_2" label="Tiene dificultad cuando corre y salta (por ejemplo, se cae a menudo o se lesiona)" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="muscleCoordination.3" label="Cuando hace juegos con mucho movimiento, por ejemplo, saltar la cuerda, se cansa con facilidad">
+					         <Form.Item name="muscleCoordination_3" label="Cuando hace juegos con mucho movimiento, por ejemplo, saltar la cuerda, se cansa con facilidad" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="muscleCoordination.4"
+					         <Form.Item name="muscleCoordination_4"
 					                    label="Su rendimiento en Eduación Física es bajo (por ejemplo, no puede cumplir los movimientos que le indica el profesorado)">
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
@@ -391,21 +435,21 @@ const SurveyB = () => {
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="muscleCoordination.5" label="Le cuesta saltar la cuerda, tirar, coger o dar patadas a la pelota">
+					         <Form.Item name="muscleCoordination_5" label="Le cuesta saltar la cuerda, tirar, coger o dar patadas a la pelota" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="muscleCoordination.6" label="En la clase de Música tiene dificultad para dar palmadas siguiendo ritmos sencillos">
+					         <Form.Item name="muscleCoordination_6" label="En la clase de Música tiene dificultad para dar palmadas siguiendo ritmos sencillos" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="muscleCoordination.7" label="Le cuesta atarse los cordones y abrocharse los botones mas que a los ninos de su edad">
+					         <Form.Item name="muscleCoordination_7" label="Le cuesta atarse los cordones y abrocharse los botones mas que a los ninos de su edad" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
@@ -418,14 +462,14 @@ const SurveyB = () => {
 			title:   t("surveyB.steps.spatialOrientation"),
 			content: (
 				         <>
-					         <Form.Item name="spatialOrientation.1" label="Le cuesta distinguir entre arriba y abajo o entre izquierda y derecha">
+					         <Form.Item name="spatialOrientation_1" label="Le cuesta distinguir entre arriba y abajo o entre izquierda y derecha" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="spatialOrientation.2"
+					         <Form.Item name="spatialOrientation_2"
 					                    label="Tiene dificultad para orientarse (por ejemplo, necesita mucho tiempo para saber como ir a las diferentes aulas, salas del profesorado o sala de música)">
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
@@ -439,7 +483,7 @@ const SurveyB = () => {
 			title:   t("surveyB.steps.emotionsSocialAdaptation"),
 			content: (
 				         <>
-					         <Form.Item name="emotionsSocialAdaptation.1"
+					         <Form.Item name="emotionsSocialAdaptation_1"
 					                    label="Huye del estudio">
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
@@ -447,7 +491,7 @@ const SurveyB = () => {
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="emotionsSocialAdaptation.2"
+					         <Form.Item name="emotionsSocialAdaptation_2"
 					                    label="Le cuesta relacionarse con otras personas (por ejemplo, a menudo discute con los hermanos o con los companeros)">
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
@@ -455,21 +499,21 @@ const SurveyB = () => {
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="emotionsSocialAdaptation.3" label="Tiene mala imagen de sí mismo">
+					         <Form.Item name="emotionsSocialAdaptation_3" label="Tiene mala imagen de sí mismo" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="emotionsSocialAdaptation.4" label="Se desanima o desiste de hacer las cosas con facilidad">
+					         <Form.Item name="emotionsSocialAdaptation_4" label="Se desanima o desiste de hacer las cosas con facilidad" rules={[{ required: true, message: 'Por favor selecciona una opción' }]}>
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
 								         <Radio.Button key={ option.value } value={ option.value }>{ option.label }</Radio.Button>
 							         )) }
 						         </Radio.Group>
 					         </Form.Item>
-					         <Form.Item name="emotionsSocialAdaptation.5"
+					         <Form.Item name="emotionsSocialAdaptation_5"
 					                    label="Tiene dolor de cabeza, dolor de estómago, se enfada o se pone nervioso cuando se siente presionado">
 						         <Radio.Group>
 							         { responseOptions.map((option) => (
@@ -489,7 +533,7 @@ const SurveyB = () => {
 				setMessage(null);
 				setCurrentStep(currentStep + 1);
 			})
-			.catch(() => setMessage({ error: { type: "validationError" } }));
+			.catch(() => setMessage({ error: { type: "surveyB.validationError" } }));
 	};
 
 	const onPrev = () => {
@@ -504,15 +548,27 @@ const SurveyB = () => {
 			}
 			return acc + 0;
 		}, 0);
+		delete allValues.remember
 
 		let response = null;
 		try {
-			response = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/surveys/B", {
-				method:  "POST", headers: {
-					"Content-Type": "application/json", Authorization: `Bearer ${ localStorage.getItem("accessToken") }`
-				}, body: JSON.stringify({
-					                        studentId, score: total
-				                        })
+			const url = surveyId
+				? `${process.env.REACT_APP_USERS_SERVICE_URL}/surveys/${surveyId}/B`
+				: `${process.env.REACT_APP_USERS_SERVICE_URL}/surveys/B`;
+
+			const method = surveyId ? "PUT" : "POST";
+
+			response = await fetch(url, {
+				method,
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+				},
+				body: JSON.stringify({
+					studentId,
+					score: total,
+					responses: allValues
+				})
 			});
 		}
 		catch ( e ) {

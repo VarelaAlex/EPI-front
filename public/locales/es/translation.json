@@ -247,7 +247,7 @@
           "seeStatistics": "Ver estadísticas",
           "delete": "Eliminar",
           "survey": "Completar encuesta",
-          "surveyCompleted": "Completada"
+          "editSurvey": "Editar encuesta"
         }
       },
       "addStudent": {
@@ -520,7 +520,8 @@
       "muscleCoordination": "Coordinación muscular",
       "spatialOrientation": "Sentido del espacio y la orientación",
       "emotionsSocialAdaptation": "Emociones y adaptación social"
-    }
+    },
+    "validationError": "Por favor, responde a todas las preguntas antes de pasar al siguiente paso o enviar el cuestionario."
   },
   "surveyB": {
     "title": "Cuestionario para la detección temprana de las dificultades de aprendizaje en la lectura, escritura y cálculo en el alumnado que inicia 1º de Educación Primaria (B)",
@@ -550,7 +551,8 @@
       "muscleCoordination": "Coordinación muscular",
       "spatialOrientation": "Sentido del espacio y la orientación",
       "emotionsSocialAdaptation": "Emociones y adaptación social"
-    }
+    },
+    "validationError": "Por favor, responde todas las preguntas antes de pasar al siguiente paso o enviar el cuestionario."
   },
   "pageNotFound": {
     "message1": "Vaya... Parece que la página que buscas no existe.",

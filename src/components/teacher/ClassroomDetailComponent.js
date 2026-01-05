@@ -44,7 +44,7 @@ let ClassroomDetail = (props) => {
 		if ( response.ok ) {
 			let jsonData = await response.json();
 			for (const student of jsonData) {
-				let responseSurvey = await fetch(process.env.REACT_APP_USERS_SERVICE_URL + "/surveys/" + student.id, {
+				let responseSurvey = await fetch(`${process.env.REACT_APP_USERS_SERVICE_URL}/surveys/${student.id}/${(student.age > 5 ? "B" : "A")}`, {
 					method: "GET", headers: { Authorization: `Bearer ${ localStorage.getItem("accessToken") }` }
 				});
 
@@ -169,13 +169,13 @@ let ClassroomDetail = (props) => {
 						</Tooltip>
 					</Popconfirm>
 				</div> : <div style={ { float: "right" } }>
-					<Button disabled={student.surveyCompleted} onClick=
+					<Button onClick=
 						        { () => {
 							        setStudentName(student.name);
-							        navigate(`/teachers/${ classroomName }/students/${ student.id }/surveys/${(student.age > 5 ? "A" : "A")}`);
+							        navigate(`/teachers/${ classroomName }/students/${ student.id }/surveys/${(student.age > 5 ? "B" : "A")}`);
 						        } } style={ { marginRight: "1vmax" } }
 					>
-						{ !student.surveyCompleted?t("classrooms.detail.table.buttons.survey"):`${t("classrooms.detail.table.buttons.surveyCompleted")} ✅` }
+						{ !student.surveyCompleted?t("classrooms.detail.table.buttons.survey"):`${t("classrooms.detail.table.buttons.editSurvey")}` }
 					</Button>
 					<Button onClick=
 						        { () => {

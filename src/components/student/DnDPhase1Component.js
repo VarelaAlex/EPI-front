@@ -184,7 +184,7 @@ let DnDPhase1 = () => {
                                     text: phrases[index],
                                     audio: `/sounds/p1-rect1-${index}.mp3`,
                                     afterDelay: 500
-                                }]), 1);
+                                }]));
                             }
                             if(current === 1) {
                                 let phrases = [
@@ -200,7 +200,7 @@ let DnDPhase1 = () => {
                                     text: phrases[index],
                                     audio: `/sounds/p1-rect2-${index}.mp3`,
                                     afterDelay: 500
-                                }]), 1);
+                                }]));
                             }
                             if([2, 6].includes(current)) {
                                 let phrases = [
@@ -216,7 +216,7 @@ let DnDPhase1 = () => {
                                     text: phrases[index],
                                     audio: `/sounds/p1-nexus-${index}.mp3`,
                                     afterDelay: 500
-                                }]), 1);
+                                }]));
                             }
                             if([3, 7, 9, 11].includes(current)) {
                                 let phrases = [
@@ -232,9 +232,9 @@ let DnDPhase1 = () => {
                                     text: phrases[index],
                                     audio: `/sounds/p1-content-${index}.mp3`,
                                     afterDelay: 500
-                                }]), 1);
+                                }]));
                             }
-                            if([4, 8, 10, 12].includes(current)) {
+                            if([4, 8, 10, 12].includes(current) && (node?.id !== "6-3" || node?.order !== current)) {
                                 let phrases = [
                                     "¡Muy bien! Cuando terminamos de decir cosas importantes nos paramos",
                                     "¡Eso es! Nos paramos cuando terminamos de decir lo importante",
@@ -248,7 +248,7 @@ let DnDPhase1 = () => {
                                     text: phrases[index],
                                     audio: `/sounds/p1-stop-${index}.mp3`,
                                     afterDelay: 500
-                                }]), 1);
+                                }]));
                             }
                             if(current === 5) {
                                 let phrases = [
@@ -264,7 +264,7 @@ let DnDPhase1 = () => {
                                     text: phrases[index],
                                     audio: `/sounds/p1-rect3-${index}.mp3`,
                                     afterDelay: 500
-                                }]), 1);
+                                }]));
                             }
                         } else {
                             setFeedback({
@@ -367,13 +367,13 @@ let DnDPhase1 = () => {
                 emotionAfter: NEUTRAL,
                 text: phrases[index],
                 audio: `/sounds/p1-end-${index}.mp3`,
-                afterDelay: 3000
+                afterDelay: 0
             }]);
 
             setTimer(setTimeout(() => {
                 finishTracking("/exerciseDnD/phase2");
                 navigate(`/exerciseDnD/phase2/${trainingMode}`);
-            }, 3000));
+            }, 4500));
         }
     };
 

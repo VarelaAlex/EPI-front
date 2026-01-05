@@ -205,7 +205,7 @@ let DnDPhase2 = () => {
                                     text: phrases[index],
                                     audio: `/sounds/p2-rect1-${index}.mp3`,
                                     afterDelay: 500
-                                }]), 1);
+                                }]));
                             }
                             if (current === 1) {
                                 let phrases = [
@@ -221,7 +221,7 @@ let DnDPhase2 = () => {
                                     text: phrases[index],
                                     audio: `/sounds/p2-rect2-${index}.mp3`,
                                     afterDelay: 500
-                                }]), 1);
+                                }]));
                             }
                             if ([2, 6].includes(current)) {
                                 let phrases = [
@@ -238,7 +238,7 @@ let DnDPhase2 = () => {
                                     text: phrases[index],
                                     audio: `/sounds/p2-nexus-${index}.mp3`,
                                     afterDelay: 500
-                                }]), 1);
+                                }]));
                             }
                             if ([3, 7, 9, 11].includes(current)) {
                                 let phrases = [
@@ -254,9 +254,9 @@ let DnDPhase2 = () => {
                                     text: phrases[index],
                                     audio: `/sounds/p2-content-${index}.mp3`,
                                     afterDelay: 500
-                                }]), 1);
+                                }]));
                             }
-                            if ([4, 8, 10, 12].includes(current)) {
+                            if ([4, 8, 10, 12].includes(current) && node?.id !== "6-3") {
                                 let phrases = [
                                     "¡Eso es! Debemos pararnos antes de seguir diciendo cosas sobre este contenido",
                                     "¡Muy bien! Hay que parar después de decir cosas importantes",
@@ -270,7 +270,7 @@ let DnDPhase2 = () => {
                                     text: phrases[index],
                                     audio: `/sounds/p2-stop-${index}.mp3`,
                                     afterDelay: 500
-                                }]), 1);
+                                }]));
                             }
                             if (current === 5) {
                                 let phrases = [
@@ -286,7 +286,7 @@ let DnDPhase2 = () => {
                                     text: phrases[index],
                                     audio: `/sounds/p2-rect3-${index}.mp3`,
                                     afterDelay: 500
-                                }]), 1);
+                                }]));
                             }
                         } else {
                             setFeedback({
@@ -389,7 +389,7 @@ let DnDPhase2 = () => {
                 emotionAfter: NEUTRAL,
                 text: phrases[index],
                 audio: `/sounds/p2-end-${index}.mp3`,
-                afterDelay: 3000
+                afterDelay: 0
             }]);
             setTimer(setTimeout(() => {
                 finishExperiment();
@@ -404,7 +404,7 @@ let DnDPhase2 = () => {
                         navigate(`/students/exercises/${trainingMode}`)
                     }
                 });
-            }, 3000));
+            }, 4500));
         }
         setElement(null);
     };

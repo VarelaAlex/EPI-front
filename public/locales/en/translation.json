@@ -247,7 +247,7 @@
           "seeStatistics": "See statistics",
           "delete": "Delete",
           "survey": "Complete survey",
-          "surveyCompleted": "Completed"
+          "editSurvey": "Edit survey"
         }
       },
       "addStudent": {
@@ -520,7 +520,8 @@
       "muscleCoordination": "Muscle coordination",
       "spatialOrientation": "Sense of space and orientation",
       "emotionsSocialAdaptation": "Emotions and social adaptation"
-    }
+    },
+    "validationError": "Please answer all questions before proceeding to the next step or submitting the form."
   },
   "surveyB": {
     "title": "Questionnaire for early detection of learning difficulties in reading, writing, and arithmetic for students starting 1st grade of Primary Education (B)",
@@ -550,7 +551,8 @@
       "muscleCoordination": "Muscle coordination",
       "spatialOrientation": "Sense of space and orientation",
       "emotionsSocialAdaptation": "Emotions and social adaptation"
-    }
+    },
+    "validationError": "Please answer all questions before proceeding to the next step or submitting the form."
   },
   "pageNotFound": {
     "message1": "Oops... It seems the page you are looking for does not exist.",
