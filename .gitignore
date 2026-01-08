@@ -149,7 +149,7 @@ summary.html
 # intellij
 .idea/
 
-startEnv.js
+scripts/
 
 tsconfig.json
 tts.mts
