@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useCallback, useEffect, useState } from 'react';
+import {Trans, useTranslation} from 'react-i18next';
 import { Link, matchPath, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import {Layout, notification, Flex, Image, Typography} from "antd";
 import SelectRole from './components/SelectRoleComponent';
@@ -43,8 +43,9 @@ import SelectTrainingMode from "./components/student/SelectTrainingModeComponent
 import useFullscreen from "./hooks/useFullscreen";
 import AudioPermissionModal from "./components/AudioPermissionModalComponent";
 import {useAvatar} from "./components/AvatarContext";
-import RuledExercisesSelector from "./components/student/RuledExercisesSelectorComponent";
+import ClosedExercisesSelector from "./components/student/ClosedExercisesSelectorComponent";
 import AvatarNavigationListener from "./components/AvatarNavigationListener";
+import InteractionBlocker from "./components/InteractionBlockerComponent";
 
 let App = () => {
 
@@ -63,6 +64,7 @@ let App = () => {
 	let { t } = useTranslation();
 	let navigate = useNavigate();
 	let location = useLocation();
+	const { isBusy } = useAvatar();
 	let { Content, Footer } = Layout;
 
 	let disconnect = useCallback(() => {
@@ -143,7 +145,13 @@ let App = () => {
 		},
 		{
 			key: "about",
-			label: <Link to="/teachers/aboutEPI" onClick={() => setOpen(false)}>{t("sider.teacher.about")}</Link>,
+			label: <Link to="/teachers/aboutEPI" onClick={() => setOpen(false)}>
+				<Trans
+					i18nKey="sider.teacher.about"
+					components={{
+						italic: <i/>
+					}}
+				/></Link>,
 			danger: false,
 			icon: <InfoCircleOutlined />
 		},
@@ -314,6 +322,7 @@ let App = () => {
 			{contextHolder}
             <AudioPermissionModal/>
 			<AvatarNavigationListener />
+			<InteractionBlocker active={isBusy} />
 			<Layout>
 				<Header
 					login={login}
@@ -343,7 +352,7 @@ let App = () => {
 								<Route path="/exerciseType/phase1/:trainingMode" element={<TypePhase1 />} />
 								<Route path="/exerciseType/phase2/:trainingMode" element={<TypePhase2 />} />
 								<Route path="/students/exercises/free" element={<ExercisesCarousel />} />
-								<Route path="/students/exercises/ruled" element={<RuledExercisesSelector />} />
+								<Route path="/students/exercises/ruled" element={<ClosedExercisesSelector />} />
 								<Route path="/students/trainingMode" element={<SelectTrainingMode />} />
                                 <Route path="/students/selectMode" element={<SelectMode />} />
 								<Route path="/students/pretraining/block/1/activity/:activity" element={<PictogramActivity key={location.pathname}/>} />

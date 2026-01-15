@@ -28,7 +28,7 @@
   ],
   "id": "/v1",
   "lang": "es-ES",
-  "name": "EPI",
+  "name": "PEPI",
   "prefer_related_application": false,
   "scope": "/",
   "screenshots": [
@@ -47,7 +47,7 @@
       "label": "Application"
     }
   ],
-  "short_name": "EPI",
+  "short_name": "PEPI",
   "start_url": "/selectRole",
   "theme_color": "#000280"
 }

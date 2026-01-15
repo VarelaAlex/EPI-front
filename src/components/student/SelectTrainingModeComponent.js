@@ -34,7 +34,7 @@ let SelectTrainingMode = () => {
                         emotionDuring: NEUTRAL_SPEAKING,
                         emotionAfter: NEUTRAL,
                         text: phrases[index],
-                        audio: `/sounds/greeting-training${index}.mp3`,
+                        audio: `greeting-training${index}`,
                         afterDelay: 500
                     }
                 ]);
@@ -47,7 +47,7 @@ let SelectTrainingMode = () => {
                         emotionDuring: NEUTRAL_SPEAKING,
                         emotionAfter: NEUTRAL,
                         text: "¡Vamos a empezar a entrenar! Es mejor que lo hagas siguiendo un orden, pero también puedes trabajar de forma libre",
-                        audio: "/sounds/intro-training1.mp3",
+                        audio: "intro-training1",
                         afterDelay: 500
                     },
                 ]);

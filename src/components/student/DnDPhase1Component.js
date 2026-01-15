@@ -88,7 +88,7 @@ let DnDPhase1 = () => {
                             emotionDuring: NEUTRAL,
                             emotionAfter: NEUTRAL,
                             text: "",
-                            audio: `/sounds/error.mp3`,
+                            audio: `error`,
                             afterDelay: 500
                         }]);
                     } else {
@@ -104,7 +104,7 @@ let DnDPhase1 = () => {
                                 emotionDuring: WORRIED_SPEAKING,
                                 emotionAfter: NEUTRAL,
                                 text: phrases[index],
-                                audio: `/sounds/rect-order${index}.mp3`,
+                                audio: `rect-order${index}`,
                                 onEnd: ()=>{setCountErrors(0)},
                                 afterDelay: 500
                             }]);
@@ -120,7 +120,7 @@ let DnDPhase1 = () => {
                                 emotionDuring: WORRIED_SPEAKING,
                                 emotionAfter: NEUTRAL,
                                 text: phrases[index],
-                                audio: `/sounds/stop-order${index}.mp3`,
+                                audio: `stop-order${index}`,
                                 onEnd: ()=>{setCountErrors(0)},
                                 afterDelay: 500
                             }]);
@@ -136,13 +136,13 @@ let DnDPhase1 = () => {
                                 emotionDuring: WORRIED_SPEAKING,
                                 emotionAfter: NEUTRAL,
                                 text: phrases[index],
-                                audio: `/sounds/incorrect-order${index}.mp3`,
+                                audio: `incorrect-order${index}`,
                                 afterDelay: 500
                             }, {
                                 emotionDuring: WORRIED_SPEAKING,
                                 emotionAfter: NEUTRAL,
                                 text: "Piensa, ¿qué elemento tienes que mover ahora a la red?",
-                                audio: `/sounds/incorrect-order-end.mp3`,
+                                audio: `incorrect-order-end`,
                                 onEnd: ()=>{setCountErrors(0)},
                                 afterDelay: 500
                             }]);
@@ -178,13 +178,15 @@ let DnDPhase1 = () => {
                                 ]
                                 let index = Math.floor(Math.random() * phrases.length) + 1;
 
-                                executeWithProbability(changeEmotionSequence([{
-                                    emotionDuring: WORRIED_SPEAKING,
-                                    emotionAfter: NEUTRAL,
-                                    text: phrases[index],
-                                    audio: `/sounds/p1-rect1-${index}.mp3`,
-                                    afterDelay: 500
-                                }]));
+                                executeWithProbability(() => {
+                                    changeEmotionSequence([{
+                                        emotionDuring: WORRIED_SPEAKING,
+                                        emotionAfter: NEUTRAL,
+                                        text: phrases[index],
+                                        audio: `p1-rect1-${index}`,
+                                                              afterDelay: 500
+                                                              }])
+                                });
                             }
                             if(current === 1) {
                                 let phrases = [
@@ -194,13 +196,15 @@ let DnDPhase1 = () => {
                                 ]
                                 let index = Math.floor(Math.random() * phrases.length) + 1;
 
-                                executeWithProbability(changeEmotionSequence([{
-                                    emotionDuring: WORRIED_SPEAKING,
-                                    emotionAfter: NEUTRAL,
-                                    text: phrases[index],
-                                    audio: `/sounds/p1-rect2-${index}.mp3`,
-                                    afterDelay: 500
-                                }]));
+                                executeWithProbability(() => {
+                                    changeEmotionSequence([{
+                                        emotionDuring: WORRIED_SPEAKING,
+                                        emotionAfter: NEUTRAL,
+                                        text: phrases[index],
+                                        audio: `p1-rect2-${index}`,
+                                                              afterDelay: 500
+                                                              }])
+                                });
                             }
                             if([2, 6].includes(current)) {
                                 let phrases = [
@@ -210,13 +214,15 @@ let DnDPhase1 = () => {
                                 ]
                                 let index = Math.floor(Math.random() * phrases.length) + 1;
 
-                                executeWithProbability(changeEmotionSequence([{
-                                    emotionDuring: WORRIED_SPEAKING,
-                                    emotionAfter: NEUTRAL,
-                                    text: phrases[index],
-                                    audio: `/sounds/p1-nexus-${index}.mp3`,
-                                    afterDelay: 500
-                                }]));
+                                executeWithProbability(() => {
+                                    changeEmotionSequence([{
+                                        emotionDuring: WORRIED_SPEAKING,
+                                        emotionAfter: NEUTRAL,
+                                        text: phrases[index],
+                                        audio: `p1-nexus-${index}`,
+                                                              afterDelay: 500
+                                                              }])
+                                });
                             }
                             if([3, 7, 9, 11].includes(current)) {
                                 let phrases = [
@@ -226,13 +232,15 @@ let DnDPhase1 = () => {
                                 ]
                                 let index = Math.floor(Math.random() * phrases.length) + 1;
 
-                                executeWithProbability(changeEmotionSequence([{
-                                    emotionDuring: WORRIED_SPEAKING,
-                                    emotionAfter: NEUTRAL,
-                                    text: phrases[index],
-                                    audio: `/sounds/p1-content-${index}.mp3`,
-                                    afterDelay: 500
-                                }]));
+                                executeWithProbability(() => {
+                                    changeEmotionSequence([{
+                                        emotionDuring: WORRIED_SPEAKING,
+                                        emotionAfter: NEUTRAL,
+                                        text: phrases[index],
+                                        audio: `p1-content-${index}`,
+                                                              afterDelay: 500
+                                                              }])
+                                });
                             }
                             if([4, 8, 10, 12].includes(current) && (node?.id !== "6-3" || node?.order !== current)) {
                                 let phrases = [
@@ -242,13 +250,15 @@ let DnDPhase1 = () => {
                                 ]
                                 let index = Math.floor(Math.random() * phrases.length) + 1;
 
-                                executeWithProbability(changeEmotionSequence([{
-                                    emotionDuring: WORRIED_SPEAKING,
-                                    emotionAfter: NEUTRAL,
-                                    text: phrases[index],
-                                    audio: `/sounds/p1-stop-${index}.mp3`,
-                                    afterDelay: 500
-                                }]));
+                                executeWithProbability(() => {
+                                    changeEmotionSequence([{
+                                        emotionDuring: WORRIED_SPEAKING,
+                                        emotionAfter: NEUTRAL,
+                                        text: phrases[index],
+                                        audio: `p1-stop-${index}`,
+                                                              afterDelay: 500
+                                                              }])
+                                });
                             }
                             if(current === 5) {
                                 let phrases = [
@@ -258,13 +268,15 @@ let DnDPhase1 = () => {
                                 ]
                                 let index = Math.floor(Math.random() * phrases.length) + 1;
 
-                                executeWithProbability(changeEmotionSequence([{
-                                    emotionDuring: WORRIED_SPEAKING,
-                                    emotionAfter: NEUTRAL,
-                                    text: phrases[index],
-                                    audio: `/sounds/p1-rect3-${index}.mp3`,
-                                    afterDelay: 500
-                                }]));
+                                executeWithProbability(() => {
+                                    changeEmotionSequence([{
+                                        emotionDuring: WORRIED_SPEAKING,
+                                        emotionAfter: NEUTRAL,
+                                        text: phrases[index],
+                                        audio: `p1-rect3-${index}`,
+                                                              afterDelay: 500
+                                                              }])
+                                });
                             }
                         } else {
                             setFeedback({
@@ -306,7 +318,7 @@ let DnDPhase1 = () => {
                         emotionDuring: WORRIED_SPEAKING,
                         emotionAfter: NEUTRAL,
                         text: "",
-                        audio: `/sounds/error.mp3`,
+                        audio: `error`,
                         afterDelay: 500
                     }]);
                 } else {
@@ -321,7 +333,7 @@ let DnDPhase1 = () => {
                         emotionDuring: WORRIED_SPEAKING,
                         emotionAfter: NEUTRAL,
                         text: phrases[index],
-                        audio: `/sounds/incorrect-pos${index}.mp3`,
+                        audio: `incorrect-pos${index}`,
                         onEnd: ()=>{setCountErrors(0)},
                         afterDelay: 500
                     }]);
@@ -366,7 +378,7 @@ let DnDPhase1 = () => {
                 emotionDuring: HAPPY_SPEAKING,
                 emotionAfter: NEUTRAL,
                 text: phrases[index],
-                audio: `/sounds/p1-end-${index}.mp3`,
+                audio: `p1-end-${index}`,
                 afterDelay: 0
             }]);
 

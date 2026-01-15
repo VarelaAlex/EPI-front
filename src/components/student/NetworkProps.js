@@ -99,7 +99,7 @@ export let nodes = (exercise) => {
 			src:   ["ICONIC", "MIXED"].includes(representation) ? `${ process.env.REACT_APP_ARASAAC_URL }/pictograms/${ mainImage }` : null,
 			text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? title : null,
 			shape: "rect",
-			sound: `/sounds/${normalizeKey(title)}.mp3`
+			sound: `${normalizeKey(title)}`
 		}, {
 			order: 2,
 			id:    "2",
@@ -109,7 +109,7 @@ export let nodes = (exercise) => {
 			src:   ["ICONIC", "MIXED"].includes(representation) ? `/pictograms/${ definitionPictogram }.png` : null,
 			nexus: true,
 			text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? `pictograms.${ definitionPictogram }` : null,
-			sound: `/sounds/${definitionPictogram}.mp3`
+			sound: `${definitionPictogram}`
 		}, {
 			order: 3,
 			id:    "3",
@@ -119,7 +119,7 @@ export let nodes = (exercise) => {
 			shape: "ellipse",
 			src:   ["ICONIC", "MIXED"].includes(representation) ? `${ process.env.REACT_APP_ARASAAC_URL }/pictograms/${ definitionImage }` : null,
 			text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? definitionText : null,
-			sound: `/sounds/${conceptDefinitionAudioMap[["ICONIC", "MIXED"].includes(representation) ? normalizeKey(definitionImage) : normalizeKey(definitionText)]}.mp3`
+			sound: `${conceptDefinitionAudioMap[normalizeKey(definitionText)]}`
 		}, {
 			order: 6,
 			id:    "4",
@@ -129,7 +129,7 @@ export let nodes = (exercise) => {
 			src:   ["ICONIC", "MIXED"].includes(representation) ? `/pictograms/${ ampliationPictogram }.png` : null,
 			nexus: true,
 			text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? `pictograms.${ ampliationPictogram }` : null,
-			sound: `/sounds/${ampliationPictogram}.mp3`
+			sound: `${ampliationPictogram}`
 		}, {
 			order: 7,
 			id:    "5",
@@ -139,14 +139,14 @@ export let nodes = (exercise) => {
 			shape: "ellipse",
 			src:   ["ICONIC", "MIXED"].includes(representation) ? `${ process.env.REACT_APP_ARASAAC_URL }/pictograms/${ ampliationImages[ 0 ] }` : null,
 			text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? ampliationText[ 0 ] : null,
-			sound: `/sounds/${conceptAmpliationAudioMap[["ICONIC", "MIXED"].includes(representation) ? normalizeKey(ampliationImages[0]) : normalizeKey(ampliationText[0])]}.mp3`
+			sound: `${conceptAmpliationAudioMap[normalizeKey(ampliationText[0])]}`
 		}, {
 			id: "6",
 			type: "type6",
 			posX: -70,
 			posY: 190,
 			text: ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? "." : null,
-			sound: `/sounds/stop.mp3`
+			sound: `stop`
 		}
 	];
 
@@ -162,7 +162,7 @@ export let nodes = (exercise) => {
 			               ) : null,
 			               src:   ["ICONIC", "MIXED"].includes(representation) ? `${ process.env.REACT_APP_ARASAAC_URL }/pictograms/${ STOP }` : null,
 			               stop:  true,
-			               sound: `/sounds/stop.mp3`
+			               sound: `stop`
 		               }, {
 			               order: 9,
 			               id:    "8",
@@ -172,7 +172,7 @@ export let nodes = (exercise) => {
 			               shape: "ellipse",
 			               src:   ["ICONIC", "MIXED"].includes(representation) ? `${ process.env.REACT_APP_ARASAAC_URL }/pictograms/${ ampliationImages[ 1 ] }` : null,
 			               text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? ampliationText[ 1 ] : null,
-			sound: `/sounds/${conceptAmpliationAudioMap[["ICONIC", "MIXED"].includes(representation) ? normalizeKey(ampliationImages[1]) : normalizeKey(ampliationText[1])]}.mp3`
+			sound: `${conceptAmpliationAudioMap[normalizeKey(ampliationText[1])]}`
 		               });
 	}
 
@@ -186,7 +186,7 @@ export let nodes = (exercise) => {
 			               text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? exercise.language === "es" ? "y" : "and" : null,
 			               src:   ["ICONIC", "MIXED"].includes(representation) ? `${ process.env.REACT_APP_ARASAAC_URL }/pictograms/${ STOP }` : null,
 			               stop:  true,
-					       sound: `/sounds/stop.mp3`
+					       sound: `stop`
 		               }, {
 			               order: 11,
 			               id:    "10",
@@ -196,7 +196,7 @@ export let nodes = (exercise) => {
 			               shape: "ellipse",
 			               src:   ["ICONIC", "MIXED"].includes(representation) ? `${ process.env.REACT_APP_ARASAAC_URL }/pictograms/${ ampliationImages[ 2 ] }` : null,
 			               text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? ampliationText[ 2 ] : null,
-						   sound: `/sounds/${conceptAmpliationAudioMap[["ICONIC", "MIXED"].includes(representation) ? normalizeKey(ampliationImages[2]) : normalizeKey(ampliationText[2])]}.mp3`
+						   sound: `${conceptAmpliationAudioMap[normalizeKey(ampliationText[2])]}`
 		               });
 	}
 

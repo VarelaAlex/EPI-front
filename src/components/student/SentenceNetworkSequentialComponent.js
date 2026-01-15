@@ -1,13 +1,12 @@
 // javascript
-import React, {useEffect, useRef, useState, useMemo} from 'react';
-import {Card, Button, Image as AntdImage} from 'antd';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
+import {Button, Card, Image as AntdImage} from 'antd';
 import {SoundOutlined} from '@ant-design/icons';
 import {DndProvider, useDrop} from 'react-dnd';
 import {MultiBackend} from 'dnd-multi-backend';
 import {HTML5toTouch} from 'rdndmb-html5-to-touch';
 import {useTranslation} from "react-i18next";
 import ActivityToolsComponent from "./dnd/ActivityToolsComponent";
-import {useSentenceAudio} from "../../hooks/useSentenceAudio";
 import {CustomDragPreview} from "./dnd/CustomDragPreview";
 import {DraggableWord} from "./dnd/DraggableWord";
 import {StaticWord} from "./dnd/StaticWord";
@@ -16,359 +15,443 @@ import {STOP} from "./NetworkProps";
 import {useNavigate} from 'react-router-dom';
 import {useAvatar} from "../AvatarContext";
 import {NEUTRAL, NEUTRAL_SPEAKING} from "../Avatar";
+import {usePlayAudio} from "../../hooks/usePlayAudio";
 
-const ItemTypes = { WORD: 'word' };
+const ItemTypes = {WORD: 'word'};
 
 const DropZone = ({zone, placedWord, onDrop, canDropHere}) => {
     const [{isOver}, drop] = useDrop({
-        accept: ItemTypes.WORD,
-        drop: (item) => {
+        accept: ItemTypes.WORD, drop: (item) => {
             onDrop(zone, item.word, item.wordKey, item.image);
-        },
-        canDrop: () => true,
-        collect: (monitor) => ({
+        }, canDrop: () => true, collect: (monitor) => ({
             isOver: monitor.isOver()
         }),
     });
 
     const backgroundColor = isOver && canDropHere ? '#bae7ff' : '#e6f7ff';
 
-    return (
-        <div ref={drop} style={{width: 100, height: 80, border: '2px dashed #91d5ff', borderRadius: 8, background: backgroundColor,
-            display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: placedWord ? 'default' : 'pointer'}}>
-            {placedWord && (
-                <div style={{textAlign: 'center'}}>
+    return (<div ref={drop} style={{
+            width: 100,
+            height: 80,
+            border: '2px dashed #91d5ff',
+            borderRadius: 8,
+            background: backgroundColor,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            cursor: placedWord ? 'default' : 'pointer'
+        }}>
+            {placedWord && (<div style={{textAlign: 'center'}}>
                     <AntdImage src={placedWord.image} alt={placedWord.text}
                                style={{width: 40, height: 40, objectFit: 'contain'}} preview={false}/>
                     <div style={{fontFamily: 'Massallera', fontSize: 14}}>{placedWord.text}</div>
-                </div>
-            )}
-        </div>
-    );
+                </div>)}
+        </div>);
 };
 
 const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
     const {t} = useTranslation();
     const navigate = useNavigate();
 
-    const sentences = [
-        // TRÍO 1 – PERRO
+    const sentences = [// TRÍO 1 – PERRO
         {
-            phrase: [
-                { text: "El perro", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7202`, audio: new Audio("/sounds/dog.mp3") }
-            ],
-            audio: new Audio("/sounds/dog.mp3")
-        },
-        {
-            phrase: [
-                { text: "El perro", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7202`, audio: new Audio("/sounds/dog.mp3") },
-                { text: "es", image: "/pictograms/is.png", audio: new Audio("/sounds/is.mp3"), draggable: true },
-                { text: "un animal", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6901`, audio: new Audio("/sounds/animal.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/dog-animal.mp3")
-        },
-        {
-            phrase: [
-                { text: "El perro", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7202`, audio: new Audio("/sounds/dog.mp3") },
-                { text: "tiene", image: "/pictograms/has.png", audio: new Audio("/sounds/has.mp3"), draggable: true },
-                { text: "cola", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/5967`, audio: new Audio("/sounds/tail.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/dog-tail.mp3")
+            phrase: [{text: "El perro", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7202`, audio: ("dog")}],
+            audio: ("dog")
+        }, {
+            phrase: [{
+                text: "El perro",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7202`,
+                audio: ("dog")
+            }, {text: "es", image: "/pictograms/is.png", audio: ("is"), draggable: true}, {
+                text: "un animal",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6901`,
+                audio: ("animal")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("dog-animal")
+        }, {
+            phrase: [{
+                text: "El perro",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7202`,
+                audio: ("dog")
+            }, {text: "tiene", image: "/pictograms/has.png", audio: ("has"), draggable: true}, {
+                text: "cola",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/5967`,
+                audio: ("tail")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("dog-tail")
         },
 
         // TRÍO 2 – BALLENA
         {
-            phrase: [
-                { text: "La ballena", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2268`, audio: new Audio("/sounds/whale.mp3") }
-            ],
-            audio: new Audio("/sounds/whale.mp3")
-        },
-        {
-            phrase: [
-                { text: "La ballena", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2268`, audio: new Audio("/sounds/whale.mp3") },
-                { text: "es", image: "/pictograms/is.png", audio: new Audio("/sounds/is.mp3"), draggable: true },
-                { text: "un mamífero", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7777`, audio: new Audio("/sounds/mammal.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/whale-mammal.mp3")
-        },
-        {
-            phrase: [
-                { text: "La ballena", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2268`, audio: new Audio("/sounds/whale.mp3") },
-                { text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true },
-                { text: "el mar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2925`, audio: new Audio("/sounds/sea.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/whale-sea.mp3")
+            phrase: [{
+                text: "La ballena",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2268`,
+                audio: ("whale")
+            }], audio: ("whale")
+        }, {
+            phrase: [{
+                text: "La ballena",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2268`,
+                audio: ("whale")
+            }, {text: "es", image: "/pictograms/is.png", audio: ("is"), draggable: true}, {
+                text: "un mamífero",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7777`,
+                audio: ("mammal")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("whale-mammal")
+        }, {
+            phrase: [{
+                text: "La ballena",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2268`,
+                audio: ("whale")
+            }, {text: "está en", image: "/pictograms/isIn.png", audio: ("isIn"), draggable: true}, {
+                text: "el mar",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2925`,
+                audio: ("sea")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("whale-sea")
         },
 
         // TRÍO 3 – CASA
         {
-            phrase: [
-                { text: "La casa", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6964`, audio: new Audio("/sounds/house.mp3") }
-            ],
-            audio: new Audio("/sounds/house.mp3")
-        },
-        {
-            phrase: [
-                { text: "La casa", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6964`, audio: new Audio("/sounds/house.mp3") },
-                { text: "es para", image: "/pictograms/isFor.png", audio: new Audio("/sounds/isFor.mp3"), draggable: true },
-                { text: "vivir", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/11605`, audio: new Audio("/sounds/live.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/casa-def.mp3")
-        },
-        {
-            phrase: [
-                { text: "La casa", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6964`, audio: new Audio("/sounds/house.mp3") },
-                { text: "sirve para", image: "/pictograms/isUsedFor.png", audio: new Audio("/sounds/isUsedFor.mp3"), draggable: true },
-                { text: "vivir", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/11605`, audio: new Audio("/sounds/live.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/casa-amp.mp3")
+            phrase: [{
+                text: "La casa",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6964`,
+                audio: ("house")
+            }], audio: ("house")
+        }, {
+            phrase: [{
+                text: "La casa",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6964`,
+                audio: ("house")
+            }, {text: "es para", image: "/pictograms/isFor.png", audio: ("isFor"), draggable: true}, {
+                text: "vivir",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/11605`,
+                audio: ("live")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("casa-def")
+        }, {
+            phrase: [{
+                text: "La casa",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6964`,
+                audio: ("house")
+            }, {
+                text: "sirve para",
+                image: "/pictograms/isUsedFor.png",
+                audio: ("isUsedFor"),
+                draggable: true
+            }, {
+                text: "vivir",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/11605`,
+                audio: ("live")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("casa-amp")
         },
 
         // TRÍO 4 – SOL
         {
-            phrase: [
-                { text: "El sol", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7252`, audio: new Audio("/sounds/sun.mp3") }
-            ],
-            audio: new Audio("/sounds/sun.mp3")
-        },
-        {
-            phrase: [
-                { text: "El sol", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7252`, audio: new Audio("/sounds/sun.mp3") },
-                { text: "es", image: "/pictograms/is.png", audio: new Audio("/sounds/is.mp3"), draggable: true },
-                { text: "una estrella", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2752`, audio: new Audio("/sounds/star.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/sol-def.mp3")
-        },
-        {
-            phrase: [
-                { text: "El sol", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7252`, audio: new Audio("/sounds/sun.mp3") },
-                { text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true },
-                { text: "el cielo", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6978`, audio: new Audio("/sounds/sunbathe.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/sol-amp.mp3")
+            phrase: [{text: "El sol", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7252`, audio: ("sun")}],
+            audio: ("sun")
+        }, {
+            phrase: [{
+                text: "El sol",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7252`,
+                audio: ("sun")
+            }, {text: "es", image: "/pictograms/is.png", audio: ("is"), draggable: true}, {
+                text: "una estrella",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2752`,
+                audio: ("star")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("sol-def")
+        }, {
+            phrase: [{
+                text: "El sol",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7252`,
+                audio: ("sun")
+            }, {text: "está en", image: "/pictograms/isIn.png", audio: ("isIn"), draggable: true}, {
+                text: "el cielo",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6978`,
+                audio: ("sunbathe")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("sol-amp")
         },
 
         // TRÍO 5 – VERANO
         {
-            phrase: [
-                { text: "El verano", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/5604`, audio: new Audio("/sounds/summer.mp3") }
-            ],
-            audio: new Audio("/sounds/summer.mp3")
-        },
-        {
-            phrase: [
-                { text: "El verano", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/5604`, audio: new Audio("/sounds/summer.mp3") },
-                { text: "es parte de", image: "/pictograms/isPartOf.png", audio: new Audio("/sounds/isPartOf.mp3"), draggable: true },
-                { text: "el año", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6903`, audio: new Audio("/sounds/year.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/verano-def.mp3")
-        },
-        {
-            phrase: [
-                { text: "El verano", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/5604`, audio: new Audio("/sounds/summer.mp3") },
-                { text: "sirve para", image: "/pictograms/isUsedFor.png", audio: new Audio("/sounds/isUsedFor.mp3"), draggable: true },
-                { text: "tomar el sol", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/26500`, audio: new Audio("/sounds/sunbathe.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/verano-amp.mp3")
+            phrase: [{
+                text: "El verano",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/5604`,
+                audio: ("summer")
+            }], audio: ("summer")
+        }, {
+            phrase: [{
+                text: "El verano",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/5604`,
+                audio: ("summer")
+            }, {
+                text: "es parte de",
+                image: "/pictograms/isPartOf.png",
+                audio: ("isPartOf"),
+                draggable: true
+            }, {
+                text: "el año",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6903`,
+                audio: ("year")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("verano-def")
+        }, {
+            phrase: [{
+                text: "El verano",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/5604`,
+                audio: ("summer")
+            }, {
+                text: "sirve para",
+                image: "/pictograms/isUsedFor.png",
+                audio: ("isUsedFor"),
+                draggable: true
+            }, {
+                text: "tomar el sol",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/26500`,
+                audio: ("sunbathe")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("verano-amp")
         },
 
         // TRÍO 6 – MANZANA
         {
-            phrase: [
-                { text: "La manzana", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2462`, audio: new Audio("/sounds/apple.mp3") }
-            ],
-            audio: new Audio("/sounds/apple.mp3")
-        },
-        {
-            phrase: [
-                { text: "La manzana", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2462`, audio: new Audio("/sounds/apple.mp3") },
-                { text: "es", image: "/pictograms/is.png", audio: new Audio("/sounds/is.mp3"), draggable: true },
-                { text: "una fruta", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/28339`, audio: new Audio("/sounds/fruit.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/manzana-def.mp3")
-        },
-        {
-            phrase: [
-                { text: "La manzana", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2462`, audio: new Audio("/sounds/apple.mp3") },
-                { text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true },
-                { text: "el frutero", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/16303`, audio: new Audio("/sounds/frutero.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/manzana-amp.mp3")
+            phrase: [{
+                text: "La manzana",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2462`,
+                audio: ("apple")
+            }], audio: ("apple")
+        }, {
+            phrase: [{
+                text: "La manzana",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2462`,
+                audio: ("apple")
+            }, {text: "es", image: "/pictograms/is.png", audio: ("is"), draggable: true}, {
+                text: "una fruta",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/28339`,
+                audio: ("fruit")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("manzana-def")
+        }, {
+            phrase: [{
+                text: "La manzana",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2462`,
+                audio: ("apple")
+            }, {text: "está en", image: "/pictograms/isIn.png", audio: ("isIn"), draggable: true}, {
+                text: "el frutero",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/16303`,
+                audio: ("frutero")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("manzana-amp")
         },
 
         // TRÍO 7 – CAMA
         {
-            phrase: [
-                { text: "La cama", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/25900`, audio: new Audio("/sounds/bed.mp3") }
-            ],
-            audio: new Audio("/sounds/bed.mp3")
-        },
-        {
-            phrase: [
-                { text: "La cama", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/25900`, audio: new Audio("/sounds/bed.mp3") },
-                { text: "es para", image: "/pictograms/isFor.png", audio: new Audio("/sounds/isFor.mp3"), draggable: true },
-                { text: "dormir", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6479`, audio: new Audio("/sounds/sleep.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/cama-def.mp3")
-        },
-        {
-            phrase: [
-                { text: "La cama", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/25900`, audio: new Audio("/sounds/bed.mp3") },
-                { text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true },
-                { text: "la habitación", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/33068`, audio: new Audio("/sounds/room.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/cama-amp.mp3")
+            phrase: [{text: "La cama", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/25900`, audio: ("bed")}],
+            audio: ("bed")
+        }, {
+            phrase: [{
+                text: "La cama",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/25900`,
+                audio: ("bed")
+            }, {text: "es para", image: "/pictograms/isFor.png", audio: ("isFor"), draggable: true}, {
+                text: "dormir",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6479`,
+                audio: ("sleep")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("cama-def")
+        }, {
+            phrase: [{
+                text: "La cama",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/25900`,
+                audio: ("bed")
+            }, {
+                text: "está en",
+                image: "/pictograms/isIn.png",
+                audio: ("isIn"),
+                draggable: true
+            }, {
+                text: "la habitación",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/33068`,
+                audio: ("room")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("cama-amp")
         },
 
         // TRÍO 8 – CALLE
         {
-            phrase: [
-                { text: "La calle", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2299`, audio: new Audio("/sounds/street.mp3") }
-            ],
-            audio: new Audio("/sounds/street.mp3")
-        },
-        {
-            phrase: [
-                { text: "La calle", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2299`, audio: new Audio("/sounds/street.mp3") },
-                { text: "es parte de", image: "/pictograms/isPartOf.png", audio: new Audio("/sounds/isPartOf.mp3"), draggable: true },
-                { text: "la ciudad", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2704`, audio: new Audio("/sounds/city.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/calle-def.mp3")
-        },
-        {
-            phrase: [
-                { text: "La calle", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2299`, audio: new Audio("/sounds/street.mp3") },
-                { text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true },
-                { text: "la ciudad", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2704`, audio: new Audio("/sounds/city.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/calle-amp.mp3")
+            phrase: [{
+                text: "La calle",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2299`,
+                audio: ("street")
+            }], audio: ("street")
+        }, {
+            phrase: [{
+                text: "La calle",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2299`,
+                audio: ("street")
+            }, {
+                text: "es parte de",
+                image: "/pictograms/isPartOf.png",
+                audio: ("isPartOf"),
+                draggable: true
+            }, {
+                text: "la ciudad",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2704`,
+                audio: ("city")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("calle-def")
+        }, {
+            phrase: [{
+                text: "La calle",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2299`,
+                audio: ("street")
+            }, {text: "está en", image: "/pictograms/isIn.png", audio: ("isIn"), draggable: true}, {
+                text: "la ciudad",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2704`,
+                audio: ("city")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("calle-amp")
         },
 
         // TRÍO 9 – COCHE
         {
-            phrase: [
-                { text: "El coche", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2339`, audio: new Audio("/sounds/car.mp3") }
-            ],
-            audio: new Audio("/sounds/car.mp3")
-        },
-        {
-            phrase: [
-                { text: "El coche", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2339`, audio: new Audio("/sounds/car.mp3") },
-                { text: "es para", image: "/pictograms/isFor.png", audio: new Audio("/sounds/isFor.mp3"), draggable: true },
-                { text: "viajar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/36974`, audio: new Audio("/sounds/travel.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/coche-def.mp3")
-        },
-        {
-            phrase: [
-                { text: "El coche", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2339`, audio: new Audio("/sounds/car.mp3") },
-                { text: "tiene", image: "/pictograms/has.png", audio: new Audio("/sounds/has.mp3"), draggable: true },
-                { text: "ruedas", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6209`, audio: new Audio("/sounds/wheels.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/coche-amp.mp3")
+            phrase: [{text: "El coche", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2339`, audio: ("car")}],
+            audio: ("car")
+        }, {
+            phrase: [{
+                text: "El coche",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2339`,
+                audio: ("car")
+            }, {text: "es para", image: "/pictograms/isFor.png", audio: ("isFor"), draggable: true}, {
+                text: "viajar",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/36974`,
+                audio: ("travel")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("coche-def")
+        }, {
+            phrase: [{
+                text: "El coche",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2339`,
+                audio: ("car")
+            }, {text: "tiene", image: "/pictograms/has.png", audio: ("has"), draggable: true}, {
+                text: "ruedas",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6209`,
+                audio: ("wheels")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("coche-amp")
         },
 
         // TRÍO 10 – COLUMPIO
         {
-            phrase: [
-                { text: "El columpio", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/4608`, audio: new Audio("/sounds/swing.mp3") }
-            ],
-            audio: new Audio("/sounds/swing.mp3")
-        },
-        {
-            phrase: [
-                { text: "El columpio", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/4608`, audio: new Audio("/sounds/swing.mp3") },
-                { text: "es para", image: "/pictograms/isFor.png", audio: new Audio("/sounds/isFor.mp3"), draggable: true },
-                { text: "jugar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6537`, audio: new Audio("/sounds/play.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/columpio-def.mp3")
-        },
-        {
-            phrase: [
-                { text: "El columpio", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/4608`, audio: new Audio("/sounds/swing.mp3") },
-                { text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true },
-                { text: "el parque", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2859`, audio: new Audio("/sounds/park.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/columpio-amp.mp3")
+            phrase: [{
+                text: "El columpio",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/4608`,
+                audio: ("swing")
+            }], audio: ("swing")
+        }, {
+            phrase: [{
+                text: "El columpio",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/4608`,
+                audio: ("swing")
+            }, {text: "es para", image: "/pictograms/isFor.png", audio: ("isFor"), draggable: true}, {
+                text: "jugar",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6537`,
+                audio: ("play")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("columpio-def")
+        }, {
+            phrase: [{
+                text: "El columpio",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/4608`,
+                audio: ("swing")
+            }, {text: "está en", image: "/pictograms/isIn.png", audio: ("isIn"), draggable: true}, {
+                text: "el parque",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2859`,
+                audio: ("park")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("columpio-amp")
         },
 
         // TRÍO 11 – AGUA
         {
-            phrase: [
-                { text: "El agua", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2248`, audio: new Audio("/sounds/water.mp3") }
-            ],
-            audio: new Audio("/sounds/water.mp3")
-        },
-        {
-            phrase: [
-                { text: "El agua", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2248`, audio: new Audio("/sounds/water.mp3") },
-                { text: "es para", image: "/pictograms/isFor.png", audio: new Audio("/sounds/isFor.mp3"), draggable: true },
-                { text: "beber", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6061`, audio: new Audio("/sounds/drink.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/agua-def.mp3")
-        },
-        {
-            phrase: [
-                { text: "El agua", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2248`, audio: new Audio("/sounds/water.mp3") },
-                { text: "sirve para", image: "/pictograms/isUsedFor.png", audio: new Audio("/sounds/isUsedFor.mp3"), draggable: true },
-                { text: "lavarse", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/26803`, audio: new Audio("/sounds/wash.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/agua-amp.mp3")
+            phrase: [{
+                text: "El agua",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2248`,
+                audio: ("water")
+            }], audio: ("water")
+        }, {
+            phrase: [{
+                text: "El agua",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2248`,
+                audio: ("water")
+            }, {text: "es para", image: "/pictograms/isFor.png", audio: ("isFor"), draggable: true}, {
+                text: "beber",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6061`,
+                audio: ("drink")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("agua-def")
+        }, {
+            phrase: [{
+                text: "El agua",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2248`,
+                audio: ("water")
+            }, {
+                text: "sirve para",
+                image: "/pictograms/isUsedFor.png",
+                audio: ("isUsedFor"),
+                draggable: true
+            }, {
+                text: "lavarse",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/26803`,
+                audio: ("wash")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("agua-amp")
         },
 
         // TRÍO 12 – MAR
         {
-            phrase: [
-                { text: "El mar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2925`, audio: new Audio("/sounds/sea.mp3") }
-            ],
-            audio: new Audio("/sounds/sea.mp3")
-        },
-        {
-            phrase: [
-                { text: "El mar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2925`, audio: new Audio("/sounds/sea.mp3") },
-                { text: "es para", image: "/pictograms/isFor.png", audio: new Audio("/sounds/isFor.mp3"), draggable: true },
-                { text: "bañarse", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/38782`, audio: new Audio("/sounds/bathe.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/mar-def.mp3")
-        },
-        {
-            phrase: [
-                { text: "El mar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2925`, audio: new Audio("/sounds/sea.mp3") },
-                { text: "está en", image: "/pictograms/isIn.png", audio: new Audio("/sounds/isIn.mp3"), draggable: true },
-                { text: "la playa", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/30518`, audio: new Audio("/sounds/beach.mp3") },
-                { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: new Audio("/sounds/stop.mp3") }
-            ],
-            audio: new Audio("/sounds/mar-amp.mp3")
-        }
-    ];
+            phrase: [{text: "El mar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2925`, audio: ("sea")}],
+            audio: ("sea")
+        }, {
+            phrase: [{
+                text: "El mar",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2925`,
+                audio: ("sea")
+            }, {text: "es para", image: "/pictograms/isFor.png", audio: ("isFor"), draggable: true}, {
+                text: "bañarse",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/38782`,
+                audio: ("bathe")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("mar-def")
+        }, {
+            phrase: [{
+                text: "El mar",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2925`,
+                audio: ("sea")
+            }, {text: "está en", image: "/pictograms/isIn.png", audio: ("isIn"), draggable: true}, {
+                text: "la playa",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/30518`,
+                audio: ("beach")
+            }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
+            audio: ("mar-amp")
+        }];
 
-    const {play, handleDropSuccess, handleDropError} = useSentenceAudio();
+    let play  = usePlayAudio();
 
     const initializePlacedWords = () => {
-        const initialState = {center: null, linkLeft: null, linkRight: null, endLeft: null, endRight: null, dotLeft: null, dotRight: null};
+        const initialState = {
+            center: null,
+            linkLeft: null,
+            linkRight: null,
+            endLeft: null,
+            endRight: null,
+            dotLeft: null,
+            dotRight: null
+        };
         sentences.forEach((sentence, sentenceIdx) => {
             sentence.phrase.forEach((_, wordIdx) => {
                 initialState[`s${sentenceIdx}w${wordIdx}`] = null;
@@ -384,7 +467,7 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
     const [showNetwork, setShowNetwork] = useState(false);
     const [completedTrios, setCompletedTrios] = useState(0);
 
-    const audioHelpRef = useRef(new Audio("/sounds/sentenceActivity2Help.mp3"));
+    const audioHelpRef = useRef(("sentenceActivity2Help"));
 
     // compute trio count and a shuffled order of trio indices (Fisher-Yates)
     const trioCount = Math.floor(sentences.length / 3);
@@ -400,18 +483,16 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
     // current trio number (0-based trio index in original sentences)
     const currentTrioIndex = trioOrder[trioPointer] ?? 0;
 
-    let { changeEmotionSequence } =  useAvatar();
+    let {changeEmotionSequence} = useAvatar();
     useEffect(() => {
 
-        changeEmotionSequence([
-            {
-                emotionDuring: NEUTRAL_SPEAKING,
-                emotionAfter: NEUTRAL,
-                text: "¡Ya estás en el último ejercicio de la preparación! ¡Enhorabuena! Coloca cada elemento del texto en su lugar en la red.",
-                audio: "/sounds/intro-activity6.mp3",
-                afterDelay: 500
-            }
-        ]);
+        changeEmotionSequence([{
+            emotionDuring: NEUTRAL_SPEAKING,
+            emotionAfter: NEUTRAL,
+            text: "¡Ya estás en el último ejercicio de la preparación! ¡Enhorabuena! Coloca cada elemento del texto en su lugar en la red.",
+            audio: "intro-activity6",
+            afterDelay: 500
+        }]);
     }, []);
 
     useEffect(() => {
@@ -423,25 +504,46 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
     const secondSentenceIdx = currentTrioIndex * 3 + 1;
     const thirdSentenceIdx = currentTrioIndex * 3 + 2;
 
-    const placementOrder = [
-        {key: 'center', word: sentences[firstSentenceIdx].phrase[0].text, sentence: firstSentenceIdx, wordIdx: 0},
-        {key: 'centerReuse', word: sentences[secondSentenceIdx].phrase[0].text, sentence: secondSentenceIdx, wordIdx: 0},
-        {key: 'linkLeft', word: sentences[secondSentenceIdx].phrase[1].text, sentence: secondSentenceIdx, wordIdx: 1},
-        {key: 'endLeft', word: sentences[secondSentenceIdx].phrase[2].text, sentence: secondSentenceIdx, wordIdx: 2},
-        {key: 'dotLeft', word: '.', sentence: secondSentenceIdx, wordIdx: 3},
-        {key: 'centerReuse2', word: sentences[thirdSentenceIdx].phrase[0].text, sentence: thirdSentenceIdx, wordIdx: 0},
-        {key: 'linkRight', word: sentences[thirdSentenceIdx].phrase[1].text, sentence: thirdSentenceIdx, wordIdx: 1},
-        {key: 'endRight', word: sentences[thirdSentenceIdx].phrase[2].text, sentence: thirdSentenceIdx, wordIdx: 2},
-        {key: 'dotRight', word: '.', sentence: thirdSentenceIdx, wordIdx: 3},
-    ];
+    const placementOrder = [{
+        key: 'center',
+        word: sentences[firstSentenceIdx].phrase[0].text,
+        sentence: firstSentenceIdx,
+        wordIdx: 0
+    }, {
+        key: 'centerReuse',
+        word: sentences[secondSentenceIdx].phrase[0].text,
+        sentence: secondSentenceIdx,
+        wordIdx: 0
+    }, {
+        key: 'linkLeft',
+        word: sentences[secondSentenceIdx].phrase[1].text,
+        sentence: secondSentenceIdx,
+        wordIdx: 1
+    }, {
+        key: 'endLeft',
+        word: sentences[secondSentenceIdx].phrase[2].text,
+        sentence: secondSentenceIdx,
+        wordIdx: 2
+    }, {key: 'dotLeft', word: '.', sentence: secondSentenceIdx, wordIdx: 3}, {
+        key: 'centerReuse2',
+        word: sentences[thirdSentenceIdx].phrase[0].text,
+        sentence: thirdSentenceIdx,
+        wordIdx: 0
+    }, {
+        key: 'linkRight',
+        word: sentences[thirdSentenceIdx].phrase[1].text,
+        sentence: thirdSentenceIdx,
+        wordIdx: 1
+    }, {
+        key: 'endRight',
+        word: sentences[thirdSentenceIdx].phrase[2].text,
+        sentence: thirdSentenceIdx,
+        wordIdx: 2
+    }, {key: 'dotRight', word: '.', sentence: thirdSentenceIdx, wordIdx: 3},];
 
     const handleDrop = (zone, word, wordKey, image) => {
         const expectedPlacement = placementOrder[currentStep];
-        const isCorrectZone = expectedPlacement && (
-            expectedPlacement.key === zone ||
-            (expectedPlacement.key === 'centerReuse' && zone === 'center') ||
-            (expectedPlacement.key === 'centerReuse2' && zone === 'center')
-        );
+        const isCorrectZone = expectedPlacement && (expectedPlacement.key === zone || (expectedPlacement.key === 'centerReuse' && zone === 'center') || (expectedPlacement.key === 'centerReuse2' && zone === 'center'));
         const isCorrectWord = expectedPlacement && expectedPlacement.word === word;
         const isCorrectSentence = wordKey === `s${expectedPlacement.sentence}w${expectedPlacement.wordIdx}`;
 
@@ -449,7 +551,7 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
             const zoneKey = (expectedPlacement.key === 'centerReuse' || expectedPlacement.key === 'centerReuse2') ? 'center' : expectedPlacement.key;
             const updates = {[zoneKey]: {text: word, image: image}, [wordKey]: {text: word, image: image}};
             setPlacedWords(prev => ({...prev, ...updates}));
-            handleDropSuccess();
+            play("correct");
 
             if (currentStep === 0 || currentStep === 4) {
                 setTimeout(() => {
@@ -494,7 +596,7 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
                 setCurrentStep(prev => prev + 1);
             }
         } else {
-            handleDropError();
+            play("error");
         }
     };
 
@@ -513,24 +615,25 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
         return sentences[sentenceIdx].phrase.every((_, wordIdx) => isWordPlaced(sentenceIdx, wordIdx));
     };
 
-    const currentSentences = [
-        sentences[firstSentenceIdx],
-        sentences[secondSentenceIdx],
-        sentences[thirdSentenceIdx]
-    ];
+    const currentSentences = [sentences[firstSentenceIdx], sentences[secondSentenceIdx], sentences[thirdSentenceIdx]];
 
-    return (
-        <DndProvider backend={MultiBackend} options={HTML5toTouch}>
+    return (<DndProvider backend={MultiBackend} options={HTML5toTouch}>
             <CustomDragPreview/>
             <Card style={{padding: 32, minWidth: 1000, margin: '0 auto', fontFamily: "Massallera"}}>
                 <ActivityToolsComponent content={t("Escucha y coloca los elementos en el orden y el lugar correcto")}
                                         playHelp={() => play(audioHelpRef.current)}/>
 
-                <div style={{marginBottom: 40, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 12}}>
+                <div style={{
+                    marginBottom: 40,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    gap: 12
+                }}>
                     {currentSentences.map((sentence, idx) => {
                         const sentenceIdx = firstSentenceIdx + idx;
-                        return (
-                            <div key={sentenceIdx} style={{display: 'flex', alignItems: 'center', flexWrap: 'nowrap', gap: 8}}>
+                        return (<div key={sentenceIdx}
+                                     style={{display: 'flex', alignItems: 'center', flexWrap: 'nowrap', gap: 8}}>
                                 <div style={{display: 'flex', alignItems: 'center', flexWrap: 'nowrap'}}>
                                     {sentence.phrase.map((wordData, wordIdx) => {
                                         const wordKey = getWordKey(sentenceIdx, wordIdx);
@@ -541,25 +644,32 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
                                         }
 
                                         return <DraggableWord key={wordKey} wordData={wordData} wordKey={wordKey}
-                                                              isPlaced={isPlaced} onDragStart={() => play(wordData.audio)}/>;
+                                                              isPlaced={isPlaced}
+                                                              onDragStart={() => play(wordData.audio)}/>;
                                     })}
                                 </div>
                                 {!isSentenceCompleted(sentenceIdx) && (
                                     <Button icon={<SoundOutlined style={{fontSize: 50, color: 'black'}}/>}
                                             type="link"
                                             size="large"
-                                            onClick={() => play(currentSentences[idx].audio)}/>
-                                )}
-                            </div>
-                        );
+                                            onClick={() => play(currentSentences[idx].audio)}/>)}
+                            </div>);
                     })}
                 </div>
 
-                <div style={{display: 'flex', justifyContent: 'center', marginTop: 40, opacity: showNetwork ? 1 : 0, transition: 'opacity 0.3s ease-in-out'}}>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    marginTop: 40,
+                    opacity: showNetwork ? 1 : 0,
+                    transition: 'opacity 0.3s ease-in-out'
+                }}>
                     <svg width="900" height="380" viewBox="0 0 900 380">
-                        <rect x="370" y="20" width="160" height="110" rx="12" fill="white" stroke="black" strokeWidth="2"/>
+                        <rect x="370" y="20" width="160" height="110" rx="12" fill="white" stroke="black"
+                              strokeWidth="2"/>
                         <foreignObject x="400" y="35" width="160" height="110">
-                            <DropZone zone="center" placedWord={placedWords.center} onDrop={handleDrop} canDropHere={canDropInZone('center')}/>
+                            <DropZone zone="center" placedWord={placedWords.center} onDrop={handleDrop}
+                                      canDropHere={canDropInZone('center')}/>
                         </foreignObject>
 
                         <line x1="450" y1="130" x2="450" y2="155" stroke="#000" strokeWidth="2"/>
@@ -569,35 +679,40 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
                         <line x1="650" y1="155" x2="650" y2="270" stroke="#000" strokeWidth="2"/>
 
                         <foreignObject x="200" y="170" width="110" height="90">
-                            <DropZone zone="linkLeft" placedWord={placedWords.linkLeft} onDrop={handleDrop} canDropHere={canDropInZone('linkLeft')}/>
+                            <DropZone zone="linkLeft" placedWord={placedWords.linkLeft} onDrop={handleDrop}
+                                      canDropHere={canDropInZone('linkLeft')}/>
                         </foreignObject>
 
                         <foreignObject x="600" y="170" width="110" height="90">
-                            <DropZone zone="linkRight" placedWord={placedWords.linkRight} onDrop={handleDrop} canDropHere={canDropInZone('linkRight')}/>
+                            <DropZone zone="linkRight" placedWord={placedWords.linkRight} onDrop={handleDrop}
+                                      canDropHere={canDropInZone('linkRight')}/>
                         </foreignObject>
 
                         <ellipse cx="250" cy="320" rx="90" ry="55" fill="white" stroke="black" strokeWidth="2"/>
                         <foreignObject x="200" y="280" width="130" height="90">
-                            <DropZone zone="endLeft" placedWord={placedWords.endLeft} onDrop={handleDrop} canDropHere={canDropInZone('endLeft')}/>
+                            <DropZone zone="endLeft" placedWord={placedWords.endLeft} onDrop={handleDrop}
+                                      canDropHere={canDropInZone('endLeft')}/>
                         </foreignObject>
 
                         <foreignObject x="360" y="300" width="110" height="90">
-                            <DropZone zone="dotLeft" placedWord={placedWords.dotLeft} onDrop={handleDrop} canDropHere={canDropInZone('dotLeft')}/>
+                            <DropZone zone="dotLeft" placedWord={placedWords.dotLeft} onDrop={handleDrop}
+                                      canDropHere={canDropInZone('dotLeft')}/>
                         </foreignObject>
 
                         <ellipse cx="650" cy="320" rx="90" ry="55" fill="white" stroke="black" strokeWidth="2"/>
                         <foreignObject x="600" y="280" width="130" height="90">
-                            <DropZone zone="endRight" placedWord={placedWords.endRight} onDrop={handleDrop} canDropHere={canDropInZone('endRight')}/>
+                            <DropZone zone="endRight" placedWord={placedWords.endRight} onDrop={handleDrop}
+                                      canDropHere={canDropInZone('endRight')}/>
                         </foreignObject>
 
                         <foreignObject x="760" y="300" width="110" height="90">
-                            <DropZone zone="dotRight" placedWord={placedWords.dotRight} onDrop={handleDrop} canDropHere={canDropInZone('dotRight')}/>
+                            <DropZone zone="dotRight" placedWord={placedWords.dotRight} onDrop={handleDrop}
+                                      canDropHere={canDropInZone('dotRight')}/>
                         </foreignObject>
                     </svg>
                 </div>
             </Card>
-        </DndProvider>
-    );
+        </DndProvider>);
 };
 
 export default SentenceNetworkSequential;

@@ -7,7 +7,7 @@ const DraggablePictogram = ({pictogram, isBlinking, isEscaping, isHighlighted, o
     const audioRef = useRef(null);
 
     useEffect(() => {
-        if (pictogram.audio) audioRef.current = new Audio(pictogram.audio);
+        if (pictogram.audio) audioRef.current = pictogram.audio;
     }, [pictogram.audio]);
 
 

@@ -222,7 +222,7 @@ const StudentDetail = () => {
 												         name={ name }
 												         { ...restField }
 											         >
-												         <Input addonBefore="Necesidades Específicas"/>
+														 <Space>{t("signup.student.steps.educationalNeeds")}<Input/></Space>
 											         </Form.Item>
 											         <MinusCircleOutlined onClick={ () => remove(name) }/>
 										         </Space>
@@ -285,7 +285,7 @@ const StudentDetail = () => {
 												         name={ name }
 												         { ...restField }
 											         >
-												         <Input addonBefore="Otros especialistas"/>
+														 <Space.Compact>Otros especialistas<Input/></Space.Compact>
 											         </Form.Item>
 											         <MinusCircleOutlined onClick={ () => remove(name) }/>
 										         </Space>

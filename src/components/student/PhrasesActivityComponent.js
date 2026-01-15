@@ -13,6 +13,7 @@ import ActivityToolsComponent from "./dnd/ActivityToolsComponent";
 import {usePretraining} from "../../hooks/usePretraining";
 import {useAvatar} from "../AvatarContext";
 import {NEUTRAL, NEUTRAL_SPEAKING} from "../Avatar";
+import {usePlayAudio} from "../../hooks/usePlayAudio";
 
 const exercises = [
     {
@@ -20,9 +21,8 @@ const exercises = [
         content: [
             {
                 id: 1,
-                phrase: ["El perro", "es", "un animal"],
-                audio: "/sounds/dog-animal.mp3",
-                wordAudio: ["/sounds/dog.mp3", "/sounds/is.mp3", "/sounds/animal.mp3"],
+                phraseKey: "dog-animal",
+                wordAudio: ["dog", "is", "animal"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7202`,
                     "/pictograms/is.png",
@@ -31,9 +31,8 @@ const exercises = [
             },
             {
                 id: 2,
-                phrase: ["La ballena", "es", "un mamífero"],
-                audio: "/sounds/whale-mammal.mp3",
-                wordAudio: ["/sounds/whale.mp3", "/sounds/is.mp3", "/sounds/mammal.mp3"],
+                phraseKey: "whale-mammal",
+                wordAudio: ["whale", "is", "mammal"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2268`,
                     "/pictograms/is.png",
@@ -42,9 +41,8 @@ const exercises = [
             },
             {
                 id: 3,
-                phrase: ["La casa", "es para", "vivir"],
-                audio: "/sounds/casa-def.mp3",
-                wordAudio: ["/sounds/house.mp3", "/sounds/isFor.mp3", "/sounds/live.mp3"],
+                phraseKey: "house-living",
+                wordAudio: ["house", "isFor", "live"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6964`,
                     "/pictograms/is.png",
@@ -53,9 +51,8 @@ const exercises = [
             },
             {
                 id: 4,
-                phrase: ["El sol", "es", "una estrella"],
-                audio: "/sounds/sol-def.mp3",
-                wordAudio: ["/sounds/sun.mp3", "/sounds/is.mp3", "/sounds/star.mp3"],
+                phraseKey: "sun-star",
+                wordAudio: ["sun", "is", "star"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7252`,
                     "/pictograms/is.png",
@@ -64,9 +61,8 @@ const exercises = [
             },
             {
                 id: 5,
-                phrase: ["El verano", "es parte de", "el año"],
-                audio: "/sounds/verano-def.mp3",
-                wordAudio: ["/sounds/summer.mp3", "/sounds/isPartOf.mp3", "/sounds/year.mp3"],
+                phraseKey: "summer-year",
+                wordAudio: ["summer", "isPartOf", "year"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/5604`,
                     "/pictograms/isPartOf.png",
@@ -75,9 +71,8 @@ const exercises = [
             },
             {
                 id: 6,
-                phrase: ["La manzana", "es", "una fruta"],
-                audio: "/sounds/manzana-def.mp3",
-                wordAudio: ["/sounds/apple.mp3", "/sounds/is.mp3", "/sounds/fruit.mp3"],
+                phraseKey: "apple-fruit",
+                wordAudio: ["apple", "is", "fruit"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2462`,
                     "/pictograms/is.png",
@@ -86,9 +81,8 @@ const exercises = [
             },
             {
                 id: 7,
-                phrase: ["La cama", "es para", "dormir"],
-                audio: "/sounds/cama-def.mp3",
-                wordAudio: ["/sounds/bed.mp3", "/sounds/isFor.mp3", "/sounds/sleep.mp3"],
+                phraseKey: "bed-sleeping",
+                wordAudio: ["bed", "isFor", "sleeping"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/25900`,
                     "/pictograms/isFor.png",
@@ -97,9 +91,8 @@ const exercises = [
             },
             {
                 id: 8,
-                phrase: ["La calle", "es parte de", "la ciudad"],
-                audio: "/sounds/calle-def.mp3",
-                wordAudio: ["/sounds/street.mp3", "/sounds/isPartOf.mp3", "/sounds/city.mp3"],
+                phraseKey: "street-city",
+                wordAudio: ["street", "isPartOf", "city"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2299`,
                     "/pictograms/isPartOf.png",
@@ -108,9 +101,8 @@ const exercises = [
             },
             {
                 id: 9,
-                phrase: ["El coche", "es para", "viajar"],
-                audio: "/sounds/coche-def.mp3",
-                wordAudio: ["/sounds/car.mp3", "/sounds/isFor.mp3", "/sounds/travel.mp3"],
+                phraseKey: "car-traveling",
+                wordAudio: ["car", "isFor", "traveling"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2339`,
                     "/pictograms/isFor.png",
@@ -119,9 +111,8 @@ const exercises = [
             },
             {
                 id: 10,
-                phrase: ["El columpio", "es para", "jugar"],
-                audio: "/sounds/columpio-def.mp3",
-                wordAudio: ["/sounds/swing.mp3", "/sounds/isFor.mp3", "/sounds/play.mp3"],
+                phraseKey: "swing-playing",
+                wordAudio: ["swing", "isFor", "playing"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/4608`,
                     "/pictograms/isFor.png",
@@ -130,9 +121,8 @@ const exercises = [
             },
             {
                 id: 11,
-                phrase: ["El agua", "es para", "beber"],
-                audio: "/sounds/agua-def.mp3",
-                wordAudio: ["/sounds/water.mp3", "/sounds/isFor.mp3", "/sounds/drink.mp3"],
+                phraseKey: "water-drinking",
+                wordAudio: ["water", "isFor", "drinking"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2248`,
                     "/pictograms/isFor.png",
@@ -141,9 +131,8 @@ const exercises = [
             },
             {
                 id: 12,
-                phrase: ["El mar", "es para", "bañarse"],
-                audio: "/sounds/mar-def.mp3",
-                wordAudio: ["/sounds/sea.mp3", "/sounds/isFor.mp3", "/sounds/bathe.mp3"],
+                phraseKey: "sea-bathing",
+                wordAudio: ["sea", "isFor", "bathing"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2925`,
                     "/pictograms/isFor.png",
@@ -158,9 +147,8 @@ const exercises = [
         content: [
             {
                 id: 1,
-                phrase: ["El perro", "tiene", "cola"],
-                audio: "/sounds/dog-tail.mp3",
-                wordAudio: ["/sounds/dog.mp3", "/sounds/has.mp3", "/sounds/tail.mp3"],
+                phraseKey: "dog-tail",
+                wordAudio: ["dog", "has", "tail"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7202`,
                     "/pictograms/has.png",
@@ -169,9 +157,8 @@ const exercises = [
             },
             {
                 id: 2,
-                phrase: ["La ballena", "está en", "el mar"],
-                audio: "/sounds/whale-sea.mp3",
-                wordAudio: ["/sounds/whale.mp3", "/sounds/isIn.mp3", "/sounds/sea.mp3"],
+                phraseKey: "whale-sea",
+                wordAudio: ["whale", "isIn", "sea"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2268`,
                     "/pictograms/isIn.png",
@@ -180,9 +167,8 @@ const exercises = [
             },
             {
                 id: 3,
-                phrase: ["La casa", "sirve para", "vivir"],
-                audio: "/sounds/casa-amp.mp3",
-                wordAudio: ["/sounds/house.mp3", "/sounds/isUsedFor.mp3", "/sounds/live.mp3"],
+                phraseKey: "house-living2",
+                wordAudio: ["house", "isUsedFor", "living"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6964`,
                     "/pictograms/isUsedFor.png",
@@ -191,9 +177,8 @@ const exercises = [
             },
             {
                 id: 4,
-                phrase: ["El sol", "está en", "el cielo"],
-                audio: "/sounds/sol-amp.mp3",
-                wordAudio: ["/sounds/sun.mp3", "/sounds/isIn.mp3", "/sounds/sunbathe.mp3"],
+                phraseKey: "sun-sky",
+                wordAudio: ["sun", "isIn", "sky"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7252`,
                     "/pictograms/isIn.png",
@@ -202,12 +187,11 @@ const exercises = [
             },
             {
                 id: 5,
-                phrase: ["El verano", "sirve para", "tomar el sol"],
-                audio: "/sounds/verano-amp.mp3",
+                phraseKey: "summer-sunbathing",
                 wordAudio: [
-                    "/sounds/summer.mp3",
-                    "/sounds/isUsedFor.mp3",
-                    "/sounds/sunbathe.mp3"
+                    "summer",
+                    "isUsedFor",
+                    "sunbathing"
                 ],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/5604`,
@@ -217,9 +201,8 @@ const exercises = [
             },
             {
                 id: 6,
-                phrase: ["La manzana", "está en", "el frutero"],
-                audio: "/sounds/manzana-amp.mp3",
-                wordAudio: ["/sounds/apple.mp3", "/sounds/isIn.mp3", "/sounds/frutero.mp3"],
+                phraseKey: "apple-fruitBowl",
+                wordAudio: ["apple", "isIn", "fruitBowl"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2462`,
                     "/pictograms/isIn.png",
@@ -228,9 +211,8 @@ const exercises = [
             },
             {
                 id: 7,
-                phrase: ["La cama", "está en", "la habitación"],
-                audio: "/sounds/cama-amp.mp3",
-                wordAudio: ["/sounds/bed.mp3", "/sounds/isIn.mp3", "/sounds/room.mp3"],
+                phraseKey: "bed-room",
+                wordAudio: ["bed", "isIn", "room"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/25900`,
                     "/pictograms/isIn.png",
@@ -239,9 +221,8 @@ const exercises = [
             },
             {
                 id: 8,
-                phrase: ["La calle", "está en", "la ciudad"],
-                audio: "/sounds/calle-amp.mp3",
-                wordAudio: ["/sounds/street.mp3", "/sounds/isIn.mp3", "/sounds/city.mp3"],
+                phraseKey: "street-city2",
+                wordAudio: ["street", "isIn", "city"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2299`,
                     "/pictograms/isIn.png",
@@ -250,9 +231,8 @@ const exercises = [
             },
             {
                 id: 9,
-                phrase: ["El coche", "tiene", "ruedas"],
-                audio: "/sounds/coche-amp.mp3",
-                wordAudio: ["/sounds/car.mp3", "/sounds/has.mp3", "/sounds/wheels.mp3"],
+                phraseKey: "car-wheels",
+                wordAudio: ["car", "has", "wheels"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2339`,
                     "/pictograms/has.png",
@@ -261,9 +241,8 @@ const exercises = [
             },
             {
                 id: 10,
-                phrase: ["El columpio", "está en", "el parque"],
-                audio: "/sounds/columpio-amp.mp3",
-                wordAudio: ["/sounds/swing.mp3", "/sounds/isIn.mp3", "/sounds/park.mp3"],
+                phraseKey: "swing-park",
+                wordAudio: ["swing", "isIn", "park"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/4608`,
                     "/pictograms/isIn.png",
@@ -272,12 +251,11 @@ const exercises = [
             },
             {
                 id: 11,
-                phrase: ["El agua", "sirve para", "lavarse"],
-                audio: "/sounds/agua-amp.mp3",
+                phraseKey: "water-washing",
                 wordAudio: [
-                    "/sounds/water.mp3",
-                    "/sounds/isUsedFor.mp3",
-                    "/sounds/wash.mp3"
+                    "water",
+                    "isUsedFor",
+                    "washing"
                 ],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2248`,
@@ -287,9 +265,8 @@ const exercises = [
             },
             {
                 id: 12,
-                phrase: ["El mar", "está en", "la playa"],
-                audio: "/sounds/mar-amp.mp3",
-                wordAudio: ["/sounds/sea.mp3", "/sounds/isIn.mp3", "/sounds/beach.mp3"],
+                phraseKey: "sea-beach",
+                wordAudio: ["sea", "isIn", "beach"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2925`,
                     "/pictograms/isIn.png",
@@ -311,175 +288,172 @@ function shuffledArray(arr) {
 
 export default function PhrasesActivity() {
 
-    const { maxUnlocked, updateUnlockedPhase, fetchUnlockedPhase } = usePretraining();
     let {t} = useTranslation();
     let {activity} = useParams();
     const navigate = useNavigate();
 
+    const { maxUnlocked, updateUnlockedPhase, fetchUnlockedPhase } = usePretraining();
+    let { changeEmotionSequence } =  useAvatar();
+    const playAudio = usePlayAudio();
+
     const [exerciseIndex, setExerciseIndex] = useState(0);
     const [slots, setSlots] = useState([]);
     const [pool, setPool] = useState([]);
-    const [shuffledExercises, setShuffledExercises] = useState(shuffledArray(exercises.find(e => e.activity === activity).content));
     const [completedCount, setCompletedCount] = useState(0);
     let [started, setStarted] = useState(false);
 
-    const audioRef = useRef(null);
-    const audioHelpRef = useRef(new Audio("/sounds/phraseActivityHelp.mp3"));
-    const maxUnlockedRef = useRef(maxUnlocked);
     const timeoutRef = useRef(null);
+    const maxUnlockedRef = useRef(maxUnlocked);
 
-    let { changeEmotionSequence } =  useAvatar();
+    const exercisesForActivity =
+        exercises.find(e => e.activity === activity)?.content ?? [];
+
+    const shuffledExercises = useRef(shuffledArray(exercisesForActivity));
+
     const playIntro = () => {
-        if(activity === "1") {
-            changeEmotionSequence([
-                {
-                    emotionDuring: NEUTRAL_SPEAKING,
-                    emotionAfter: NEUTRAL,
-                    text: "Ahora vamos a ordenar los elementos para formar la frase, ¡fíjate bien en los pictogramas!",
-                    audio: "/sounds/intro-activity3.mp3",
-                    onEnd: () => setStarted(true),
-                    afterDelay: 500
-                }
-            ]);
-        } else {
-            changeEmotionSequence([
-                {
-                    emotionDuring: NEUTRAL_SPEAKING,
-                    emotionAfter: NEUTRAL,
-                    text: "Recuerda que en esta actividad tienes que ordenar los elementos para formar la frase.",
-                    audio: "/sounds/intro-activity4.mp3",
-                    onEnd: () => setStarted(true),
-                    afterDelay: 500
-                }
-            ]);
-        }
+        changeEmotionSequence([
+            {
+                emotionDuring: NEUTRAL_SPEAKING,
+                emotionAfter: NEUTRAL,
+                text:
+                    activity === "1"
+                        ? t("phrasesActivity.intro1")
+                        : t("phrasesActivity.intro2"),
+                audio:
+                    activity === "1"
+                        ? "intro-activity3"
+                        : "intro-activity4",
+                onEnd: () => setStarted(true),
+                afterDelay: 500
+            }
+        ]);
     };
 
     useEffect(() => {
         playIntro();
 
-        // Cada 5 segundos sin interacción, repetir la secuencia
         const resetTimeout = () => {
-            if (timeoutRef.current) clearTimeout(timeoutRef.current);
-            timeoutRef.current = setTimeout(() => {
-                playIntro();
-            }, 5000);
+            clearTimeout(timeoutRef.current);
+            timeoutRef.current = setTimeout(playIntro, 5000);
         };
 
-        resetTimeout(); // inicio del timeout
-
-        // Escuchar interacción del usuario
         const events = ["click", "keydown", "touchstart", "mousemove"];
         events.forEach(e => window.addEventListener(e, resetTimeout));
 
+        resetTimeout();
+
         return () => {
-            if (timeoutRef.current) clearTimeout(timeoutRef.current);
+            clearTimeout(timeoutRef.current);
             events.forEach(e => window.removeEventListener(e, resetTimeout));
         };
     }, []);
-
-    useEffect(() => {
-        setCompletedCount(0);
-    }, [activity]);
-
-    useEffect(() => {
-        maxUnlockedRef.current = maxUnlocked;
-    }, [maxUnlocked]);
 
     useEffect(() => {
         fetchUnlockedPhase();
     }, []);
 
     useEffect(() => {
-        if(started){
-            const ex = shuffledExercises[exerciseIndex];
-            if (!ex) return;
-
-            if (ex.audio) {
-                audioRef.current = new Audio(ex.audio);
-                audioRef.current.play().catch(() => {
-                    console.log("Audio blocked by browser autoplay policy");
-                });
-            }
-        }
-    }, [activity, exerciseIndex, started]);
-
-    function play(audio) {
-        if (audio) {
-            audio.currentTime = 0;
-            audio.play().catch(() => {
-            });
-        }
-    }
+        maxUnlockedRef.current = maxUnlocked;
+    }, [maxUnlocked]);
 
     useEffect(() => {
-        if(started) {
-            const ex = shuffledExercises[exerciseIndex];
-            if (!ex) return;
+        setCompletedCount(0);
+    }, [activity]);
 
-            setSlots(Array(ex.phrase.length).fill(null));
+    useEffect(() => {
+        if (!started) return;
 
-            const base = ex.phrase.map((text, i) => ({
-                id: `${exerciseIndex}-${i}`,
-                text,
-                used: false,
-                audio: ex.wordAudio ? ex.wordAudio[i] : null,
-                image: ex.image ? ex.image[i] : null,
-            }));
-
-            setPool(shuffledArray(base));
-        }
-    }, [activity, exerciseIndex, started]);
-
-    function handleDrop(index, item) {
-        const ex = shuffledExercises[exerciseIndex];
+        const ex = shuffledExercises.current[exerciseIndex];
         if (!ex) return;
 
-        const expected = ex.phrase[index];
-        if (item.text === expected) {
-            setSlots((prev) => {
+        const phrase = t(`phrasesActivity.phrases.${ex.phraseKey}`, {
+            returnObjects: true
+        });
+
+        setSlots(Array(phrase.length).fill(null));
+
+        const base = phrase.map((text, i) => ({
+            id: `${exerciseIndex}-${i}`,
+            text,
+            used: false,
+            audio: ex.wordAudio?.[i] ?? null,
+            image: ex.image?.[i] ?? null
+        }));
+
+        setPool(shuffledArray(base));
+
+        playAudio(ex.phraseKey);
+    }, [exerciseIndex, started]);
+
+    function handleDrop(index, item) {
+        const ex = shuffledExercises.current[exerciseIndex];
+        if (!ex) return;
+
+        const phrase = t(`phrasesActivity.phrases.${ex.phraseKey}`, {
+            returnObjects: true
+        });
+
+        if (item.text === phrase[index]) {
+            setSlots(prev => {
                 const next = [...prev];
                 if (!next[index]) next[index] = item.text;
                 return next;
             });
-            setPool((prev) => prev.map((p) => (p.id === item.id ? {...p, used: true} : p)));
+
+            setPool(prev =>
+                prev.map(p =>
+                    p.id === item.id ? { ...p, used: true } : p
+                )
+            );
         }
     }
 
     useEffect(() => {
-        const ex = shuffledExercises[exerciseIndex];
+        const ex = shuffledExercises.current[exerciseIndex];
         if (!ex) return;
-        const completed = slots.length > 0 && slots.every((s, i) => s === ex.phrase[i]);
-        if (completed) {
-            setTimeout(() => {
-                setCompletedCount(prev => prev + 1);
-                if (completedCount + 1 < 5) {
-                    setExerciseIndex((i) => i + 1);
-                } else {
-                    if (parseInt(activity) + 2 >= maxUnlockedRef.current) {
-                        updateUnlockedPhase(maxUnlockedRef.current + 1)
-                            .then(() => console.log("Fase desbloqueada actualizada"))
-                            .catch((err) => console.error(err));
-                    }
-                    if (activity === "1") {
-                        navigate("/students/pretraining/block/2/activity/2");
-                    } else {
-                        navigate("/students/pretraining/block/3/activity/1");
-                    }
-                }
-            }, 600);
-        }
-    }, [slots, exerciseIndex, activity]);
 
-    const currentExercise = shuffledExercises[exerciseIndex];
-    if (!currentExercise) return <div>No hay ejercicios</div>;
+        const phrase = t(`phrasesActivity.phrases.${ex.phraseKey}`, {
+            returnObjects: true
+        });
+
+        const completed =
+            slots.length > 0 &&
+            slots.every((s, i) => s === phrase[i]);
+
+        if (!completed) return;
+
+        setTimeout(() => {
+            setCompletedCount(c => c + 1);
+
+            if (completedCount + 1 < 5) {
+                setExerciseIndex(i => i + 1);
+            } else {
+                if (parseInt(activity) + 2 >= maxUnlockedRef.current) {
+                    updateUnlockedPhase(maxUnlockedRef.current + 1);
+                }
+
+                navigate(
+                    activity === "1"
+                        ? "/students/pretraining/block/2/activity/2"
+                        : "/students/pretraining/block/3/activity/1"
+                );
+            }
+        }, 600);
+    }, [slots]);
+
+    const currentExercise = shuffledExercises.current[exerciseIndex];
+    if (!currentExercise) return null;
 
     const visiblePool = pool.filter((p) => !p.used);
 
     return (<DndProvider backend={MultiBackend} options={HTML5toTouch}>
         <CustomDragLayer/>
         <Card style={{padding: "2vh", width: "80%"}}>
-            <ActivityToolsComponent playAudio={()=> play(audioRef.current)} content={t("Escucha y ordena la frase")} playHelp={()=> play(audioHelpRef.current)} />
+            <ActivityToolsComponent
+                playAudio={() => playAudio(currentExercise.phraseKey)}
+                content={t("phrasesActivity.help")}
+                playHelp={() => playAudio("phraseActivityHelp")}
+            />
             <Row gutter={[16, 16]} justify="center" style={{marginBottom: 40}}>
                 {visiblePool.map(({id, text, audio, image}) => (<Col key={id}>
                     <DraggableCard id={id} text={text} audio={audio} image={image}/>
@@ -487,16 +461,19 @@ export default function PhrasesActivity() {
             </Row>
 
             <Row justify="center">
-                {currentExercise.phrase.map((expected, i) => (<DropSlot
-                    key={i}
-                    index={i}
-                    expectedText={expected}
-                    value={slots[i]}
-                    image={currentExercise.image ? currentExercise.image[i] : null}
-                    enabled={i === 0 ? true : !!slots[i - 1]}
-                    onDrop={handleDrop}
-                />))}
-
+                {t(`phrasesActivity.phrases.${currentExercise.phraseKey}`, {
+                    returnObjects: true
+                }).map((expected, i) => (
+                    <DropSlot
+                        key={i}
+                        index={i}
+                        expectedText={expected}
+                        value={slots[i]}
+                        image={currentExercise.image?.[i]}
+                        enabled={i === 0 ? true : !!slots[i - 1]}
+                        onDrop={handleDrop}
+                    />
+                ))}
             </Row>
         </Card>
     </DndProvider>);

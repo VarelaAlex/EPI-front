@@ -5,8 +5,11 @@ import { useEffect } from "react";
 import "../assets/styles/font.css";
 import {useAvatar} from "../AvatarContext";
 import {NEUTRAL, NEUTRAL_SPEAKING} from "../Avatar";
+import {useTranslation} from "react-i18next";
 
 const SelectPhase = () => {
+
+    let {t} = useTranslation();
     const navigate = useNavigate();
     const { maxUnlocked, loading, fetchUnlockedPhase } = usePretraining();
 
@@ -49,7 +52,7 @@ const SelectPhase = () => {
                         emotionDuring: NEUTRAL_SPEAKING,
                         emotionAfter: NEUTRAL,
                         text: phrases[index],
-                        audio: `/sounds/greeting-pretraining${index}.mp3`,
+                        audio: `greeting-pretraining${index}`,
                         afterDelay: 500
                     }
                 ]);
@@ -62,21 +65,21 @@ const SelectPhase = () => {
                         emotionDuring: NEUTRAL_SPEAKING,
                         emotionAfter: NEUTRAL,
                         text: "Te voy a enseñar algunos elementos que tienes que aprender para poder organizar la información.",
-                        audio: "/sounds/intro-pretraining1.mp3",
+                        audio: "intro-pretraining1",
                         afterDelay: 500
                     },
                     {
                         emotionDuring: NEUTRAL_SPEAKING,
                         emotionAfter: NEUTRAL,
                         text: "¡Se llaman pictogramas!",
-                        audio: "/sounds/intro-pretraining2.mp3",
+                        audio: "intro-pretraining2",
                         afterDelay: 500
                     },
                     {
                         emotionDuring: NEUTRAL_SPEAKING,
                         emotionAfter: NEUTRAL,
                         text: "¡Haz cada una de las actividades que te voy a enseñar!",
-                        audio: "/sounds/intro-pretraining3.mp3",
+                        audio: "intro-pretraining3",
                         afterDelay: 500
                     }
                 ]);
@@ -103,7 +106,7 @@ const SelectPhase = () => {
         <Card style={{ maxWidth: "80%"}}>
             <Row gutter={[64, 32]} justify="center" align="middle" style={{ marginBottom: "5vh" }}>
                 <Col>
-                    <Title style={{ fontFamily: "Massallera", color: "#3070a5" }}>Selecciona la actividad</Title>
+                    <Title style={{ fontFamily: "Massallera", color: "#3070a5" }}>{t("pretraining.select")}</Title>
                 </Col>
             </Row>
             <Row gutter={[32, 32]} justify="center" align="middle">

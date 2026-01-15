@@ -14,25 +14,27 @@ import {useTranslation} from "react-i18next";
 import { usePretraining } from "../../hooks/usePretraining";
 import {useAvatar} from "../AvatarContext";
 import {NEUTRAL, NEUTRAL_SPEAKING} from "../Avatar";
+import {usePlayAudio} from "../../hooks/usePlayAudio";
 
 let pictograms = [{
     activity: "1",
-    content: [{id: "is", label: "es", audio: "/sounds/is.mp3"}, {
+    content: [{id: "is", label: "es", audio: "is"}, {
         id: "isFor",
         label: "es para",
-        audio: "/sounds/isFor.mp3"
-    }, {id: "isPartOf", label: "es parte de", audio: "/sounds/isPartOf.mp3"}]
+        audio: "isFor"
+    }, {id: "isPartOf", label: "es parte de", audio: "isPartOf"}]
 }, {
     activity: "2",
-    content: [{id: "has", label: "tiene", audio: "/sounds/has.mp3"}, {
+    content: [{id: "has", label: "tiene", audio: "has"}, {
         id: "isUsedFor",
         label: "sirve para",
-        audio: "/sounds/isUsedFor.mp3"
-    }, {id: "isIn", label: "está en", audio: "/sounds/isIn.mp3"}]
+        audio: "isUsedFor"
+    }, {id: "isIn", label: "está en", audio: "isIn"}]
 }];
 
 let PictogramActivity = () => {
 
+    let playAudio = usePlayAudio();
     const { maxUnlocked, updateUnlockedPhase, fetchUnlockedPhase } = usePretraining();
 
     let {t} = useTranslation();
@@ -70,14 +72,14 @@ let PictogramActivity = () => {
                     emotionDuring: NEUTRAL_SPEAKING,
                     emotionAfter: NEUTRAL,
                     text: "Vamos a aprender cómo representamos es, es para y es parte de. ¡Fíjate!",
-                    audio: "/sounds/intro-activity1-1.mp3",
+                    audio: "intro-activity1-1",
                     afterDelay: 500
                 },
                 {
                     emotionDuring: NEUTRAL_SPEAKING,
                     emotionAfter: NEUTRAL,
                     text: "Este pictograma significa “ES”.",
-                    audio: "/sounds/intro-activity1-2.mp3",
+                    audio: "intro-activity1-2",
                     onStart: () => setHighlightId("is"),
                     onEnd: () => setHighlightId(null),
                     afterDelay: 500
@@ -86,7 +88,7 @@ let PictogramActivity = () => {
                     emotionDuring: NEUTRAL_SPEAKING,
                     emotionAfter: NEUTRAL,
                     text: "Este significa “ES PARA”.",
-                    audio: "/sounds/intro-activity1-3.mp3",
+                    audio: "intro-activity1-3",
                     onStart: () => setHighlightId("isFor"),
                     onEnd: () => setHighlightId(null),
                     afterDelay: 500
@@ -95,7 +97,7 @@ let PictogramActivity = () => {
                     emotionDuring: NEUTRAL_SPEAKING,
                     emotionAfter: NEUTRAL,
                     text: "Y este significa “ES PARTE DE”.",
-                    audio: "/sounds/intro-activity1-4.mp3",
+                    audio: "intro-activity1-4",
                     onStart: () => setHighlightId("isPartOf"),
                     onEnd: () => setHighlightId(null),
                     afterDelay: 500
@@ -104,7 +106,7 @@ let PictogramActivity = () => {
                     emotionDuring: NEUTRAL_SPEAKING,
                     emotionAfter: NEUTRAL,
                     text: "Cuando oigas el sonido del pictograma, arrástralo al cuadrado.",
-                    audio: "/sounds/intro-activity-5.mp3",
+                    audio: "intro-activity-5",
                     onEnd: () => setStarted(true),
                     afterDelay: 2000
                 }
@@ -115,7 +117,7 @@ let PictogramActivity = () => {
                     emotionDuring: NEUTRAL_SPEAKING,
                     emotionAfter: NEUTRAL,
                     text: "Vamos a aprender cómo representamos tiene, sirve para y está en. ¡Mira la pantalla!",
-                    audio: "/sounds/intro-activity2-1.mp3",
+                    audio: "intro-activity2-1",
 
                     afterDelay: 500
                 },
@@ -123,7 +125,7 @@ let PictogramActivity = () => {
                     emotionDuring: NEUTRAL_SPEAKING,
                     emotionAfter: NEUTRAL,
                     text: "Este pictograma significa “TIENE”.",
-                    audio: "/sounds/intro-activity2-2.mp3",
+                    audio: "intro-activity2-2",
                     onStart: () => setHighlightId("has"),
                     onEnd: () => setHighlightId(null),
                     afterDelay: 500
@@ -132,7 +134,7 @@ let PictogramActivity = () => {
                     emotionDuring: NEUTRAL_SPEAKING,
                     emotionAfter: NEUTRAL,
                     text: "Este significa “SIRVE PARA”.",
-                    audio: "/sounds/intro-activity2-3.mp3",
+                    audio: "intro-activity2-3",
                     onStart: () => setHighlightId("isUsedFor"),
                     onEnd: () => setHighlightId(null),
                     afterDelay: 500
@@ -141,7 +143,7 @@ let PictogramActivity = () => {
                     emotionDuring: NEUTRAL_SPEAKING,
                     emotionAfter: NEUTRAL,
                     text: "Y este significa “ESTÁ EN”.",
-                    audio: "/sounds/intro-activity2-4.mp3",
+                    audio: "intro-activity2-4",
                     onStart: () => setHighlightId("isIn"),
                     onEnd: () => setHighlightId(null),
                     afterDelay: 500
@@ -150,7 +152,7 @@ let PictogramActivity = () => {
                     emotionDuring: NEUTRAL_SPEAKING,
                     emotionAfter: NEUTRAL,
                     text: "Cuando oigas el sonido del pictograma, arrástralo al cuadrado.",
-                    audio: "/sounds/intro-activity-5.mp3",
+                    audio: "intro-activity-5",
                     onEnd: () => setStarted(true),
                     afterDelay: 2000
                 }
@@ -165,9 +167,7 @@ let PictogramActivity = () => {
     let successStreakRef = useRef(0);
 
     let audiosRef = useRef({});
-    let correctAudioRef = useRef(null);
-    let errorAudioRef = useRef(null);
-    let audioHelpRef = useRef(new Audio("/sounds/pictogramActivityHelp.mp3"));
+    let audioHelpRef = useRef(("pictogramActivityHelp"));
     let repeatTimerRef = useRef(null);
 
     let {activity} = useParams();
@@ -186,11 +186,8 @@ let PictogramActivity = () => {
 
             audiosRef.current = {};
             pictograms.find(p => p.activity === activity)?.content.forEach((p) => {
-                audiosRef.current[p.id] = new Audio(p.audio);
+                audiosRef.current[p.id] = (p.audio);
             });
-
-            correctAudioRef.current = new Audio("/sounds/correct.mp3");
-            errorAudioRef.current = new Audio("/sounds/error.mp3");
 
             return () => {
                 if (repeatTimerRef.current) {
@@ -203,18 +200,14 @@ let PictogramActivity = () => {
 
     useEffect(() => {
         if(started) {
-            let playTargetAudio = () => {
-                audiosRef.current[targetId]?.play().catch(() => {
-                });
-            };
-            playTargetAudio();
+            playAudio(targetId);
 
             if (repeatTimerRef.current) {
                 clearInterval(repeatTimerRef.current);
             }
             repeatTimerRef.current = setInterval(() => {
                 if (!help) {
-                    playTargetAudio();
+                    playAudio(targetId);
                 }
             }, 6000);
 
@@ -235,8 +228,7 @@ let PictogramActivity = () => {
             ?.content.find(p => p.id === draggedId);
 
         if (draggedId === currentTarget) {
-            correctAudioRef.current?.play().catch(() => {
-            });
+            playAudio("correct");
             attemptsRef.current = 0;
             setHelp(false);
             setEscapingId(null);
@@ -275,8 +267,7 @@ let PictogramActivity = () => {
             }, 1000);
 
         } else {
-            errorAudioRef.current?.play().catch(() => {
-            });
+            playAudio("error")
             setEscapingId(draggedId);
             setTimeout(() => setEscapingId(null), 700);
 
@@ -338,19 +329,11 @@ let PictogramActivity = () => {
         setTimeout(doMove, 90);
     };
 
-    function play(audio) {
-        if (audio) {
-            audio.currentTime = 0;
-            audio.play().catch(() => {
-            });
-        }
-    }
-
     return (<DndProvider backend={MultiBackend} options={HTML5toTouch}>
         <CustomDragLayer/>
         <Card style={{padding: "2vh", width: "80%"}}>
             <ActivityToolsComponent content={t("Escucha y coloca el elemento correcto en el cuadrado inferior")}
-                                    playHelp={()=>play(audioHelpRef.current)}/>
+                                    playHelp={()=>playAudio(audioHelpRef.current)}/>
             <Row justify="center" gutter={[16, 16]} style={{marginBottom: 24}}>
                 {pictograms.find(p => p.activity === activity)?.content.map((p) => (<Col key={p.id}>
                         <DraggablePictogram

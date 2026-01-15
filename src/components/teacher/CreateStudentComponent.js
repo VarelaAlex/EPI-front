@@ -1,8 +1,8 @@
-import { MinusCircleOutlined, PlusOutlined }                                                                   from "@ant-design/icons";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Alert, Button, Card, Checkbox, Col, DatePicker, Form, Input, InputNumber, Row, Select, Space, Steps } from "antd";
-import React, { useState }                                                                                     from "react";
-import { useTranslation }                                                                                      from "react-i18next";
-import { useNavigate, useParams }                                                                              from "react-router-dom";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate, useParams } from "react-router-dom";
 
 const { Step } = Steps;
 const { Option } = Select;
@@ -23,342 +23,359 @@ const CreateStudent = () => {
 
 	const steps = [
 		{
-			title:   "Información Básica",
+			title:   t("signup.student.steps.basicInformation"),
+			fields: ['name', 'lastName', 'age', 'birthDate', 'classroomNumber', 'school'],
 			content: (
-				         <>
-					         <Form.Item
-						         name="name"
-						         label="Nombre"
-						         rules={ [{ required: true, message: "Por favor, ingrese el nombre" }] }
-					         >
-						         <Input/>
-					         </Form.Item>
-					         <Form.Item
-						         name="lastName"
-						         label="Apellido"
-						         rules={ [{ required: true, message: "Por favor, ingrese el apellido" }] }
-					         >
-						         <Input/>
-					         </Form.Item>
-					         <Form.Item style={ { margin: "0" } }>
-						         <Form.Item
-							         name="age"
-							         label="Edad"
-							         rules={ [
-								         {
-									         required: true, type: "number", message: "Por favor, ingrese la edad"
-								         }
-							         ] }
-							         style={ {
-								         display: "inline-block"
-							         } }
-						         >
-							         <InputNumber style={ { width: "10rem" } }/>
-						         </Form.Item>
-						         <span style={ { display: "inline-block", margin: "2rem 2rem 0 2rem" } }>-</span>
-						         <Form.Item
-							         name="birthDate"
-							         label="Fecha de Nacimiento"
-							         rules={ [{ required: true, message: "Seleccione la fecha de nacimiento" }] }
-							         style={ {
-								         display: "inline-block"
-							         } }
-						         >
-							         <DatePicker style={ { width: "10rem" } }/>
-						         </Form.Item>
-						         <span style={ { display: "inline-block", margin: "2rem 2rem 0 2rem" } }>-</span>
-						         <Form.Item
-							         name="classroomNumber"
-							         label="Número de Clase"
-							         rules={ [
-								         {
-									         required: true, type: "number", message: "Por favor, ingrese el número de clase"
-								         }
-							         ] }
-							         style={ {
-								         display: "inline-block"
-							         } }
-						         >
-							         <InputNumber style={ { width: "10rem" } }/>
-						         </Form.Item>
-					         </Form.Item>
-					         <Form.Item
-						         name="school"
-						         label="Colegio"
-						         rules={ [{ required: true, message: "Por favor, ingrese el colegio" }] }
-					         >
-						         <Input/>
-					         </Form.Item>
-				         </>
-			         )
+				<>
+					<Form.Item
+						name="name"
+						label={t("signup.form.label.name")}
+						rules={[{ required: true, message: t("signup.error.name") }]}
+					>
+						<Input placeholder={t("signup.error.name")} />
+					</Form.Item>
+
+					<Form.Item
+						name="lastName"
+						label={t("signup.form.label.lastName")}
+						rules={[{ required: true, message: t("signup.error.lastName") }]}
+					>
+						<Input placeholder={t("signup.error.lastName")} />
+					</Form.Item>
+
+					<Row justify="start" gutter={32}>
+						<Col>
+							<Form.Item
+								name="age"
+								label={t("signup.form.label.age")}
+								rules={[{ required: true, type: "number", message: t("signup.error.age") }]}
+							>
+								<InputNumber style={{ width: "15rem" }} placeholder={t("signup.error.age")} />
+							</Form.Item>
+						</Col>
+
+						<Col>
+							<Form.Item
+								name="birthDate"
+								label={t("signup.form.label.birthDate")}
+								rules={[{ required: true, message: t("signup.error.birthDate") }]}
+							>
+								<DatePicker style={{ width: "15rem" }} placeholder={t("signup.error.birthDate")} />
+							</Form.Item>
+						</Col>
+					</Row>
+
+					<Form.Item
+						name="classroomNumber"
+						label={t("signup.form.label.classroomNumber")}
+						rules={[{ required: true, type: "number", message: t("signup.error.classroomNumber") }]}
+					>
+						<InputNumber style={{ width: "15rem" }} placeholder={t("signup.error.classroomNumber")} />
+					</Form.Item>
+
+					<Form.Item
+						name="school"
+						label={t("signup.form.label.school")}
+						rules={[{ required: true, message: t("signup.error.school") }]}
+					>
+						<Input placeholder={t("signup.error.school")} />
+					</Form.Item>
+				</>
+			)
 		}, {
-			title:   "Contexto Familiar",
+			title:   t("signup.student.steps.familyBackground"),
+			fields: [],
 			content: (
-				         <>
-					         <Form.Item
-						         name="socioEconomicLevel"
-						         label="Nivel Socioeconómico"
-					         >
-						         <Select placeholder="Seleccione" allowClear>
-							         <Option value="bajo">Bajo</Option>
-							         <Option value="medio">Medio</Option>
-							         <Option value="alto">Alto</Option>
-						         </Select>
-					         </Form.Item>
-					         <Form.Item
-						         name="nationalOrigin"
-						         label="Origen Nacional"
-					         >
-						         <Select
-							         placeholder="Seleccione"
-							         onChange={ (value) => setShowOtherNationalOrigin(value === "otro") }
-							         allowClear
-						         >
-							         <Option value="espania">España</Option>
-							         <Option value="europeo">Otro país europeo</Option>
-							         <Option value="africano">País africano</Option>
-							         <Option value="asiatico">País asiático</Option>
-							         <Option value="norteamericano">País norteamericano</Option>
-							         <Option value="latinoamericano">País latinoamericano</Option>
-							         <Option value="otro">Otro</Option>
-						         </Select>
-					         </Form.Item>
-					         { showOtherNationalOrigin && (
-						         <Form.Item name="otherNationalOrigin" label="Especifique el País">
-							         <Input/>
-						         </Form.Item>
-					         ) }
-				         </>
-			         )
+				<>
+					<Form.Item
+						name="socioEconomicLevel"
+						label={t("signup.form.label.socioEconomicLevel")}
+					>
+						<Select placeholder={t("select")} allowClear>
+							<Option value="bajo">{t("students.socioeconomicLevel.low")}</Option>
+							<Option value="medio">{t("students.socioeconomicLevel.medium")}</Option>
+							<Option value="alto">{t("students.socioeconomicLevel.high")}</Option>
+						</Select>
+					</Form.Item>
+					<Form.Item
+						name="nationalOrigin"
+						label={t("signup.form.label.nationalOrigin")}
+					>
+						<Select
+							placeholder={t("select")}
+							onChange={ (value) => setShowOtherNationalOrigin(value === "otro") }
+							allowClear
+						>
+							<Option value="espania">{t("students.nationalOrigin.spain")}</Option>
+							<Option value="europeo">{t("students.nationalOrigin.european")}</Option>
+							<Option value="africano">{t("students.nationalOrigin.african")}</Option>
+							<Option value="asiatico">{t("students.nationalOrigin.asian")}</Option>
+							<Option value="norteamericano">{t("students.nationalOrigin.northAmerican")}</Option>
+							<Option value="latinoamericano">{t("students.nationalOrigin.latinAmerican")}</Option>
+							<Option value="otro">{t("students.nationalOrigin.other")}</Option>
+						</Select>
+					</Form.Item>
+					{ showOtherNationalOrigin && (
+						<Form.Item name="otherNationalOrigin" label="Especifique el País">
+							<Input/>
+						</Form.Item>
+					) }
+				</>
+			)
 		}, {
-			title:   "Necesidades Educativas",
+			title:   t("signup.student.steps.educationalNeeds"),
+			fields: [], // Paso sin campos requeridos
 			content: (
-				         <>
-					         <Form.Item
-						         name="learningReadingRisk"
-						         label="¿Alumno en riesgo de dificultades de aprendizaje de la lectura?"
-					         >
-						         <Select placeholder="Seleccione" allowClear>
-							         <Option value="si">Sí</Option>
-							         <Option value="no">No</Option>
-						         </Select>
-					         </Form.Item>
-					         <Form.Item
-						         name="learningWritingRisk"
-						         label="¿Alumno en riesgo de dificultades de aprendizaje de la escritura?"
-					         >
-						         <Select placeholder="Seleccione" allowClear>
-							         <Option value="si">Sí</Option>
-							         <Option value="no">No</Option>
-						         </Select>
-					         </Form.Item>
-					         <Form.Item
-						         name="familyBackground"
-						         label="Alguno de los progenitores del alumno presentó dificultades de aprendizaje de la lectura o la escritura"
-					         >
-						         <Select placeholder="Seleccione" allowClear>
-							         <Option value="padre">Sí, el padre</Option>
-							         <Option value="madre">Sí, la madre</Option>
-							         <Option value="ambos">Sí, ambos progenitores</Option>
-							         <Option value="ninguno">No</Option>
-						         </Select>
-					         </Form.Item>
-					         <Form.Item
-						         name="neae"
-						         label="El alumno presenta Necesidades Específicas de Apoyo Educativo (NEAE)"
-					         >
-						         <Select placeholder="Seleccione"
-						                 onChange={ (value) => setShowNEAE(value === "si") }
-						                 allowClear>
-							         <Option value="si">Sí</Option>
-							         <Option value="no">No</Option>
-						         </Select>
-					         </Form.Item>
-					         { showNEAE && (
-						         <Form.Item
-							         name="specificSupportNeeds"
-							         label="Necesidades Específicas"
-						         >
-							         <Checkbox.Group
-								         onChange={ (checkedValues) => setShowOtherSupportNeeds(checkedValues.includes("otro")) }>
-								         <Row gutter={ [8, 16] }>
-									         <Col span={ 8 }><Checkbox value="trastornoLenguaje">Trastorno del desarrollo del lenguaje y la comunicación</Checkbox></Col>
-									         <Col span={ 8 }><Checkbox value="tdah">Trastorno por déficit de atención con hiperactividad</Checkbox></Col>
-									         <Col span={ 8 }><Checkbox value="autismo">Trastorno del espectro del autismo</Checkbox></Col>
-									         <Col span={ 16 }><Checkbox value="pendienteEvaluacion">Alumno pendiente de evaluación psicopedagógica</Checkbox></Col>
-									         <Col span={ 8 }><Checkbox value="altasCapacidades">Altas capacidades</Checkbox></Col>
-									         <Col span={ 8 }><Checkbox value="discapacidadCognitiva">Discapacidad cognitiva</Checkbox></Col>
-									         <Col span={ 8 }><Checkbox value="discapacidadFisica">Discapacidad física</Checkbox></Col>
-									         <Col span={ 8 }><Checkbox value="dificultadesEspecificas">Dificultades Específicas de Aprendizaje</Checkbox></Col>
-									         <Col span={ 8 }><Checkbox value="otro">Otro</Checkbox></Col>
-								         </Row>
-							         </Checkbox.Group>
-						         </Form.Item>
-					         ) }
-					         { showOtherSupportNeeds && (
-						         <Form.List name="otherSpecificSupportNeeds">
-							         { (fields, { add, remove }) => (
-								         <>
-									         { fields.map(({ key, name, ...restField }) => (
-										         <Space
-											         key={ key }
-											         style={ {
-												         display: "flex", marginBottom: 8
-											         } }
-											         align="baseline"
-										         >
-											         <Form.Item
-												         name={ name }
-												         { ...restField }
-											         >
-												         <Input addonBefore="Necesidades Específicas"/>
-											         </Form.Item>
-											         <MinusCircleOutlined onClick={ () => remove(name) }/>
-										         </Space>
-									         )) }
-									         <Form.Item>
-										         <Button type="dashed" onClick={ () => add() } block
-										                 icon={ <PlusOutlined/> }>
-											         Add field
-										         </Button>
-									         </Form.Item>
-								         </>
-							         ) }
-						         </Form.List>
-					         ) }
-					         <Form.Item
-						         name="learningDiagnosedDifficulties"
-						         label="Dificultades de Aprendizaje Diagnosticadas"
-					         >
-						         <Checkbox.Group>
-							         <Checkbox value="lectura">En lectura</Checkbox>
-							         <Checkbox value="escritura">En escritura</Checkbox>
-							         <Checkbox value="matematicas">En matemáticas</Checkbox>
-						         </Checkbox.Group>
-					         </Form.Item>
-					         <Form.Item
-						         name="needE
-						         ducationalSupport"
-						         label="El alumno recibe apoyo educativo"
-					         >
-						         <Select placeholder="Seleccione"
-						                 onChange={ (value) => setShowEducationalSupport(value === "si") }
-						                 allowClear>
-							         <Option value="si">Sí</Option>
-							         <Option value="no">No</Option>
-						         </Select>
-					         </Form.Item>
-					         { showEducationalSupport && <Form.Item
-						         name="educationalSupport"
-						         label="Apoyo educativo"
-					         >
-						         <Checkbox.Group
-							         onChange={ (checkedValues) => setShowOtherEducationalSupport(checkedValues.includes("otros")) }>
-							         <Checkbox value="PT">PT</Checkbox>
-							         <Checkbox value="AL">AL</Checkbox>
-							         <Checkbox value="otros">Otros especialistas</Checkbox>
-						         </Checkbox.Group>
-					         </Form.Item> }
-					         { showOtherEducationalSupport && (
-						         <Form.List name="otherEducationalSupport">
-							         { (fields, { add, remove }) => (
-								         <>
-									         { fields.map(({ key, name, ...restField }) => (
-										         <Space
-											         key={ key }
-											         style={ {
-												         display: "flex", marginBottom: 8
-											         } }
-											         align="baseline"
-										         >
-											         <Form.Item
-												         name={ name }
-												         { ...restField }
-											         >
-												         <Input addonBefore="Otros especialistas"/>
-											         </Form.Item>
-											         <MinusCircleOutlined onClick={ () => remove(name) }/>
-										         </Space>
-									         )) }
-									         <Form.Item>
-										         <Button type="dashed" onClick={ () => add() } block
-										                 icon={ <PlusOutlined/> }>
-											         Add field
-										         </Button>
-									         </Form.Item>
-								         </>
-							         ) }
-						         </Form.List>
-					         ) }
-					         <Form.Item
-						         name="firstWords"
-						         label="La emisión de las primeras palabras se inició "
-					         >
-						         <Select placeholder="Seleccione" allowClear>
-							         <Option value="antesUno">Antes del año</Option>
-							         <Option value="entreUnoYUnoMedio">Entre el año y el año y medio</Option>
-							         <Option value="entreUnoMedioYDos">Entre el año y medio y los dos años</Option>
-							         <Option value="entreDosYDosMedio">Entre los dos años y los dos años y
-								         medio</Option>
-							         <Option value="despuesDos">Después de los dos años y medio</Option>
-							         <Option value="noComunica">No se comunica oralmente</Option>
-						         </Select>
-					         </Form.Item>
-				         </>
-			         )
+				<>
+					<Form.Item
+						name="learningReadingRisk"
+						label={t("signup.form.label.learningReadingRisk")}
+					>
+						<Select placeholder={t("select")} allowClear>
+							<Option value="si">{t("yes")}</Option>
+							<Option value="no">{t("no")}</Option>
+						</Select>
+					</Form.Item>
+					<Form.Item
+						name="learningWritingRisk"
+						label={t("signup.form.label.learningWritingRisk")}
+					>
+						<Select placeholder={t("select")} allowClear>
+							<Option value="si">{t("yes")}</Option>
+							<Option value="no">{t("no")}</Option>
+						</Select>
+					</Form.Item>
+					<Form.Item
+						name="familyBackground"
+						label={t("signup.form.label.familyBackground")}
+					>
+						<Select placeholder={t("select")} allowClear>
+							<Option value="padre">{t("students.familyBackground.father")}</Option>
+							<Option value="madre">{t("students.familyBackground.mother")}</Option>
+							<Option value="ambos">{t("students.familyBackground.both")}</Option>
+							<Option value="ninguno">{t("students.familyBackground.none")}</Option>
+						</Select>
+					</Form.Item>
+					<Form.Item
+						name="neae"
+						label={t("signup.form.label.neae")}
+					>
+						<Select placeholder={t("select")}
+								onChange={ (value) => setShowNEAE(value === "si") }
+								allowClear>
+							<Option value="si">{t("yes")}</Option>
+							<Option value="no">{t("no")}</Option>
+						</Select>
+					</Form.Item>
+					{ showNEAE && (
+						<Form.Item
+							name="specificSupportNeeds"
+							label={t("signup.form.label.specificSupportNeeds")}
+						>
+							<Checkbox.Group
+								onChange={ (checkedValues) => setShowOtherSupportNeeds(checkedValues.includes("otro")) }>
+								<Row gutter={ [8, 16] }>
+									<Col span={ 8 }><Checkbox value="trastornoLenguaje">{t("students.specificSupportNeeds.languageDisorder")}</Checkbox></Col>
+									<Col span={ 8 }><Checkbox value="tdah">{t("students.specificSupportNeeds.adhd")}</Checkbox></Col>
+									<Col span={ 8 }><Checkbox value="autismo">{t("students.specificSupportNeeds.asd")}</Checkbox></Col>
+									<Col span={ 16 }><Checkbox value="pendienteEvaluacion">{t("students.specificSupportNeeds.awaitingEvaluation")}</Checkbox></Col>
+									<Col span={ 8 }><Checkbox value="altasCapacidades">{t("students.specificSupportNeeds.highAbilities")}</Checkbox></Col>
+									<Col span={ 8 }><Checkbox value="discapacidadCognitiva">{t("students.specificSupportNeeds.cognitiveDisability")}</Checkbox></Col>
+									<Col span={ 8 }><Checkbox value="discapacidadFisica">{t("students.specificSupportNeeds.physicalDisability")}</Checkbox></Col>
+									<Col span={ 8 }><Checkbox value="dificultadesEspecificas">{t("students.specificSupportNeeds.specificLearningDisability")}</Checkbox></Col>
+									<Col span={ 8 }><Checkbox value="otro">{t("students.specificSupportNeeds.other")}</Checkbox></Col>
+								</Row>
+							</Checkbox.Group>
+						</Form.Item>
+					) }
+					{ showOtherSupportNeeds && (
+						<Form.List name="otherSpecificSupportNeeds">
+							{ (fields, { add, remove }) => (
+								<>
+									{ fields.map(({ key, name, ...restField }) => (
+										<Space
+											key={ key }
+											style={ {
+												display: "flex", marginBottom: 8
+											} }
+											align="baseline"
+										>
+											<Form.Item
+												name={ name }
+												{ ...restField }
+											>
+												<Space>{t("signup.form.label.specificSupportNeeds")}<Input/></Space>
+											</Form.Item>
+											<MinusCircleOutlined onClick={ () => remove(name) }/>
+										</Space>
+									)) }
+									<Form.Item>
+										<Button type="dashed" onClick={ () => add() } block
+												icon={ <PlusOutlined/> }>
+											{t("addField")}
+										</Button>
+									</Form.Item>
+								</>
+							) }
+						</Form.List>
+					) }
+					<Form.Item
+						name="learningDiagnosedDifficulties"
+						label={t("signup.form.label.learningDiagnosedDifficulties")}
+					>
+						<Checkbox.Group>
+							<Checkbox value="lectura">{t("students.learningDiagnosedDifficulties.reading")}</Checkbox>
+							<Checkbox value="escritura">{t("students.learningDiagnosedDifficulties.writing")}</Checkbox>
+							<Checkbox value="matematicas">{t("students.learningDiagnosedDifficulties.math")}</Checkbox>
+						</Checkbox.Group>
+					</Form.Item>
+					<Form.Item
+						name="needEducationalSupport"
+						label={t("signup.form.label.needEducationalSupport")}
+					>
+						<Select placeholder={t("select")}
+								onChange={ (value) => setShowEducationalSupport(value === "si") }
+								allowClear>
+							<Option value="si">{t("yes")}</Option>
+							<Option value="no">{t("no")}</Option>
+						</Select>
+					</Form.Item>
+					{ showEducationalSupport && <Form.Item
+						name="educationalSupport"
+						label={t("signup.form.label.educationalSupport")}
+					>
+						<Checkbox.Group
+							onChange={ (checkedValues) => setShowOtherEducationalSupport(checkedValues.includes("otros")) }>
+							<Checkbox value="PT">{t("students.educationalSupport.pt")}</Checkbox>
+							<Checkbox value="AL">{t("students.educationalSupport.al")}</Checkbox>
+							<Checkbox value="otros">{t("students.educationalSupport.other")}</Checkbox>
+						</Checkbox.Group>
+					</Form.Item> }
+					{ showOtherEducationalSupport && (
+						<Form.List name="otherEducationalSupport">
+							{ (fields, { add, remove }) => (
+								<>
+									{ fields.map(({ key, name, ...restField }) => (
+										<Space
+											key={ key }
+											style={ {
+												display: "flex", marginBottom: 8
+											} }
+											align="baseline"
+										>
+											<Form.Item
+												name={ name }
+												{ ...restField }
+											>
+												<Space>{t("signup.form.label.otherSpecialists")}<Input/></Space>
+											</Form.Item>
+											<MinusCircleOutlined onClick={ () => remove(name) }/>
+										</Space>
+									)) }
+									<Form.Item>
+										<Button type="dashed" onClick={ () => add() } block
+												icon={ <PlusOutlined/> }>
+											{t("addField")}
+										</Button>
+									</Form.Item>
+								</>
+							) }
+						</Form.List>
+					) }
+					<Form.Item
+						name="firstWords"
+						label={t("signup.form.label.firstWords")}
+					>
+						<Select placeholder={t("select")} allowClear>
+							<Option value="antesUno">{t("students.firstWords.before12Months")}</Option>
+							<Option value="entreUnoYUnoMedio">{t("students.firstWords.between12And18Months")}</Option>
+							<Option value="entreUnoMedioYDos">{t("students.firstWords.between18And24Months")}</Option>
+							<Option value="entreDosYDosMedio">{t("students.firstWords.between24And30Months")}</Option>
+							<Option value="despuesDos">{t("students.firstWords.after30Months")}</Option>
+							<Option value="noComunica">{t("students.firstWords.dontComunicate")}</Option>
+						</Select>
+					</Form.Item>
+				</>
+			)
 		}
 	];
 
-	const next = () => setCurrentStep(currentStep + 1);
-	const prev = () => setCurrentStep(currentStep - 1);
+	const next = async () => {
+		try {
+			// Validar solo los campos del paso actual
+			const currentFields = steps[currentStep].fields;
+			if (currentFields && currentFields.length > 0) {
+				await form.validateFields(currentFields);
+			}
+			setCurrentStep(currentStep + 1);
+			setMessage(null);
+		} catch (error) {
+			// Los errores de validación se mostrarán automáticamente en los campos
+			console.log('Validation failed:', error);
+		}
+	};
+
+	const prev = () => {
+		setCurrentStep(currentStep - 1);
+		setMessage(null);
+	};
 
 	let onFinish = async () => {
+		// Validar todos los campos requeridos antes de enviar
+		try {
+			await form.validateFields(['name', 'lastName', 'age', 'birthDate', 'classroomNumber', 'school']);
+		} catch (error) {
+			setMessage({ error: { message: t("signup.validationError") } });
+			setCurrentStep(0);
+			return;
+		}
+
 		let {
-			    name,
-			    lastName,
-			    age,
-			    school,
-			    classroomNumber,
-			    birthDate,
-			    socioEconomicLevel,
-			    nationalOrigin,
-			    otherNationalOrigin,
-			    learningReadingRisk,
-			    learningWritingRisk,
-			    familyBackground,
-			    specificSupportNeeds,
-			    otherSpecificSupportNeeds,
-			    learningDiagnosedDifficulties,
-			    educationalSupport,
-			    otherEducationalSupport,
-			    firstWords
-		    } = form.getFieldsValue(true);
+			name,
+			lastName,
+			age,
+			school,
+			classroomNumber,
+			birthDate,
+			socioEconomicLevel,
+			nationalOrigin,
+			otherNationalOrigin,
+			learningReadingRisk,
+			learningWritingRisk,
+			familyBackground,
+			specificSupportNeeds,
+			otherSpecificSupportNeeds,
+			learningDiagnosedDifficulties,
+			educationalSupport,
+			otherEducationalSupport,
+			firstWords
+		} = form.getFieldsValue(true);
 
 		// Handle specific support needs: convert array to a string or process 'Otro' case
 		if ( specificSupportNeeds && specificSupportNeeds.includes("otro") && !otherSpecificSupportNeeds ) {
 			setMessage({
-				           error: {
-					           type: "validationError", message: "Por favor, ingrese la descripción de las necesidades específicas."
-				           }
-			           });
+				error: {
+					type: "validationError", message: t("signup.error.neae")
+				}
+			});
 			return;
 		}
 
 		// Handle educational support: convert array to a string or process 'Otros especialistas' case
 		if ( educationalSupport && educationalSupport.includes("otros") && !otherEducationalSupport ) {
 			setMessage({
-				           error: {
-					           type: "validationError", message: "Por favor, ingrese los especialistas."
-				           }
-			           });
+				error: {
+					type: "validationError", message: t("signup.error.specialists")
+				}
+			});
 			return;
 		}
 
 		// Handle 'Otro' national origin case
 		if ( nationalOrigin === "otro" && !otherNationalOrigin ) {
 			setMessage({
-				           error: { type: "validationError", message: "Por favor, ingrese el país de origen." }
-			           });
+				error: { type: "validationError", message: t("signup.error.nationalOrigin") }
+			});
 			return;
 		}
 
@@ -370,8 +387,8 @@ const CreateStudent = () => {
 			birthDate,
 			school,
 			classroomNumber,
-			socioEconomicLevel,
-			nationalOrigin:            nationalOrigin === "otro" ? otherNationalOrigin : nationalOrigin,
+			socioEconomicLevel: socioEconomicLevel || "",
+			nationalOrigin:            nationalOrigin === "otro" ? otherNationalOrigin : (nationalOrigin || ""),
 			learningReadingRisk,
 			learningWritingRisk,
 			familyBackground,
@@ -401,23 +418,39 @@ const CreateStudent = () => {
 			navigate("/teachers/classrooms/" + classroomName);
 		} else {
 			let jsonData = await response?.json();
-			setMessage({ error: jsonData?.error || { type: "unknownError", message: "Error desconocido" } });
+			setMessage({ error: jsonData?.error || { type: "unknownError", message: t("signup.form.unknownError") } });
 		}
 	};
 
 	return (
-		<Card title="Agregar Estudiante" style={ { margin: "auto" } }>
+		<Card title={t("signup.student.title")} style={ { margin: "auto" } }>
 			{ message && (
-				<Alert type="error" message={ message } showIcon style={ { marginBottom: "1vh" } }/>
+				Array.isArray(message) ? (
+					message.map((msg, index) => (
+						<Alert
+							key={index}
+							type="error"
+							message={msg.error?.message || msg.message || t("signup.validationError")}
+							showIcon
+							style={{ marginBottom: "1vh" }}
+						/>
+					))
+				) : (
+					<Alert
+						type="error"
+						message={message.error?.message || message.message || t("signup.validationError")}
+						showIcon
+						style={{ marginBottom: "1vh" }}
+					/>
+				)
 			) }
 			<Form
 				form={ form }
 				layout="vertical"
 				onFinish={ onFinish }
-				initialValues={ { socioEconomicLevel: "", nationalOrigin: "" } }
 				style={ { width: "40rem" } }
 			>
-				<Steps current={ currentStep } labelPlacement="vertical" onChange={ value => setCurrentStep(value) }>
+				<Steps current={ currentStep } labelPlacement="vertical">
 					{ steps.map((item) => (
 						<Step key={ item.title } title={ item.title }/>
 					)) }
@@ -427,17 +460,17 @@ const CreateStudent = () => {
 					<div style={ { display: "flex", gap: "1rem" } }>
 						{ currentStep > 0 && (
 							<Button block onClick={ prev } style={ { flex: "100%" } }>
-								Anterior
+								{t("signup.button.prev")}
 							</Button>
 						) }
 						{ currentStep < steps.length - 1 && (
 							<Button block type="primary" onClick={ next } style={ { flex: "100%" } }>
-								Siguiente
+								{t("signup.button.next")}
 							</Button>
 						) }
 						{ currentStep === steps.length - 1 && (
 							<Button block type="primary" htmlType="submit" style={ { flex: "100%" } }>
-								Finalizar
+								{t("signup.button.submit")}
 							</Button>
 						) }
 					</div>

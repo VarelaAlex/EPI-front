@@ -12,7 +12,7 @@
   },
   "pwa": {
     "button": "Descargar",
-    "notificationMessage": "¡Bienvenido/a a EPI!",
+    "notificationMessage": "¡Bienvenido/a a PEPI!",
     "notificationDescription": "Puedes descargar la aplicación haciendo clic en el botón de la derecha"
   },
   "iconic": "Icónica",
@@ -60,22 +60,30 @@
     },
     "error": {
       "email": {
-        "empty": "El correo electrónico es obligatorio",
+        "empty": "Por favor, ingrese el correo electrónico",
         "format": "Formato de correo electrónico incorrecto",
         "notExist": "No existe un profesor con este correo electrónico"
       },
       "password": {
-        "empty": "La contraseña es obligatoria",
+        "empty": "Por favor, ingrese la contraseña",
         "incorrect": "Contraseña incorrecta"
       },
       "username": {
-        "empty": "El nombre de usuario es obligatorio",
+        "empty": "Por favor, ingrese el nombre de usuario",
         "notExist": "No existe un alumno con este nombre de usuario"
       }
     }
   },
   "signup": {
     "title": "Regístrate",
+    "student": {
+      "title": "Agregar alumno",
+      "steps": {
+        "basicInformation": "Información Básica",
+        "familyBackground": "Contexto Familiar",
+        "educationalNeeds": "Necesidades Educativas"
+      }
+    },
     "button": {
       "next": "Siguiente",
       "prev": "Anterior",
@@ -101,7 +109,23 @@
         "schoolLocation": "Ubicación del centro",
         "gender": "Género",
         "experienceYears": "Años de experiencia",
-        "community": "Comunidad autónoma"
+        "community": "Comunidad autónoma",
+        "age": "Edad",
+        "birthDate": "Fecha de nacimiento",
+        "classroomNumber": "Número de clase",
+        "school": "Colegio",
+        "socioEconomicLevel": "Nivel socioeconómico",
+        "nationalOrigin": "Origen nacional",
+        "learningReadingRisk": "¿Alumno en riesgo de dificultades de aprendizaje de la lectura?",
+        "learningWritingRisk": "¿Alumno en riesgo de dificultades de aprendizaje de la escritura?",
+        "familyBackground": "¿Alguno de los progenitores del alumno presentó dificultades de aprendizaje de la lectura o la escritura?",
+        "neae": "¿El alumno presenta Necesidades Específicas de Apoyo Educativo (NEAE)?",
+        "specificSupportNeeds": "Necesidades Específicas",
+        "learningDiagnosedDifficulties": "Dificultades de Aprendizaje Diagnosticadas",
+        "needEducationalSupport": "El alumno recibe apoyo educativo",
+        "educationalSupport": "Apoyo educativo",
+        "firstWords": "¿Cuándo se inció la emisión de las primeras palabras?",
+        "otherSpecialists": "Especialistas"
       },
       "placeholder": {
         "name": "Angelica",
@@ -133,28 +157,35 @@
     },
     "error": {
       "email": {
-        "empty": "El correo electrónico es obligatorio",
+        "empty": "Por favor, ingrese el correo electrónico",
         "format": "Formato de correo electrónico incorrecto",
         "repeated": "Ya existe una cuenta con este correo electrónico"
       },
-      "name": "El nombre es obligatorio",
-      "lastName": "Los apellidos son obligatorios",
+      "name": "Por favor, ingrese el nombre",
+      "lastName": "Por favor, ingrese los apellidos",
+      "age": "Por favor, ingrese la edad",
+      "birthDate": "Por favor, ingrese la fecha de nacimiento",
+      "classroomNumber": "Por favor, ingrese el número de clase",
+      "school": "Por favor, ingrese el colegio",
+      "neae": "Por favor, ingrese la descripción de NEAE",
+      "specialists": "Por favor, ingrese los especialistas",
+      "nationalOrigin": "Por favor, ingrese el origen nacional",
       "password": {
-        "empty": "La contraseña es obligatoria",
+        "empty": "Por favor, ingrese la contraseña",
         "format": "La contraseña debe tener entre 8 y 12 caracteres, incluir al menos un número y un carácter especial (! @ # $ % & *)",
-        "confirm": "Por favor, confirma tu contraseña",
+        "confirm": "Por favor, confirme su contraseña",
         "unmatch": "Las contraseñas no coinciden"
       },
-      "teachingStage": "La etapa educativa es obligatoria",
-      "schoolType": "El tipo de centro es obligatorio",
-      "schoolLocation": "La ubicación del centro es obligatoria",
-      "gender": "El género es obligatorio",
-      "experienceYears": "Introduce tus años de experiencia",
+      "teachingStage": "Por favor, seleccione la etapa educativa",
+      "schoolType": "Por favor, seleccione el tipo de centro",
+      "schoolLocation": "Por favor, seleccione la ubicación del centro",
+      "gender": "Por favor, seleccione el género",
+      "experienceYears": "Por favor, ingrese sus años de experiencia",
       "community": {
-        "empty": "Selecciona tu comunidad autónoma"
+        "empty": "Por favor, seleccione su comunidad autónoma"
       }
     },
-    "validationError": "Revisa los campos del formulario",
+    "validationError": "Revisa todos los campos del formulario",
     "internalServerError": "Ocurrió un error en el servidor. Intenta de nuevo más tarde.",
     "invalidServerResponse": "Respuesta inesperada del servidor. Intenta más tarde.",
     "unknownError": "Ocurrió un error desconocido. Intenta nuevamente."
@@ -173,7 +204,7 @@
       "buttons": {
         "seeStatistics": "Ver estadísticas",
         "delete": "Eliminar",
-        "generateReport" : "Generar Informe"
+        "generateReport": "Generar Informe"
       }
     },
     "addClassroom": {
@@ -181,7 +212,7 @@
       "label": "Nombre del aula",
       "placeholder": "Primaria 2ºC",
       "button": "Añadir aula",
-      "error": "El nombre del aula es obligatorio",
+      "error": "Por favor, ingrese el nombre del aula",
       "level": {
         "label": "Nivel educativo",
         "placeholder": "Primaria",
@@ -208,7 +239,7 @@
     },
     "create": {
       "error": {
-        "name": "El nombre es obligatorio",
+        "name": "Por favor, ingrese el nombre",
         "teacher": "El id del profesor es obligatorio",
         "repeated": "Ya existe un aula con este nombre"
       }
@@ -258,9 +289,9 @@
           "age": "Edad del alumno"
         },
         "error": {
-          "name": "El nombre es obligatorio",
-          "lastName": "Los apellidos son obligatorios",
-          "age": "La edad es obligatoria"
+          "name": "Por favor, ingrese el nombre",
+          "lastName": "Por favor, ingrese los apellidos",
+          "age": "Por favor, ingrese la edad"
         },
         "placeholder": {
           "name": "Angelica",
@@ -349,7 +380,11 @@
         "edit": "Editar",
         "delete": "Eliminar"
       }
-    }
+    },
+    "ICONIC": "ICÓNICA",
+    "MIXED": "COMBINADA",
+    "SYMBOLIC": "SIMBÓLICA",
+    "GLOBAL": "GLOBAL"
   },
   "pictograms": {
     "is": "es",
@@ -410,10 +445,10 @@
           "classroom": "Aula del alumno"
         },
         "error": {
-          "name": "El nombre es obligatorio",
-          "lastName": "Los apellidos son obligatorios",
-          "age": "La edad es obligatoria",
-          "classroom": "El aula es obligatoria"
+          "name": "Por favor, ingrese el nombre del alumno",
+          "lastName": "Por favor, ingrese los apellidos del alumno",
+          "age": "Por favor, ingrese la edad del alumno",
+          "classroom": "Por favor, seleccione el aula del alumno"
         },
         "placeholder": {
           "name": "Angelica",
@@ -423,6 +458,56 @@
         },
         "button": "Aceptar"
       }
+    },
+    "socioeconomicLevel": {
+      "low": "Bajo",
+      "medium": "Medio",
+      "high": "Alto"
+    },
+    "nationalOrigin": {
+      "spain": "España",
+      "european": "Otro país europeo",
+      "african": "País africano",
+      "asian": "País asiático",
+      "northAmerican": "País norteamericano",
+      "latinAmerican": "País latinoamericano",
+      "other": "Otro",
+      "specify": "Especifica el país"
+    },
+    "familyBackground": {
+      "father": "Sí, el padre",
+      "mother": "Sí, la madre",
+      "both": "Ambos progenitores",
+      "none": "Ninguno"
+    },
+    "specificSupportNeeds": {
+      "languageDisorder": "Trastorno del desarrollo del lenguaje y la comunicación",
+      "adhd": "Trastorno por déficit de atención con hiperactividad",
+      "asd": "Trastorno del espectro autista",
+      "awaitingEvaluation": "Alumno pendiente de evaluación psicopedagógica",
+      "highAbilities": "Altas capacidades",
+      "cognitiveDisability": "Discapacidad cognitiva",
+      "physicalDisability": "Discapacidad física",
+      "specificLearningDisability": "Dificultades Específicas de Aprendizaje",
+      "other": "Otros"
+    },
+    "learningDiagnosedDifficulties": {
+      "reading": "En lectura",
+      "writing": "En escritura",
+      "math": "En matemáticas"
+    },
+    "educationalSupport": {
+      "pt": "PT",
+      "al": "AL",
+      "other": "Otros"
+    },
+    "firstWords": {
+      "before12Months": "Antes del año",
+      "between12And18Months": "Entre el año y el año y medio",
+      "between18And24Months": "Entre el año y medio y los dos años",
+      "between24And30Months": "Entre los dos años y los dos años y medio",
+      "after30Months": "Después de los dos años y medio",
+      "dontComunicate": "No se comunica oralmente"
     }
   },
   "profile": {
@@ -439,20 +524,20 @@
       "community": "Comunidad autónoma"
     },
     "error": {
-      "name": "El nombre es obligatorio",
-      "lastName": "Los apellidos son obligatorios",
+      "name": "Por favor, ingrese el nombre",
+      "lastName": "Por favor, ingrese los apellidos",
       "email": {
-        "empty": "El correo electrónico es obligatorio",
+        "empty": "Por favor, ingrese el correo electrónico",
         "format": "Formato de correo electrónico incorrecto",
         "repeated": "Ya existe una cuenta con este correo electrónico"
       },
-      "teachingStage": "La etapa educativa es obligatoria",
-      "schoolType": "El tipo de centro es obligatorio",
-      "schoolLocation": "La localización del centro es obligatoria",
-      "gender": "El género es obligatorio",
-      "experienceYears": "Los años de experiencia son obligatorios",
+      "teachingStage": "Por favor, seleccione la etapa educativa",
+      "schoolType": "Por favor, seleccione el tipo de centro",
+      "schoolLocation": "Por favor, seleccione la localización del centro",
+      "gender": "Por favor, seleccione el género",
+      "experienceYears": "Por favor, ingrese los años de experiencia",
       "experienceYearsMin": "Los años de experiencia deben ser mayor que 0",
-      "community": "La comunidad autónoma es obligatoria"
+      "community": "Por favor, seleccione la comunidad autónoma"
     },
     "placeholder": {
       "name": "Angelica",
@@ -503,7 +588,7 @@
       "prev": "Anterior",
       "submit": "Enviar"
     },
-    "options":{
+    "options": {
       "never": "Nunca",
       "almostNever": "Casi nunca",
       "fewTimes": "Pocas veces",
@@ -521,6 +606,57 @@
       "spatialOrientation": "Sentido del espacio y la orientación",
       "emotionsSocialAdaptation": "Emociones y adaptación social"
     },
+    "questions": {
+      "generalBehavior": {
+        "generalBehavior_1": "En la libreta, deja muchas marcas de goma de borrar, incluso se rompe o se arruga la hoja de tanto borrar",
+        "generalBehavior_2": "Su comportamiento para la tarea de casa es irregular",
+        "generalBehavior_3": "El comportamiento en la clase es bueno, pero su rendimiento es bajo"
+      },
+      "speechAbility": {
+        "speechAbility_1": "Reacciona lentamente cuando tiene que contestar preguntas de forma oral",
+        "speechAbility_2": "Se expresa oralmente con dificultad (por ejemplo, no encuentra las palabras para expresar sus ideas)",
+        "speechAbility_3": "Comete errores gramaticales cuando habla",
+        "speechAbility_4": "Tiene dificultades para pronunciar bien"
+      },
+      "memoryAbility": {
+        "memoryAbility_1": "Pierde sus pertenencias personales, tales como libretas, lápices, o estuches, o se olvida de hacer o traer los deberes",
+        "memoryAbility_2": "Le cuesta seguir una serie de varias indicaciones seguidas",
+        "memoryAbility_3": "Necesita que otras personas le recuerden varias veces ciertas informaciones, como traer de casa algunos materiales para trabajar en el aula",
+        "memoryAbility_4": "Le cuesta aprender de memoria los nombres de personas o lugares",
+        "memoryAbility_5": "Le cuesta aprender canciones o poemas infantiles, incluso los que son sencillos",
+        "memoryAbility_6": "Tiene dificultad para aprender un horario que sea un poco complejo",
+        "memoryAbility_7": "Tiene dificultad para recordar sus datos personales, tales como su fecha de nacimiento, su número de teléfono, su dirección, etc."
+      },
+      "attentionAbility": {
+        "attentionAbility_1": "Se distrae con facilidad",
+        "attentionAbility_2": "Tiene dificultad para concentrarse en una cosa durante mucho tiempo (por ejemplo, cuando hace tareas, se para con frecuencia, se levanta a hablar con otros/as compañeros/as)",
+        "attentionAbility_3": "Tiene dificultad para repetir datos que acaba de escuchar, como números de teléfono, nombres de personas o contenido de cuentos"
+      },
+      "sequenceAbility": {
+        "sequenceAbility_1": "Tiene dificultad para asimilar los conceptos de tiempo (no distingue ayer, hoy y mañana)",
+        "sequenceAbility_2": "Se equivoca de orden cuando tiene que aprender de memoria algunas palabras o números en una secuencia (por ejemplo, el orden de las cuatro estaciones o nmeros de teléfono)",
+        "sequenceAbility_3": "Necesita mucho tiempo para aprender a decir la hora"
+      },
+      "muscleCoordination": {
+        "muscleCoordination_1": "Cuando colorea un dibujo se sale de los límites",
+        "muscleCoordination_2": "Tiene dificultad cuando corre y salta (por ejemplo, se cae a menudo o se lesiona)",
+        "muscleCoordination_3": "Cuando hace juegos con mucho movimiento, por ejemplo, saltar la cuerda, se cansa con facilidad",
+        "muscleCoordination_4": "Su rendimiento motor es bajo (por ejemplo, no puede cumplir los movimientos que le indica el profesorado)",
+        "muscleCoordination_5": "Le cuesta saltar la cuerda, tirar, coger o dar patadas a la pelota",
+        "muscleCoordination_6": "En la clase no puede dar palmadas siguiendo ritmos sencillos",
+        "muscleCoordination_7": "Le cuesta atarse los cordones y abrocharse los botones mas que a los niños de su edad"
+      },
+      "spatialOrientation": {
+        "spatialOrientation_1": "Le cuesta distinguir entre arriba y abajo o entre izquierda y derecha",
+        "spatialOrientation_2": "Tiene dificultad para orientarse (por ejemplo, necesita mucho tiempo para saber como ir a las diferentes aulas, salas del profesorado o sala de música)"
+      },
+      "emotionsSocialAdaptation": {
+        "emotionsSocialAdaptation_1": "Le cuesta relacionarse con otras personas (por ejemplo, a menudo discute con los hermanos o con los companeros)",
+        "emotionsSocialAdaptation_2": "Tiene mala imagen de sí mismo",
+        "emotionsSocialAdaptation_3": "Se desanima o desiste de hacer las cosas con facilidad",
+        "emotionsSocialAdaptation_4": "Tiene dolor de cabeza, dolor de estómago, se enfada o se pone nervioso cuando se siente presionado"
+      }
+    },
     "validationError": "Por favor, responde a todas las preguntas antes de pasar al siguiente paso o enviar el cuestionario."
   },
   "surveyB": {
@@ -530,7 +666,7 @@
       "prev": "Anterior",
       "submit": "Enviar"
     },
-    "options":{
+    "options": {
       "never": "Nunca",
       "almostNever": "Casi nunca",
       "fewTimes": "Pocas veces",
@@ -552,10 +688,331 @@
       "spatialOrientation": "Sentido del espacio y la orientación",
       "emotionsSocialAdaptation": "Emociones y adaptación social"
     },
+    "questions": {
+      "reading": {
+        "reading_1": "Su competencia en la lectura es peor que la de los alumnos de su misma edad",
+        "reading_2": "Tiene dificultad para reconocer palabras muy frecuentes o familiares",
+        "reading_3": "Cuando lee en voz alta, se equivoca de palabras",
+        "reading_4": "Su actitud a la hora de leer es peor que la de los alumnos de su misma edad",
+        "reading_5": "Cuando revisa sus producciones, no encuentra los errores"
+      },
+      "orthography": {
+        "orthography_1": "Se equivoca en la tarea de escribir al dictado, cometiendo errores en las letras, palabras o lo deja en blanco",
+        "orthography_2": "Comete muchos errores a la hora de escribir, tales como saltarse letras, no mantiene el mismo tamano de las letras o no respeta la pauta",
+        "orthography_3": "Necesita mas tiempo que otros alumnos para copiar un texto"
+      },
+      "writeExpression": {
+        "writeExpression_1": "Muchas palabras de su vocabulario oral, no las sabe escribir",
+        "writeExpression_2": "La expresion escrita es peor que la oral"
+      },
+      "generalBehavior": {
+        "generalBehavior_1": "En la libreta, deja muchas marcas de goma de borrar, incluso se rompe o se arruga la hoja de tanto borrar",
+        "generalBehavior_2": "Su comportamiento para la tarea de casa es irregular",
+        "generalBehavior_3": "El comportamiento en la clase es bueno, pero su rendimiento es bajo",
+        "generalBehavior_4": "Los padres dicen que el alumno estudia mucho, pero, incluso así, su rendimiento en clase es bajo",
+        "generalBehavior_5": "Los padres dicen que el alumno ha leído muchas veces el contenido que debe escribir de memoria, pero el resultado de la escritura de memoria no es bueno"
+      },
+      "mathAbility": {
+        "mathAbility_1": "Para cálculos sencillos (por ejemplo, 3+2), necesita los dedos o hacer marcas en el papel",
+        "mathAbility_2": "Tiene dificultades para resolver problemas",
+        "mathAbility_3": "Tiene dificultades para comprender el valor de los numeros que ha de conocer por su edad"
+      },
+      "speechAbility": {
+        "speechAbility_1": "Reacciona lentamente cuando tiene que contestar preguntas de forma oral",
+        "speechAbility_2": "Se expresa oralmente con dificultad (por ejemplo, no encuentra las palabras para expresar sus ideas)",
+        "speechAbility_3": "Comete errores gramaticales cuando habla",
+        "speechAbility_4": "Tiene dificultades para pronunciar bien"
+      },
+      "memoryAbility": {
+        "memoryAbility_1": "Pierde sus pertenencias personales, tales como libretas, lápices, o estuches, o se olvida de hacer o traer los deberes",
+        "memoryAbility_2": "Le cuesta seguir una serie de varias indicaciones seguidas",
+        "memoryAbility_3": "Necesita que otras personas le recuerden varias veces ciertas informaciones, como traer de casa algunos materiales para trabajar en el aula",
+        "memoryAbility_4": "Le cuesta aprender de memoria los nombres de personas o lugares",
+        "memoryAbility_5": "Le cuesta aprender canciones o poemas infantiles, incluso los que son sencillos",
+        "memoryAbility_6": "Tiene dificultad para aprender un horario que sea un poco complejo",
+        "memoryAbility_7": "Tiene dificultad para recordar sus datos personales, tales como su fecha de nacimiento, su número de teléfono, su dirección, etc."
+      },
+      "attentionAbility": {
+        "attentionAbility_1": "Se distrae con facilidad",
+        "attentionAbility_2": "Tiene dificultad para concentrarse en una cosa durante mucho tiempo (por ejemplo, cuando hace tareas, se para con frecuencia, se levanta a hablar con otros/as compañeros/as)",
+        "attentionAbility_3": "Tiene dificultad para repetir datos que acaba de escuchar, como números de teléfono, nombres de personas o contenido de cuentos"
+      },
+      "sequenceAbility": {
+        "sequenceAbility_1": "Cambia el orden de las letras en las palabras",
+        "sequenceAbility_2": "Le cuesta escribir bien las fechas, siguiendo el orden de día, mes, año",
+        "sequenceAbility_3": "Tiene dificultad para asimilar los conceptos de tiempo (no distingue ayer, hoy y mañana)",
+        "sequenceAbility_4": "Se equivoca de orden cuando tiene que aprender de memoria algunas palabras o números en una secuencia (por ejemplo, el orden de las cuatro estaciones o nmeros de teléfono)",
+        "sequenceAbility_5": "Necesita mucho tiempo para aprender a decir la hora"
+      },
+      "muscleCoordination": {
+        "muscleCoordination_1": "Cuando colorea un dibujo se sale de los límites",
+        "muscleCoordination_2": "Tiene dificultad cuando corre y salta (por ejemplo, se cae a menudo o se lesiona)",
+        "muscleCoordination_3": "Cuando hace juegos con mucho movimiento, por ejemplo, saltar la cuerda, se cansa con facilidad",
+        "muscleCoordination_4": "Su rendimiento en Educación Física es bajo (por ejemplo, no puede cumplir los movimientos que le indica el profesorado)",
+        "muscleCoordination_5": "Le cuesta saltar la cuerda, tirar, coger o dar patadas a la pelota",
+        "muscleCoordination_6": "En la clase de Música tiene dificultad para dar palmadas siguiendo ritmos sencillos",
+        "muscleCoordination_7": "Le cuesta atarse los cordones y abrocharse los botones mas que a los niños de su edad"
+      },
+      "spatialOrientation": {
+        "spatialOrientation_1": "Le cuesta distinguir entre arriba y abajo o entre izquierda y derecha",
+        "spatialOrientation_2": "Tiene dificultad para orientarse (por ejemplo, necesita mucho tiempo para saber como ir a las diferentes aulas, salas del profesorado o sala de música)"
+      },
+      "emotionsSocialAdaptation": {
+        "emotionsSocialAdaptation_1": "Huye del estudio",
+        "emotionsSocialAdaptation_2": "Le cuesta relacionarse con otras personas (por ejemplo, a menudo discute con los hermanos o con los compañeros)",
+        "emotionsSocialAdaptation_3": "Tiene mala imagen de sí mismo",
+        "emotionsSocialAdaptation_4": "Se desanima o desiste de hacer las cosas con facilidad",
+        "emotionsSocialAdaptation_5": "Tiene dolor de cabeza, dolor de estómago, se enfada o se pone nervioso cuando se siente presionado"
+      }
+    },
     "validationError": "Por favor, responde todas las preguntas antes de pasar al siguiente paso o enviar el cuestionario."
   },
   "pageNotFound": {
     "message1": "Vaya... Parece que la página que buscas no existe.",
     "message2": "Haz clic en el icono en la parte superior izquierda para volver."
+  },
+  "exercises": {
+    "notFound": "No se han encontrado ejercicios"
+  },
+  "pretraining": {
+    "select": "Selecciona la actividad"
+  },
+  "aboutEPI": {
+    "title": "Estrategia Hypertexto",
+    "description": "Hypertexto es una estrategia que facilita la gestión de la información, promoviendo el recuerdo, la comprensión y la expresión. Con Hypertexto, se aborda tanto la estructura de un contenido, organizándolo en redes, como el uso de signos y pictogramas para una comunicación más efectiva.",
+    "collapse": {
+      "mainComponents": "Componentes principales de la estrategia Hypertexto",
+      "hypertextLevels": "Niveles de Hypertexto",
+      "exercisePhases": "Fases de un ejercicio"
+    },
+    "tabs": {
+      "linearText": "Texto lineal",
+      "hypertext": "Hypertexto",
+      "punctuation": "Signos de puntuación"
+    },
+    "linearText": {
+      "intro": "Un mensaje lineal puede representarse de tres maneras distintas:",
+      "types": {
+        "iconic": "Icónica",
+        "combined": "Combinada",
+        "symbolic": "Simbólica"
+      },
+      "description": {
+        "iconic": "Solo imágenes",
+        "combined": "Imágenes y palabras",
+        "symbolic": "Solo palabras"
+      },
+      "explanation": {
+        "part1": "Cada mensaje incluye un título y dos frases que definen y amplían el contenido. Las imágenes que se presentan a continuación son ejemplos de textos lineales en diferentes representaciones y tipos de red, que se explican en la sección",
+        "part2": "."
+      },
+      "images": {
+        "iconic": "Texto lineal de una red I-I en representación icónica",
+        "combined": "Texto lineal de una red I-II en representación combinada",
+        "symbolic": "Texto lineal de una red I-III en representación simbólica"
+      }
+    },
+    "hypertext": {
+      "intro": "El texto lineal se organiza en una red o esquema de Hypertexto. Esta estructura puede ser de tres tipos:",
+      "organization": {
+        "part1": "Para organizar la información, se siguen ciertas normas, como colocar el título en un rectángulo, los contenidos en bolos y los",
+        "part2": "o verbos en los enlaces."
+      },
+      "pictograms": {
+        "alt": "Pictogramas",
+        "title": "Pictogramas y sus verbos de enlace",
+        "button": "pictogramas",
+        "close": "Close"
+      },
+      "images": {
+        "i-i": "Hypertexto de una red I-I en representación icónica",
+        "i-ii": "Hypertexto de una red I-II en representación combinada",
+        "i-iii": "Hypertexto de una red I-III en representación simbólica"
+      }
+    },
+    "punctuation": {
+      "intro": "El programa también se enfoca en la expresión, incorporando pausas al organizar la información. En las representaciones icónica y combinada, se utilizan imágenes como stop grande para el punto (.) y stop pequeño para la coma (,) y la \"y\". En la representación simbólica, se emplean los signos de puntuación: coma (,), \"y\" y punto (.).",
+      "stop": {
+        "title": "Stop",
+        "description": "Esta imagen se utiliza en representación icónica y combinada para representar las pausas en una oración."
+      }
+    },
+    "levels": {
+      "intro": "La edad recomendada para cada ejercicio depende del tipo de red y de la representación de cada ejercicio.",
+      "iconic": "Icónica",
+      "combined": "Combinada",
+      "symbolic": "Simbólica",
+      "network": {
+        "i-i": "Red I-I",
+        "i-ii": "Red I-II",
+        "i-iii": "Red I-III"
+      },
+      "age": {
+        "3": "3 años",
+        "3-4": "3-4 años",
+        "4": "4 años",
+        "5": "5 años",
+        "5-6": "5-6 años",
+        "6": "6 años",
+        "7": "7 años",
+        "7-8": "7-8 años",
+        "8": "8 años"
+      }
+    },
+    "phases": {
+      "intro": "La realización de un ejercicio en esta aplicación se compone de tres pasos fundamentales, organizados en dos fases distintas. Este enfoque estructurado no solo facilita la comprensión del proceso, sino que también fomenta el desarrollo de habilidades de lectoescritura en los alumnos. A continuación, se detallan las fases y pasos involucrados:",
+      "first": {
+        "title": "Primera fase",
+        "description": "En esta fase, el alumno se enfrenta a los dos primeros pasos del ejercicio, diseñados para fortalecer su capacidad de lectura y organización de la información.",
+        "read": {
+          "title": "Lee",
+          "description": "El alumno debe leer atentamente el texto lineal ubicado en la parte superior de la pantalla. Este primer paso es crucial, ya que promueve la atención y la comprensión lectora. Al interactuar con el contenido, el alumno no solo adquiere información, sino que también se familiariza con la estructura del texto, esencial para su desarrollo lector."
+        },
+        "order": {
+          "title": "Ordena",
+          "description": "Después de la lectura, el alumno debe colocar cada elemento del texto lineal en el sitio correspondiente. Este ejercicio de ordenación ayuda a los estudiantes a conectar ideas y conceptos, desarrollando así habilidades críticas de organización y síntesis de información. Al realizar esta tarea, los alumnos refuerzan su capacidad para interpretar y estructurar textos, habilidades fundamentales en el aprendizaje de la lectoescritura."
+        }
+      },
+      "second": {
+        "title": "Segunda fase",
+        "description": "En esta fase se lleva a cabo el último paso del ejercicio, donde el alumno aplica lo aprendido en la primera fase.",
+        "express": {
+          "title": "Expresa",
+          "description": "En este paso, la red Hypertexto se presenta en la parte superior de la pantalla. Aquí, el alumno debe ejecutar el proceso inverso, colocando ordenadamente los elementos en el texto lineal. Esta actividad no solo refuerza la comprensión del contenido, sino que también promueve la expresión escrita, al pasar a la representación simbólica. A través de este ejercicio, el alumno tiene la oportunidad de reorganizar la información y articular sus pensamientos de manera coherente, lo cual es fundamental para desarrollar habilidades de escritura efectiva y creativa."
+        }
+      },
+      "conclusion": "A través de este proceso estructurado y dinámico, la aplicación no solo favorece la lectoescritura, sino que también brinda a los alumnos las herramientas necesarias para desarrollar una comprensión profunda del texto y la capacidad de expresarse de manera clara y organizada. Este enfoque no solo mejora las habilidades de lectura y escritura, sino que también fomenta un aprendizaje activo y participativo."
+    }
+  },
+  "yes": "Sí",
+  "no": "No",
+  "select": "Por favor, selecciona una opción",
+  "addField": "Añadir campo",
+  "phrasesActivity": {
+    "intro1": "Ahora vamos a ordenar los elementos para formar la frase, ¡fíjate bien en los pictogramas!",
+    "intro2": "Recuerda que en esta actividad tienes que ordenar los elementos para formar la frase.",
+    "help": "Escucha y ordena la frase",
+    "phrases": {
+      "dog-animal": [
+        "El perro",
+        "es",
+        "un animal"
+      ],
+      "whale-mammal": [
+        "La ballena",
+        "es",
+        "un mamífero"
+      ],
+      "house-living": [
+        "La casa",
+        "es para",
+        "vivir"
+      ],
+      "sun-star": [
+        "El sol",
+        "es",
+        "una estrella"
+      ],
+      "summer-year": [
+        "El verano",
+        "es parte de",
+        "el año"
+      ],
+      "apple-fruit": [
+        "La manzana",
+        "es",
+        "una fruta"
+      ],
+      "bed-sleeping": [
+        "La cama",
+        "es para",
+        "dormir"
+      ],
+      "street-city": [
+        "La calle",
+        "es parte de",
+        "la ciudad"
+      ],
+      "car-traveling": [
+        "El coche",
+        "es para",
+        "viajar"
+      ],
+      "swing-playing": [
+        "El columpio",
+        "es para",
+        "jugar"
+      ],
+      "water-drinking": [
+        "El agua",
+        "es para",
+        "beber"
+      ],
+      "sea-bathing": [
+        "El mar",
+        "es para",
+        "bañarse"
+      ],
+      "dog-tail": [
+        "El perro",
+        "tiene",
+        "cola"
+      ],
+      "whale-sea": [
+        "La ballena",
+        "está en",
+        "el mar"
+      ],
+      "house-living2": [
+        "La casa",
+        "sirve para",
+        "vivir"
+      ],
+      "sun-sky": [
+        "El sol",
+        "está en",
+        "el cielo"
+      ],
+      "summer-sunbathing": [
+        "El verano",
+        "sirve para",
+        "tomar el sol"
+      ],
+      "apple-fruitBowl": [
+        "La manzana",
+        "está en",
+        "el frutero"
+      ],
+      "bed-room": [
+        "La cama",
+        "está en",
+        "la habitación"
+      ],
+      "street-city2": [
+        "La calle",
+        "está en",
+        "la ciudad"
+      ],
+      "car-wheels": [
+        "El coche",
+        "tiene",
+        "ruedas"
+      ],
+      "swing-park": [
+        "El columpio",
+        "está en",
+        "el parque"
+      ],
+      "water-washing": [
+        "El agua",
+        "sirve para",
+        "lavarse"
+      ],
+      "sea-beach": [
+        "El mar",
+        "está en",
+        "la playa"
+      ]
+    }
   }
 }

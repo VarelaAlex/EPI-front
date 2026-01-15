@@ -1,4 +1,6 @@
 import { createContext, useContext, useState, useRef } from "react";
+import {usePlayAudio} from "../hooks/usePlayAudio";
+import {runWithLock} from "../services/runWithLock";
 
 const AvatarContext = createContext();
 
@@ -7,22 +9,26 @@ export const AvatarProvider = ({ children }) => {
     const [speech, setSpeech] = useState(null);
     const [visible, setVisible] = useState(localStorage.getItem("avatarVisible") === "true");
     const [voiceEnabled, setVoiceEnabled] = useState(localStorage.getItem("avatarVoiceEnabled") === "true");
+    const [isBusy, setIsBusy] = useState(false);
+
+
     const audioRef = useRef(null);
     const isPlayingRef = useRef(false);
+    const playAudioByKey = usePlayAudio();
 
-    const playAudio = (src) => {
+    const playAudio = (audioKey) => {
         return new Promise(resolve => {
-            if (!src || !voiceEnabled) return resolve(); // si el audio está deshabilitado, resolvemos inmediatamente
+            if (!audioKey || !voiceEnabled) return resolve();
 
             if (audioRef.current) {
                 audioRef.current.pause();
             }
 
-            const audio = new Audio(src);
+            const audio = playAudioByKey(audioKey);
             audioRef.current = audio;
 
+            if (!audio) return resolve();
             audio.onended = () => resolve();
-            audio.play();
         });
     };
 
@@ -44,12 +50,13 @@ export const AvatarProvider = ({ children }) => {
 
     const changeEmotionSequence = async (sequence = []) => {
         if (!Array.isArray(sequence) || sequence.length === 0) return;
-
         if (isPlayingRef.current) return;
-        isPlayingRef.current = true;
 
+        isPlayingRef.current = true;
+        await runWithLock(setIsBusy, async () => {
         for (const step of sequence) {
             if (!isPlayingRef.current) break;
+
             const {
                 audio,
                 text,
@@ -60,13 +67,10 @@ export const AvatarProvider = ({ children }) => {
                 onEnd
             } = step;
 
-            // Mostrar emoción y texto solo si el avatar está visible
             if (visible) setEmotion(emotionDuring);
             setSpeech(text || null);
 
-            if (typeof onStart === "function") {
-                try { onStart(); } catch (e) { console.error(e); }
-            }
+            onStart?.();
 
             await playAudio(audio);
 
@@ -75,10 +79,8 @@ export const AvatarProvider = ({ children }) => {
 
             await new Promise(res => setTimeout(res, afterDelay));
 
-            if (typeof onEnd === "function") {
-                try { onEnd(); } catch (e) { console.error(e); }
-            }
-        }
+            onEnd?.();
+        }});
 
         if (visible) setEmotion("neutral");
         isPlayingRef.current = false;
@@ -113,7 +115,8 @@ export const AvatarProvider = ({ children }) => {
             showAvatar,
             disableVoice,
             enableVoice,
-            stopAudio
+            stopAudio,
+            isBusy
         }}>
             {children}
         </AvatarContext.Provider>

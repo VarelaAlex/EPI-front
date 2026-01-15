@@ -37,7 +37,7 @@ let SelectMode = () => {
                         emotionDuring: NEUTRAL_SPEAKING,
                         emotionAfter: NEUTRAL,
                         text: phrases[index],
-                        audio: `/sounds/greeting${index}.mp3`,
+                        audio: `greeting${index}`,
                         afterDelay: 500
                     }
                 ]);
@@ -50,28 +50,28 @@ let SelectMode = () => {
                         emotionDuring: NEUTRAL_SPEAKING,
                         emotionAfter: NEUTRAL,
                         text: "¡Hola! ¡Yo soy PEPI! Y voy a ayudarte a aprender a organizar la información.",
-                        audio: "/sounds/intro1.mp3",
+                        audio: "intro1",
                         afterDelay: 500
                     },
                     {
                         emotionDuring: NEUTRAL_SPEAKING,
                         emotionAfter: NEUTRAL,
                         text: "A veces, te saldrá a la primera. Otras, nos equivocaremos, pero cometer errores es normal, forma parte del aprendizaje.",
-                        audio: "/sounds/intro2.mp3",
+                        audio: "intro2",
                         afterDelay: 500
                     },
                     {
                         emotionDuring: NEUTRAL_SPEAKING,
                         emotionAfter: NEUTRAL,
                         text: "Lo importante es seguir intentándolo, así que, juntos, vamos a hacerlo lo mejor que podamos.",
-                        audio: "/sounds/intro3.mp3",
+                        audio: "intro3",
                         afterDelay: 500
                     },
                     {
                         emotionDuring: NEUTRAL_SPEAKING,
                         emotionAfter: NEUTRAL,
                         text: "Primero tienes que prepararte para luego empezar a entrenar. ¡Empieza por la preparación!",
-                        audio: "/sounds/intro4.mp3",
+                        audio: "intro4",
                         afterDelay: 500
                     }
                 ]);
