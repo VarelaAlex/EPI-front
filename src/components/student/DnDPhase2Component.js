@@ -16,6 +16,7 @@ import {useAvatar} from "../AvatarContext";
 import {getNextExercise} from '../../services/getNextExercise';
 import {TRAINING_MODES} from "../../Globals";
 import {executeWithProbability} from "../../services/executeWithProbability";
+import {getGuidedIndex} from "../../services/getGuidedIndex";
 
 let DnDPhase2 = () => {
 
@@ -406,16 +407,22 @@ let DnDPhase2 = () => {
             setTimer(setTimeout(() => {
                 finishExperiment();
                 finishTracking("/students/exercises");
-                updateExerciseProgress(exercise.closedOrder).then(() => {
+                updateExerciseProgress(exercise.index).then(() => {
                     if (trainingMode.toUpperCase() === TRAINING_MODES.RULED) {
-                        getNextExercise(exercise.closedOrder).then((nextExercise) => {
-                            setExercise(nextExercise);
-                            navigate(`/exerciseDnD/phase1/ruled`);
+                        getNextExercise(exercise.index).then((nextExercise) => {
+                            if (nextExercise) {
+                                setExercise(nextExercise);
+                                navigate(`/exerciseDnD/phase1/ruled`);
+                            } else {
+                                // Fin de la secuencia guiada
+                                navigate(`/students/exercises/${trainingMode}`);
+                            }
                         });
                     } else {
-                        navigate(`/students/exercises/${trainingMode}`)
+                        navigate(`/students/exercises/${trainingMode}`);
                     }
                 });
+
             }, 4500));
         }
         setElement(null);

@@ -131,20 +131,20 @@ const SentenceNetwork = () => {
             phrase: [
                 { text: "La casa", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6964`, audio: ("house") },
                 { text: "es para", image: "/pictograms/isFor.png", audio: ("isFor"), draggable: true },
-                { text: "vivir", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/11605`, audio: ("live") },
+                { text: "vivir", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/11605`, audio: ("living") },
                 { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop") }
             ],
-            audio: ("casa-def")
+            audio: ("house-living")
         },
         {
             id: 6,
             phrase: [
                 { text: "La casa", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6964`, audio: ("house") },
                 { text: "sirve para", image: "/pictograms/isUsedFor.png", audio: ("isUsedFor"), draggable: true },
-                { text: "vivir", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/11605`, audio: ("live") },
+                { text: "vivir", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/11605`, audio: ("living") },
                 { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop") }
             ],
-            audio: ("casa-amp")
+            audio: ("house-living2")
         },
         {
             id: 7,
@@ -154,17 +154,17 @@ const SentenceNetwork = () => {
                 { text: "una estrella", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2752`, audio: ("star") },
                 { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop") }
             ],
-            audio: ("sol-def")
+            audio: ("sun-star")
         },
         {
             id: 8,
             phrase: [
                 { text: "El sol", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7252`, audio: ("sun") },
                 { text: "está en", image: "/pictograms/isIn.png", audio: ("isIn"), draggable: true },
-                { text: "el cielo", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6978`, audio: ("sunbathe") },
+                { text: "el cielo", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6978`, audio: ("sunbathing") },
                 { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop") }
             ],
-            audio: ("sol-amp")
+            audio: ("sun-sunbathing")
         },
         {
             id: 9,
@@ -174,17 +174,17 @@ const SentenceNetwork = () => {
                 { text: "el año", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6903`, audio: ("year") },
                 { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop") }
             ],
-            audio: ("verano-def")
+            audio: ("summer-year")
         },
         {
             id: 10,
             phrase: [
                 { text: "El verano", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/5604`, audio: ("summer") },
                 { text: "sirve para", image: "/pictograms/isUsedFor.png", audio: ("isUsedFor"), draggable: true },
-                { text: "tomar el sol", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/26500`, audio: ("sunbathe") },
+                { text: "tomar el sol", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/26500`, audio: ("sunbathing") },
                 { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop") }
             ],
-            audio: ("verano-amp")
+            audio: ("summer-sunbathing")
         },
         {
             id: 11,
@@ -194,37 +194,37 @@ const SentenceNetwork = () => {
                 { text: "una fruta", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/28339`, audio: ("fruit") },
                 { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop") }
             ],
-            audio: ("manzana-def")
+            audio: ("apple-fruit")
         },
         {
             id: 12,
             phrase: [
                 { text: "La manzana", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2462`, audio: ("apple") },
                 { text: "está en", image: "/pictograms/isIn.png", audio: ("isIn"), draggable: true },
-                { text: "el frutero", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/16303`, audio: ("frutero") },
+                { text: "el frutero", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/16303`, audio: ("fruitBowl") },
                 { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop") }
             ],
-            audio: ("manzana-amp")
+            audio: ("apple-fruitBowl")
         },
         {
             id: 13,
             phrase: [
                 { text: "La cama", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/25900`, audio: ("bed") },
                 { text: "es para", image: "/pictograms/isFor.png", audio: ("isFor"), draggable: true },
-                { text: "dormir", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6479`, audio: ("sleep") },
+                { text: "dormir", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6479`, audio: ("sleeping") },
                 { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop") }
             ],
-            audio: ("cama-def")
+            audio: ("bed-sleeping")
         },
         {
             id: 14,
             phrase: [
                 { text: "La cama", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/25900`, audio: ("bed") },
                 { text: "está en", image: "/pictograms/isIn.png", audio: ("isIn"), draggable: true },
-                { text: "la habitación", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/33068`, audio: ("room") },
+                { text: "la habitación", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/33068`, audio: ("bedroom") },
                 { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop") }
             ],
-            audio: ("cama-amp")
+            audio: ("bed-bedroom")
         },
         {
             id: 15,
@@ -234,7 +234,7 @@ const SentenceNetwork = () => {
                 { text: "la ciudad", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2704`, audio: ("city") },
                 { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop") }
             ],
-            audio: ("calle-def")
+            audio: ("street-city")
         },
         {
             id: 16,
@@ -244,17 +244,17 @@ const SentenceNetwork = () => {
                 { text: "la ciudad", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2704`, audio: ("city") },
                 { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop") }
             ],
-            audio: ("calle-amp")
+            audio: ("street-city2")
         },
         {
             id: 17,
             phrase: [
                 { text: "El coche", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2339`, audio: ("car") },
                 { text: "es para", image: "/pictograms/isFor.png", audio: ("isFor"), draggable: true },
-                { text: "viajar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/36974`, audio: ("travel") },
+                { text: "viajar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/36974`, audio: ("traveling") },
                 { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop") }
             ],
-            audio: ("coche-def")
+            audio: ("car-traveling")
         },
         {
             id: 18,
@@ -264,17 +264,17 @@ const SentenceNetwork = () => {
                 { text: "ruedas", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6209`, audio: ("wheels") },
                 { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop") }
             ],
-            audio: ("coche-amp")
+            audio: ("car-wheels")
         },
         {
             id: 19,
             phrase: [
                 { text: "El columpio", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/4608`, audio: ("swing") },
                 { text: "es para", image: "/pictograms/isFor.png", audio: ("isFor"), draggable: true },
-                { text: "jugar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6537`, audio: ("play") },
+                { text: "jugar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6537`, audio: ("playing") },
                 { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop") }
             ],
-            audio: ("columpio-def")
+            audio: ("swing-playing")
         },
         {
             id: 20,
@@ -284,37 +284,37 @@ const SentenceNetwork = () => {
                 { text: "el parque", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2859`, audio: ("park") },
                 { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop") }
             ],
-            audio: ("columpio-amp")
+            audio: ("swing-park")
         },
         {
             id: 21,
             phrase: [
                 { text: "El agua", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2248`, audio: ("water") },
                 { text: "es para", image: "/pictograms/isFor.png", audio: ("isFor"), draggable: true },
-                { text: "beber", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6061`, audio: ("drink") },
+                { text: "beber", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6061`, audio: ("drinking") },
                 { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop") }
             ],
-            audio: ("agua-def")
+            audio: ("water-drinking")
         },
         {
             id: 22,
             phrase: [
                 { text: "El agua", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2248`, audio: ("water") },
                 { text: "sirve para", image: "/pictograms/isUsedFor.png", audio: ("isUsedFor"), draggable: true },
-                { text: "lavarse", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/26803`, audio: ("wash") },
+                { text: "lavarse", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/26803`, audio: ("washing") },
                 { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop") }
             ],
-            audio: ("agua-amp")
+            audio: ("water-drinking")
         },
         {
             id: 23,
             phrase: [
                 { text: "El mar", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2925`, audio: ("sea") },
                 { text: "es para", image: "/pictograms/isFor.png", audio: ("isFor"), draggable: true },
-                { text: "bañarse", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/38782`, audio: ("bathe") },
+                { text: "bañarse", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/38782`, audio: ("bathing") },
                 { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop") }
             ],
-            audio: ("mar-def")
+            audio: ("sea-bathing")
         },
         {
             id: 24,
@@ -324,7 +324,7 @@ const SentenceNetwork = () => {
                 { text: "la playa", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/30518`, audio: ("beach") },
                 { text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop") }
             ],
-            audio: ("mar-amp")
+            audio: ("sea-beach")
         }
     ];
 

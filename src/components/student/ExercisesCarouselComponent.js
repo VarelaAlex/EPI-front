@@ -28,7 +28,7 @@ let ExercisesCarousel = () => {
 	const lastX = useRef(0);
 	const lastTime = useRef(0);
 	const requestId = useRef(null);
-    let enabledExercisesRef = useRef(null);
+    let guidedIndexRef = useRef(null);
 
     function matchesCondition(item, condition) {
         return condition.networks.includes(item.networkType) &&
@@ -82,7 +82,7 @@ let ExercisesCarousel = () => {
 				return networkTypeComparison;
 			});
             jsonData.map((item) => {
-                item.enabled = isItemEnabled(item, enabledExercisesRef.current);
+                item.enabled = isItemEnabled(item, guidedIndexRef.current);
             });
 			setExercises(jsonData);
 		} else {
@@ -249,8 +249,7 @@ let ExercisesCarousel = () => {
 						} }
 					>
 						{ exercises.map((card, index) => (
-							["ICONIC", "MIXED"].includes(card.representation) ? <Card
-
+							["ICONIC", "MIXED"].includes(representation) ? <Card
 								key={ index }
 								hoverable={card.enabled}
 								size="small"
@@ -258,6 +257,7 @@ let ExercisesCarousel = () => {
 								title={ <Title level={ 4 } style={ { fontSize: "1.3vmax", textAlign: "center" } }>{ card.title }</Title> }
 								onClick={ () => {
 									if ( velocity.current === 0 && card.enabled ) {
+										card.representation = representation;
 										setExercise(card);
 										setFeedback({});
 										navigate(`/exerciseDnD/phase1/free`);
@@ -278,12 +278,13 @@ let ExercisesCarousel = () => {
 								title={ null }
 								onClick={ () => {
 									if ( velocity.current === 0 && card.enabled ) {
+										card.representation = representation;
 										setExercise(card);
 										setFeedback({});
-										if(card.representation === REPRESENTATION.SYMBOLIC) {
+										if(representation === REPRESENTATION.SYMBOLIC) {
 											navigate(`/exerciseType/phase1/free`);
 										}
-										if(card.representation === REPRESENTATION.GLOBAL) {
+										if(representation === REPRESENTATION.GLOBAL) {
 											navigate(`/exerciseDnD/phase1/free`);
 										}
 									}

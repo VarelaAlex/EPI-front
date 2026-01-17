@@ -9,6 +9,7 @@ import {finishExperiment, finishTracking, initTracking, registerElement} from ".
 import {useExerciseProgressUpdater} from "../../hooks/useExerciseProgressUpdater";
 import {getNextExercise} from "../../services/getNextExercise";
 import {TRAINING_MODES} from "../../Globals";
+import {getGuidedIndex} from "../../services/getGuidedIndex";
 
 let TypePhase2 = () => {
 
@@ -99,17 +100,21 @@ let TypePhase2 = () => {
 							setTimer(setTimeout(() => {
 								finishExperiment();
 								finishTracking("/students/exercises");
-								updateExerciseProgress(exercise.closedOrder).then(() => {
-									if(trainingMode.toUpperCase()===TRAINING_MODES.RULED) {
-										getNextExercise(exercise.closedOrder).then((nextExercise) => {
-											setExercise(nextExercise);
-											navigate(`/exerciseType/phase1/ruled`);
+								updateExerciseProgress(exercise.index).then(() => {
+									if (trainingMode.toUpperCase() === TRAINING_MODES.RULED) {
+										getNextExercise(exercise.index).then((nextExercise) => {
+											if (nextExercise) {
+												setExercise(nextExercise);
+												navigate(`/exerciseDnD/phase1/ruled`);
+											} else {
+												// Fin de la secuencia guiada
+												navigate(`/students/exercises/${trainingMode}`);
+											}
 										});
 									} else {
-										navigate(`/students/exercises/${trainingMode}`)
+										navigate(`/students/exercises/${trainingMode}`);
 									}
 								});
-
 							}, 3000));
 						}
 					} else {

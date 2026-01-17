@@ -55,8 +55,11 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
 
     const sentences = [// TRÍO 1 – PERRO
         {
-            phrase: [{text: "El perro", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7202`, audio: ("dog")}],
-            audio: ("dog")
+            phrase: [{
+                text: "El perro",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/7202`,
+                audio: ("dog")
+            }], audio: ("dog")
         }, {
             phrase: [{
                 text: "El perro",
@@ -127,25 +130,20 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
             }, {text: "es para", image: "/pictograms/isFor.png", audio: ("isFor"), draggable: true}, {
                 text: "vivir",
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/11605`,
-                audio: ("live")
+                audio: ("living")
             }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
-            audio: ("casa-def")
+            audio: ("house-living")
         }, {
             phrase: [{
                 text: "La casa",
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6964`,
                 audio: ("house")
-            }, {
-                text: "sirve para",
-                image: "/pictograms/isUsedFor.png",
-                audio: ("isUsedFor"),
-                draggable: true
-            }, {
+            }, {text: "sirve para", image: "/pictograms/isUsedFor.png", audio: ("isUsedFor"), draggable: true}, {
                 text: "vivir",
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/11605`,
-                audio: ("live")
+                audio: ("living")
             }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
-            audio: ("casa-amp")
+            audio: ("house-living2")
         },
 
         // TRÍO 4 – SOL
@@ -162,7 +160,7 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2752`,
                 audio: ("star")
             }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
-            audio: ("sol-def")
+            audio: ("sun-star")
         }, {
             phrase: [{
                 text: "El sol",
@@ -171,9 +169,9 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
             }, {text: "está en", image: "/pictograms/isIn.png", audio: ("isIn"), draggable: true}, {
                 text: "el cielo",
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6978`,
-                audio: ("sunbathe")
+                audio: ("sky")
             }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
-            audio: ("sol-amp")
+            audio: ("sun-sky")
         },
 
         // TRÍO 5 – VERANO
@@ -188,33 +186,23 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
                 text: "El verano",
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/5604`,
                 audio: ("summer")
-            }, {
-                text: "es parte de",
-                image: "/pictograms/isPartOf.png",
-                audio: ("isPartOf"),
-                draggable: true
-            }, {
+            }, {text: "es parte de", image: "/pictograms/isPartOf.png", audio: ("isPartOf"), draggable: true}, {
                 text: "el año",
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6903`,
                 audio: ("year")
             }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
-            audio: ("verano-def")
+            audio: ("summer-year")
         }, {
             phrase: [{
                 text: "El verano",
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/5604`,
                 audio: ("summer")
-            }, {
-                text: "sirve para",
-                image: "/pictograms/isUsedFor.png",
-                audio: ("isUsedFor"),
-                draggable: true
-            }, {
+            }, {text: "sirve para", image: "/pictograms/isUsedFor.png", audio: ("isUsedFor"), draggable: true}, {
                 text: "tomar el sol",
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/26500`,
-                audio: ("sunbathe")
+                audio: ("sunbathing")
             }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
-            audio: ("verano-amp")
+            audio: ("summer-sunbathing")
         },
 
         // TRÍO 6 – MANZANA
@@ -234,7 +222,7 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/28339`,
                 audio: ("fruit")
             }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
-            audio: ("manzana-def")
+            audio: ("apple-fruit")
         }, {
             phrase: [{
                 text: "La manzana",
@@ -243,15 +231,18 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
             }, {text: "está en", image: "/pictograms/isIn.png", audio: ("isIn"), draggable: true}, {
                 text: "el frutero",
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/16303`,
-                audio: ("frutero")
+                audio: ("fruitBowl")
             }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
-            audio: ("manzana-amp")
+            audio: ("apple-fruitBowl")
         },
 
         // TRÍO 7 – CAMA
         {
-            phrase: [{text: "La cama", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/25900`, audio: ("bed")}],
-            audio: ("bed")
+            phrase: [{
+                text: "La cama",
+                image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/25900`,
+                audio: ("bed")
+            }], audio: ("bed")
         }, {
             phrase: [{
                 text: "La cama",
@@ -260,25 +251,20 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
             }, {text: "es para", image: "/pictograms/isFor.png", audio: ("isFor"), draggable: true}, {
                 text: "dormir",
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6479`,
-                audio: ("sleep")
+                audio: ("sleeping")
             }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
-            audio: ("cama-def")
+            audio: ("bed-sleeping")
         }, {
             phrase: [{
                 text: "La cama",
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/25900`,
                 audio: ("bed")
-            }, {
-                text: "está en",
-                image: "/pictograms/isIn.png",
-                audio: ("isIn"),
-                draggable: true
-            }, {
+            }, {text: "está en", image: "/pictograms/isIn.png", audio: ("isIn"), draggable: true}, {
                 text: "la habitación",
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/33068`,
-                audio: ("room")
+                audio: ("bedroom")
             }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
-            audio: ("cama-amp")
+            audio: ("bed-bedroom")
         },
 
         // TRÍO 8 – CALLE
@@ -293,17 +279,12 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
                 text: "La calle",
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2299`,
                 audio: ("street")
-            }, {
-                text: "es parte de",
-                image: "/pictograms/isPartOf.png",
-                audio: ("isPartOf"),
-                draggable: true
-            }, {
+            }, {text: "es parte de", image: "/pictograms/isPartOf.png", audio: ("isPartOf"), draggable: true}, {
                 text: "la ciudad",
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2704`,
                 audio: ("city")
             }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
-            audio: ("calle-def")
+            audio: ("street-city")
         }, {
             phrase: [{
                 text: "La calle",
@@ -314,7 +295,7 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2704`,
                 audio: ("city")
             }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
-            audio: ("calle-amp")
+            audio: ("street-city2")
         },
 
         // TRÍO 9 – COCHE
@@ -329,9 +310,9 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
             }, {text: "es para", image: "/pictograms/isFor.png", audio: ("isFor"), draggable: true}, {
                 text: "viajar",
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/36974`,
-                audio: ("travel")
+                audio: ("traveling")
             }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
-            audio: ("coche-def")
+            audio: ("car-traveling")
         }, {
             phrase: [{
                 text: "El coche",
@@ -342,7 +323,7 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6209`,
                 audio: ("wheels")
             }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
-            audio: ("coche-amp")
+            audio: ("car-wheels")
         },
 
         // TRÍO 10 – COLUMPIO
@@ -360,9 +341,9 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
             }, {text: "es para", image: "/pictograms/isFor.png", audio: ("isFor"), draggable: true}, {
                 text: "jugar",
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6537`,
-                audio: ("play")
+                audio: ("playing")
             }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
-            audio: ("columpio-def")
+            audio: ("swing-playing")
         }, {
             phrase: [{
                 text: "El columpio",
@@ -373,7 +354,7 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2859`,
                 audio: ("park")
             }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
-            audio: ("columpio-amp")
+            audio: ("swing-park")
         },
 
         // TRÍO 11 – AGUA
@@ -391,25 +372,20 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
             }, {text: "es para", image: "/pictograms/isFor.png", audio: ("isFor"), draggable: true}, {
                 text: "beber",
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6061`,
-                audio: ("drink")
+                audio: ("drinking")
             }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
-            audio: ("agua-def")
+            audio: ("water-drinking")
         }, {
             phrase: [{
                 text: "El agua",
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2248`,
                 audio: ("water")
-            }, {
-                text: "sirve para",
-                image: "/pictograms/isUsedFor.png",
-                audio: ("isUsedFor"),
-                draggable: true
-            }, {
+            }, {text: "sirve para", image: "/pictograms/isUsedFor.png", audio: ("isUsedFor"), draggable: true}, {
                 text: "lavarse",
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/26803`,
-                audio: ("wash")
+                audio: ("washing")
             }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
-            audio: ("agua-amp")
+            audio: ("water-washing")
         },
 
         // TRÍO 12 – MAR
@@ -424,9 +400,9 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
             }, {text: "es para", image: "/pictograms/isFor.png", audio: ("isFor"), draggable: true}, {
                 text: "bañarse",
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/38782`,
-                audio: ("bathe")
+                audio: ("bathing")
             }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
-            audio: ("mar-def")
+            audio: ("sea-bathing")
         }, {
             phrase: [{
                 text: "El mar",
@@ -437,7 +413,7 @@ const SentenceNetworkSequential = ({updateUnlockedPhase}) => {
                 image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/30518`,
                 audio: ("beach")
             }, {text: ".", image: `${process.env.REACT_APP_ARASAAC_URL}/pictograms/${STOP}`, audio: ("stop")}],
-            audio: ("mar-amp")
+            audio: ("sea-beach")
         }];
 
     let play  = usePlayAudio();

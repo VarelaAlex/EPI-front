@@ -42,7 +42,7 @@ const exercises = [
             {
                 id: 3,
                 phraseKey: "house-living",
-                wordAudio: ["house", "isFor", "live"],
+                wordAudio: ["house", "isFor", "living"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/6964`,
                     "/pictograms/is.png",
@@ -211,8 +211,8 @@ const exercises = [
             },
             {
                 id: 7,
-                phraseKey: "bed-room",
-                wordAudio: ["bed", "isIn", "room"],
+                phraseKey: "bed-bedroom",
+                wordAudio: ["bed", "isIn", "bedroom"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/25900`,
                     "/pictograms/isIn.png",
@@ -252,11 +252,7 @@ const exercises = [
             {
                 id: 11,
                 phraseKey: "water-washing",
-                wordAudio: [
-                    "water",
-                    "isUsedFor",
-                    "washing"
-                ],
+                wordAudio: ["water", "isUsedFor", "washing"],
                 image: [
                     `${process.env.REACT_APP_ARASAAC_URL}/pictograms/2248`,
                     "/pictograms/isUsedFor.png",

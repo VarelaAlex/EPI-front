@@ -1,7 +1,7 @@
-export const getNextExercise = async (closedOrder) => {
+export const getNextExercise = async (index) => {
     try {
         const response = await fetch(
-            `${process.env.REACT_APP_EXERCISES_SERVICE_URL}/exercises/next/${closedOrder}`,
+            `${process.env.REACT_APP_EXERCISES_SERVICE_URL}/exercises/next/${index}`,
             {
                 method: 'GET',
                 headers: {
@@ -12,11 +12,13 @@ export const getNextExercise = async (closedOrder) => {
         );
 
         if (!response.ok) {
-            console.error('Error al obtener ejercicios habilitados');
+            console.error('Error al obtener el siguiente ejercicio');
+            return null;
         }
 
         return await response.json();
     } catch (e) {
         console.error('Error en la solicitud:', e);
+        return null;
     }
-}
+};

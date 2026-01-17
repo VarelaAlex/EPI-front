@@ -1,4 +1,3 @@
-import {conceptAmpliationAudioMap, conceptDefinitionAudioMap} from "../../Globals";
 import {normalizeKey} from "../../services/normalize";
 
 export const X = 210;
@@ -119,7 +118,7 @@ export let nodes = (exercise) => {
 			shape: "ellipse",
 			src:   ["ICONIC", "MIXED"].includes(representation) ? `${ process.env.REACT_APP_ARASAAC_URL }/pictograms/${ definitionImage }` : null,
 			text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? definitionText : null,
-			sound: `${conceptDefinitionAudioMap[normalizeKey(definitionText)]}`
+			sound: `${normalizeKey(definitionText)}`
 		}, {
 			order: 6,
 			id:    "4",
@@ -139,7 +138,7 @@ export let nodes = (exercise) => {
 			shape: "ellipse",
 			src:   ["ICONIC", "MIXED"].includes(representation) ? `${ process.env.REACT_APP_ARASAAC_URL }/pictograms/${ ampliationImages[ 0 ] }` : null,
 			text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? ampliationText[ 0 ] : null,
-			sound: `${conceptAmpliationAudioMap[normalizeKey(ampliationText[0])]}`
+			sound: `${normalizeKey(ampliationText[0])}`
 		}, {
 			id: "6",
 			type: "type6",
@@ -172,7 +171,7 @@ export let nodes = (exercise) => {
 			               shape: "ellipse",
 			               src:   ["ICONIC", "MIXED"].includes(representation) ? `${ process.env.REACT_APP_ARASAAC_URL }/pictograms/${ ampliationImages[ 1 ] }` : null,
 			               text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? ampliationText[ 1 ] : null,
-			sound: `${conceptAmpliationAudioMap[normalizeKey(ampliationText[1])]}`
+			sound: `${normalizeKey(ampliationText[1])}`
 		               });
 	}
 
@@ -196,7 +195,7 @@ export let nodes = (exercise) => {
 			               shape: "ellipse",
 			               src:   ["ICONIC", "MIXED"].includes(representation) ? `${ process.env.REACT_APP_ARASAAC_URL }/pictograms/${ ampliationImages[ 2 ] }` : null,
 			               text:  ["MIXED", "SYMBOLIC", "GLOBAL"].includes(representation) ? ampliationText[ 2 ] : null,
-						   sound: `${conceptAmpliationAudioMap[normalizeKey(ampliationText[2])]}`
+						   sound: `${normalizeKey(ampliationText[2])}`
 		               });
 	}
 
